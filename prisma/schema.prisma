@@ -18,3 +18,11 @@ model Author {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Publisher {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
