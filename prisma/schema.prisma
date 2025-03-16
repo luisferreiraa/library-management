@@ -52,3 +52,32 @@ model Format {
   updatedAt DateTime @updatedAt
   isActive  Boolean  @default(true)
 }
+
+model Translator {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isActive  Boolean  @default(true)
+}
+
+model BookStatus {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isActive  Boolean  @default(true)
+}
+
+model PenaltyRule {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String
+  description String
+  finePerDay  Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isActive    Boolean  @default(true)
+}
