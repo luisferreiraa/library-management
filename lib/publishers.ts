@@ -45,5 +45,5 @@ export async function updatePublisher(id: string, data: { name?: string }): Prom
 export async function deletePublisher(id: string): Promise<Publisher> {
     return prisma.publisher.delete({
         where: { id },
-    })
+    });
 }

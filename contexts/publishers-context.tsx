@@ -46,7 +46,7 @@ export function PublishersProvider({
 export function usePublishers() {
     const context = useContext(PublishersContext)
     if (context === undefined) {
-        throw new Error("usePublishers must be used within an PublishersProvider")
+        throw new Error("usePublishers must be used within a PublishersProvider")
     }
     return context
 }
