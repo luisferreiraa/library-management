@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import { getAuthors } from "@/lib/authors"
 import { AuthorsTable } from "@/components/authors/authors-table"
+import { AuthorsSearch } from "@/components/authors/authors-search"
 import { CreateAuthorButton } from "@/components/authors/create-author-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { AuthorsProvider } from "@/contexts/authors-context"
@@ -17,11 +18,14 @@ export default async function AuthorsPage() {
           <CreateAuthorButton />
         </div>
 
-        <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>
+        <div className="mb-6 max-w-sm">
+          <AuthorsSearch />
+        </div>
+
+        <Suspense fallback={<TableSkeleton columns={5} rows={5} />}>
           <AuthorsTable />
         </Suspense>
       </AuthorsProvider>
     </div>
   )
 }
-

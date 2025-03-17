@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createAuthor } from "@/lib/authors"
+import { createAuthor, deleteAuthors } from "@/lib/authors"
 
 export async function createAuthorAction(authorData: { name: string; email: string; bio: string }): Promise<any> {
   try {
@@ -19,6 +19,18 @@ export async function createAuthorAction(authorData: { name: string; email: stri
     }
 
     throw new Error("Erro ao criar autor: " + error.message)
+  }
+}
+
+export async function deleteAuthorsAction(authorIds: string[]): Promise<void> {
+  try {
+    // Excluir os autores do banco de dados
+    await deleteAuthors(authorIds)
+
+    // Revalidar o caminho para atualizar os dados
+    revalidatePath("/authors")
+  } catch (error: any) {
+    throw new Error("Erro ao excluir autores: " + error.message)
   }
 }
 

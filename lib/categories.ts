@@ -48,3 +48,15 @@ export async function deleteCategory(id: string): Promise<Category> {
     });
 }
 
+export async function deleteCategories(ids: string[]): Promise<number> {
+    const result = await prisma.category.deleteMany({
+        where: {
+            id: {
+                in: ids,
+            },
+        },
+    })
+
+    return result.count
+}
+

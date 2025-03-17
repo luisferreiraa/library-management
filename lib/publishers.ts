@@ -47,3 +47,15 @@ export async function deletePublisher(id: string): Promise<Publisher> {
         where: { id },
     });
 }
+
+export async function deletePublishers(ids: string[]): Promise<number> {
+    const result = await prisma.publisher.deleteMany({
+        where: {
+            id: {
+                in: ids,
+            },
+        },
+    })
+
+    return result.count
+}

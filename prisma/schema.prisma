@@ -17,6 +17,7 @@ model Author {
   bio       String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  books     Book[]
 }
 
 model Publisher {
@@ -80,4 +81,16 @@ model PenaltyRule {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   isActive    Boolean  @default(true)
+}
+
+model Book {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  coverImage  String?
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  author      Author    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String
 }

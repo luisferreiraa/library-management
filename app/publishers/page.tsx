@@ -4,6 +4,7 @@ import { PublishersTable } from "@/components/publishers/publishers-table"
 import { CreatePublisherButton } from "@/components/publishers/create-publisher-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { PublishersProvider } from "@/contexts/publishers-context"
+import { PublishersSearch } from "@/components/publishers/publishers-search"
 
 export default async function PublishersPage() {
     // Buscar dados no servidor
@@ -15,6 +16,10 @@ export default async function PublishersPage() {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Editoras</h1>
                     <CreatePublisherButton />
+                </div>
+
+                <div className="mb-6 max-w-sm">
+                    <PublishersSearch />
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>
