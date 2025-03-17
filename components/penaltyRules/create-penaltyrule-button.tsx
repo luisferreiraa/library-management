@@ -12,7 +12,7 @@ export function CreatePenaltyRuleButton() {
         <>
             <Button onClick={() => setOpen(true)}>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Nova Multa
+                Nova Regra
             </Button>
             <CreatePenaltyRuleModal open={open} onOpenChange={setOpen} />
         </>

@@ -23,24 +23,28 @@ import { createPenaltyRuleAction } from "@/app/penaltyrules/actions"
 
 const formSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
+    description: z.string().min(5, { message: "Descrição deve ter pelo menos 5 caracteres" }),
+    finePerDay: z.number().positive({ message: "Multa por dia deve ser um número positivo" }),
 })
 
 type FormValues = z.infer<typeof formSchema>
 
-interface CreatePublisherModalProps {
+interface CreatePenaltyRuleModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
 }
 
-export function CreatePublisherModal({ open, onOpenChange }: CreatePublisherModalProps) {
+export function CreatePenaltyRuleModal({ open, onOpenChange }: CreatePenaltyRuleModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const { addPublisher } = usePublishers()
+    const { addPenaltyRule } = usePenaltyRules()
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
+            description: "",
+            finePerDay: 0,
         },
     })
 
@@ -49,26 +53,26 @@ export function CreatePublisherModal({ open, onOpenChange }: CreatePublisherModa
         try {
             setIsSubmitting(true)
 
-            // Criar editora via Server Action
-            const newPublisher = await createPublisherAction(values)
+            // Criar penalty rule via Server Action
+            const newPenaltyRule = await createPenaltyRuleAction(values)
 
             // Atualizar UI otimisticamente
-            addPublisher(newPublisher)
+            addPenaltyRule(newPenaltyRule)
 
             // Fechar modal e mostrar toast
             onOpenChange(false)
             form.reset()
 
             toast({
-                title: "Editora criada com sucesso",
-                description: `${newPublisher.name} foi adicionado à lista de editoras.`,
+                title: "Regra criada com sucesso",
+                description: `${newPenaltyRule.name} foi adicionada à lista de regras.`,
             })
         } catch (error: any) {
-            setError(error.message || "Ocorreu um erro ao criar a editora")
+            setError(error.message || "Ocorreu um erro ao criar a regra")
 
             toast({
-                title: "Erro ao criar editora",
-                description: error.message || "Ocorreu um erro ao criar a editora. Tente novamente.",
+                title: "Erro ao criar regra",
+                description: error.message || "Ocorreu um erro ao criar a regra. Tente novamente.",
                 variant: "destructive",
             })
         } finally {
@@ -80,8 +84,8 @@ export function CreatePublisherModal({ open, onOpenChange }: CreatePublisherModa
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Criar Nova Editora</DialogTitle>
-                    <DialogDescription>Preencha os dados da editora e clique em salvar quando terminar.</DialogDescription>
+                    <DialogTitle>Criar Nova Regra</DialogTitle>
+                    <DialogDescription>Preencha os dados da regra e clique em salvar quando terminar.</DialogDescription>
                 </DialogHeader>
 
                 {error && (
@@ -99,7 +103,44 @@ export function CreatePublisherModal({ open, onOpenChange }: CreatePublisherModa
                                 <FormItem>
                                     <FormLabel>Nome</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Nome da editora" {...field} />
+                                        <Input placeholder="Nome da regra" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Descrição</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Breve descrição da regra" className="resize-none" rows={4} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="finePerDay"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Valor p/ dia</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="number"
+                                            placeholder="0"
+                                            {...field}
+                                            value={field.value ?? ""} // Evita NaN
+                                            onChange={(e) => {
+                                                const value = e.target.value === "" ? "" : Number(e.target.value);
+                                                field.onChange(value);
+                                            }}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
