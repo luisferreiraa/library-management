@@ -47,3 +47,15 @@ export async function deleteFormat(id: string): Promise<Format> {
         where: { id },
     });
 }
+
+export async function deleteFormats(ids: string[]): Promise<number> {
+    const result = await prisma.format.deleteMany({
+        where: {
+            id: {
+                in: ids,
+            },
+        },
+    })
+
+    return result.count
+}

@@ -115,7 +115,7 @@ export function CategoriesTable() {
                                     checked={allSelected}
                                     indeterminate={someSelected}
                                     onCheckedChange={toggleAllCategories}
-                                    aria-label="Selecionar todos os autores"
+                                    aria-label="Selecionar todas as categorias"
                                 />
                             </TableHead>
                             <TableHead>Nome</TableHead>

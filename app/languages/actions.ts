@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createLanguage } from "@/lib/languages"
+import { createLanguage, deleteLanguages } from "@/lib/languages"
 
 export async function createLanguageAction(languageData: { name: string }): Promise<any> {
     try {
@@ -14,5 +14,17 @@ export async function createLanguageAction(languageData: { name: string }): Prom
         return newLanguage
     } catch (error: any) {
         throw new Error("Erro ao criar idioma: " + error.message)
+    }
+}
+
+export async function deleteLanguagesAction(languageIds: string[]): Promise<void> {
+    try {
+        // Excluir os idiomas da base de dados
+        await deleteLanguages(languageIds)
+
+        // Revalidar o caminho para atualizar os dados
+        revalidatePath("/languages")
+    } catch (error: any) {
+        throw new Error("Erro ao excluir idiomas: " + error.message)
     }
 }

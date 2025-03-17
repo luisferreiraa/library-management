@@ -48,3 +48,15 @@ export async function deleteLanguage(id: string): Promise<Language> {
     });
 }
 
+export async function deleteLanguages(ids: string[]): Promise<number> {
+    const result = await prisma.language.deleteMany({
+        where: {
+            id: {
+                in: ids,
+            },
+        },
+    })
+
+    return result.count
+}
+

@@ -4,6 +4,7 @@ import { FormatsTable } from "@/components/formats/formats-table"
 import { CreateFormatButton } from "@/components/formats/create-format-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { FormatsProvider } from "@/contexts/formats-context"
+import { FormatsSearch } from "@/components/formats/formats-search"
 
 export default async function FormatsPage() {
     // Buscar dados no servidor
@@ -15,6 +16,10 @@ export default async function FormatsPage() {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Formatos</h1>
                     <CreateFormatButton />
+                </div>
+
+                <div className="mb-6 max-w-sm">
+                    <FormatsSearch />
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>
