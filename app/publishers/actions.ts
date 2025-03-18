@@ -23,7 +23,7 @@ export async function deletePublishersAction(publisherIds: string[]): Promise<vo
         await deletePublishers(publisherIds)
 
         // Revalidar o caminho para atualizar os dados
-        revalidatePath("publishers")
+        revalidatePath("/publishers")
     } catch (error: any) {
         throw new Error("Erro ao excluir editoras: " + error.message)
     }

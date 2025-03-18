@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createTranslator } from "@/lib/translators"
+import { createTranslator, deleteTranslators } from "@/lib/translators"
 
 export async function createTranslatorAction(translatorData: { name: string }): Promise<any> {
     try {
@@ -14,5 +14,17 @@ export async function createTranslatorAction(translatorData: { name: string }): 
         return newTranslator
     } catch (error: any) {
         throw new Error("Erro ao criar translator: " + error.message)
+    }
+}
+
+export async function deleteTranslatorsAction(translatorIds: string[]): Promise<void> {
+    try {
+        // Excluir os traadutores da base de dados
+        await deleteTranslators(translatorIds)
+
+        // Revalidar o caminho para atualizar os dados
+        revalidatePath("/translators")
+    } catch (error: any) {
+        throw new Error("Erro ao excluir tradutor: " + error.message)
     }
 }

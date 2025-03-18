@@ -47,3 +47,15 @@ export async function deleteTranslator(id: string): Promise<Translator> {
         where: { id },
     });
 }
+
+export async function deleteTranslators(ids: string[]): Promise<number> {
+    const result = await prisma.translator.deleteMany({
+        where: {
+            id: {
+                in: ids,
+            },
+        },
+    })
+
+    return result.count
+}
