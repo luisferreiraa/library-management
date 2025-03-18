@@ -47,3 +47,15 @@ export async function deletePenaltyRule(id: string): Promise<PenaltyRule> {
         where: { id },
     });
 }
+
+export async function deletePenaltyRules(ids: string[]): Promise<number> {
+    const result = await prisma.penaltyRule.deleteMany({
+        where: {
+            id: {
+                in: ids,
+            },
+        },
+    })
+
+    return result.count
+}

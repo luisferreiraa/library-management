@@ -4,6 +4,7 @@ import { PenaltyRulesTable } from "@/components/penaltyRules/penaltyrules-table"
 import { CreatePenaltyRuleButton } from "@/components/penaltyRules/create-penaltyrule-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { PenaltyRulesProvider } from "@/contexts/penaltyrules-context"
+import { PenaltyRulesSearch } from "@/components/penaltyRules/penaltyrules-search"
 
 export default async function PenaltyRulesPage() {
     // Buscar dados no servidor
@@ -15,6 +16,10 @@ export default async function PenaltyRulesPage() {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Regras</h1>
                     <CreatePenaltyRuleButton />
+                </div>
+
+                <div className="mb-6 max-w-sm">
+                    <PenaltyRulesSearch />
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>

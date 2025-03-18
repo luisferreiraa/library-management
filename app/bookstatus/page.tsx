@@ -4,6 +4,7 @@ import { BookStatusesTable } from "@/components/bookStatuses/bookStatuses-table"
 import { CreateBookStatusButton } from "@/components/bookStatuses/create-bookStatus-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { BookStatusesProvider } from "@/contexts/bookstatus-context"
+import { BookStatusSearch } from "@/components/bookStatuses/bookstatus-search"
 
 export default async function BookStatusPage() {
     // Buscar dados no servidor
@@ -15,6 +16,10 @@ export default async function BookStatusPage() {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Book Status</h1>
                     <CreateBookStatusButton />
+                </div>
+
+                <div className="mb-6 max-w-sm">
+                    <BookStatusSearch />
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>
