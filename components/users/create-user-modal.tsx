@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { createUserAction } from "@/app/users/actions"
+import { createUserAction, uploadProfilePictureAction } from "@/app/users/actions"
 import { useUsers } from "@/contexts/users-context"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ImageUpload } from "@/components/ui/image-upload"
 
 const formSchema = z.object({
     username: z.string().min(3, { message: "Nome de usuário deve ter pelo menos 3 caracteres" }),
@@ -44,6 +45,7 @@ interface CreateUserModalProps {
 export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [profileImageFile, setProfileImageFile] = useState<File | null>(null)
     const { addUser } = useUsers()
 
     const form = useForm<FormValues>({
@@ -67,6 +69,15 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
         try {
             setIsSubmitting(true)
 
+            // Se houver uma imagem para upload, processar primeiro
+            if (profileImageFile) {
+                const formData = new FormData()
+                formData.append("file", profileImageFile)
+
+                const imageUrl = await uploadProfilePictureAction(formData)
+                values.profilePicture = imageUrl
+            }
+
             // Criar usuário via Server Action
             const newUser = await createUserAction(values)
 
@@ -76,6 +87,7 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
             // Fechar modal e mostrar toast
             onOpenChange(false)
             form.reset()
+            setProfileImageFile(null)
 
             toast({
                 title: "Usuário criado com sucesso",
@@ -118,13 +130,47 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
                             </TabsList>
 
                             <TabsContent value="account" className="space-y-4 mt-4">
+                                <div className="flex flex-col items-center mb-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="profilePicture"
+                                        render={({ field }) => (
+                                            <FormItem className="w-full flex flex-col items-center">
+                                                <FormLabel className="text-center mb-2">Foto de Perfil</FormLabel>
+                                                <FormControl>
+                                                    <ImageUpload
+                                                        value={field.value}
+                                                        onChange={(file) => {
+                                                            setProfileImageFile(file)
+                                                            // Manter o valor atual se o arquivo for nulo
+                                                            if (file === null && field.value) {
+                                                                return
+                                                            }
+                                                            // Limpar o valor se o arquivo for nulo
+                                                            if (file === null) {
+                                                                field.onChange("")
+                                                            }
+                                                        }}
+                                                        onClear={() => {
+                                                            field.onChange("")
+                                                            setProfileImageFile(null)
+                                                        }}
+                                                        disabled={isSubmitting}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
                                 <div className="grid grid-cols-2 gap-4">
                                     <FormField
                                         control={form.control}
                                         name="username"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Nome de Utilizador</FormLabel>
+                                                <FormLabel>Nome de Usuário</FormLabel>
                                                 <FormControl>
                                                     <Input placeholder="johndoe" {...field} />
                                                 </FormControl>
@@ -156,20 +202,6 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
                                             <FormLabel>Senha</FormLabel>
                                             <FormControl>
                                                 <Input type="password" placeholder="********" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name="profilePicture"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>URL da Foto de Perfil</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="https://example.com/avatar.jpg" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

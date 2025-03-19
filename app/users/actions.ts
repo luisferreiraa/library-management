@@ -2,7 +2,23 @@
 
 import { revalidatePath } from "next/cache"
 import { createUser, deleteUsers } from "@/lib/users"
+import { uploadProfilePicture } from "@/lib/upload"
 import bcrypt from "bcryptjs"
+
+export async function uploadProfilePictureAction(formData: FormData): Promise<string> {
+    try {
+        const file = formData.get("file") as File
+
+        if (!file) {
+            throw new Error("Nenhum arquivo enviado")
+        }
+
+        const imageUrl = await uploadProfilePicture(file)
+        return imageUrl
+    } catch (error: any) {
+        throw new Error(error.message || "Erro ao fazer upload da imagem")
+    }
+}
 
 export async function createUserAction(userData: {
     username: string
