@@ -136,9 +136,16 @@ model Barcode {
 }
 
 model BorrowedBook {
-  id        String  @id @default(cuid())
-  barcode   Barcode @relation(fields: [barcodeId], references: [id], name: "BarcodeBorrowedBooks")
-  barcodeId String
+  id         String   @id @default(cuid())
+  barcode    Barcode  @relation(fields: [barcodeId], references: [id], name: "BarcodeBorrowedBooks")
+  barcodeId  String
+  user       User     @relation(fields: [userId], references: [id], name: "UserBorrowedBooks")
+  userId     String
+  borrowedAt DateTime @default(now())
+  dueDate    DateTime
+  returnDate DateTime
+  fineValue  Float
+  isActive   Boolean  @default(true)
 }
 
 model Review {
@@ -187,8 +194,8 @@ model User {
   idNumber       String
   nifNumber      Int
   profilePicture String?
-  role           Role            @relation(fields: [roleId], references: [id])
-  roleId         String
+  role           Role?           @relation(fields: [roleId], references: [id])
+  roleId         String?
   lastLogin      DateTime?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
@@ -197,4 +204,16 @@ model User {
   booksUpdated   Book[]          @relation("UpdatedByUser")
   reviews        Review[]
   recomendations Recomendation[]
+  borrowedBooks  BorrowedBook[]  @relation("UserBorrowedBooks")
+  AuditLog       AuditLog[]
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  entity    String
+  entityId  String
+  action    String
+  timestamp DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
