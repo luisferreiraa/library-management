@@ -26,6 +26,7 @@ model Publisher {
   slug      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  books     Book[]
 }
 
 model Category {
@@ -34,6 +35,7 @@ model Category {
   slug      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  books     Book[]   @relation("BookCategories")
 }
 
 model Language {
@@ -43,6 +45,7 @@ model Language {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean  @default(true)
+  books     Book[]
 }
 
 model Format {
@@ -52,6 +55,7 @@ model Format {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean  @default(true)
+  books     Book[]
 }
 
 model Translator {
@@ -61,6 +65,7 @@ model Translator {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean  @default(true)
+  books     Book[]
 }
 
 model BookStatus {
@@ -70,6 +75,7 @@ model BookStatus {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean  @default(true)
+  books     Book[]
 }
 
 model PenaltyRule {
@@ -84,30 +90,95 @@ model PenaltyRule {
 }
 
 model Book {
-  id          String    @id @default(cuid())
-  title       String
-  description String?
-  coverImage  String?
-  publishedAt DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  author      Author    @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId    String
+  id              String          @id @default(cuid())
+  title           String
+  isbn            String          @unique
+  publishingDate  DateTime
+  edition         Int
+  summary         String?
+  coverImage      String?
+  publishedAt     DateTime?
+  pageCount       Int
+  createdAt       DateTime        @default(now())
+  createdByUser   User?           @relation("CreatedByUser", fields: [createdByUserId], references: [id])
+  createdByUserId String?
+  updatedAt       DateTime        @updatedAt
+  updatedByUser   User?           @relation("UpdatedByUser", fields: [updatedByUserId], references: [id])
+  updatedByUserId String?
+  isActive        Boolean         @default(true)
+  format          Format          @relation(fields: [formatId], references: [id])
+  formatId        String
+  language        Language        @relation(fields: [languageId], references: [id])
+  languageId      String
+  publisher       Publisher       @relation(fields: [publisherId], references: [id])
+  publisherId     String
+  categories      Category[]      @relation("BookCategories")
+  author          Author          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId        String
+  translator      Translator?     @relation(fields: [translatorId], references: [id])
+  translatorId    String?
+  bookStatus      BookStatus      @relation(fields: [bookStatusId], references: [id])
+  bookStatusId    String
+  barcodes        Barcode[]
+  reviews         Review[]
+  recomendations  Recomendation[]
+}
+
+model Barcode {
+  id            String         @id @default(cuid())
+  code          String         @unique
+  book          Book           @relation(fields: [bookId], references: [id])
+  bookId        String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  isActive      Boolean        @default(true)
+  borrowedBooks BorrowedBook[] @relation("BarcodeBorrowedBooks")
+}
+
+model BorrowedBook {
+  id        String  @id @default(cuid())
+  barcode   Barcode @relation(fields: [barcodeId], references: [id], name: "BarcodeBorrowedBooks")
+  barcodeId String
+}
+
+model Review {
+  id           String    @id @default(cuid())
+  book         Book      @relation(fields: [bookId], references: [id])
+  bookId       String
+  user         User      @relation(fields: [userId], references: [id])
+  userId       String
+  rating       Int
+  createdAt    DateTime  @default(now())
+  udatedAt     DateTime  @updatedAt
+  isAproved    Boolean   @default(false)
+  approvalDate DateTime?
+  isActive     Boolean   @default(false)
+}
+
+model Recomendation {
+  id        String   @id @default(cuid())
+  book      Book     @relation(fields: [bookId], references: [id])
+  bookId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  reason    String?
+  createdAt DateTime @default(now())
 }
 
 model Role {
   id        String   @id @default(cuid())
   name      String   @unique
   slug      String
+  users     User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean  @default(true)
 }
 
 model User {
-  id             String    @id @default(cuid())
-  username       String    @unique
-  email          String    @unique
+  id             String          @id @default(cuid())
+  username       String          @unique
+  email          String          @unique
   password       String
   firstName      String
   lastName       String
@@ -116,8 +187,14 @@ model User {
   idNumber       String
   nifNumber      Int
   profilePicture String?
+  role           Role            @relation(fields: [roleId], references: [id])
+  roleId         String
   lastLogin      DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  isActive       Boolean   @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  isActive       Boolean         @default(true)
+  booksCreated   Book[]          @relation("CreatedByUser")
+  booksUpdated   Book[]          @relation("UpdatedByUser")
+  reviews        Review[]
+  recomendations Recomendation[]
 }
