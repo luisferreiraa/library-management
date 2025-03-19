@@ -3,14 +3,15 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Book, Users, BookOpenCheck, Tag, Menu } from "lucide-react"
+import { Book, Users, BookOpenCheck, Tag, Menu, PenTool } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 const navItems = [
-    { href: "/authors", label: "Autores", icon: Users },
+    { href: "/users", label: "Utilizadores", icon: Users },
+    { href: "/authors", label: "Autores", icon: PenTool },
     { href: "/books", label: "Livros", icon: Book },
     { href: "/publishers", label: "Editoras", icon: BookOpenCheck },
     { href: "/categories", label: "Categorias", icon: Tag },
