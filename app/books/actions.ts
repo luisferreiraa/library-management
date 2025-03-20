@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { createBook, deleteBooks } from "@/lib/books"
 import { uploadCoverImage } from "@/lib/upload"
+import { createBarcode } from "@/lib/barcodes"
 
 export async function uploadCoverImageAction(formData: FormData): Promise<string> {
     try {
@@ -49,7 +50,7 @@ export async function createBookAction(bookData: {
     } catch (error: any) {
         // Verificar se é um erro de ISBN duplicado
         if (error.code === "P2002" && error.meta?.target?.includes("isbn")) {
-            throw new Error("Este ISBN já está cadastrado")
+            throw new Error("Este ISBN já está registado")
         }
 
         throw new Error("Erro ao criar livro: " + error.message)
@@ -67,4 +68,21 @@ export async function deleteBooksAction(bookIds: string[]): Promise<void> {
         throw new Error("Erro ao excluir livros: " + error.message)
     }
 }
+
+export async function createBarcodeAction(barcodeData: { bookId: string; code: string }): Promise<any> {
+    try {
+        const newBarcode = await createBarcode(barcodeData.bookId, barcodeData.code);
+
+        revalidatePath(`/books/${barcodeData.bookId}`);
+
+        return newBarcode;
+    } catch (error: any) {
+        if (error.code === "P2002" && error.meta?.target?.includes("code")) {
+            throw new Error("Este código de barras já está registado");
+        }
+
+        throw new Error("Erro ao criar código de barras: " + error.message);
+    }
+}
+
 

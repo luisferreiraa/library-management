@@ -65,7 +65,7 @@ export function LoginForm() {
         <Card className="w-full">
             <CardHeader className="space-y-1">
                 <CardTitle className="text-2xl font-bold">Login</CardTitle>
-                <CardDescription>Entre com seu nome de usuário e senha</CardDescription>
+                <CardDescription>Entre com o seu nome de utilizador e senha</CardDescription>
             </CardHeader>
             <CardContent>
                 {error && (
@@ -82,9 +82,9 @@ export function LoginForm() {
                             name="username"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nome de Usuário</FormLabel>
+                                    <FormLabel>Nome de Utilizador</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Digite seu nome de usuário" {...field} />
+                                        <Input placeholder="Digite o seu nome de utilizador" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -98,7 +98,7 @@ export function LoginForm() {
                                 <FormItem>
                                     <FormLabel>Senha</FormLabel>
                                     <FormControl>
-                                        <Input type="password" placeholder="Digite sua senha" {...field} />
+                                        <Input type="password" placeholder="Digite a sua senha" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -109,7 +109,7 @@ export function LoginForm() {
                             {isLoading ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Entrando...
+                                    A entrar...
                                 </>
                             ) : (
                                 "Entrar"

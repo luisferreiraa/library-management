@@ -43,7 +43,7 @@ export default function HomePage() {
                     <>
                         <Card>
                             <CardHeader>
-                                <CardTitle>Gerenciar Livros</CardTitle>
+                                <CardTitle>Gerir Livros</CardTitle>
                                 <CardDescription>Adicione, edite e remova livros do sistema</CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -51,14 +51,14 @@ export default function HomePage() {
                             </CardContent>
                             <CardFooter>
                                 <Button asChild className="w-full">
-                                    <Link href="/books">Acessar</Link>
+                                    <Link href="/books">Aceder</Link>
                                 </Button>
                             </CardFooter>
                         </Card>
 
                         <Card>
                             <CardHeader>
-                                <CardTitle>Gerenciar Autores</CardTitle>
+                                <CardTitle>Gerir Autores</CardTitle>
                                 <CardDescription>Adicione, edite e remova autores do sistema</CardDescription>
                             </CardHeader>
                             <CardContent>
@@ -66,22 +66,22 @@ export default function HomePage() {
                             </CardContent>
                             <CardFooter>
                                 <Button asChild className="w-full">
-                                    <Link href="/authors">Acessar</Link>
+                                    <Link href="/authors">Aceder</Link>
                                 </Button>
                             </CardFooter>
                         </Card>
 
                         <Card>
                             <CardHeader>
-                                <CardTitle>Gerenciar Usuários</CardTitle>
-                                <CardDescription>Adicione, edite e remova usuários do sistema</CardDescription>
+                                <CardTitle>Gerir Utilizadores</CardTitle>
+                                <CardDescription>Adicione, edite e remova utilizadores do sistema</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <Users className="h-12 w-12 text-primary" />
                             </CardContent>
                             <CardFooter>
                                 <Button asChild className="w-full">
-                                    <Link href="/users">Acessar</Link>
+                                    <Link href="/users">Aceder</Link>
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -98,7 +98,7 @@ export default function HomePage() {
                     </CardContent>
                     <CardFooter>
                         <Button asChild className="w-full">
-                            <Link href="/catalog">Acessar</Link>
+                            <Link href="/catalog">Aceder</Link>
                         </Button>
                     </CardFooter>
                 </Card>

@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import type { AuthorWithBooks } from "@/lib/authors"
 import type { Book as BookType } from "@/lib/books"
 import { EmptyState } from "@/components/ui/empty-state"
+import Link from "next/link"
 
 interface AuthorBooksProps {
     author: AuthorWithBooks
@@ -24,7 +25,7 @@ export function AuthorBooks({ author, books }: AuthorBooksProps) {
             <EmptyState
                 icon={<Book className="h-10 w-10" />}
                 title="Nenhum livro encontrado"
-                description="Este autor ainda não possui livros cadastrados."
+                description="Este autor ainda não possui livros registados."
                 action={
                     <Button onClick={() => setIsAddingBook(true)}>
                         <PlusCircle className="mr-2 h-4 w-4" />
@@ -70,13 +71,15 @@ export function AuthorBooks({ author, books }: AuthorBooksProps) {
                                 </div>
                             )}
                             <p className="text-sm text-muted-foreground line-clamp-3">
-                                {book.description || "Sem descrição disponível."}
+                                {book.summary || "Sem resumo disponível."}
                             </p>
                         </CardContent>
                         <CardFooter>
-                            <Button variant="outline" size="sm" className="w-full">
-                                Ver Detalhes
-                            </Button>
+                            <Link href={`/books/${book.id}`} className="w-full">
+                                <Button variant="outline" size="sm" className="w-full">
+                                    Ver Detalhes
+                                </Button>
+                            </Link>
                         </CardFooter>
                     </Card>
                 ))}

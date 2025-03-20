@@ -56,7 +56,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
                                     <dd className="mt-1 text-sm">{author.id}</dd>
                                 </div>
                                 <div>
-                                    <dt className="text-sm font-medium text-muted-foreground">Cadastrado em</dt>
+                                    <dt className="text-sm font-medium text-muted-foreground">Registado em</dt>
                                     <dd className="mt-1 text-sm">{format(new Date(author.createdAt), "dd/MM/yyyy")}</dd>
                                 </div>
                                 <div>

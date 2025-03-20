@@ -2,12 +2,13 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { format } from "date-fns"
-import { ChevronLeft, BookIcon, User, Building, Calendar, Hash, Languages, BookOpen, Tag } from "lucide-react"
+import { ChevronLeft, BookIcon, User, Building, Calendar, Hash, Languages, BookOpen, Tag, PlusCircle } from "lucide-react"
 import { getBookById } from "@/lib/books"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { CreateBarcodeButton } from "@/components/barcodes/create-barcode-button"
 
 interface BookPageProps {
     params: {
@@ -203,7 +204,7 @@ export default async function BookPage({ params }: BookPageProps) {
                                             <dd className="mt-1 text-sm">{book.bookStatus.name}</dd>
                                         </div>
                                         <div>
-                                            <dt className="text-sm font-medium text-muted-foreground">Cadastrado em</dt>
+                                            <dt className="text-sm font-medium text-muted-foreground">Registado em</dt>
                                             <dd className="mt-1 text-sm">{formatDate(book.createdAt)}</dd>
                                         </div>
                                         <div>
@@ -239,9 +240,12 @@ export default async function BookPage({ params }: BookPageProps) {
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="text-center py-6 text-muted-foreground">
-                                            Nenhum exemplar cadastrado para este livro.
+                                        <div className="flex flex-col items-center text-center py-6 text-muted-foreground">
+                                            <p>Nenhum exemplar registado para este livro.</p>
+
+                                            <CreateBarcodeButton bookId={book.id} />
                                         </div>
+
                                     )}
                                 </CardContent>
                             </Card>
@@ -251,7 +255,7 @@ export default async function BookPage({ params }: BookPageProps) {
                             <Card>
                                 <CardHeader>
                                     <CardTitle>Avaliações</CardTitle>
-                                    <CardDescription>Avaliações dos usuários sobre este livro</CardDescription>
+                                    <CardDescription>Avaliações dos utilizadores sobre este livro</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     {book.reviews && book.reviews.length > 0 ? (
