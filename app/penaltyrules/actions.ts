@@ -2,11 +2,15 @@
 
 import { revalidatePath } from "next/cache"
 import { createPenaltyRule, deletePenaltyRules, } from "@/lib/penaltyrules"
+import { logAudit } from "@/lib/session";
 
 export async function createPenaltyRuleAction(penaltyRuleData: { name: string; description: string; finePerDay: number }): Promise<any> {
     try {
         // Criar a multa na base de dados
         const newPenaltyRule = await createPenaltyRule(penaltyRuleData)
+
+        // Criar auditLog
+        await logAudit("PenaltyRule", newPenaltyRule.id, "CREATE_PENALTY_RULE");
 
         // Revalidar o caminho para atualizar dados
         revalidatePath("/penaltyrules")
@@ -21,6 +25,9 @@ export async function deletePenaltyRulesAction(penaltyRuleIds: string[]): Promis
     try {
         // Excluir as multas da base de dados
         await deletePenaltyRules(penaltyRuleIds)
+
+        // Criar auditLog
+        await logAudit("PenaltyRule", penaltyRuleIds, "DELETE_PENALTY_RULE");
 
         // Revalidar o caminho para atualizar os dados
         revalidatePath("/penaltyrules")

@@ -4,6 +4,10 @@ import { revalidatePath } from "next/cache"
 import { createBook, deleteBooks } from "@/lib/books"
 import { uploadCoverImage } from "@/lib/upload"
 import { createBarcode } from "@/lib/barcodes"
+import { createAuditLog } from "@/lib/auditlogs"
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth"
+import { logAudit } from "@/lib/session"
 
 export async function uploadCoverImageAction(formData: FormData): Promise<string> {
     try {
@@ -43,6 +47,9 @@ export async function createBookAction(bookData: {
             // Quando implementar autenticação, você pode adicionar createdByUserId aqui
         })
 
+        // Criar auditLog
+        await logAudit("Book", newBook.id, "CREATE_BOOK");
+
         // Revalidar o caminho para atualizar os dados
         revalidatePath("/books")
 
@@ -59,20 +66,29 @@ export async function createBookAction(bookData: {
 
 export async function deleteBooksAction(bookIds: string[]): Promise<void> {
     try {
+
         // Excluir os livros do banco de dados
-        await deleteBooks(bookIds)
+        await deleteBooks(bookIds);
+
+        // Criar auditLog para cada livro removido
+        await logAudit("Book", bookIds, "DELETE_BOOK");
 
         // Revalidar o caminho para atualizar os dados
-        revalidatePath("/books")
+        revalidatePath("/books");
     } catch (error: any) {
-        throw new Error("Erro ao excluir livros: " + error.message)
+        throw new Error("Erro ao excluir livros: " + error.message);
     }
 }
 
 export async function createBarcodeAction(barcodeData: { bookId: string; code: string }): Promise<any> {
     try {
+        // Criar novo barcode
         const newBarcode = await createBarcode(barcodeData.bookId, barcodeData.code);
 
+        // Criar auditLog
+        await logAudit("Barcode", newBarcode.id, "CREATE_BARCODE");
+
+        // Revalidar o caminho para atualizar os dados
         revalidatePath(`/books/${barcodeData.bookId}`);
 
         return newBarcode;
@@ -84,5 +100,4 @@ export async function createBarcodeAction(barcodeData: { bookId: string; code: s
         throw new Error("Erro ao criar código de barras: " + error.message);
     }
 }
-
 

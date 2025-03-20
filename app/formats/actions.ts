@@ -2,11 +2,15 @@
 
 import { revalidatePath } from "next/cache"
 import { createFormat, deleteFormats } from "@/lib/formats"
+import { logAudit } from "@/lib/session";
 
 export async function createFormatAction(formatData: { name: string }): Promise<any> {
     try {
         // Criar o formato na base de dados
         const newFormat = await createFormat(formatData)
+
+        // Criar auditLog
+        await logAudit("Format", newFormat.id, "CREATE_FORMAT");
 
         // Revalidar o caminho para atualizar dados
         revalidatePath("/formats")
@@ -21,6 +25,9 @@ export async function deleteFormatsAction(formatIds: string[]): Promise<void> {
     try {
         // Excluir os formatos da base de dados
         await deleteFormats(formatIds)
+
+        // Criar auditLog
+        await logAudit("Format", formatIds, "DELETE_FORMAT");
 
         // Revalidar o caminho para atualizar os dados
         revalidatePath("/formats")

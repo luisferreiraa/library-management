@@ -219,8 +219,13 @@ export default async function BookPage({ params }: BookPageProps) {
                         <TabsContent value="barcodes" className="mt-6">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Exemplares</CardTitle>
-                                    <CardDescription>Lista de exemplares disponíveis deste livro</CardDescription>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <CardTitle>Exemplares</CardTitle>
+                                            <CardDescription>Lista de exemplares disponíveis deste livro</CardDescription>
+                                        </div>
+                                        <CreateBarcodeButton bookId={book.id} />
+                                    </div>
                                 </CardHeader>
                                 <CardContent>
                                     {book.barcodes && book.barcodes.length > 0 ? (
@@ -242,8 +247,6 @@ export default async function BookPage({ params }: BookPageProps) {
                                     ) : (
                                         <div className="flex flex-col items-center text-center py-6 text-muted-foreground">
                                             <p>Nenhum exemplar registado para este livro.</p>
-
-                                            <CreateBarcodeButton bookId={book.id} />
                                         </div>
 
                                     )}
