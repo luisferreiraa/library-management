@@ -4,6 +4,7 @@ import { Navbar } from "@/components/navbar"
 import { ThemeProvider } from "next-themes"
 import { Toaster } from "@/components/ui/toaster"
 import "@/app/globals.css"
+import { AuthProvider } from "@/components/auth/session-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,15 +21,19 @@ export default function RootLayout({
   return (
     <html lang="pt" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-grow">{children}</main>
-            <Toaster />
-          </div>
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <div className="flex flex-col min-h-screen">
+              <Navbar />
+              <main className="flex-grow">{children}</main>
+              <Toaster />
+            </div>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   )
 }
+
+
 
