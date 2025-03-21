@@ -26,3 +26,21 @@ export async function createAuditLog(
         },
     });
 }
+
+export async function deleteAuditLog(id: string): Promise<AuditLog> {
+    return prisma.auditLog.delete({
+        where: { id },
+    })
+}
+
+export async function deleteAuditLogs(ids: string[]): Promise<number> {
+    const result = await prisma.auditLog.deleteMany({
+        where: {
+            id: {
+                in: ids,
+            },
+        },
+    })
+
+    return result.count
+}

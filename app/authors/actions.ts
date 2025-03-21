@@ -2,11 +2,15 @@
 
 import { revalidatePath } from "next/cache"
 import { createAuthor, deleteAuthors } from "@/lib/authors"
+import { logAudit } from "@/lib/session";
 
 export async function createAuthorAction(authorData: { name: string; email: string; bio: string }): Promise<any> {
   try {
     // Criar o autor no banco de dados
     const newAuthor = await createAuthor(authorData)
+
+    // Criar auditLog
+    await logAudit("Author", newAuthor.id, "CREATE_AUTHOR");
 
     // Revalidar o caminho para atualizar os dados
     revalidatePath("/authors")
@@ -26,6 +30,9 @@ export async function deleteAuthorsAction(authorIds: string[]): Promise<void> {
   try {
     // Excluir os autores do banco de dados
     await deleteAuthors(authorIds)
+
+    // Criar auditLog
+    await logAudit("Author", authorIds, "DELETE_AUTHOR");
 
     // Revalidar o caminho para atualizar os dados
     revalidatePath("/authors")

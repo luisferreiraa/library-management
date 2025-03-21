@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createUser, deleteUsers } from "@/lib/users"
 import { uploadProfilePicture } from "@/lib/upload"
 import bcrypt from "bcryptjs"
+import { logAudit } from "@/lib/session"
 
 export async function uploadProfilePictureAction(formData: FormData): Promise<string> {
     try {
@@ -43,6 +44,9 @@ export async function createUserAction(userData: {
             nifNumber: Number.parseInt(userData.nifNumber),
         })
 
+        // Criar auditLog
+        await logAudit("User", newUser.id, "CREATE_USER");
+
         // Revalidar o caminho para atualizar os dados
         revalidatePath("/users")
 
@@ -69,6 +73,9 @@ export async function deleteUsersAction(userIds: string[]): Promise<void> {
     try {
         // Excluir os usuários do banco de dados
         await deleteUsers(userIds)
+
+        // Criar auditLog
+        await logAudit("User", userIds, "DELETE_USER");
 
         // Revalidar o caminho para atualizar os dados
         revalidatePath("/users")
