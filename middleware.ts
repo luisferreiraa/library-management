@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
     const isPublicRoute = publicRoutes.includes(pathname)
 
     // Rotas que exigem permissão de administrador
-    const adminRoutes = ["/authors", "/books", "/users"]
+    const adminRoutes = ["/authors", "/books", "/users", "/logs"]
     const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route))
 
     // Redirecionar para login se não estiver autenticado e não for rota pública

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
-import { Book, Users, BookOpenCheck, Tag, Menu, PenTool, LogOut, User } from "lucide-react"
+import { Book, Users, BookOpenCheck, Tag, Menu, PenTool, LogOut, User, ShieldAlert, BookMarked, BookText, Languages, FileText, Settings, ScrollText, ScrollTextIcon, ChevronDown } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -13,19 +13,64 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible"
 
-const navItems = [
-    { href: "/users", label: "Utilizadores", icon: Users, adminOnly: true },
-    { href: "/authors", label: "Autores", icon: PenTool, adminOnly: true },
-    { href: "/books", label: "Livros", icon: Book, adminOnly: true },
-    { href: "/publishers", label: "Editoras", icon: BookOpenCheck, adminOnly: true },
-    { href: "/categories", label: "Categorias", icon: Tag, adminOnly: true },
-    { href: "/catalog", label: "Catálogo", icon: Book, adminOnly: false },
+// Definição da estrutura de navegação
+type NavItem = {
+    label: string
+    href?: string
+    icon: React.ElementType
+    adminOnly?: boolean
+    children?: NavItem[]
+}
+
+const navItems: NavItem[] = [
+    {
+        label: "Gestão de Utilizadores",
+        icon: Users,
+        adminOnly: true,
+        children: [
+            { label: "Utilizadores", href: "/users", icon: User, adminOnly: true },
+            { label: "Roles", href: "/roles", icon: ShieldAlert, adminOnly: true },
+        ],
+    },
+    {
+        label: "Gestão de Livros",
+        icon: Book,
+        adminOnly: true,
+        children: [
+            { label: "Livros", href: "/books", icon: BookMarked, adminOnly: true },
+            { label: "Autores", href: "/authors", icon: PenTool, adminOnly: true },
+            { label: "Editoras", href: "/publishers", icon: BookOpenCheck, adminOnly: true },
+            { label: "Categorias", href: "/categories", icon: Tag, adminOnly: true },
+            { label: "Tradutores", href: "/translators", icon: User, adminOnly: true },
+            { label: "Formatos", href: "/formats", icon: BookText, adminOnly: true },
+            { label: "Idiomas", href: "/languages", icon: Languages, adminOnly: true },
+            { label: "Estados", href: "/bookstatuses", icon: FileText, adminOnly: true },
+        ],
+    },
+    {
+        label: "Regras e Configurações",
+        icon: Settings,
+        adminOnly: true,
+        children: [
+            { label: "Regras de Multa", href: "/penaltyrules", icon: ScrollText, adminOnly: true },
+        ],
+    },
+    {
+        label: "Registos e Auditoria",
+        icon: ScrollTextIcon,
+        adminOnly: true,
+        children: [
+            { label: "Logs", href: "/logs", icon: Book, adminOnly: true },
+        ]
+    }
 ]
 
 export function Navbar() {
@@ -33,6 +78,7 @@ export function Navbar() {
     const pathname = usePathname()
     const [open, setOpen] = useState(false)
     const isDesktop = useMediaQuery("(min-width: 768px)")
+    const [openCollapsibles, setOpenCollapsibles] = useState<Record<string, boolean>>({})
 
     // Verificar se o usuário é admin
     const isAdmin = session?.user?.role?.toLowerCase() === "admin"
@@ -69,34 +115,82 @@ export function Navbar() {
         window.location.href = href
     }
 
+    // Função para alternar o estado do collapsible
+    const toggleCollapsible = (label: string) => {
+        setOpenCollapsibles((prev) => ({
+            ...prev,
+            [label]: !prev[label],
+        }))
+    }
+
+    // Verificar se um item ou seus filhos estão ativos
+    const isItemActive = (item: NavItem): boolean => {
+        if (item.href && pathname.startsWith(item.href)) {
+            return true
+        }
+        if (item.children) {
+            return item.children.some((child) => child.href && pathname.startsWith(child.href))
+        }
+        return false
+    }
+
+
     return (
         <nav className="bg-background border-b sticky top-0 z-10">
             <div className="container mx-auto px-4">
                 <div className="flex h-16 items-center justify-between">
-                    <Link
-                        href="/"
-                        className="text-2xl font-bold text-primary"
-                        onClick={(e) => {
-                            e.preventDefault()
-                            handleNavigation("/")
-                        }}
-                    >
+                    <div className="text-2xl font-bold text-primary cursor-pointer" onClick={() => handleNavigation("/")}>
                         Biblio.Gest
-                    </Link>
+                    </div>
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-4">
                         {filteredNavItems.map((item) => {
-                            const isActive = pathname.startsWith(item.href)
+                            // Se o item tem filhos, renderizar um dropdown
+                            if (item.children && item.children.length > 0) {
+                                return (
+                                    <DropdownMenu key={item.label}>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${isItemActive(item)
+                                                    ? "bg-primary text-primary-foreground"
+                                                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                                                    }`}
+                                            >
+                                                <item.icon className="h-4 w-4 mr-2" />
+                                                {item.label}
+                                                <ChevronDown className="h-4 w-4 ml-1" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="w-56">
+                                            <DropdownMenuGroup>
+                                                {item.children.map((child) => (
+                                                    <DropdownMenuItem
+                                                        key={child.label}
+                                                        onClick={() => child.href && handleNavigation(child.href)}
+                                                        className={pathname.startsWith(child.href || "") ? "bg-accent" : ""}
+                                                    >
+                                                        <child.icon className="h-4 w-4 mr-2" />
+                                                        {child.label}
+                                                    </DropdownMenuItem>
+                                                ))}
+                                            </DropdownMenuGroup>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                )
+                            }
+
+                            // Se o item não tem filhos, renderizar um botão normal
                             return (
                                 <Button
-                                    key={item.href}
+                                    key={item.label}
                                     variant="ghost"
-                                    className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${isActive
-                                            ? "bg-primary text-primary-foreground"
-                                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                                    className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${pathname.startsWith(item.href || "")
+                                        ? "bg-primary text-primary-foreground"
+                                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                                         }`}
-                                    onClick={() => handleNavigation(item.href)}
+                                    onClick={() => item.href && handleNavigation(item.href)}
                                 >
                                     <item.icon className="h-4 w-4 mr-2" />
                                     {item.label}
@@ -187,22 +281,68 @@ export function Navbar() {
                                     <Menu className="h-5 w-5" />
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="right">
+                            <SheetContent side="right" className="overflow-y-auto">
                                 <SheetHeader className="mb-4">
                                     <SheetTitle>Menu</SheetTitle>
                                 </SheetHeader>
                                 <div className="flex flex-col space-y-2">
                                     {filteredNavItems.map((item) => {
-                                        const isActive = pathname.startsWith(item.href)
+                                        // Se o item tem filhos, renderizar um collapsible
+                                        if (item.children && item.children.length > 0) {
+                                            return (
+                                                <Collapsible
+                                                    key={item.label}
+                                                    open={openCollapsibles[item.label]}
+                                                    onOpenChange={() => toggleCollapsible(item.label)}
+                                                    className="w-full"
+                                                >
+                                                    <CollapsibleTrigger asChild>
+                                                        <Button
+                                                            variant="ghost"
+                                                            className={`flex items-center justify-between w-full px-3 py-2 rounded-md text-sm font-medium ${isItemActive(item)
+                                                                ? "bg-primary text-primary-foreground"
+                                                                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                                                                }`}
+                                                        >
+                                                            <div className="flex items-center">
+                                                                <item.icon className="h-4 w-4 mr-2" />
+                                                                {item.label}
+                                                            </div>
+                                                            <ChevronDown
+                                                                className={`h-4 w-4 transition-transform ${openCollapsibles[item.label] ? "rotate-180" : ""}`}
+                                                            />
+                                                        </Button>
+                                                    </CollapsibleTrigger>
+                                                    <CollapsibleContent className="pl-6 space-y-1 mt-1">
+                                                        {item.children.map((child) => (
+                                                            <Button
+                                                                key={child.label}
+                                                                variant="ghost"
+                                                                className={`flex items-center justify-start w-full px-3 py-2 rounded-md text-sm font-medium ${pathname.startsWith(child.href || "")
+                                                                    ? "bg-accent text-accent-foreground"
+                                                                    : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
+                                                                    }`}
+                                                                onClick={() => child.href && handleNavigation(child.href)}
+                                                            >
+                                                                <child.icon className="h-4 w-4 mr-2" />
+                                                                {child.label}
+                                                            </Button>
+                                                        ))}
+                                                    </CollapsibleContent>
+                                                </Collapsible>
+                                            )
+                                        }
+
+                                        // Se o item não tem filhos, renderizar um botão normal
                                         return (
                                             <Button
-                                                key={item.href}
+                                                key={item.label}
                                                 variant="ghost"
-                                                className={`flex items-center justify-start px-3 py-2 rounded-md text-sm font-medium ${isActive
-                                                        ? "bg-primary text-primary-foreground"
-                                                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                                                className={`flex items-center justify-start w-full px-3 py-2 rounded-md text-sm font-medium ${pathname.startsWith(item.href || "")
+                                                    ? "bg-primary text-primary-foreground"
+                                                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                                                     }`}
-                                                onClick={() => handleNavigation(item.href)}
+                                                onClick={() => item.href && handleNavigation(item.href)}
                                             >
                                                 <item.icon className="h-4 w-4 mr-2" />
                                                 {item.label}

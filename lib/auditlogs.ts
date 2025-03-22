@@ -1,12 +1,20 @@
 import { prisma } from "./prisma"
-import type { AuditLog as PrismaAuditLog } from "@prisma/client"
+import type { AuditLog as PrismaAuditLog, Prisma } from "@prisma/client"
 
 export type AuditLog = PrismaAuditLog
+export type AuditLogWithRelations = Prisma.AuditLogGetPayload<{
+    include: {
+        user: true
+    }
+}>
 
 export async function getAuditLogs(): Promise<AuditLog[]> {
     return prisma.auditLog.findMany({
         orderBy: {
             timestamp: 'desc',
+        },
+        include: {
+            user: true,
         },
     });
 }

@@ -1,8 +1,7 @@
 "use client"
 
 import { format } from "date-fns"
-import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2 } from "lucide-react"
 import { useAuditLogs } from "@/contexts/logs-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -23,18 +22,17 @@ import { deleteAuditLogsAction } from "@/app/logs/actions"
 import { toast } from "@/components/ui/use-toast"
 
 export function AuditLogsTable() {
-    const { filteredAuthors, selectedAuthorIds, toggleAuthorSelection, toggleAllAuthors, hasSelection, removeAuthors } =
-        useAuthors()
-
+    const { filteredAuditLogs, selectedAuditLogIds, toggleAuditLogSelection, toggleAllAuditLogs, hasSelection, removeAuditLogs } =
+        useAuditLogs()
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-    // Verificar se todos os autores estão selecionados
+    // Verificar se todos os logs estão selecionados
     const allSelected =
-        filteredAuthors.length > 0 && filteredAuthors.every((author) => selectedAuthorIds.includes(author.id))
+        filteredAuditLogs.length > 0 && filteredAuditLogs.every((auditLog) => selectedAuditLogIds.includes(auditLog.id))
 
-    // Verificar se alguns autores estão selecionados
-    const someSelected = selectedAuthorIds.length > 0 && !allSelected
+    // Verificar se alguns logs estão selecionados
+    const someSelected = selectedAuditLogIds.length > 0 && !allSelected
 
     // Função para formatar a data corretamente
     const formatDate = (dateValue: Date | string) => {
@@ -44,27 +42,27 @@ export function AuditLogsTable() {
 
     // Função para excluir os autores selecionados
     const handleDeleteSelected = async () => {
-        if (selectedAuthorIds.length === 0) return
+        if (selectedAuditLogIds.length === 0) return
 
         try {
             setIsDeleting(true)
 
-            // Chamar a Server Action para excluir os autores
-            await deleteAuthorsAction(selectedAuthorIds)
+            // Chamar a Server Action para excluir os logs
+            await deleteAuditLogsAction(selectedAuditLogIds)
 
             // Atualizar o estado local otimisticamente
-            removeAuthors(selectedAuthorIds)
+            removeAuditLogs(selectedAuditLogIds)
 
             toast({
-                title: "Autores excluídos com sucesso",
-                description: `${selectedAuthorIds.length} autor(es) foram excluídos.`,
+                title: "Logs excluídos com sucesso",
+                description: `${selectedAuditLogIds.length} log(s) foram excluídos.`,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
             toast({
-                title: "Erro ao excluir autores",
-                description: "Ocorreu um erro ao excluir os autores selecionados.",
+                title: "Erro ao excluir logs",
+                description: "Ocorreu um erro ao excluir os logs selecionados.",
                 variant: "destructive",
             })
         } finally {
@@ -80,14 +78,14 @@ export function AuditLogsTable() {
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" size="sm" className="flex items-center gap-2">
                                 <Trash2 className="h-4 w-4" />
-                                Excluir Selecionados ({selectedAuthorIds.length})
+                                Excluir Selecionados ({selectedAuditLogIds.length})
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>Excluir autores</AlertDialogTitle>
+                                <AlertDialogTitle>Excluir logs</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja excluir {selectedAuthorIds.length} autor(es)? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja excluir {selectedAuditLogIds.length} log(s)? Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -113,54 +111,43 @@ export function AuditLogsTable() {
                                 <IndeterminateCheckbox
                                     checked={allSelected}
                                     indeterminate={someSelected}
-                                    onCheckedChange={toggleAllAuthors}
+                                    onCheckedChange={toggleAllAuditLogs}
                                     aria-label="Selecionar todos os autores"
                                 />
                             </TableHead>
-                            <TableHead>Nome</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Bio</TableHead>
-                            <TableHead>Data de Criação</TableHead>
-                            <TableHead className="w-[80px]">Ações</TableHead>
+                            <TableHead>#</TableHead>
+                            <TableHead>Entidade</TableHead>
+                            <TableHead>Id Entidade</TableHead>
+                            <TableHead>Ação</TableHead>
+                            <TableHead>Utilizador</TableHead>
+                            <TableHead>Timestamp</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredAuthors.length === 0 ? (
+                        {filteredAuditLogs.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={6} className="h-24 text-center">
-                                    Nenhum autor encontrado.
+                                    Nenhum log encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredAuthors.map((author) => (
-                                <TableRow key={author.id} className={selectedAuthorIds.includes(author.id) ? "bg-muted/50" : ""}>
+                            filteredAuditLogs.map((log, index) => (
+                                <TableRow key={log.id} className={selectedAuditLogIds.includes(log.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
-                                            checked={selectedAuthorIds.includes(author.id)}
-                                            onCheckedChange={() => toggleAuthorSelection(author.id)}
-                                            aria-label={`Selecionar ${author.name}`}
+                                            checked={selectedAuditLogIds.includes(log.id)}
+                                            onCheckedChange={() => toggleAuditLogSelection(log.id)}
+                                            aria-label={`Selecionar ${log.id}`}
                                         />
                                     </TableCell>
                                     <TableCell className="font-medium">
-                                        {/* Transformar o nome do autor em um link */}
-                                        <Link
-                                            href={`/authors/${author.id}`}
-                                            className="hover:underline hover:text-primary transition-colors"
-                                        >
-                                            {author.name}
-                                        </Link>
+                                        {index + 1}
                                     </TableCell>
-                                    <TableCell>{author.email}</TableCell>
-                                    <TableCell className="max-w-xs truncate">{author.bio || "-"}</TableCell>
-                                    <TableCell>{formatDate(author.createdAt)}</TableCell>
-                                    <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/authors/${author.id}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {author.name}</span>
-                                            </Link>
-                                        </Button>
-                                    </TableCell>
+                                    <TableCell>{log.entity}</TableCell>
+                                    <TableCell>{log.entityId}</TableCell>
+                                    <TableCell>{log.action}</TableCell>
+                                    <TableCell>{log.user.username}</TableCell>
+                                    <TableCell>{formatDate(log.timestamp)}</TableCell>
                                 </TableRow>
                             ))
                         )}

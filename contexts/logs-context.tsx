@@ -1,15 +1,15 @@
 "use client"
 
 import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition } from "react"
-import type { AuditLog } from "@/lib/auditlogs"
+import type { AuditLogWithRelations } from "@/lib/auditlogs"
 
 interface AuditLogsContextType {
-    auditLogs: AuditLog[]
+    auditLogs: AuditLogWithRelations[]
     removeAuditLogs: (auditLogIds: string[]) => void
     isPending: boolean
     searchTerm: string
     setSearchTerm: (term: string) => void
-    filteredAuditLogs: AuditLog[]
+    filteredAuditLogs: AuditLogWithRelations[]
     selectedAuditLogIds: string[]
     toggleAuditLogSelection: (auditLogId: string) => void
     toggleAllAuditLogs: (selected: boolean) => void
@@ -24,7 +24,7 @@ export function AuditLogsProvider({
     initialAuditLogs,
 }: {
     children: ReactNode
-    initialAuditLogs: AuditLog[]
+    initialAuditLogs: AuditLogWithRelations[]
 }) {
     const [isPending, startTransition] = useTransition()
     const [optimisticAuditLogs, updateAuditLogs] = useOptimistic(

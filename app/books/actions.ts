@@ -4,9 +4,6 @@ import { revalidatePath } from "next/cache"
 import { createBook, deleteBooks } from "@/lib/books"
 import { uploadCoverImage } from "@/lib/upload"
 import { createBarcode } from "@/lib/barcodes"
-import { createAuditLog } from "@/lib/auditlogs"
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth"
 import { logAudit } from "@/lib/session"
 
 export async function uploadCoverImageAction(formData: FormData): Promise<string> {

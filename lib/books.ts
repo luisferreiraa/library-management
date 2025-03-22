@@ -14,6 +14,7 @@ export type BookWithRelations = Prisma.BookGetPayload<{
         bookStatus: true
         categories: true
         barcodes: true
+        reviews: true
     }
 }>
 
@@ -30,6 +31,11 @@ export async function getBooks(): Promise<BookWithRelations[]> {
             translator: true,
             bookStatus: true,
             categories: true,
+            reviews: {
+                where: {
+                    isActive: true
+                },
+            },
             barcodes: {
                 where: {
                     isActive: true,
