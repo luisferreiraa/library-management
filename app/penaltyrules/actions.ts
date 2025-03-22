@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createPenaltyRule, deletePenaltyRules, } from "@/lib/penaltyrules"
 import { logAudit } from "@/lib/session";
 
-export async function createPenaltyRuleAction(penaltyRuleData: { name: string; description: string; finePerDay: number }): Promise<any> {
+export async function createPenaltyRuleAction(penaltyRuleData: { name: string; description: string; finePerDay: number; minDaysLate: number; maxDaysLate?: number }): Promise<any> {
     try {
         // Criar a multa na base de dados
         const newPenaltyRule = await createPenaltyRule(penaltyRuleData)

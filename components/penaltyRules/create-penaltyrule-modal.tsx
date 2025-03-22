@@ -25,6 +25,7 @@ const formSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
     description: z.string().min(5, { message: "Descrição deve ter pelo menos 5 caracteres" }),
     finePerDay: z.number().positive({ message: "Multa por dia deve ser um número positivo" }),
+    minDaysLate: z.number().positive({ message: "Número mínimo de dias de atraso deve ser positivo" }),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -45,6 +46,7 @@ export function CreatePenaltyRuleModal({ open, onOpenChange }: CreatePenaltyRule
             name: "",
             description: "",
             finePerDay: 0,
+            minDaysLate: 0,
         },
     })
 
@@ -130,6 +132,52 @@ export function CreatePenaltyRuleModal({ open, onOpenChange }: CreatePenaltyRule
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Valor p/ dia</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="number"
+                                            placeholder="0"
+                                            {...field}
+                                            value={field.value ?? ""} // Evita NaN
+                                            onChange={(e) => {
+                                                const value = e.target.value === "" ? "" : Number(e.target.value);
+                                                field.onChange(value);
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="minDaysLate"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Mínimo de dias de atraso</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="number"
+                                            placeholder="0"
+                                            {...field}
+                                            value={field.value ?? ""} // Evita NaN
+                                            onChange={(e) => {
+                                                const value = e.target.value === "" ? "" : Number(e.target.value);
+                                                field.onChange(value);
+                                            }}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="maxDaysLate"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Máximo de dias de atraso</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="number"

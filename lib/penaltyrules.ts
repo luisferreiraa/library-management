@@ -18,7 +18,13 @@ export async function getPenaltyRuleById(id: string): Promise<PenaltyRule | null
     })
 }
 
-export async function createPenaltyRule(data: { name: string; description: string; finePerDay: number }): Promise<PenaltyRule> {
+export async function createPenaltyRule(data: {
+    name: string;
+    description: string;
+    finePerDay: number;
+    minDaysLate: number;
+    maxDaysLate?: number;
+}): Promise<PenaltyRule> {
     const slug: string = slugify(data.name, { lower: true });
 
     return prisma.penaltyRule.create({

@@ -84,6 +84,8 @@ model PenaltyRule {
   slug        String
   description String
   finePerDay  Float
+  minDaysLate Int
+  maxDaysLate Int?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   isActive    Boolean  @default(true)
@@ -136,16 +138,16 @@ model Barcode {
 }
 
 model BorrowedBook {
-  id         String   @id @default(cuid())
-  barcode    Barcode  @relation(fields: [barcodeId], references: [id], name: "BarcodeBorrowedBooks")
+  id         String    @id @default(cuid())
+  barcode    Barcode   @relation(fields: [barcodeId], references: [id], name: "BarcodeBorrowedBooks")
   barcodeId  String
-  user       User     @relation(fields: [userId], references: [id], name: "UserBorrowedBooks")
+  user       User      @relation(fields: [userId], references: [id], name: "UserBorrowedBooks")
   userId     String
-  borrowedAt DateTime @default(now())
+  borrowedAt DateTime  @default(now())
   dueDate    DateTime
-  returnDate DateTime
+  returnDate DateTime?
   fineValue  Float
-  isActive   Boolean  @default(true)
+  isActive   Boolean   @default(true)
 }
 
 model Review {
