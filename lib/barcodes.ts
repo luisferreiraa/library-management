@@ -9,6 +9,12 @@ export async function getBarcodesByBookId(bookId: string): Promise<Barcode[]> {
     })
 }
 
+export async function getBarcodeIdByCode(code: string): Promise<Barcode | null> {
+    return await prisma.barcode.findUnique({
+        where: { code: code },
+    });
+}
+
 export async function createBarcode(bookId: string, code: string): Promise<Barcode> {
     return prisma.barcode.create({
         data: {

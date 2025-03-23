@@ -1,13 +1,23 @@
 import { prisma } from "./prisma"
-import type { BorrowedBook as PrismaBorrowedBook } from "@prisma/client"
+import type { BorrowedBook as PrismaBorrowedBook, Prisma } from "@prisma/client"
 
 export type BorrowedBook = PrismaBorrowedBook
+export type BorrowedBookWithRelations = Prisma.BorrowedBookGetPayload<{
+    include: {
+        barcode: true
+        user: true
+    }
+}>
 
-export async function getBorrowedBooks(): Promise<BorrowedBook[]> {
+export async function getBorrowedBooks(): Promise<BorrowedBookWithRelations[]> {
     return prisma.borrowedBook.findMany({
         orderBy: {
             borrowedAt: 'desc',
         },
+        include: {
+            barcode: true,
+            user: true,
+        }
     });
 }
 

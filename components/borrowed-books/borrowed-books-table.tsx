@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, X, Check } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
 import { Button } from "@/components/ui/button"
@@ -17,6 +17,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { markMultipleBooksAsReturnedAction } from "@/app/borrowed-books/actions"
 import { toast } from "@/components/ui/use-toast"
@@ -117,11 +118,11 @@ export function BorrowedBooksTable() {
                                     aria-label="Selecionar todos os empréstimos"
                                 />
                             </TableHead>
-                            <TableHead>Id</TableHead>
+                            <TableHead>Código de Barras</TableHead>
                             <TableHead>Utilizador</TableHead>
-                            <TableHead>Livro</TableHead>
                             <TableHead>Data de Empréstimo</TableHead>
-                            <TableHead>Data Limite p/ Devolução</TableHead>
+                            <TableHead>Prazo p/ Devolução</TableHead>
+                            <TableHead>Data de Devolução</TableHead>
                             <TableHead>Multa</TableHead>
                             <TableHead>Estado</TableHead>
                         </TableRow>
@@ -143,13 +144,28 @@ export function BorrowedBooksTable() {
                                             aria-label={`Selecionar ${borrowedBook.id}`}
                                         />
                                     </TableCell>
-                                    <TableCell className="font-medium">{borrowedBook.id}</TableCell>
-                                    <TableCell>{borrowedBook.userId}</TableCell>
-                                    <TableCell className="max-w-xs truncate">{borrowedBook.barcodeId || "-"}</TableCell>
+                                    <TableCell className="font-medium">{borrowedBook.barcode.code}</TableCell>
+                                    <TableCell>{`${borrowedBook.user.firstName} ${borrowedBook.user.lastName}`}</TableCell>
                                     <TableCell>{formatDate(borrowedBook.borrowedAt)}</TableCell>
                                     <TableCell>{formatDate(borrowedBook.dueDate)}</TableCell>
-                                    <TableCell>{borrowedBook.fineValue + " Eur"}</TableCell>
-                                    <TableCell>{borrowedBook.isActive}</TableCell>
+                                    <TableCell>
+                                        {borrowedBook.returnDate ? new Date(borrowedBook.returnDate).toLocaleDateString() : "-"}
+                                    </TableCell>
+
+                                    <TableCell>{borrowedBook.isActive ? "-" : `${borrowedBook.fineValue} €`}</TableCell>
+                                    <TableCell>
+                                        {borrowedBook.isActive ? (
+                                            <Badge variant="pending" className="flex items-center gap-1 w-fit">
+                                                <X className="h-3 w-3" />
+                                                Ativo
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="success" className="flex items-center gap-1 w-fit">
+                                                <Check className="h-3 w-3" />
+                                                Entregue
+                                            </Badge>
+                                        )}
+                                    </TableCell>
                                 </TableRow>
                             ))
                         )}

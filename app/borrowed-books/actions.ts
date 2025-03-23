@@ -3,26 +3,33 @@
 import { revalidatePath } from "next/cache";
 import { createBorrowedBook, markBookAsReturned, markMultipleBooksAsReturned } from "@/lib/borrowed-books";
 import { logAudit } from "@/lib/session";
+import { getBarcodeIdByCode } from "@/lib/barcodes";
 
-export async function createBorrowedBookAction(borrowedBookData: { barcodeId: string, userId: string }): Promise<any> {
+export async function createBorrowedBookAction(borrowedBookData: { code: string, userId: string }): Promise<any> {
     try {
-        const { barcodeId, userId } = borrowedBookData
+        const { code, userId } = borrowedBookData;
 
+        // Obter barcodeId a partir do código
+        const barcode = await getBarcodeIdByCode(code);
+        if (!barcode) {
+            throw new Error("Código de livro não encontrado.");
+        }
 
         // Criar borrowedBook na base de dados
-        const newBorrowedBook = await createBorrowedBook(barcodeId, userId)
+        const newBorrowedBook = await createBorrowedBook(barcode.id, userId);
 
         // Criar auditLog
         await logAudit("BorrowedBook", newBorrowedBook.id, "CREATE_BORROWED_BOOK");
 
         // Revalidar o caminho para atualizar dados
-        revalidatePath("/borrowed-books")
+        revalidatePath("/borrowed-books");
 
-        return newBorrowedBook
+        return newBorrowedBook;
     } catch (error: any) {
-        throw new Error("Erro ao criar empréstimo: " + error.message)
+        throw new Error("Erro ao criar empréstimo: " + error.message);
     }
 }
+
 
 export async function markBookAsReturnedAction(borrowedBookId: string): Promise<void> {
     try {

@@ -1,16 +1,16 @@
 "use client"
 
 import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition } from "react"
-import type { BorrowedBook } from "@/lib/borrowed-books"
+import type { BorrowedBook, BorrowedBookWithRelations } from "@/lib/borrowed-books"
 
 interface BorrowedBooksContextType {
-    borrowedBooks: BorrowedBook[]
-    addBorrowedBook: (borrowedBook: BorrowedBook) => void
+    borrowedBooks: BorrowedBookWithRelations[]
+    addBorrowedBook: (borrowedBook: BorrowedBookWithRelations) => void
     markAsReturned: (borrowedBookIds: string[]) => void
     isPending: boolean
     searchTerm: string
     setSearchTerm: (term: string) => void
-    filteredBorrowedBooks: BorrowedBook[]
+    filteredBorrowedBooks: BorrowedBookWithRelations[]
     selectedBorrowedBookIds: string[]
     toggleBorrowedBookSelection: (borrowedBookId: string) => void
     toggleAllBorrowedBooks: (selected: boolean) => void
@@ -25,12 +25,12 @@ export function BorrowedBooksProvider({
     initialBorrowedBooks,
 }: {
     children: ReactNode
-    initialBorrowedBooks: BorrowedBook[]
+    initialBorrowedBooks: BorrowedBookWithRelations[]
 }) {
     const [isPending, startTransition] = useTransition()
     const [optimisticBorrowedBooks, updateBorrowedBooks] = useOptimistic(
         initialBorrowedBooks,
-        (state, action: { type: "add"; borrowedBook: BorrowedBook } | { type: "update"; borrowedBookIds: string[] }) => {
+        (state, action: { type: "add"; borrowedBook: BorrowedBookWithRelations } | { type: "update"; borrowedBookIds: string[] }) => {
             if (action.type === "add") {
                 return [...state, action.borrowedBook]
             } else if (action.type === "update") {
@@ -55,7 +55,7 @@ export function BorrowedBooksProvider({
         return optimisticBorrowedBooks.filter((borrowedBook) => borrowedBook.id.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticBorrowedBooks])
 
-    const addBorrowedBook = (borrowedBook: BorrowedBook) => {
+    const addBorrowedBook = (borrowedBook: BorrowedBookWithRelations) => {
         startTransition(() => {
             updateBorrowedBooks({ type: "add", borrowedBook })
         })

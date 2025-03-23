@@ -135,7 +135,7 @@ export function UsersTable() {
                         {filteredUsers.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={7} className="h-24 text-center">
-                                    Nenhum usuário encontrado.
+                                    Nenhum utilizador encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (

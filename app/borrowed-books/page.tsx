@@ -15,6 +15,7 @@ export default async function BorrowedBooksPage() {
             <BorrowedBooksProvider initialBorrowedBooks={borrowedBooks}>
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Empréstimos</h1>
+                    <CreateBorrowedBookButton />
                 </div>
 
                 <div className="mb-6 max-w-sm">
