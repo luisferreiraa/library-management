@@ -53,7 +53,7 @@ const navItems: NavItem[] = [
             { label: "Tradutores", href: "/translators", icon: User, adminOnly: true },
             { label: "Formatos", href: "/formats", icon: BookText, adminOnly: true },
             { label: "Idiomas", href: "/languages", icon: Languages, adminOnly: true },
-            { label: "Estados", href: "/bookstatus", icon: FileText, adminOnly: true },
+            { label: "Estados", href: "/book-status", icon: FileText, adminOnly: true },
         ],
     },
     {
@@ -61,7 +61,7 @@ const navItems: NavItem[] = [
         icon: Settings,
         adminOnly: true,
         children: [
-            { label: "Regras de Multa", href: "/penaltyrules", icon: ScrollText, adminOnly: true },
+            { label: "Regras de Multa", href: "/penalty-rules", icon: ScrollText, adminOnly: true },
         ],
     },
     {

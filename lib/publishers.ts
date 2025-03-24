@@ -1,8 +1,13 @@
 import { prisma } from "./prisma"
-import type { Publisher as PrismaPublisher } from "@prisma/client"
+import type { Publisher as PrismaPublisher, Book as PrismaBook, Prisma } from "@prisma/client"
 import slugify from "slugify"
 
 export type Publisher = PrismaPublisher
+export type Book = PrismaBook
+
+export type PublisherWithBooks = Prisma.PublisherGetPayload<{
+    include: { books: true }
+}>
 
 export async function getPublishers(): Promise<Publisher[]> {
     return prisma.publisher.findMany({
@@ -16,6 +21,19 @@ export async function getPublisherById(id: string): Promise<Publisher | null> {
     return prisma.publisher.findUnique({
         where: { id },
     })
+}
+
+export async function getPublisherWithBooks(slug: string): Promise<PublisherWithBooks | null> {
+    return prisma.publisher.findUnique({
+        where: { slug },
+        include: {
+            books: {
+                orderBy: {
+                    createdAt: "desc",
+                },
+            },
+        },
+    });
 }
 
 export async function createPublisher(data: { name: string }): Promise<Publisher> {

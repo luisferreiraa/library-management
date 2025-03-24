@@ -19,7 +19,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
-import { deleteBookStatusesAction } from "@/app/bookstatus/actions"
+import { deleteBookStatusesAction } from "@/app/book-status/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 

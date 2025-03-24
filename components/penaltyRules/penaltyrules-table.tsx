@@ -19,7 +19,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
-import { deletePenaltyRulesAction } from "@/app/penaltyrules/actions"
+import { deletePenaltyRulesAction } from "@/app/penalty-rules/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 
