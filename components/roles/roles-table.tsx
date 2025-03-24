@@ -21,17 +21,30 @@ import {
 import { useState } from "react"
 import { deleteRolesAction } from "@/app/roles/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function RolesTable() {
-    const { filteredRoles, selectedRoleIds, toggleRoleSelection, toggleAllRoles, hasSelection, removeRoles } =
-        useRoles()
+    const {
+        paginatedRoles,
+        filteredRoles,
+        selectedRoleIds,
+        toggleRoleSelection,
+        toggleAllRoles,
+        hasSelection,
+        removeRoles,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useRoles()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todas os roles estão selecionados
     const allSelected =
-        filteredRoles.length > 0 && filteredRoles.every((role) => selectedRoleIds.includes(role.id))
+        paginatedRoles.length > 0 && paginatedRoles.every((role) => selectedRoleIds.includes(role.id))
 
     // Verificar se alguns roles estão selecionados
     const someSelected = selectedRoleIds.length > 0 && !allSelected
@@ -122,14 +135,14 @@ export function RolesTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredRoles.length === 0 ? (
+                        {paginatedRoles.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhum role encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredRoles.map((role) => (
+                            paginatedRoles.map((role) => (
                                 <TableRow key={role.id} className={selectedRoleIds.includes(role.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -162,6 +175,15 @@ export function RolesTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredRoles.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

@@ -16,6 +16,12 @@ interface PublishersContextType {
     toggleAllPublishers: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedPublishers: Publisher[]
+    totalPages: number
 }
 
 const PublishersContext = createContext<PublishersContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function PublishersProvider({
     // Estado para seleção de categorias
     const [selectedPublisherIds, setSelectedPublisherIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Usar useMemo em vez de useEffect + useState para filtrar categorias
     const filteredPublishers = useMemo(() => {
         if (searchTerm === "") {
@@ -54,6 +64,24 @@ export function PublishersProvider({
 
         return optimisticPublishers.filter((publisher) => publisher.name.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticPublishers])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredPublishers.length / pageSize))
+    }, [filteredPublishers, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter editoras paginadas
+    const paginatedPublishers = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredPublishers.slice(startIndex, startIndex + pageSize)
+    }, [filteredPublishers, currentPage, pageSize])
 
     const addPublisher = (publisher: Publisher) => {
         startTransition(() => {
@@ -106,6 +134,12 @@ export function PublishersProvider({
                 toggleAllPublishers,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedPublishers,
+                totalPages,
             }}
         >
             {children}

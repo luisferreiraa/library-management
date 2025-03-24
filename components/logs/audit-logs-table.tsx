@@ -20,16 +20,30 @@ import {
 import { useState } from "react"
 import { deleteAuditLogsAction } from "@/app/logs/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function AuditLogsTable() {
-    const { filteredAuditLogs, selectedAuditLogIds, toggleAuditLogSelection, toggleAllAuditLogs, hasSelection, removeAuditLogs } =
-        useAuditLogs()
+    const {
+        paginatedLogs,
+        filteredAuditLogs,
+        selectedAuditLogIds,
+        toggleAuditLogSelection,
+        toggleAllAuditLogs,
+        hasSelection,
+        removeAuditLogs,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useAuditLogs()
+
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todos os logs estão selecionados
     const allSelected =
-        filteredAuditLogs.length > 0 && filteredAuditLogs.every((auditLog) => selectedAuditLogIds.includes(auditLog.id))
+        paginatedLogs.length > 0 && paginatedLogs.every((auditLog) => selectedAuditLogIds.includes(auditLog.id))
 
     // Verificar se alguns logs estão selecionados
     const someSelected = selectedAuditLogIds.length > 0 && !allSelected
@@ -124,14 +138,14 @@ export function AuditLogsTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredAuditLogs.length === 0 ? (
+                        {paginatedLogs.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={6} className="h-24 text-center">
                                     Nenhum log encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredAuditLogs.map((log, index) => (
+                            paginatedLogs.map((log, index) => (
                                 <TableRow key={log.id} className={selectedAuditLogIds.includes(log.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -154,6 +168,15 @@ export function AuditLogsTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredAuditLogs.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

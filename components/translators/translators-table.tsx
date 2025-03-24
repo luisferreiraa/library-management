@@ -21,17 +21,30 @@ import {
 import { useState } from "react"
 import { deleteTranslatorsAction } from "@/app/translators/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function TranslatorsTable() {
-    const { filteredTranslators, selectedTranslatorIds, toggleTranslatorSelection, toggleAllTranslators, hasSelection, removeTranslators } =
-        useTranslators()
+    const {
+        paginatedTranslators,
+        filteredTranslators,
+        selectedTranslatorIds,
+        toggleTranslatorSelection,
+        toggleAllTranslators,
+        hasSelection,
+        removeTranslators,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useTranslators()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todos os editores estão selecionadas
     const allSelected =
-        filteredTranslators.length > 0 && filteredTranslators.every((translator) => selectedTranslatorIds.includes(translator.id))
+        paginatedTranslators.length > 0 && paginatedTranslators.every((translator) => selectedTranslatorIds.includes(translator.id))
 
     // Verificar se alguns tradutores estão selecionados
     const someSelected = selectedTranslatorIds.length > 0 && !allSelected
@@ -123,14 +136,14 @@ export function TranslatorsTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredTranslators.length === 0 ? (
+                        {paginatedTranslators.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhum tradutor encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredTranslators.map((translator) => (
+                            paginatedTranslators.map((translator) => (
                                 <TableRow key={translator.id} className={selectedTranslatorIds.includes(translator.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -163,6 +176,15 @@ export function TranslatorsTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredTranslators.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

@@ -21,17 +21,30 @@ import {
 import { useState } from "react"
 import { deletePublishersAction } from "@/app/publishers/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function PublishersTable() {
-    const { filteredPublishers, selectedPublisherIds, togglePublisherSelection, toggleAllPublishers, hasSelection, removePublishers } =
-        usePublishers()
+    const {
+        paginatedPublishers,
+        filteredPublishers,
+        selectedPublisherIds,
+        togglePublisherSelection,
+        toggleAllPublishers,
+        hasSelection,
+        removePublishers,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = usePublishers()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todas as editoras estão selecionadas
     const allSelected =
-        filteredPublishers.length > 0 && filteredPublishers.every((publisher) => selectedPublisherIds.includes(publisher.id))
+        paginatedPublishers.length > 0 && paginatedPublishers.every((publisher) => selectedPublisherIds.includes(publisher.id))
 
     // Verificar se algumas editoras estão selecionadas
     const someSelected = selectedPublisherIds.length > 0 && !allSelected
@@ -122,14 +135,14 @@ export function PublishersTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredPublishers.length === 0 ? (
+                        {paginatedPublishers.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhuma editora encontrada.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredPublishers.map((publisher) => (
+                            paginatedPublishers.map((publisher) => (
                                 <TableRow key={publisher.id} className={selectedPublisherIds.includes(publisher.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -162,6 +175,15 @@ export function PublishersTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredPublishers.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

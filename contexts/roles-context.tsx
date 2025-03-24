@@ -16,6 +16,12 @@ interface RolesContextType {
     toggleAllRoles: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedRoles: Role[]
+    totalPages: number
 }
 
 const RolesContext = createContext<RolesContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function RolesProvider({
     // Estado para seleção de roles
     const [selectedRoleIds, setSelectedRoleIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Usar useMemo em vez de useEffect + useState para filtrar roles
     const filteredRoles = useMemo(() => {
         if (searchTerm === "") {
@@ -54,6 +64,24 @@ export function RolesProvider({
 
         return optimisticRoles.filter((role) => role.name.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticRoles])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredRoles.length / pageSize))
+    }, [filteredRoles, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter roles paginados
+    const paginatedRoles = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredRoles.slice(startIndex, startIndex + pageSize)
+    }, [filteredRoles, currentPage, pageSize])
 
     const addRole = (role: Role) => {
         startTransition(() => {
@@ -106,6 +134,12 @@ export function RolesProvider({
                 toggleAllRoles,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedRoles,
+                totalPages,
             }}
         >
             {children}

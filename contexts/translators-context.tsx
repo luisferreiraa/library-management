@@ -16,6 +16,12 @@ interface TranslatorsContextType {
     toggleAllTranslators: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedTranslators: Translator[]
+    totalPages: number
 }
 
 const TranslatorsContext = createContext<TranslatorsContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function TranslatorsProvider({
     // Estado para seleção de tradutores
     const [selectedTranslatorIds, setSelectedTranslatorIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Usar useMemo em vez de useEffect + useState para filtrar tradutores
     const filteredTranslators = useMemo(() => {
         if (searchTerm === "") {
@@ -54,6 +64,24 @@ export function TranslatorsProvider({
 
         return optimisticTranslators.filter((translator) => translator.name.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticTranslators])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredTranslators.length / pageSize))
+    }, [filteredTranslators, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter autores paginados
+    const paginatedTranslators = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredTranslators.slice(startIndex, startIndex + pageSize)
+    }, [filteredTranslators, currentPage, pageSize])
 
     const addTranslator = (translator: Translator) => {
         startTransition(() => {
@@ -106,6 +134,12 @@ export function TranslatorsProvider({
                 toggleAllTranslators,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedTranslators,
+                totalPages,
             }}
         >
             {children}

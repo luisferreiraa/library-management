@@ -21,17 +21,30 @@ import {
 import { useState } from "react"
 import { deletePenaltyRulesAction } from "@/app/penaltyrules/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function PenaltyRulesTable() {
-    const { filteredPenaltyRules, selectedPenaltyRuleIds, togglePenaltyRuleSelection, toggleAllPenaltyRules, hasSelection, removePenaltyRules } =
-        usePenaltyRules()
+    const {
+        paginatedRules,
+        filteredPenaltyRules,
+        selectedPenaltyRuleIds,
+        togglePenaltyRuleSelection,
+        toggleAllPenaltyRules,
+        hasSelection,
+        removePenaltyRules,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = usePenaltyRules()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todas as penalty rules estão selecionadas
     const allSelected =
-        filteredPenaltyRules.length > 0 && filteredPenaltyRules.every((penaltyRule) => selectedPenaltyRuleIds.includes(penaltyRule.id))
+        paginatedRules.length > 0 && paginatedRules.every((penaltyRule) => selectedPenaltyRuleIds.includes(penaltyRule.id))
 
     // Verificar se algumas penalty rules estão selecionadas
     const someSelected = selectedPenaltyRuleIds.length > 0 && !allSelected
@@ -124,14 +137,14 @@ export function PenaltyRulesTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredPenaltyRules.length === 0 ? (
+                        {paginatedRules.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhuma regra encontrada.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredPenaltyRules.map((rule) => (
+                            paginatedRules.map((rule) => (
                                 <TableRow key={rule.id} className={selectedPenaltyRuleIds.includes(rule.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -166,6 +179,15 @@ export function PenaltyRulesTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredPenaltyRules.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

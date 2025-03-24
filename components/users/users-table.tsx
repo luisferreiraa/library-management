@@ -23,15 +23,29 @@ import { deleteUsersAction } from "@/app/users/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Pagination } from "../ui/pagination"
 
 export function UsersTable() {
-    const { filteredUsers, selectedUserIds, toggleUserSelection, toggleAllUsers, hasSelection, removeUsers } = useUsers()
+    const {
+        paginatedUsers,
+        filteredUsers,
+        selectedUserIds,
+        toggleUserSelection,
+        toggleAllUsers,
+        hasSelection,
+        removeUsers,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useUsers()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todos os usuários estão selecionados
-    const allSelected = filteredUsers.length > 0 && filteredUsers.every((user) => selectedUserIds.includes(user.id))
+    const allSelected = paginatedUsers.length > 0 && paginatedUsers.every((user) => selectedUserIds.includes(user.id))
 
     // Verificar se alguns usuários estão selecionados
     const someSelected = selectedUserIds.length > 0 && !allSelected
@@ -132,14 +146,14 @@ export function UsersTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredUsers.length === 0 ? (
+                        {paginatedUsers.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={7} className="h-24 text-center">
                                     Nenhum utilizador encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredUsers.map((user) => (
+                            paginatedUsers.map((user) => (
                                 <TableRow key={user.id} className={selectedUserIds.includes(user.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -200,6 +214,15 @@ export function UsersTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredUsers.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

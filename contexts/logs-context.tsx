@@ -62,6 +62,24 @@ export function AuditLogsProvider({
         return optimisticAuditLogs.filter((auditLog) => auditLog.entity.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticAuditLogs])
 
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredAuditLogs.length / pageSize))
+    }, [filteredAuditLogs, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter logs paginados
+    const paginatedLogs = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredAuditLogs.slice(startIndex, startIndex + pageSize)
+    }, [filteredAuditLogs, currentPage, pageSize])
+
     const removeAuditLogs = (auditLogIds: string[]) => {
         startTransition(() => {
             updateAuditLogs({ type: "remove", auditLogIds })
@@ -106,7 +124,12 @@ export function AuditLogsProvider({
                 toggleAllAuditLogs,
                 clearSelection,
                 hasSelection,
-
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedLogs,
+                totalPages,
             }}
         >
             {children}

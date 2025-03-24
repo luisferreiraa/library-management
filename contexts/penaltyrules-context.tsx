@@ -16,6 +16,12 @@ interface PenaltyRulesContextType {
     toggleAllPenaltyRules: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedRules: PenaltyRule[]
+    totalPages: number
 }
 
 const PenaltyRulesContext = createContext<PenaltyRulesContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function PenaltyRulesProvider({
     // Estado para seleção de penalty rules
     const [selectedPenaltyRuleIds, setSelectedPenaltyRuleIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Usar useMemo em vez de useEffect + useState para filtrar penalty rules
     const filteredPenaltyRules = useMemo(() => {
         if (searchTerm === "") {
@@ -54,6 +64,24 @@ export function PenaltyRulesProvider({
 
         return optimisticPenaltyRules.filter((penaltyRule) => penaltyRule.name.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticPenaltyRules])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredPenaltyRules.length / pageSize))
+    }, [filteredPenaltyRules, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter penalty rules paginadas
+    const paginatedRules = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredPenaltyRules.slice(startIndex, startIndex + pageSize)
+    }, [filteredPenaltyRules, currentPage, pageSize])
 
     const addPenaltyRule = (penaltyRule: PenaltyRule) => {
         startTransition(() => {
@@ -106,6 +134,12 @@ export function PenaltyRulesProvider({
                 toggleAllPenaltyRules,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedRules,
+                totalPages,
             }}
         >
             {children}

@@ -18,6 +18,12 @@ interface UsersContextType {
     toggleAllUsers: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedUsers: User[]
+    totalPages: number
 }
 
 const UsersContext = createContext<UsersContextType | undefined>(undefined)
@@ -48,6 +54,10 @@ export function UsersProvider({
     // Estado para seleção de usuários
     const [selectedUserIds, setSelectedUserIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Use useMemo para filtrar usuários
     const filteredUsers = useMemo(() => {
         if (searchTerm === "") {
@@ -63,6 +73,24 @@ export function UsersProvider({
                 user.username.toLowerCase().includes(lowerSearchTerm),
         )
     }, [searchTerm, optimisticUsers])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredUsers.length / pageSize))
+    }, [filteredUsers, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter autores paginados
+    const paginatedUsers = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredUsers.slice(startIndex, startIndex + pageSize)
+    }, [filteredUsers, currentPage, pageSize])
 
     const addUser = (user: User) => {
         startTransition(() => {
@@ -113,6 +141,12 @@ export function UsersProvider({
                 toggleAllUsers,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedUsers,
+                totalPages,
             }}
         >
             {children}
