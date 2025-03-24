@@ -16,6 +16,12 @@ interface AuthorsContextType {
     toggleAllAuthors: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedAuthors: Author[]
+    totalPages: number
 }
 
 const AuthorsContext = createContext<AuthorsContextType | undefined>(undefined)
@@ -46,14 +52,41 @@ export function AuthorsProvider({
     // Estado para seleção de autores
     const [selectedAuthorIds, setSelectedAuthorIds] = useState<string[]>([])
 
-    // Use useMemo em vez de useEffect + useState para filtrar autores
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
+    // Use useMemo para filtrar autores
     const filteredAuthors = useMemo(() => {
         if (searchTerm === "") {
             return optimisticAuthors
         }
 
-        return optimisticAuthors.filter((author) => author.name.toLowerCase().includes(searchTerm.toLowerCase()))
+        const lowerSearchTerm = searchTerm.toLowerCase()
+        return optimisticAuthors.filter(
+            (author) =>
+                author.name.toLowerCase().includes(lowerSearchTerm) ||
+                (author.bio && author.bio.toLowerCase().includes(lowerSearchTerm)),
+        )
     }, [searchTerm, optimisticAuthors])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredAuthors.length / pageSize))
+    }, [filteredAuthors, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter autores paginados
+    const paginatedAuthors = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredAuthors.slice(startIndex, startIndex + pageSize)
+    }, [filteredAuthors, currentPage, pageSize])
 
     const addAuthor = (author: Author) => {
         startTransition(() => {
@@ -106,6 +139,12 @@ export function AuthorsProvider({
                 toggleAllAuthors,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedAuthors,
+                totalPages,
             }}
         >
             {children}

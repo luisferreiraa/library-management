@@ -21,17 +21,30 @@ import {
 import { useState } from "react"
 import { deleteAuthorsAction } from "@/app/authors/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function AuthorsTable() {
-  const { filteredAuthors, selectedAuthorIds, toggleAuthorSelection, toggleAllAuthors, hasSelection, removeAuthors } =
-    useAuthors()
+  const {
+    paginatedAuthors,
+    filteredAuthors,
+    selectedAuthorIds,
+    toggleAuthorSelection,
+    toggleAllAuthors,
+    hasSelection,
+    removeAuthors,
+    currentPage,
+    setCurrentPage,
+    pageSize,
+    setPageSize,
+    totalPages,
+  } = useAuthors()
 
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   // Verificar se todos os autores estão selecionados
   const allSelected =
-    filteredAuthors.length > 0 && filteredAuthors.every((author) => selectedAuthorIds.includes(author.id))
+    paginatedAuthors.length > 0 && paginatedAuthors.every((author) => selectedAuthorIds.includes(author.id))
 
   // Verificar se alguns autores estão selecionados
   const someSelected = selectedAuthorIds.length > 0 && !allSelected
@@ -125,14 +138,14 @@ export function AuthorsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredAuthors.length === 0 ? (
+            {paginatedAuthors.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="h-24 text-center">
                   Nenhum autor encontrado.
                 </TableCell>
               </TableRow>
             ) : (
-              filteredAuthors.map((author) => (
+              paginatedAuthors.map((author) => (
                 <TableRow key={author.id} className={selectedAuthorIds.includes(author.id) ? "bg-muted/50" : ""}>
                   <TableCell>
                     <IndeterminateCheckbox
@@ -167,6 +180,15 @@ export function AuthorsTable() {
           </TableBody>
         </Table>
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        totalItems={filteredAuthors.length}
+        pageSize={pageSize}
+        onPageSizeChange={setPageSize}
+        className="mt-4"
+      />
     </div>
   )
 }

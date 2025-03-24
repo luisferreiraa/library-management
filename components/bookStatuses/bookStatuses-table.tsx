@@ -21,17 +21,30 @@ import {
 import { useState } from "react"
 import { deleteBookStatusesAction } from "@/app/bookstatus/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function BookStatusesTable() {
-    const { filteredBookStatuses, selectedBookStatusIds, toggleBookStatusSelection, toggleAllBookStatuses, hasSelection, removeBookStatuses } =
-        useBookStatuses()
+    const {
+        paginatedBookStatuses,
+        filteredBookStatuses,
+        selectedBookStatusIds,
+        toggleBookStatusSelection,
+        toggleAllBookStatuses,
+        hasSelection,
+        removeBookStatuses,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useBookStatuses()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todos os book status estão selecionados
     const allSelected =
-        filteredBookStatuses.length > 0 && filteredBookStatuses.every((bookStatus) => selectedBookStatusIds.includes(bookStatus.id))
+        paginatedBookStatuses.length > 0 && paginatedBookStatuses.every((bookStatus) => selectedBookStatusIds.includes(bookStatus.id))
 
     // Verificar se alguns book status estão selecionados
     const someSelected = selectedBookStatusIds.length > 0 && !allSelected
@@ -122,14 +135,14 @@ export function BookStatusesTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredBookStatuses.length === 0 ? (
+                        {paginatedBookStatuses.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhum status encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredBookStatuses.map((bookStatus) => (
+                            paginatedBookStatuses.map((bookStatus) => (
                                 <TableRow key={bookStatus.id} className={selectedBookStatusIds.includes(bookStatus.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -162,6 +175,15 @@ export function BookStatusesTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredBookStatuses.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

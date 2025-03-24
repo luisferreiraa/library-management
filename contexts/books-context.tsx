@@ -16,6 +16,12 @@ interface BooksContextType {
     toggleAllBooks: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedBooks: BookWithRelations[]
+    totalPages: number
 }
 
 const BooksContext = createContext<BooksContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function BooksProvider({
     // Estado para seleção de livros
     const [selectedBookIds, setSelectedBookIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Use useMemo para filtrar livros
     const filteredBooks = useMemo(() => {
         if (searchTerm === "") {
@@ -61,6 +71,25 @@ export function BooksProvider({
                 book.publisher.name.toLowerCase().includes(lowerSearchTerm),
         )
     }, [searchTerm, optimisticBooks])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredBooks.length / pageSize))
+    }, [filteredBooks, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > pageSize) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter livros paginados
+    const paginatedBooks = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredBooks.slice(startIndex, startIndex + pageSize)
+    }, [filteredBooks, currentPage, pageSize])
+
 
     const addBook = (book: BookWithRelations) => {
         startTransition(() => {
@@ -111,6 +140,12 @@ export function BooksProvider({
                 toggleAllBooks,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedBooks,
+                totalPages,
             }}
         >
             {children}

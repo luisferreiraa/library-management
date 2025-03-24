@@ -16,6 +16,12 @@ interface BookStatusesContextType {
     toggleAllBookStatuses: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedBookStatuses: BookStatus[]
+    totalPages: number
 }
 
 const BookStatusesContext = createContext<BookStatusesContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function BookStatusesProvider({
     // Estado para seleção de book status
     const [selectedBookStatusIds, setSelectedBookStatusIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Usar useMemo em vez de useEffect + useState para filtrar book status
     const filteredBookStatuses = useMemo(() => {
         if (searchTerm === "") {
@@ -54,6 +64,24 @@ export function BookStatusesProvider({
 
         return optimisticBookStatuses.filter((bookStatus) => bookStatus.name.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticBookStatuses])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredBookStatuses.length / pageSize))
+    }, [filteredBookStatuses, pageSize])
+
+    // Ajustar a página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter os status paginados
+    const paginatedBookStatuses = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredBookStatuses.slice(startIndex, startIndex + pageSize)
+    }, [filteredBookStatuses, currentPage, pageSize])
 
     const addBookStatus = (bookStatus: BookStatus) => {
         startTransition(() => {
@@ -106,6 +134,12 @@ export function BookStatusesProvider({
                 toggleAllBookStatuses,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedBookStatuses,
+                totalPages,
             }}
         >
             {children}

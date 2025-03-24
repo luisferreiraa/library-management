@@ -1,8 +1,7 @@
 "use client"
 
 import { format } from "date-fns"
-import Link from "next/link"
-import { Trash2, ExternalLink, X, Check } from "lucide-react"
+import { Trash2, X, Check } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
 import { Button } from "@/components/ui/button"
@@ -22,17 +21,31 @@ import { useState } from "react"
 import { markMultipleBooksAsReturnedAction } from "@/app/borrowed-books/actions"
 import { toast } from "@/components/ui/use-toast"
 import { useBorrowedBooks } from "@/contexts/borrowed-books-context"
+import { Pagination } from "../ui/pagination"
 
 export function BorrowedBooksTable() {
-    const { filteredBorrowedBooks, selectedBorrowedBookIds, toggleBorrowedBookSelection, toggleAllBorrowedBooks, hasSelection, markAsReturned } =
-        useBorrowedBooks()
+    const {
+        paginatedBorrowedBooks,
+        filteredBorrowedBooks,
+        selectedBorrowedBookIds,
+        toggleBorrowedBookSelection,
+        toggleAllBorrowedBooks,
+        hasSelection,
+        markAsReturned,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useBorrowedBooks()
 
     const [isMarking, setIsMarking] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todos os borrowedBooks estão selecionados
     const allSelected =
-        filteredBorrowedBooks.length > 0 && filteredBorrowedBooks.every((borrowedBook) => selectedBorrowedBookIds.includes(borrowedBook.id))
+        paginatedBorrowedBooks.length > 0 &&
+        paginatedBorrowedBooks.every((borrowedBook) => selectedBorrowedBookIds.includes(borrowedBook.id))
 
     // Verificar se alguns borrowedBooks estão selecionados
     const someSelected = selectedBorrowedBookIds.length > 0 && !allSelected
@@ -88,7 +101,8 @@ export function BorrowedBooksTable() {
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Marcar como devolvidos</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja marcar {selectedBorrowedBookIds.length} livro(s) como devolvido(s)? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja marcar {selectedBorrowedBookIds.length} livro(s) como devolvido(s)? Esta ação
+                                    não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -128,15 +142,18 @@ export function BorrowedBooksTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredBorrowedBooks.length === 0 ? (
+                        {paginatedBorrowedBooks.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={6} className="h-24 text-center">
+                                <TableCell colSpan={8} className="h-24 text-center">
                                     Nenhum empréstimo encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredBorrowedBooks.map((borrowedBook) => (
-                                <TableRow key={borrowedBook.id} className={selectedBorrowedBookIds.includes(borrowedBook.id) ? "bg-muted/50" : ""}>
+                            paginatedBorrowedBooks.map((borrowedBook) => (
+                                <TableRow
+                                    key={borrowedBook.id}
+                                    className={selectedBorrowedBookIds.includes(borrowedBook.id) ? "bg-muted/50" : ""}
+                                >
                                     <TableCell>
                                         <IndeterminateCheckbox
                                             checked={selectedBorrowedBookIds.includes(borrowedBook.id)}
@@ -144,15 +161,18 @@ export function BorrowedBooksTable() {
                                             aria-label={`Selecionar ${borrowedBook.id}`}
                                         />
                                     </TableCell>
-                                    <TableCell className="font-medium">{borrowedBook.barcode.code}</TableCell>
-                                    <TableCell>{`${borrowedBook.user.firstName} ${borrowedBook.user.lastName}`}</TableCell>
-                                    <TableCell>{formatDate(borrowedBook.borrowedAt)}</TableCell>
-                                    <TableCell>{formatDate(borrowedBook.dueDate)}</TableCell>
-                                    <TableCell>
-                                        {borrowedBook.returnDate ? new Date(borrowedBook.returnDate).toLocaleDateString() : "-"}
+                                    <TableCell className="font-medium">
+                                        {borrowedBook.barcode ? borrowedBook.barcode.code : "Código não disponível"}
                                     </TableCell>
-
-                                    <TableCell>{borrowedBook.isActive ? "-" : `${borrowedBook.fineValue} €`}</TableCell>
+                                    <TableCell>
+                                        {borrowedBook.user
+                                            ? `${borrowedBook.user.firstName} ${borrowedBook.user.lastName}`
+                                            : "Utilizador não disponível"}
+                                    </TableCell>
+                                    <TableCell>{borrowedBook.borrowedAt ? formatDate(borrowedBook.borrowedAt) : "-"}</TableCell>
+                                    <TableCell>{borrowedBook.dueDate ? formatDate(borrowedBook.dueDate) : "-"}</TableCell>
+                                    <TableCell>{borrowedBook.returnDate ? formatDate(borrowedBook.returnDate) : "-"}</TableCell>
+                                    <TableCell>{borrowedBook.isActive ? "-" : `${borrowedBook.fineValue || 0} €`}</TableCell>
                                     <TableCell>
                                         {borrowedBook.isActive ? (
                                             <Badge variant="pending" className="flex items-center gap-1 w-fit">
@@ -172,6 +192,15 @@ export function BorrowedBooksTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredBorrowedBooks.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

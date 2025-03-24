@@ -21,17 +21,30 @@ import {
 import { useState } from "react"
 import { deleteCategoriesAction } from "@/app/categories/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function CategoriesTable() {
-    const { filteredCategories, selectedCategoryIds, toggleCategorySelection, toggleAllCategories, hasSelection, removeCategories } =
-        useCategories()
+    const {
+        paginatedCategories,
+        filteredCategories,
+        selectedCategoryIds,
+        toggleCategorySelection,
+        toggleAllCategories,
+        hasSelection,
+        removeCategories,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useCategories()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todas as categorias estão selecionadas
     const allSelected =
-        filteredCategories.length > 0 && filteredCategories.every((category) => selectedCategoryIds.includes(category.id))
+        paginatedCategories.length > 0 && paginatedCategories.every((category) => selectedCategoryIds.includes(category.id))
 
     // Verificar se algumas categorias estão selecionadas
     const someSelected = selectedCategoryIds.length > 0 && !allSelected
@@ -123,14 +136,14 @@ export function CategoriesTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredCategories.length === 0 ? (
+                        {paginatedCategories.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhuma categoria encontrada.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredCategories.map((category) => (
+                            paginatedCategories.map((category) => (
                                 <TableRow key={category.id} className={selectedCategoryIds.includes(category.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -163,6 +176,15 @@ export function CategoriesTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredCategories.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

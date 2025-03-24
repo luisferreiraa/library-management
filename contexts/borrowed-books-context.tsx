@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition } from "react"
-import type { BorrowedBook, BorrowedBookWithRelations } from "@/lib/borrowed-books"
+import type { BorrowedBookWithRelations } from "@/lib/borrowed-books"
 
 interface BorrowedBooksContextType {
     borrowedBooks: BorrowedBookWithRelations[]
@@ -16,6 +16,12 @@ interface BorrowedBooksContextType {
     toggleAllBorrowedBooks: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedBorrowedBooks: BorrowedBookWithRelations[]
+    totalPages: number
 }
 
 const BorrowedBooksContext = createContext<BorrowedBooksContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function BorrowedBooksProvider({
     // Estado para seleção de borrowedBooks
     const [selectedBorrowedBookIds, setSelectedBorrowedBookIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Use useMemo em vez de useEffect + useState para filtrar borrowedBooks
     const filteredBorrowedBooks = useMemo(() => {
         if (searchTerm === "") {
@@ -54,6 +64,24 @@ export function BorrowedBooksProvider({
 
         return optimisticBorrowedBooks.filter((borrowedBook) => borrowedBook.id.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticBorrowedBooks])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredBorrowedBooks.length / pageSize))
+    }, [filteredBorrowedBooks, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter borrowedBooks paginados
+    const paginatedBorrowedBooks = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredBorrowedBooks.slice(startIndex, startIndex + pageSize)
+    }, [filteredBorrowedBooks, currentPage, pageSize])
 
     const addBorrowedBook = (borrowedBook: BorrowedBookWithRelations) => {
         startTransition(() => {
@@ -106,6 +134,12 @@ export function BorrowedBooksProvider({
                 toggleAllBorrowedBooks,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedBorrowedBooks,
+                totalPages,
             }}
         >
             {children}

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
-import { Book, Users, BookOpenCheck, Tag, Menu, PenTool, LogOut, User, ShieldAlert, BookMarked, BookText, Languages, FileText, Settings, ScrollText, ScrollTextIcon, ChevronDown } from "lucide-react"
+import { Book, Users, BookOpenCheck, Tag, Menu, PenTool, LogOut, User, ShieldAlert, BookMarked, BookText, Languages, FileText, Settings, ScrollText, ScrollTextIcon, ChevronDown, BookCheck } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -36,6 +36,7 @@ const navItems: NavItem[] = [
         icon: Users,
         adminOnly: true,
         children: [
+            { label: "Empréstimos", href: "/borrowed-books", icon: BookCheck, adminOnly: true },
             { label: "Utilizadores", href: "/users", icon: User, adminOnly: true },
             { label: "Roles", href: "/roles", icon: ShieldAlert, adminOnly: true },
         ],
@@ -52,7 +53,7 @@ const navItems: NavItem[] = [
             { label: "Tradutores", href: "/translators", icon: User, adminOnly: true },
             { label: "Formatos", href: "/formats", icon: BookText, adminOnly: true },
             { label: "Idiomas", href: "/languages", icon: Languages, adminOnly: true },
-            { label: "Estados", href: "/bookstatuses", icon: FileText, adminOnly: true },
+            { label: "Estados", href: "/bookstatus", icon: FileText, adminOnly: true },
         ],
     },
     {

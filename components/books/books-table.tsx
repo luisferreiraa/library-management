@@ -23,15 +23,29 @@ import {
 import { useState } from "react"
 import { deleteBooksAction } from "@/app/books/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function BooksTable() {
-    const { filteredBooks, selectedBookIds, toggleBookSelection, toggleAllBooks, hasSelection, removeBooks } = useBooks()
+    const {
+        paginatedBooks,
+        filteredBooks,
+        selectedBookIds,
+        toggleBookSelection,
+        toggleAllBooks,
+        hasSelection,
+        removeBooks,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useBooks()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todos os livros estão selecionados
-    const allSelected = filteredBooks.length > 0 && filteredBooks.every((book) => selectedBookIds.includes(book.id))
+    const allSelected = paginatedBooks.length > 0 && paginatedBooks.every((book) => selectedBookIds.includes(book.id))
 
     // Verificar se alguns livros estão selecionados
     const someSelected = selectedBookIds.length > 0 && !allSelected
@@ -128,14 +142,14 @@ export function BooksTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredBooks.length === 0 ? (
+                        {paginatedBooks.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={8} className="h-24 text-center">
                                     Nenhum livro encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredBooks.map((book) => (
+                            paginatedBooks.map((book) => (
                                 <TableRow key={book.id} className={selectedBookIds.includes(book.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -206,6 +220,15 @@ export function BooksTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredBooks.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

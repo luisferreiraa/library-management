@@ -16,6 +16,12 @@ interface CategoriesContextType {
     toggleAllCategories: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedCategories: Category[]
+    totalPages: number
 }
 
 const CategoriesContext = createContext<CategoriesContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function CategoryProvider({
     // Estado para seleção de categorias
     const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Usar useMemo em vez de useEffect + useState para filtrar categorias
     const filteredCategories = useMemo(() => {
         if (searchTerm === "") {
@@ -54,6 +64,24 @@ export function CategoryProvider({
 
         return optimisticCategories.filter((category) => category.name.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticCategories])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredCategories.length / pageSize))
+    }, [filteredCategories, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter categorias paginadas
+    const paginatedCategories = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredCategories.slice(startIndex, startIndex + pageSize)
+    }, [filteredCategories, currentPage, pageSize])
 
     const addCategory = (category: Category) => {
         startTransition(() => {
@@ -106,6 +134,12 @@ export function CategoryProvider({
                 toggleAllCategories,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedCategories,
+                totalPages,
             }}
         >
             {children}
