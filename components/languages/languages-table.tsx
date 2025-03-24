@@ -21,17 +21,30 @@ import {
 import { useState } from "react"
 import { deleteLanguagesAction } from "@/app/languages/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function LanguagesTable() {
-    const { filteredLanguages, selectedLanguageIds, toggleLanguageSelection, toggleAllLanguages, hasSelection, removeLanguages } =
-        useLanguages()
+    const {
+        paginatedLanguages,
+        filteredLanguages,
+        selectedLanguageIds,
+        toggleLanguageSelection,
+        toggleAllLanguages,
+        hasSelection,
+        removeLanguages,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useLanguages()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todos os idiomas estão selecionados
     const allSelected =
-        filteredLanguages.length > 0 && filteredLanguages.every((language) => selectedLanguageIds.includes(language.id))
+        paginatedLanguages.length > 0 && paginatedLanguages.every((language) => selectedLanguageIds.includes(language.id))
 
     // Verificar se alguns idiomas estão selecionados
     const someSelected = selectedLanguageIds.length > 0 && !allSelected
@@ -122,14 +135,14 @@ export function LanguagesTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredLanguages.length === 0 ? (
+                        {paginatedLanguages.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhum idioma encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredLanguages.map((language) => (
+                            paginatedLanguages.map((language) => (
                                 <TableRow key={language.id} className={selectedLanguageIds.includes(language.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -162,6 +175,15 @@ export function LanguagesTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredLanguages.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

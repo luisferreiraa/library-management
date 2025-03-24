@@ -21,17 +21,30 @@ import {
 import { useState } from "react"
 import { deleteFormatsAction } from "@/app/formats/actions"
 import { toast } from "@/components/ui/use-toast"
+import { Pagination } from "../ui/pagination"
 
 export function FormatsTable() {
-    const { filteredFormats, selectedFormatIds, toggleFormatSelection, toggleAllFormats, hasSelection, removeFormats } =
-        useFormats()
+    const {
+        paginatedFormats,
+        filteredFormats,
+        selectedFormatIds,
+        toggleFormatSelection,
+        toggleAllFormats,
+        hasSelection,
+        removeFormats,
+        currentPage,
+        setCurrentPage,
+        pageSize,
+        setPageSize,
+        totalPages,
+    } = useFormats()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     // Verificar se todos os formatos estão selecionadas
     const allSelected =
-        filteredFormats.length > 0 && filteredFormats.every((format) => selectedFormatIds.includes(format.id))
+        paginatedFormats.length > 0 && paginatedFormats.every((format) => selectedFormatIds.includes(format.id))
 
     // Verificar se alguns formatos estão selecionadas
     const someSelected = selectedFormatIds.length > 0 && !allSelected
@@ -122,14 +135,14 @@ export function FormatsTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredFormats.length === 0 ? (
+                        {paginatedFormats.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhum formato encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            filteredFormats.map((fmats) => (
+                            paginatedFormats.map((fmats) => (
                                 <TableRow key={fmats.id} className={selectedFormatIds.includes(fmats.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
@@ -162,6 +175,15 @@ export function FormatsTable() {
                     </TableBody>
                 </Table>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                totalItems={filteredFormats.length}
+                pageSize={pageSize}
+                onPageSizeChange={setPageSize}
+                className="mt-4"
+            />
         </div>
     )
 }

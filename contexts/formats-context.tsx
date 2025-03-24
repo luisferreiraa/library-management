@@ -16,6 +16,12 @@ interface FormatsContextType {
     toggleAllFormats: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedFormats: Format[]
+    totalPages: number
 }
 
 const FormatsContext = createContext<FormatsContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function FormatsProvider({
     // Estado para seleção de formatos
     const [selectedFormatIds, setSelectedFormatIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Usar useMemo em vez de useEffect + useState para filtrar formatos
     const filteredFormats = useMemo(() => {
         if (searchTerm === "") {
@@ -54,6 +64,24 @@ export function FormatsProvider({
 
         return optimisticFormats.filter((format) => format.name.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticFormats])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredFormats.length / pageSize))
+    }, [filteredFormats, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter formatos paginados
+    const paginatedFormats = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredFormats.slice(startIndex, startIndex + pageSize)
+    }, [filteredFormats, currentPage, pageSize])
 
     const addFormat = (format: Format) => {
         startTransition(() => {
@@ -106,6 +134,12 @@ export function FormatsProvider({
                 toggleAllFormats,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedFormats,
+                totalPages,
             }}
         >
             {children}

@@ -16,6 +16,12 @@ interface LanguagesContextType {
     toggleAllLanguages: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedLanguages: Language[]
+    totalPages: number
 }
 
 const LanguagesContext = createContext<LanguagesContextType | undefined>(undefined)
@@ -46,6 +52,10 @@ export function LanguagesProvider({
     // Estado para seleção de idiomas
     const [selectedLanguageIds, setSelectedLanguageIds] = useState<string[]>([])
 
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+
     // Usar useMemo em vez de useEffect + useState para filtrar idiomas
     const filteredLanguages = useMemo(() => {
         if (searchTerm === "") {
@@ -54,6 +64,24 @@ export function LanguagesProvider({
 
         return optimisticLanguages.filter((language) => language.name.toLowerCase().includes(searchTerm.toLowerCase()))
     }, [searchTerm, optimisticLanguages])
+
+    // Calcular total de páginas
+    const totalPages = useMemo(() => {
+        return Math.max(1, Math.ceil(filteredLanguages.length / pageSize))
+    }, [filteredLanguages, pageSize])
+
+    // Ajustar página atual se necessário
+    useMemo(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(Math.max(1, totalPages))
+        }
+    }, [totalPages, currentPage])
+
+    // Obter languages paginadas
+    const paginatedLanguages = useMemo(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        return filteredLanguages.slice(startIndex, startIndex + pageSize)
+    }, [filteredLanguages, currentPage, pageSize])
 
     const addLanguage = (language: Language) => {
         startTransition(() => {
@@ -106,6 +134,12 @@ export function LanguagesProvider({
                 toggleAllLanguages,
                 clearSelection,
                 hasSelection,
+                currentPage,
+                setCurrentPage,
+                pageSize,
+                setPageSize,
+                paginatedLanguages,
+                totalPages,
             }}
         >
             {children}

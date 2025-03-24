@@ -15,6 +15,12 @@ interface AuditLogsContextType {
     toggleAllAuditLogs: (selected: boolean) => void
     clearSelection: () => void
     hasSelection: boolean
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    pageSize: number
+    setPageSize: (size: number) => void
+    paginatedLogs: AuditLogWithRelations[]
+    totalPages: number
 }
 
 const AuditLogsContext = createContext<AuditLogsContextType | undefined>(undefined)
@@ -42,6 +48,10 @@ export function AuditLogsProvider({
 
     // Estado para seleção de Logs
     const [selectedAuditLogIds, setSelecteAuditLogIds] = useState<string[]>([])
+
+    // Estado para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
 
     // Usar useMemo para filtrar logs
     const filteredAuditLogs = useMemo(() => {
