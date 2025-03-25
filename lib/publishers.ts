@@ -40,10 +40,18 @@ export async function getPublisherWithBooks(slug: string): Promise<PublisherWith
         where: { slug },
         include: {
             books: {
-                orderBy: {
-                    createdAt: "desc",
-                },
-            },
+                orderBy: { createdAt: "desc" },
+                include: {
+                    author: true,
+                    language: true,
+                    format: true,
+                    translator: true,
+                    barcodes: true,
+                    categories: true,
+                    publisher: true,
+                    bookStatus: true,
+                }
+            }
         },
     });
 }

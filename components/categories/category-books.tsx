@@ -6,19 +6,19 @@ import { format } from "date-fns"
 import { Book, PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import type { PublisherWithBooks } from "@/lib/publishers"
+import type { CategoryWithBooks } from "@/lib/categories"
 import { EmptyState } from "@/components/ui/empty-state"
 import Link from "next/link"
 import { BooksProvider } from "@/contexts/books-context"
-import { CreatePublisherBookModal } from "./create-publisher-book-modal"
+import { CreateCategoryBookModal } from "./create-category-book-modal"
 
-interface PublisherBooksProps {
-    publisher: PublisherWithBooks
+interface CategoryBooksProps {
+    category: CategoryWithBooks
 }
 
-export function PublisherBooks({ publisher }: PublisherBooksProps) {
+export function CategoryBooks({ category }: CategoryBooksProps) {
     const [isAddingBook, setIsAddingBook] = useState(false)
-    const books = publisher.books
+    const books = category.books
 
     if (books.length === 0) {
         return (
@@ -26,7 +26,7 @@ export function PublisherBooks({ publisher }: PublisherBooksProps) {
                 <EmptyState
                     icon={<Book className="h-10 w-10" />}
                     title="Nenhum livro encontrado"
-                    description="Esta editora ainda não possui livros registados."
+                    description="Esta categoria ainda não possui livros registados."
                     action={
                         <Button onClick={() => setIsAddingBook(true)}>
                             <PlusCircle className="mr-2 h-4 w-4" />
@@ -36,11 +36,11 @@ export function PublisherBooks({ publisher }: PublisherBooksProps) {
                 />
 
                 <BooksProvider initialBooks={[]}>
-                    <CreatePublisherBookModal
+                    <CreateCategoryBookModal
                         open={isAddingBook}
                         onOpenChange={setIsAddingBook}
-                        publisherId={publisher.id}
-                        publisherName={publisher.name}
+                        categoryId={category.id}
+                        categoryName={category.name}
                     />
                 </BooksProvider>
             </>
@@ -95,11 +95,11 @@ export function PublisherBooks({ publisher }: PublisherBooksProps) {
                     ))}
                 </div>
 
-                <CreatePublisherBookModal
+                <CreateCategoryBookModal
                     open={isAddingBook}
                     onOpenChange={setIsAddingBook}
-                    publisherId={publisher.id}
-                    publisherName={publisher.name}
+                    categoryId={category.id}
+                    categoryName={category.name}
                 />
             </BooksProvider>
         </div>

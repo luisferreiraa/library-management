@@ -14,7 +14,7 @@ export default async function TranslatorsPage() {
         <div className="container mx-auto px-4 py-10 max-w-6xl">
             <TranslatorsProvider initialTranslators={translators}>
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold tracking-tight">Editoras</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">Tradutores</h1>
                     <CreateTranslatorButton />
                 </div>
 

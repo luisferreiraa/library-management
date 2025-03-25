@@ -1,8 +1,25 @@
 import { prisma } from "./prisma"
-import type { Translator as PrismaTranslator } from "@prisma/client"
+import type { Translator as PrismaTranslator, Book as PrismaBook, Prisma } from "@prisma/client"
 import slugify from "slugify"
 
 export type Translator = PrismaTranslator
+export type Book = PrismaBook
+
+export type TranslatorWithBooks = Prisma.TranslatorGetPayload<{
+    include: {
+        books: {
+            include: {
+                author: true
+                format: true
+                language: true
+                bookStatus: true
+                barcodes: true
+                publisher: true
+                categories: true
+            }
+        }
+    }
+}>
 
 export async function getTranslators(): Promise<Translator[]> {
     return prisma.translator.findMany({
@@ -10,6 +27,29 @@ export async function getTranslators(): Promise<Translator[]> {
             createdAt: "desc",
         },
     })
+}
+
+export async function getTranslatorsWithBooks(slug: string): Promise<TranslatorWithBooks | null> {
+    return prisma.translator.findUnique({
+        where: { slug },
+        include: {
+            books: {
+                include: {
+                    author: true,
+                    format: true,
+                    language: true,
+                    bookStatus: true,
+                    barcodes: {
+                        where: {
+                            isActive: true,
+                        },
+                    },
+                    publisher: true,
+                    categories: true,
+                },
+            },
+        },
+    });
 }
 
 export async function getTranslatorById(id: string): Promise<Translator | null> {

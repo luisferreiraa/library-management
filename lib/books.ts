@@ -93,6 +93,7 @@ export async function getBooksByAuthorId(authorId: string): Promise<BookWithRela
                     isActive: true,
                 },
             },
+            reviews: true,
         },
     })
 }
