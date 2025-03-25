@@ -6,7 +6,19 @@ export type Publisher = PrismaPublisher
 export type Book = PrismaBook
 
 export type PublisherWithBooks = Prisma.PublisherGetPayload<{
-    include: { books: true }
+    include: {
+        books: {
+            include: {
+                author: true
+                format: true
+                language: true
+                translator: true
+                bookStatus: true
+                categories: true
+                barcodes: true
+            }
+        }
+    }
 }>
 
 export async function getPublishers(): Promise<Publisher[]> {
