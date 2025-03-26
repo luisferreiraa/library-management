@@ -1,7 +1,13 @@
 "use client"
 
-import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition } from "react"
+import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition, useEffect } from "react"
 import type { Author } from "@/lib/authors"
+
+// Definir SortOption type
+export type SortOption = {
+    value: string
+    direction: "asc" | "desc"
+}
 
 interface AuthorsContextType {
     authors: Author[]
@@ -22,6 +28,8 @@ interface AuthorsContextType {
     setPageSize: (size: number) => void
     paginatedAuthors: Author[]
     totalPages: number
+    sortOption: SortOption | null
+    setSortOption: (option: SortOption) => void
 }
 
 const AuthorsContext = createContext<AuthorsContextType | undefined>(undefined)
@@ -56,19 +64,65 @@ export function AuthorsProvider({
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
 
-    // Use useMemo para filtrar autores
+    // Estado para ordenação
+    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+
+    // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
+    // garantindo melhor performance
     const filteredAuthors = useMemo(() => {
-        if (searchTerm === "") {
-            return optimisticAuthors
+        // Criamos uma cópia da lista de autores para evitar modificar o estado original
+        let result = [...optimisticAuthors]
+
+        // Se houver um termo de pesquisa, filtramos os autores pelo nome ou biografia
+        if (searchTerm !== "") {
+            const lowerSearchTerm = searchTerm.toLowerCase()
+            result = result.filter(
+                (author) =>
+                    author.name.toLowerCase().includes(lowerSearchTerm) ||
+                    author.bio?.toLocaleLowerCase().includes(lowerSearchTerm),
+            )
         }
 
-        const lowerSearchTerm = searchTerm.toLowerCase()
-        return optimisticAuthors.filter(
-            (author) =>
-                author.name.toLowerCase().includes(lowerSearchTerm) ||
-                (author.bio && author.bio.toLowerCase().includes(lowerSearchTerm)),
-        )
-    }, [searchTerm, optimisticAuthors])
+        // Se houver uma opção de ordenação selecionada, aplicamos a ordenação
+        if (sortOption) {
+            result.sort((a, b) => {
+                let valueA: any, valueB: any
+
+                switch (sortOption.value) {
+                    case "name":
+                        // Ordenação pelo nome (string)
+                        valueA = a.name
+                        valueB = b.name
+                        break
+                    case "createdAt":
+                        // Ordenação pela data de criação (convertida para timestamp para comparação numérica)
+                        valueA = a.createdAt ? new Date(a.createdAt).getTime() : 0
+                        valueB = b.createdAt ? new Date(b.createdAt).getTime() : 0
+                        break
+                    default:
+                        // Ordenação padrão pelo nome caso a opção não seja reconhecida
+                        valueA = a.name
+                        valueB = b.name
+                        break
+                }
+
+                // Se os valores forem strings, usamos localCompare para garantir ordenação alfabética correta
+                if (typeof valueA === "string" && typeof valueB === "string") {
+                    return sortOption.direction === "asc"
+                        ? valueA.localeCompare(valueB)
+                        : valueB.localeCompare(valueA)
+                }
+
+                // Caso contrário, ordenamos numericamente (ex: datas convertidas em timestamps)
+                return sortOption.direction === "asc"
+                    ? (valueA || 0) - (valueB || 0)
+                    : (valueB || 0) - (valueA || 0)
+            })
+        }
+
+        // Retornamos a lista filtrada e ordenada
+        return result
+    }, [searchTerm, optimisticAuthors, sortOption])     // Dependências: recalcula apenas quando uma delas mudar
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -87,6 +141,11 @@ export function AuthorsProvider({
         const startIndex = (currentPage - 1) * pageSize
         return filteredAuthors.slice(startIndex, startIndex + pageSize)
     }, [filteredAuthors, currentPage, pageSize])
+
+    // Resetar para a primeira página quando o sorting altera
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [sortOption])
 
     const addAuthor = (author: Author) => {
         startTransition(() => {
@@ -145,6 +204,8 @@ export function AuthorsProvider({
                 setPageSize,
                 paginatedAuthors,
                 totalPages,
+                sortOption,
+                setSortOption,
             }}
         >
             {children}

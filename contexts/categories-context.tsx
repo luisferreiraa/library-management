@@ -1,7 +1,13 @@
 "use client"
 
-import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition } from "react"
+import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition, useEffect } from "react"
 import type { Category } from "@/lib/categories"
+
+// Definir SortOption type
+export type SortOption = {
+    value: string
+    direction: "asc" | "desc"
+}
 
 interface CategoriesContextType {
     categories: Category[]
@@ -22,6 +28,8 @@ interface CategoriesContextType {
     setPageSize: (size: number) => void
     paginatedCategories: Category[]
     totalPages: number
+    sortOption: SortOption | null
+    setSortOption: (option: SortOption) => void
 }
 
 const CategoriesContext = createContext<CategoriesContextType | undefined>(undefined)
@@ -56,14 +64,64 @@ export function CategoryProvider({
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
 
-    // Usar useMemo em vez de useEffect + useState para filtrar categorias
+    // Estado para ordenação
+    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+
+    // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
+    // garantindo melhor performance
     const filteredCategories = useMemo(() => {
-        if (searchTerm === "") {
-            return optimisticCategories
+        // Criamos uma cópia da lista de autores para evitar modificar o estado original
+        let result = [...optimisticCategories]
+
+        // Se houver um termo de pesquisa, filtramos os autores pelo nome ou biografia
+        if (searchTerm !== "") {
+            const lowerSearchTerm = searchTerm.toLowerCase()
+            result = result.filter(
+                (category) =>
+                    category.name.toLowerCase().includes(lowerSearchTerm)
+            )
         }
 
-        return optimisticCategories.filter((category) => category.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    }, [searchTerm, optimisticCategories])
+        // Se houver uma opção de ordenação selecionada, aplicamos a ordenação
+        if (sortOption) {
+            result.sort((a, b) => {
+                let valueA: any, valueB: any
+
+                switch (sortOption.value) {
+                    case "name":
+                        // Ordenação pelo nome (string)
+                        valueA = a.name
+                        valueB = b.name
+                        break
+                    case "createdAt":
+                        // Ordenação pela data de criação (convertida para timestamp para comparação numérica)
+                        valueA = a.createdAt ? new Date(a.createdAt).getTime() : 0
+                        valueB = b.createdAt ? new Date(b.createdAt).getTime() : 0
+                        break
+                    default:
+                        // Ordenação padrão pelo nome caso a opção não seja reconhecida
+                        valueA = a.name
+                        valueB = b.name
+                        break
+                }
+
+                // Se os valores forem strings, usamos localCompare para garantir ordenação alfabética correta
+                if (typeof valueA === "string" && typeof valueB === "string") {
+                    return sortOption.direction === "asc"
+                        ? valueA.localeCompare(valueB)
+                        : valueB.localeCompare(valueA)
+                }
+
+                // Caso contrário, ordenamos numericamente (ex: datas convertidas em timestamps)
+                return sortOption.direction === "asc"
+                    ? (valueA || 0) - (valueB || 0)
+                    : (valueB || 0) - (valueA || 0)
+            })
+        }
+
+        // Retornamos a lista filtrada e ordenada
+        return result
+    }, [searchTerm, optimisticCategories, sortOption])     // Dependências: recalcula apenas quando uma delas mudar
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -82,6 +140,11 @@ export function CategoryProvider({
         const startIndex = (currentPage - 1) * pageSize
         return filteredCategories.slice(startIndex, startIndex + pageSize)
     }, [filteredCategories, currentPage, pageSize])
+
+    // Resetar para a primeira página quando o sorting altera
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [sortOption])
 
     const addCategory = (category: Category) => {
         startTransition(() => {
@@ -140,6 +203,8 @@ export function CategoryProvider({
                 setPageSize,
                 paginatedCategories,
                 totalPages,
+                sortOption,
+                setSortOption,
             }}
         >
             {children}

@@ -132,6 +132,7 @@ export function RolesTable() {
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>

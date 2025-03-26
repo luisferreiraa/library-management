@@ -153,26 +153,10 @@ export function PenaltyRulesTable() {
                                             aria-label={`Selecionar ${rule.name}`}
                                         />
                                     </TableCell>
-                                    <TableCell className="font-medium">
-                                        {/* Transformar o nome da penalty rule num link */}
-                                        <Link
-                                            href={`/penaltyrules/${rule.slug}`}
-                                            className="hover:underline hover:text-primary transition-colors"
-                                        >
-                                            {rule.name}
-                                        </Link>
-                                    </TableCell>
+                                    <TableCell className="font-medium">{rule.name}</TableCell>
                                     <TableCell>{rule.description}</TableCell>
                                     <TableCell className="max-w-xs truncate">{rule.finePerDay + " €" || "-"}</TableCell>
                                     <TableCell>{format(new Date(rule.createdAt), "dd/MM/yyyy")}</TableCell>
-                                    <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/penaltyrules/${rule.slug}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {rule.name}</span>
-                                            </Link>
-                                        </Button>
-                                    </TableCell>
                                 </TableRow>
                             ))
                         )}

@@ -1,7 +1,13 @@
 "use client"
 
-import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition } from "react"
+import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition, useEffect } from "react"
 import type { BookWithRelations } from "@/lib/books"
+
+// Definir SortOptions type
+export type SortOption = {
+    value: string
+    direction: "asc" | "desc"
+}
 
 interface BooksContextType {
     books: BookWithRelations[]
@@ -22,6 +28,9 @@ interface BooksContextType {
     setPageSize: (size: number) => void
     paginatedBooks: BookWithRelations[]
     totalPages: number
+    // Adicionar propriedades de ordenação ao context
+    sortOption: SortOption | null
+    setSortOption: (option: SortOption) => void
 }
 
 const BooksContext = createContext<BooksContextType | undefined>(undefined)
@@ -56,21 +65,71 @@ export function BooksProvider({
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
 
-    // Use useMemo para filtrar livros
+    // Estado para ordenação
+    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+
+    // Use useMemo para filtrar e ordenar livros
     const filteredBooks = useMemo(() => {
-        if (searchTerm === "") {
-            return optimisticBooks
+        // Primeiro, filtramos os livros
+        let result = [...optimisticBooks]
+
+        if (searchTerm !== "") {
+            const lowerSearchTerm = searchTerm.toLowerCase()
+            result = result.filter(
+                (book) =>
+                    book.title.toLowerCase().includes(lowerSearchTerm) ||
+                    book.isbn.toLowerCase().includes(lowerSearchTerm) ||
+                    book.author.name.toLowerCase().includes(lowerSearchTerm) ||
+                    book.publisher.name.toLowerCase().includes(lowerSearchTerm),
+            )
         }
 
-        const lowerSearchTerm = searchTerm.toLowerCase()
-        return optimisticBooks.filter(
-            (book) =>
-                book.title.toLowerCase().includes(lowerSearchTerm) ||
-                book.isbn.toLowerCase().includes(lowerSearchTerm) ||
-                book.author.name.toLowerCase().includes(lowerSearchTerm) ||
-                book.publisher.name.toLowerCase().includes(lowerSearchTerm),
-        )
-    }, [searchTerm, optimisticBooks])
+        // Ordenamos os filtered books se uma opção de ordenação estiver selecionada
+        if (sortOption) {
+            result.sort((a, b) => {
+                let valueA: any, valueB: any
+
+                // Manipular propriedades específicas de forma segura quanto ao tipo
+                switch (sortOption.value) {
+                    case "title":
+                        valueA = a.title
+                        valueB = b.title
+                        break
+                    case "isbn":
+                        valueA = a.isbn
+                        valueB = b.isbn
+                        break
+                    case "publishingDate":
+                        valueA = a.publishingDate ? new Date(a.publishingDate).getTime() : 0
+                        valueB = b.publishingDate ? new Date(b.publishingDate).getTime() : 0
+                        break
+                    case "author.name":
+                        valueA = a.author?.name || ""
+                        valueB = b.author?.name || ""
+                        break
+                    case "publisher.name":
+                        valueA = a.publisher?.name || ""
+                        valueB = b.publisher?.name || ""
+                        break
+                    default:
+                        // Título padrão se a opção de ordenação não for reconhecida
+                        valueA = a.title
+                        valueB = b.title
+                        break
+                }
+
+                // Manípular strings
+                if (typeof valueA === "string" && typeof valueB === "string") {
+                    return sortOption.direction === "asc" ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA)
+                }
+
+                // Manípular numbers e outros tipos
+                return sortOption.direction === "asc" ? (valueA || 0) - (valueB || 0) : (valueB || 0) - (valueA || 0)
+            })
+        }
+
+        return result
+    }, [searchTerm, optimisticBooks, sortOption])
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -89,6 +148,11 @@ export function BooksProvider({
         const startIndex = (currentPage - 1) * pageSize
         return filteredBooks.slice(startIndex, startIndex + pageSize)
     }, [filteredBooks, currentPage, pageSize])
+
+    // Reset to first page when sorting changes
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [sortOption])
 
 
     const addBook = (book: BookWithRelations) => {
@@ -146,6 +210,8 @@ export function BooksProvider({
                 setPageSize,
                 paginatedBooks,
                 totalPages,
+                sortOption,
+                setSortOption,
             }}
         >
             {children}

@@ -1,8 +1,25 @@
 import { prisma } from "./prisma"
-import type { Language as PrismaLanguage } from "@prisma/client"
+import type { Language as PrismaLanguage, Book as PrismaBook, Prisma } from "@prisma/client"
 import slugify from "slugify"
 
 export type Language = PrismaLanguage
+export type Book = PrismaBook
+
+export type LanguageWithBooks = Prisma.LanguageGetPayload<{
+    include: {
+        books: {
+            include: {
+                author: true
+                format: true
+                translator: true
+                bookStatus: true
+                barcodes: true
+                publisher: true
+                categories: true
+            }
+        }
+    }
+}>
 
 export async function getLanguages(): Promise<Language[]> {
     return prisma.language.findMany({
@@ -16,6 +33,29 @@ export async function getLanguagesById(id: string): Promise<Language | null> {
     return prisma.language.findUnique({
         where: { id },
     })
+}
+
+export async function getLanguageWithBooks(slug: string): Promise<LanguageWithBooks | null> {
+    return prisma.language.findUnique({
+        where: { slug },
+        include: {
+            books: {
+                include: {
+                    author: true,
+                    format: true,
+                    translator: true,
+                    bookStatus: true,
+                    barcodes: {
+                        where: {
+                            isActive: true,
+                        },
+                    },
+                    publisher: true,
+                    categories: true,
+                },
+            },
+        },
+    });
 }
 
 export async function createLanguage(data: { name: string }): Promise<Language> {

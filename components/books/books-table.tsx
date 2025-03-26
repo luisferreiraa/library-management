@@ -192,7 +192,14 @@ export function BooksTable() {
                                             {book.author.name}
                                         </Link>
                                     </TableCell>
-                                    <TableCell>{book.publisher.name}</TableCell>
+                                    <TableCell>
+                                        <Link
+                                            href={`/publishers/${book.publisher.slug}`}
+                                            className="hover:underline hover:text-primary transition-colors"
+                                        >
+                                            {book.publisher.name}
+                                        </Link>
+                                    </TableCell>
                                     <TableCell>
                                         {book.isActive ? (
                                             <Badge variant="success" className="flex items-center gap-1 w-fit">

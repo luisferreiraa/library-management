@@ -5,6 +5,7 @@ import { AuthorsSearch } from "@/components/authors/authors-search"
 import { CreateAuthorButton } from "@/components/authors/create-author-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { AuthorsProvider } from "@/contexts/authors-context"
+import { OrderAuthorsBy } from "@/components/authors/order-authors-by"
 
 export default async function AuthorsPage() {
   // Buscar dados no servidor
@@ -18,8 +19,13 @@ export default async function AuthorsPage() {
           <CreateAuthorButton />
         </div>
 
-        <div className="mb-6 max-w-sm">
-          <AuthorsSearch />
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="w-full sm:max-w-sm">
+            <AuthorsSearch />
+          </div>
+          <div className="w-full sm:max-w-xs">
+            <OrderAuthorsBy />
+          </div>
         </div>
 
         <Suspense fallback={<TableSkeleton columns={5} rows={5} />}>

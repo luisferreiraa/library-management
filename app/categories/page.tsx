@@ -5,6 +5,7 @@ import { CreateCategoryButton } from "@/components/categories/create-category-bu
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { CategoryProvider } from "@/contexts/categories-context"
 import { CategoriesSearch } from "@/components/categories/categories-search"
+import { OrderCategoriesBy } from "@/components/categories/order-categories-by"
 
 export default async function CategoriesPage() {
     // Buscar dados no servidor
@@ -18,8 +19,13 @@ export default async function CategoriesPage() {
                     <CreateCategoryButton />
                 </div>
 
-                <div className="mb-6 max-w-sm">
-                    <CategoriesSearch />
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="w-full sm:max-w-sm">
+                        <CategoriesSearch />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <OrderCategoriesBy />
+                    </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>

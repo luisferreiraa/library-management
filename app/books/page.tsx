@@ -5,6 +5,7 @@ import { BooksSearch } from "@/components/books/book-search"
 import { CreateBookButton } from "@/components/books/create-book-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { BooksProvider } from "@/contexts/books-context"
+import { OrderBooksBy } from "@/components/books/order-books-by"
 
 export default async function BooksPage() {
     // Buscar dados no servidor
@@ -18,8 +19,13 @@ export default async function BooksPage() {
                     <CreateBookButton />
                 </div>
 
-                <div className="mb-6 max-w-sm">
-                    <BooksSearch />
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="w-full sm:max-w-sm">
+                        <BooksSearch />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <OrderBooksBy />
+                    </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={7} rows={5} />}>
