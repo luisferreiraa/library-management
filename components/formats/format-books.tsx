@@ -9,16 +9,16 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { EmptyState } from "../ui/empty-state"
 import Link from "next/link"
 import { BooksProvider } from "@/contexts/books-context"
-import { CreateTranslatorBookModal } from "@/components/translators/create-translator-book-modal"
-import type { TranslatorWithBooks } from "@/lib/translators"
+import { CreateFormatBookModal } from "@/components/formats/create-format-book-modal"
+import type { FormatWithBooks } from "@/lib/formats"
 
-interface TranslatorBooksProps {
-    translator: TranslatorWithBooks
+interface FormatBooksProps {
+    bookFormat: FormatWithBooks
 }
 
-export function TranslatorBooks({ translator }: TranslatorBooksProps) {
+export function FormatBooks({ bookFormat }: FormatBooksProps) {
     const [isAddingBook, setIsAddingBook] = useState(false)
-    const books = translator.books
+    const books = bookFormat.books
 
     if (books.length === 0) {
         return (
@@ -26,7 +26,7 @@ export function TranslatorBooks({ translator }: TranslatorBooksProps) {
                 <EmptyState
                     icon={<Book className="h-10 w-10" />}
                     title="Nenhum livro encontrado"
-                    description="Este tradutor ainda não possui livros registrados."
+                    description="Este formato ainda não possui livros registrados."
                     action={
                         <Button onClick={() => setIsAddingBook(true)}>
                             <PlusCircle className="mr-2 h-4 w-4" />
@@ -36,11 +36,11 @@ export function TranslatorBooks({ translator }: TranslatorBooksProps) {
                 />
 
                 <BooksProvider initialBooks={[]}>
-                    <CreateTranslatorBookModal
+                    <CreateFormatBookModal
                         open={isAddingBook}
                         onOpenChange={setIsAddingBook}
-                        translatorId={translator.id}
-                        translatorName={translator.name}
+                        formatId={bookFormat.id}
+                        formatName={bookFormat.name}
                     />
                 </BooksProvider>
             </>
@@ -95,11 +95,11 @@ export function TranslatorBooks({ translator }: TranslatorBooksProps) {
                     ))}
                 </div>
 
-                <CreateTranslatorBookModal
+                <CreateFormatBookModal
                     open={isAddingBook}
                     onOpenChange={setIsAddingBook}
-                    translatorId={translator.id}
-                    translatorName={translator.name}
+                    formatId={bookFormat.id}
+                    formatName={bookFormat.name}
                 />
             </BooksProvider>
         </div>

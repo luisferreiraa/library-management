@@ -1,8 +1,25 @@
 import { prisma } from "./prisma"
-import type { Format as PrismaFormat } from "@prisma/client"
+import type { Format as PrismaFormat, Book as PrismaBook, Prisma } from "@prisma/client"
 import slugify from "slugify"
 
 export type Format = PrismaFormat
+export type Book = PrismaBook
+
+export type FormatWithBooks = Prisma.FormatGetPayload<{
+    include: {
+        books: {
+            include: {
+                author: true
+                translator: true
+                language: true
+                bookStatus: true
+                barcodes: true
+                publisher: true
+                categories: true
+            }
+        }
+    }
+}>
 
 export async function getFormats(): Promise<Format[]> {
     return prisma.format.findMany({
@@ -16,6 +33,29 @@ export async function getFormatById(id: string): Promise<Format | null> {
     return prisma.format.findUnique({
         where: { id },
     })
+}
+
+export async function getFormatWithBooks(slug: string): Promise<FormatWithBooks | null> {
+    return prisma.format.findUnique({
+        where: { slug },
+        include: {
+            books: {
+                include: {
+                    author: true,
+                    translator: true,
+                    language: true,
+                    bookStatus: true,
+                    barcodes: {
+                        where: {
+                            isActive: true,
+                        },
+                    },
+                    publisher: true,
+                    categories: true,
+                },
+            },
+        },
+    });
 }
 
 export async function createFormat(data: { name: string }): Promise<Format> {

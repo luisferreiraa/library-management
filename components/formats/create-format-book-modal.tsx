@@ -28,7 +28,7 @@ import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { getAuthors } from "@/lib/authors"
-import { getFormats, getLanguages, getCategories, getPublishers, getBookStatuses } from "@/lib/books"
+import { getFormats, getLanguages, getCategories, getPublishers, getBookStatuses, getTranslators } from "@/lib/books"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Badge } from "@/components/ui/badge"
@@ -53,19 +53,19 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-interface CreateTranslatorBookModalProps {
+interface CreateFormatBookModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
-    translatorId: string
-    translatorName: string
+    formatId: string
+    formatName: string
 }
 
-export function CreateTranslatorBookModal({
+export function CreateFormatBookModal({
     open,
     onOpenChange,
-    translatorId,
-    translatorName,
-}: CreateTranslatorBookModalProps) {
+    formatId,
+    formatName,
+}: CreateFormatBookModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [coverImageFile, setCoverImageFile] = useState<File | null>(null)
@@ -73,7 +73,7 @@ export function CreateTranslatorBookModal({
 
     // Estado para os dados relacionados
     const [authors, setAuthors] = useState<{ id: string; name: string }[]>([])
-    const [formats, setFormats] = useState<{ id: string; name: string }[]>([])
+    const [translators, setTranslators] = useState<{ id: string; name: string }[]>([])
     const [languages, setLanguages] = useState<{ id: string; name: string }[]>([])
     const [categories, setCategories] = useState<{ id: string; name: string }[]>([])
     const [publishers, setPublishers] = useState<{ id: string; name: string }[]>([])
@@ -92,11 +92,11 @@ export function CreateTranslatorBookModal({
             pageCount: 0,
             summary: "",
             coverImage: "",
-            formatId: "",
+            formatId: formatId,     // Pré-preencher com ID do formato
             languageId: "",
             publisherId: "",
             authorId: "",
-            translatorId: translatorId,     // Pré-preencher com ID do tradutor
+            translatorId: "",
             bookStatusId: "",
             categoryIds: []
         },
@@ -107,17 +107,17 @@ export function CreateTranslatorBookModal({
         if (open) {
             const loadRelatedData = async () => {
                 try {
-                    const [authorsData, formatsData, languagesData, categoriesData, publishersData, bookStatusesData] =
+                    const [authorsData, translatorsData, languagesData, categoriesData, publishersData, bookStatusesData] =
                         await Promise.all([
                             getAuthors(),
-                            getFormats(),
+                            getTranslators(),
                             getLanguages(),
                             getCategories(),
                             getPublishers(),
                             getBookStatuses(),
                         ])
                     setAuthors(authorsData)
-                    setFormats(formatsData)
+                    setTranslators(translatorsData)
                     setLanguages(languagesData)
                     setCategories(categoriesData)
                     setPublishers(publishersData)
@@ -181,8 +181,8 @@ export function CreateTranslatorBookModal({
                 author: { id: newBook.authorId, name: authors.find((a) => a.id === newBook.authorId)?.name || "" },
                 publisher: { id: newBook.publisherId, name: publishers.find((p) => p.id === newBook.publisherId)?.name || "" },
                 language: { id: newBook.languageId, name: languages.find((l) => l.id === newBook.languageId)?.name || "" },
-                format: { id: newBook.formatId, name: formats.find((f) => f.id === newBook.formatId)?.name || "" },
-                translator: { id: translatorId, name: translatorName },
+                format: { id: formatId, name: formatName },
+                translator: { id: newBook.translatorId, name: translators.find((t) => t.id === newBook.translatorId)?.name || "" },
                 bookStatus: {
                     id: newBook.bookStatusId,
                     name: bookStatuses.find((s) => s.id === newBook.bookStatusId)?.name || "",
@@ -218,7 +218,7 @@ export function CreateTranslatorBookModal({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[800px]">
                 <DialogHeader>
-                    <DialogTitle>Adicionar Novo Livro para {translatorName}</DialogTitle>
+                    <DialogTitle>Adicionar Novo Livro para {formatName}</DialogTitle>
                     <DialogDescription>Preencha os dados do livro e clique em salvar quando terminar.</DialogDescription>
                 </DialogHeader>
 
@@ -424,19 +424,12 @@ export function CreateTranslatorBookModal({
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Formato</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <Select disabled value={formatId}>
                                                     <FormControl>
                                                         <SelectTrigger>
-                                                            <SelectValue placeholder="Selecione um formato" />
+                                                            <SelectValue>{formatName}</SelectValue>
                                                         </SelectTrigger>
                                                     </FormControl>
-                                                    <SelectContent>
-                                                        {formats.map((format) => (
-                                                            <SelectItem key={format.id} value={format.id}>
-                                                                {format.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
                                                 </Select>
                                                 <FormMessage />
                                             </FormItem>
@@ -474,12 +467,19 @@ export function CreateTranslatorBookModal({
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Tradutor (opcional)</FormLabel>
-                                                <Select disabled value={translatorId}>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
-                                                            <SelectValue>{translatorName}</SelectValue>
+                                                            <SelectValue placeholder="Selecione um tradutor" />
                                                         </SelectTrigger>
                                                     </FormControl>
+                                                    <SelectContent>
+                                                        {translators.map((translator) => (
+                                                            <SelectItem key={translator.id} value={translator.id}>
+                                                                {translator.name}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
                                                 </Select>
                                                 <FormMessage />
                                             </FormItem>

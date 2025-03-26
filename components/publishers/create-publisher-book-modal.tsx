@@ -608,7 +608,7 @@ export function CreatePublisherBookModal({
                                 Cancelar
                             </Button>
                             <Button type="submit" disabled={isSubmitting}>
-                                {isSubmitting ? "Salvando..." : "Salvar"}
+                                {isSubmitting ? "A salvar..." : "Salvar"}
                             </Button>
                         </DialogFooter>
                     </form>
