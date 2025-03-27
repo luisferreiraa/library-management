@@ -5,6 +5,7 @@ import { CreateFormatButton } from "@/components/formats/create-format-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { FormatsProvider } from "@/contexts/formats-context"
 import { FormatsSearch } from "@/components/formats/formats-search"
+import { OrderFormatsBy } from "@/components/formats/order-formats-by"
 
 export default async function FormatsPage() {
     // Buscar dados no servidor
@@ -18,8 +19,13 @@ export default async function FormatsPage() {
                     <CreateFormatButton />
                 </div>
 
-                <div className="mb-6 max-w-sm">
-                    <FormatsSearch />
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="w-full sm:max-w-sm">
+                        <FormatsSearch />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <OrderFormatsBy />
+                    </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>

@@ -1,9 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { createContext, useContext, useMemo, type ReactNode, useOptimistic, useTransition } from "react"
 import type { User } from "@/lib/users"
+
+// Definir SortOption type
+export type SortOption = {
+    value: string
+    direction: "asc" | "desc"
+}
 
 interface UsersContextType {
     users: User[]
@@ -24,6 +30,8 @@ interface UsersContextType {
     setPageSize: (size: number) => void
     paginatedUsers: User[]
     totalPages: number
+    sortOption: SortOption | null
+    setSortOption: (option: SortOption) => void
 }
 
 const UsersContext = createContext<UsersContextType | undefined>(undefined)
@@ -58,21 +66,73 @@ export function UsersProvider({
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
 
-    // Use useMemo para filtrar usuários
+    // Estado para ordenação
+    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+
+    // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
+    // garantindo melhor performance
     const filteredUsers = useMemo(() => {
-        if (searchTerm === "") {
-            return optimisticUsers
+        // Criamos uma cópia da lista de autores para evitar modificar o estado original
+        let result = [...optimisticUsers]
+
+        // Se houver um termo de pesquisa, filtramos os autores pelo nome ou biografia
+        if (searchTerm !== "") {
+            const lowerSearchTerm = searchTerm.toLowerCase()
+            result = result.filter(
+                (user) =>
+                    user.firstName.toLowerCase().includes(lowerSearchTerm) ||
+                    user.lastName.toLocaleLowerCase().includes(lowerSearchTerm) ||
+                    user.email.toLocaleLowerCase().includes(lowerSearchTerm) ||
+                    user.username.toLocaleLowerCase().includes(lowerSearchTerm)
+            )
         }
 
-        const lowerSearchTerm = searchTerm.toLowerCase()
-        return optimisticUsers.filter(
-            (user) =>
-                user.firstName.toLowerCase().includes(lowerSearchTerm) ||
-                user.lastName.toLowerCase().includes(lowerSearchTerm) ||
-                user.email.toLowerCase().includes(lowerSearchTerm) ||
-                user.username.toLowerCase().includes(lowerSearchTerm),
-        )
-    }, [searchTerm, optimisticUsers])
+        // Se houver uma opção de ordenação selecionada, aplicamos a ordenação
+        if (sortOption) {
+            result.sort((a, b) => {
+                let valueA: any, valueB: any
+
+                switch (sortOption.value) {
+                    case "username":
+                        // Ordenação pelo username (string)
+                        valueA = a.username
+                        valueB = b.username
+                        break
+                    case "email":
+                        // Ordenação pelo email (string)
+                        valueA = a.email
+                        valueB = b.email
+                        break
+                    case "createdAt":
+                        // Ordenação pela data de criação (convertida para timestamp para comparação numérica)
+                        valueA = a.createdAt ? new Date(a.createdAt).getTime() : 0
+                        valueB = b.createdAt ? new Date(b.createdAt).getTime() : 0
+                        break
+                    default:
+                        // Ordenação padrão pelo nome caso a opção não seja reconhecida
+                        valueA = a.username
+                        valueB = b.username
+                        break
+                }
+
+                // Se os valores forem strings, usamos localCompare para garantir ordenação alfabética correta
+                if (typeof valueA === "string" && typeof valueB === "string") {
+                    return sortOption.direction === "asc"
+                        ? valueA.localeCompare(valueB)
+                        : valueB.localeCompare(valueA)
+                }
+
+                // Caso contrário, ordenamos numericamente (ex: datas convertidas em timestamps)
+                return sortOption.direction === "asc"
+                    ? (valueA || 0) - (valueB || 0)
+                    : (valueB || 0) - (valueA || 0)
+            })
+        }
+
+        // Retornamos a lista filtrada e ordenada
+        return result
+    }, [searchTerm, optimisticUsers, sortOption])     // Dependências: recalcula apenas quando uma delas mudar
+
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -91,6 +151,11 @@ export function UsersProvider({
         const startIndex = (currentPage - 1) * pageSize
         return filteredUsers.slice(startIndex, startIndex + pageSize)
     }, [filteredUsers, currentPage, pageSize])
+
+    // Resetar para a primeira página quando o sorting altera
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [sortOption])
 
     const addUser = (user: User) => {
         startTransition(() => {
@@ -147,6 +212,8 @@ export function UsersProvider({
                 setPageSize,
                 paginatedUsers,
                 totalPages,
+                sortOption,
+                setSortOption,
             }}
         >
             {children}

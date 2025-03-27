@@ -1,7 +1,13 @@
 "use client"
 
-import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition } from "react"
+import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition, useEffect } from "react"
 import type { BorrowedBookWithRelations } from "@/lib/borrowed-books"
+
+// Definir SortOption type
+export type SortOption = {
+    value: string
+    direction: "asc" | "desc"
+}
 
 interface BorrowedBooksContextType {
     borrowedBooks: BorrowedBookWithRelations[]
@@ -22,6 +28,8 @@ interface BorrowedBooksContextType {
     setPageSize: (size: number) => void
     paginatedBorrowedBooks: BorrowedBookWithRelations[]
     totalPages: number
+    sortOption: SortOption | null
+    setSortOption: (option: SortOption) => void
 }
 
 const BorrowedBooksContext = createContext<BorrowedBooksContextType | undefined>(undefined)
@@ -56,14 +64,79 @@ export function BorrowedBooksProvider({
     const [currentPage, setCurrentPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
 
-    // Use useMemo em vez de useEffect + useState para filtrar borrowedBooks
+    // Estado para ordenação
+    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+
+    // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
+    // garantindo melhor performance
     const filteredBorrowedBooks = useMemo(() => {
-        if (searchTerm === "") {
-            return optimisticBorrowedBooks
+        // Criamos uma cópia da lista de autores para evitar modificar o estado original
+        let result = [...optimisticBorrowedBooks]
+
+        // Se houver um termo de pesquisa, filtramos os autores pelo nome ou biografia
+        if (searchTerm !== "") {
+            const lowerSearchTerm = searchTerm.toLowerCase()
+            result = result.filter(
+                (borrowedBook) =>
+                    borrowedBook.id.toLowerCase().includes(lowerSearchTerm)
+            )
         }
 
-        return optimisticBorrowedBooks.filter((borrowedBook) => borrowedBook.id.toLowerCase().includes(searchTerm.toLowerCase()))
-    }, [searchTerm, optimisticBorrowedBooks])
+        // Se houver uma opção de ordenação selecionada, aplicamos a ordenação
+        if (sortOption) {
+            result.sort((a, b) => {
+                let valueA: any, valueB: any
+
+                switch (sortOption.value) {
+                    case "id":
+                        // Ordenação pelo id (string)
+                        valueA = a.id
+                        valueB = b.id
+                        break
+                    case "borrowedAt":
+                        // Ordenação pela data de empréstimo (convertida para timestamp para comparação numérica)
+                        valueA = a.borrowedAt ? new Date(a.borrowedAt).getTime() : 0
+                        valueB = b.borrowedAt ? new Date(b.borrowedAt).getTime() : 0
+                        break
+                    case "dueDate":
+                        // Ordenação pelo prazo de devolução (convertida para timestamp para comparação numérica)
+                        valueA = a.dueDate ? new Date(a.dueDate).getTime() : 0
+                        valueB = b.dueDate ? new Date(b.dueDate).getTime() : 0
+                        break
+                    case "returnDate":
+                        // Ordenação pela data de devolução (convertida para timestamp para comparação numérica)
+                        valueA = a.returnDate ? new Date(a.returnDate).getTime() : 0
+                        valueB = b.returnDate ? new Date(b.returnDate).getTime() : 0
+                        break
+                    case "fineValue":
+                        // Ordenação pelo valor da multa
+                        valueA = a.id
+                        valueB = b.id
+                        break
+                    default:
+                        // Ordenação padrão pelo nome caso a opção não seja reconhecida
+                        valueA = a.id
+                        valueB = b.id
+                        break
+                }
+
+                // Se os valores forem strings, usamos localCompare para garantir ordenação alfabética correta
+                if (typeof valueA === "string" && typeof valueB === "string") {
+                    return sortOption.direction === "asc"
+                        ? valueA.localeCompare(valueB)
+                        : valueB.localeCompare(valueA)
+                }
+
+                // Caso contrário, ordenamos numericamente (ex: datas convertidas em timestamps)
+                return sortOption.direction === "asc"
+                    ? (valueA || 0) - (valueB || 0)
+                    : (valueB || 0) - (valueA || 0)
+            })
+        }
+
+        // Retornamos a lista filtrada e ordenada
+        return result
+    }, [searchTerm, optimisticBorrowedBooks, sortOption])     // Dependências: recalcula apenas quando uma delas mudar
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -82,6 +155,11 @@ export function BorrowedBooksProvider({
         const startIndex = (currentPage - 1) * pageSize
         return filteredBorrowedBooks.slice(startIndex, startIndex + pageSize)
     }, [filteredBorrowedBooks, currentPage, pageSize])
+
+    // Resetar para a primeira página quando o sorting altera
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [sortOption])
 
     const addBorrowedBook = (borrowedBook: BorrowedBookWithRelations) => {
         startTransition(() => {
@@ -140,6 +218,8 @@ export function BorrowedBooksProvider({
                 setPageSize,
                 paginatedBorrowedBooks,
                 totalPages,
+                sortOption,
+                setSortOption,
             }}
         >
             {children}

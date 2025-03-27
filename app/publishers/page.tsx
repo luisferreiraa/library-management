@@ -5,6 +5,7 @@ import { CreatePublisherButton } from "@/components/publishers/create-publisher-
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { PublishersProvider } from "@/contexts/publishers-context"
 import { PublishersSearch } from "@/components/publishers/publishers-search"
+import { OrderPublishersBy } from "@/components/publishers/order-publishers-by"
 
 export default async function PublishersPage() {
     // Buscar dados no servidor
@@ -18,8 +19,13 @@ export default async function PublishersPage() {
                     <CreatePublisherButton />
                 </div>
 
-                <div className="mb-6 max-w-sm">
-                    <PublishersSearch />
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="w-full sm:max-w-sm">
+                        <PublishersSearch />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <OrderPublishersBy />
+                    </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>

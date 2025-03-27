@@ -5,6 +5,7 @@ import { CreateLanguageButton } from "@/components/languages/create-language-but
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { LanguagesProvider } from "@/contexts/languages-context"
 import { LanguagesSearch } from "@/components/languages/languages-search"
+import { OrderLanguagesBy } from "@/components/languages/order-languages-by"
 
 export default async function LanguagesPage() {
     // Buscar dados no servidor
@@ -18,8 +19,13 @@ export default async function LanguagesPage() {
                     <CreateLanguageButton />
                 </div>
 
-                <div className="mb-6 max-w-sm">
-                    <LanguagesSearch />
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="w-full sm:max-w-sm">
+                        <LanguagesSearch />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <OrderLanguagesBy />
+                    </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>

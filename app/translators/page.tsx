@@ -5,6 +5,7 @@ import { CreateTranslatorButton } from "@/components/translators/create-translat
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { TranslatorsProvider } from "@/contexts/translators-context"
 import { TranslatorsSearch } from "@/components/translators/translators-search"
+import { OrderTranslatorsBy } from "@/components/translators/order-translators-by"
 
 export default async function TranslatorsPage() {
     // Buscar dados no servidor
@@ -20,6 +21,15 @@ export default async function TranslatorsPage() {
 
                 <div className="mb-6 max-w-sm">
                     <TranslatorsSearch />
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="w-full sm:max-w-sm">
+                        <TranslatorsSearch />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <OrderTranslatorsBy />
+                    </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>

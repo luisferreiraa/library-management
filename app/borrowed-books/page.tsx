@@ -5,6 +5,7 @@ import { BorrowedBooksProvider } from "@/contexts/borrowed-books-context"
 import { CreateBorrowedBookButton } from "@/components/borrowed-books/create-borrowed-book-button"
 import { BorrowedBooksSearch } from "@/components/borrowed-books/borrowed-books-search"
 import { BorrowedBooksTable } from "@/components/borrowed-books/borrowed-books-table"
+import { OrderBorrowedBooksBy } from "@/components/borrowed-books/order-borrowed-books-by"
 
 export default async function BorrowedBooksPage() {
     // Buscar dados no servidor
@@ -18,8 +19,13 @@ export default async function BorrowedBooksPage() {
                     <CreateBorrowedBookButton />
                 </div>
 
-                <div className="mb-6 max-w-sm">
-                    <BorrowedBooksSearch />
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="w-full sm:max-w-sm">
+                        <BorrowedBooksSearch />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <OrderBorrowedBooksBy />
+                    </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>

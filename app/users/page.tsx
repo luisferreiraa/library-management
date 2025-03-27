@@ -5,6 +5,7 @@ import { UsersSearch } from "@/components/users/users-search"
 import { CreateUserButton } from "@/components/users/create-user-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { UsersProvider } from "@/contexts/users-context"
+import { OrderUsersBy } from "@/components/users/order-users-by"
 
 export default async function UsersPage() {
     // Buscar dados no servidor
@@ -18,8 +19,13 @@ export default async function UsersPage() {
                     <CreateUserButton />
                 </div>
 
-                <div className="mb-6 max-w-sm">
-                    <UsersSearch />
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="w-full sm:max-w-sm">
+                        <UsersSearch />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <OrderUsersBy />
+                    </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={7} rows={5} />}>

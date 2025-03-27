@@ -16,8 +16,13 @@ export default async function AuditLogsPage() {
                     <h1 className="text-3xl font-bold tracking-tight">Logs</h1>
                 </div>
 
-                <div className="mb-6 max-w-sm">
-                    <AuditLogsSearch />
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                    <div className="w-full sm:max-w-sm">
+                        <AuditLogsSearch />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <OrderLogsBy />
+                    </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={5} rows={5} />}>
