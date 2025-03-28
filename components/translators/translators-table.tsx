@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, Pencil } from "lucide-react"
 import { useTranslators } from "@/contexts/translators-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -22,6 +22,8 @@ import { useState } from "react"
 import { deleteTranslatorsAction } from "@/app/translators/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
+import { Translator } from "@/lib/translators"
+import { CreateTranslatorModal } from "./create-translator-modal"
 
 export function TranslatorsTable() {
     const {
@@ -41,6 +43,8 @@ export function TranslatorsTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [selectedTranslator, setSelectedTranslator] = useState<Translator | null>(null)
 
     // Verificar se todos os editores estão selecionadas
     const allSelected =
@@ -83,6 +87,12 @@ export function TranslatorsTable() {
         } finally {
             setIsDeleting(false)
         }
+    }
+
+    // Função para abrir o modal de edição
+    const handleEditTranslator = (translator: Translator) => {
+        setSelectedTranslator(translator)
+        setIsEditModalOpen(true)
     }
 
     return (
@@ -133,6 +143,7 @@ export function TranslatorsTable() {
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -163,12 +174,18 @@ export function TranslatorsTable() {
                                     </TableCell>
                                     <TableCell>{format(new Date(translator.createdAt), "dd/MM/yyyy")}</TableCell>
                                     <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/translators/${translator.slug}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {translator.name}</span>
-                                            </Link>
-                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditTranslator(translator)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {translator.name}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/translators/${translator.slug}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {translator.name}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -185,6 +202,8 @@ export function TranslatorsTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+            {/* Unified modal for editing */}
+            <CreateTranslatorModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} translator={selectedTranslator} />
         </div>
     )
 }

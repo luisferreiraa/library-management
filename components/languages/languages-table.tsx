@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, Pencil } from "lucide-react"
 import { useLanguages } from "@/contexts/languages-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -22,6 +22,8 @@ import { useState } from "react"
 import { deleteLanguagesAction } from "@/app/languages/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
+import { Language } from "@/lib/languages"
+import { CreateLanguageModal } from "./create-language-modal"
 
 export function LanguagesTable() {
     const {
@@ -41,6 +43,8 @@ export function LanguagesTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null)
 
     // Verificar se todos os idiomas estão selecionados
     const allSelected =
@@ -83,6 +87,12 @@ export function LanguagesTable() {
         } finally {
             setIsDeleting(false)
         }
+    }
+
+    // Função para abrir o modal de edição
+    const handleEditLanguage = (language: Language) => {
+        setSelectedLanguage(language)
+        setIsEditModalOpen(true)
     }
 
     return (
@@ -132,6 +142,7 @@ export function LanguagesTable() {
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -162,12 +173,18 @@ export function LanguagesTable() {
                                     </TableCell>
                                     <TableCell>{format(new Date(language.createdAt), "dd/MM/yyyy")}</TableCell>
                                     <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/languages/${language.slug}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {language.name}</span>
-                                            </Link>
-                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditLanguage(language)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {language.name}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/languages/${language.slug}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {language.name}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -184,6 +201,9 @@ export function LanguagesTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+
+            {/* Unified modal for editing */}
+            <CreateLanguageModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} language={selectedLanguage} />
         </div>
     )
 }

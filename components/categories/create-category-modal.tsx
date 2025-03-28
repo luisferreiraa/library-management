@@ -101,7 +101,7 @@ export function CreateCategoryModal({ open, onOpenChange, category }: CreateCate
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Criar Nova Categoria</DialogTitle>
+                    <DialogTitle>{isEditMode ? "Editar Categoria" : "Criar Nova Categoria"}</DialogTitle>
                     <DialogDescription>Preencha os dados da categoria e clique em salvar quando terminar.</DialogDescription>
                 </DialogHeader>
 

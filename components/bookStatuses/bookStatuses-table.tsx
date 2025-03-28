@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, Pencil } from "lucide-react"
 import { useBookStatuses } from "@/contexts/bookstatus-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -22,6 +22,8 @@ import { useState } from "react"
 import { deleteBookStatusesAction } from "@/app/book-status/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
+import { BookStatus } from "@/lib/bookstatus"
+import { CreateBookStatusModal } from "./create-bookStatus-modal"
 
 export function BookStatusesTable() {
     const {
@@ -41,6 +43,8 @@ export function BookStatusesTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [selectedBookStatus, setSelectedBookStatus] = useState<BookStatus | null>(null)
 
     // Verificar se todos os book status estão selecionados
     const allSelected =
@@ -83,6 +87,12 @@ export function BookStatusesTable() {
         } finally {
             setIsDeleting(false)
         }
+    }
+
+    // Função para abrir o modal de edição
+    const handleEditBookStatus = (bookStatus: BookStatus) => {
+        setSelectedBookStatus(bookStatus)
+        setIsEditModalOpen(true)
     }
 
     return (
@@ -132,6 +142,7 @@ export function BookStatusesTable() {
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -162,12 +173,18 @@ export function BookStatusesTable() {
                                     </TableCell>
                                     <TableCell>{format(new Date(bookStatus.createdAt), "dd/MM/yyyy")}</TableCell>
                                     <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/bookstatus/${bookStatus.slug}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {bookStatus.name}</span>
-                                            </Link>
-                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditBookStatus(bookStatus)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {bookStatus.name}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/book-status/${bookStatus.slug}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {bookStatus.name}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -184,6 +201,8 @@ export function BookStatusesTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+            {/* Unified modal for editing */}
+            <CreateBookStatusModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} bookStatus={selectedBookStatus} />
         </div>
     )
 }

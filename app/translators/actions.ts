@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { createTranslator, deleteTranslators } from "@/lib/translators"
 import { logAudit } from "@/lib/session";
+import { updateCategory } from "@/lib/categories";
 
 export async function createTranslatorAction(translatorData: { name: string }): Promise<any> {
     try {
@@ -18,6 +19,32 @@ export async function createTranslatorAction(translatorData: { name: string }): 
         return newTranslator
     } catch (error: any) {
         throw new Error("Erro ao criar translator: " + error.message)
+    }
+}
+
+export async function updateTranslatorAction(translatorData: {
+    id: string
+    name: string
+}): Promise<any> {
+    try {
+        // Atualizar o tradutor na base de dados
+        const updatedTranslator = await updateCategory(translatorData.id, {
+            name: translatorData.name,
+        })
+
+        // Criar auditLog
+        await logAudit("Translator", translatorData.id, "UPDATE_TRANSLATOR")
+
+        // Revalidar o caminho para atualizar os dados
+        revalidatePath("/translators")
+        revalidatePath(`/translators/${translatorData.id}`)
+
+        return updatedTranslator
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(`Erro ao atualizar tradutor (ID: ${translatorData.id}): ${error.message}`);
+        }
+        throw new Error("Erro desconhecido ao atualizar tradutor.");
     }
 }
 

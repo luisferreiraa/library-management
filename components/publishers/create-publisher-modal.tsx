@@ -101,7 +101,7 @@ export function CreatePublisherModal({ open, onOpenChange, publisher }: CreatePu
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Criar Nova Editora</DialogTitle>
+                    <DialogTitle>{isEditMode ? "Editar Editora" : "Criar Nova Editora"}</DialogTitle>
                     <DialogDescription>Preencha os dados da editora e clique em salvar quando terminar.</DialogDescription>
                 </DialogHeader>
 

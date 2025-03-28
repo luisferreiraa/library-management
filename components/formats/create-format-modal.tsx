@@ -101,7 +101,7 @@ export function CreateFormatModal({ open, onOpenChange, format }: CreateFormatMo
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Criar Novo Formato</DialogTitle>
+                    <DialogTitle>{isEditMode ? "Editar Formato" : "Criar Novo Formato"}</DialogTitle>
                     <DialogDescription>Preencha os dados do formato e clique em salvar quando terminar.</DialogDescription>
                 </DialogHeader>
 

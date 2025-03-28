@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -18,7 +18,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { createTranslatorAction } from "@/app/translators/actions"
+import { createTranslatorAction, updateTranslatorAction } from "@/app/translators/actions"
+import { Translator } from "@/lib/translators"
 
 const formSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
@@ -29,9 +30,11 @@ type FormValues = z.infer<typeof formSchema>
 interface CreateTranslatorModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
+    translator?: Translator | null
 }
 
-export function CreateTranslatorModal({ open, onOpenChange }: CreateTranslatorModalProps) {
+export function CreateTranslatorModal({ open, onOpenChange, translator }: CreateTranslatorModalProps) {
+    const isEditMode = !!translator
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const { addTranslator } = useTranslators()
@@ -43,31 +46,50 @@ export function CreateTranslatorModal({ open, onOpenChange }: CreateTranslatorMo
         },
     })
 
+    // Atualizar valores quando o tradutor muda ou o modal abre/ fecha
+    useEffect(() => {
+        if (open) {
+            form.reset({
+                name: translator?.name || "",
+            })
+            setError(null)
+        }
+    }, [open, translator, form])
+
     async function onSubmit(values: FormValues) {
         setError(null)
         try {
             setIsSubmitting(true)
 
-            // Criar tradutor via Server Action
-            const newTranslator = await createTranslatorAction(values)
+            let resultTranslator
+
+            if (isEditMode && translator) {
+                // Atualizar traadutor via Server Action
+                resultTranslator = await updateTranslatorAction({
+                    id: translator.id,
+                    ...values,
+                })
+            } else {
+                resultTranslator = await createTranslatorAction(values)
+            }
 
             // Atualizar UI otimisticamente
-            addTranslator(newTranslator)
+            addTranslator(resultTranslator)
 
             // Fechar modal e mostrar toast
             onOpenChange(false)
             form.reset()
 
             toast({
-                title: "Tradutor criado com sucesso",
-                description: `${newTranslator.name} foi adicionado à lista de tradutores.`,
+                title: isEditMode ? "Tradutor atualizado com sucesso" : "Tradutor criado com sucesso",
+                description: `${resultTranslator.name} foi ${isEditMode ? "atualizado" : "adicionado"} à lista de tradutores.`,
             })
         } catch (error: any) {
-            setError(error.message || "Ocorreu um erro ao criar o tradutor")
+            setError(error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} o tradutor.`)
 
             toast({
-                title: "Erro ao criar tradutor",
-                description: error.message || "Ocorreu um erro ao criar o tradutor. Tente novamente.",
+                title: `Erro ao ${isEditMode ? "atualizar" : "criar"} tradutor`,
+                description: error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} o tradutor. Tente novamente.`,
                 variant: "destructive",
             })
         } finally {
@@ -79,7 +101,7 @@ export function CreateTranslatorModal({ open, onOpenChange }: CreateTranslatorMo
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Criar Novo Tradutor</DialogTitle>
+                    <DialogTitle>{isEditMode ? "Editar Tradutor" : "Criar Novo Tradutor"}</DialogTitle>
                     <DialogDescription>Preencha os dados do tradutor e clique em salvar quando terminar.</DialogDescription>
                 </DialogHeader>
 
