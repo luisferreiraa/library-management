@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -18,7 +18,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { createCategoryAction } from "@/app/categories/actions"
+import { createCategoryAction, updateCategoryAction } from "@/app/categories/actions"
+import { Category } from "@/lib/categories"
 
 const formSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
@@ -29,9 +30,11 @@ type FormValues = z.infer<typeof formSchema>
 interface CreateCategoryModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
+    category?: Category | null
 }
 
-export function CreateCategoryModal({ open, onOpenChange }: CreateCategoryModalProps) {
+export function CreateCategoryModal({ open, onOpenChange, category }: CreateCategoryModalProps) {
+    const isEditMode = !!category
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const { addCategory } = useCategories()
@@ -43,31 +46,50 @@ export function CreateCategoryModal({ open, onOpenChange }: CreateCategoryModalP
         },
     })
 
+    // Atualizar valores quando a categoria muda ou o modal abre/ fecha
+    useEffect(() => {
+        if (open) {
+            form.reset({
+                name: category?.name || "",
+            })
+            setError(null)
+        }
+    }, [open, category, form])
+
     async function onSubmit(values: FormValues) {
         setError(null)
         try {
             setIsSubmitting(true)
 
-            // Criar categoria via Server Action
-            const newCategory = await createCategoryAction(values)
+            let resultCategory
+
+            if (isEditMode && category) {
+                // Atualizar categoria via Server Action
+                resultCategory = await updateCategoryAction({
+                    id: category.id,
+                    ...values,
+                })
+            } else {
+                resultCategory = await createCategoryAction(values)
+            }
 
             // Atualizar UI otimisticamente
-            addCategory(newCategory)
+            addCategory(resultCategory)
 
             // Fechar modal e mostrar toast
             onOpenChange(false)
             form.reset()
 
             toast({
-                title: "Categoria criada com sucesso",
-                description: `${newCategory.name} foi adicionado à lista de categorias.`,
+                title: isEditMode ? "Categoria atualizada com sucesso" : "Categoria criada com sucesso",
+                description: `${resultCategory.name} foi ${isEditMode ? "atualizado" : "adicionado"} à lista de categorias.`,
             })
         } catch (error: any) {
-            setError(error.message || "Ocorreu um erro ao criar a categoria")
+            setError(error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} a categoria.`)
 
             toast({
-                title: "Erro ao criar categoria",
-                description: error.message || "Ocorreu um erro ao criar a categoria. Tente novamente.",
+                title: `Erro ao ${isEditMode ? "atualizar" : "criar"} categoria`,
+                description: error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} a categoria. Tente novamente.`,
                 variant: "destructive",
             })
         } finally {

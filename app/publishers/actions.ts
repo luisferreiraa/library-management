@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createPublisher, deletePublishers } from "@/lib/publishers"
+import { createPublisher, deletePublishers, updatePublisher } from "@/lib/publishers"
 import { logAudit } from "@/lib/session";
 
 export async function createPublisherAction(publisherData: { name: string }): Promise<any> {
@@ -18,6 +18,32 @@ export async function createPublisherAction(publisherData: { name: string }): Pr
         return newPublisher
     } catch (error: any) {
         throw new Error("Erro ao criar publisher: " + error.message)
+    }
+}
+
+export async function updatePublisherAction(publisherData: {
+    id: string
+    name: string
+}): Promise<any> {
+    try {
+        // Atualizar a editora na base de dados
+        const updatedPublisher = await updatePublisher(publisherData.id, {
+            name: publisherData.name,
+        })
+
+        // Criar auditLog
+        await logAudit("Publisher", publisherData.id, "UPDATE_PUBLISHER")
+
+        // Revalidar o caminho para atualizar os dados
+        revalidatePath("/publishers")
+        revalidatePath(`/publishers/${publisherData.id}`)
+
+        return updatedPublisher
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(`Erro ao atualizar editora (ID: ${publisherData.id}): ${error.message}`);
+        }
+        throw new Error("Erro desconhecido ao atualizar editora.")
     }
 }
 

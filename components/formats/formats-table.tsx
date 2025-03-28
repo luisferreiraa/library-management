@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, Pencil } from "lucide-react"
 import { useFormats } from "@/contexts/formats-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -22,6 +22,8 @@ import { useState } from "react"
 import { deleteFormatsAction } from "@/app/formats/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
+import { Format } from "@/lib/formats"
+import { CreateFormatModal } from "./create-format-modal"
 
 export function FormatsTable() {
     const {
@@ -41,6 +43,8 @@ export function FormatsTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [selectedFormat, setSelectedFormat] = useState<Format | null>(null)
 
     // Verificar se todos os formatos estão selecionadas
     const allSelected =
@@ -83,6 +87,12 @@ export function FormatsTable() {
         } finally {
             setIsDeleting(false)
         }
+    }
+
+    // Função para abrir o modal de edição
+    const handleEditFormat = (format: Format) => {
+        setSelectedFormat(format)
+        setIsEditModalOpen(true)
     }
 
     return (
@@ -132,6 +142,7 @@ export function FormatsTable() {
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -162,12 +173,18 @@ export function FormatsTable() {
                                     </TableCell>
                                     <TableCell>{format(new Date(fmats.createdAt), "dd/MM/yyyy")}</TableCell>
                                     <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/formats/${fmats.slug}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {fmats.name}</span>
-                                            </Link>
-                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditFormat(fmats)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {fmats.name}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/categories/${fmats.slug}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {fmats.name}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -184,6 +201,8 @@ export function FormatsTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+            {/* Unified modal for editing */}
+            <CreateFormatModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} format={selectedFormat} />
         </div>
     )
 }

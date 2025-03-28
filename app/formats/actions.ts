@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createFormat, deleteFormats } from "@/lib/formats"
+import { createFormat, deleteFormats, updateFormat } from "@/lib/formats"
 import { logAudit } from "@/lib/session";
 
 export async function createFormatAction(formatData: { name: string }): Promise<any> {
@@ -18,6 +18,32 @@ export async function createFormatAction(formatData: { name: string }): Promise<
         return newFormat
     } catch (error: any) {
         throw new Error("Erro ao criar formato: " + error.message)
+    }
+}
+
+export async function updateFormatAction(formatData: {
+    id: string
+    name: string
+}): Promise<any> {
+    try {
+        // Atualizar o formato na base de dados
+        const updatedFormat = await updateFormat(formatData.id, {
+            name: formatData.name,
+        })
+
+        // Criar auditLog
+        await logAudit("Format", formatData.id, "UPDATE_FORMAT")
+
+        // Revalidar o caminho para atualizar os dados
+        revalidatePath("/formats")
+        revalidatePath(`/formats/${formatData.id}`)
+
+        return updatedFormat
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(`Erro ao atualizar formato (ID: ${formatData.id}): ${error.message}`)
+        }
+        throw new Error("Erro desconhecido ao atualizar formato.")
     }
 }
 

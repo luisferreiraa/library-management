@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createCategory, deleteCategories } from "@/lib/categories"
+import { createCategory, deleteCategories, updateCategory } from "@/lib/categories"
 import { logAudit } from "@/lib/session";
 
 export async function createCategoryAction(categoryData: { name: string }): Promise<any> {
@@ -18,6 +18,32 @@ export async function createCategoryAction(categoryData: { name: string }): Prom
         return newCategory
     } catch (error: any) {
         throw new Error("Erro ao criar categoria: " + error.message)
+    }
+}
+
+export async function updateCategoryAction(categoryData: {
+    id: string
+    name: string
+}): Promise<any> {
+    try {
+        // Atualizar a categoria na base de dados
+        const updatedCategory = await updateCategory(categoryData.id, {
+            name: categoryData.name,
+        })
+
+        // Criar auditLog
+        await logAudit("Category", categoryData.id, "UPDATE_CATEGORY")
+
+        // Revalidar o caminho para atualizar os dados
+        revalidatePath("/categories")
+        revalidatePath(`/categories/${categoryData.id}`)
+
+        return updatedCategory
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(`Erro ao atualizar categoria (ID: ${categoryData.id}): ${error.message}`);
+        }
+        throw new Error("Erro desconhecido ao atualizar categoria.");
     }
 }
 

@@ -40,6 +40,10 @@ export async function updateAuthorAction(authorData: {
       bio: authorData.bio,
     })
 
+    // Criar auditLog
+
+    await logAudit("Author", authorData.id, "UPDATE_AUTHOR")
+
     // Revalidar o caminho para atualizar os dados
     revalidatePath("/authors")
     revalidatePath(`/authors/${authorData.id}`)

@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, Pencil } from "lucide-react"
 import { usePublishers } from "@/contexts/publishers-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -22,6 +22,8 @@ import { useState } from "react"
 import { deletePublishersAction } from "@/app/publishers/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
+import { Publisher } from "@/lib/publishers"
+import { CreatePublisherModal } from "./create-publisher-modal"
 
 export function PublishersTable() {
     const {
@@ -41,6 +43,8 @@ export function PublishersTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [selectedPublisher, setSelectedPublisher] = useState<Publisher | null>(null)
 
     // Verificar se todas as editoras estão selecionadas
     const allSelected =
@@ -83,6 +87,12 @@ export function PublishersTable() {
         } finally {
             setIsDeleting(false)
         }
+    }
+
+    // Função para abrir o modal de edição
+    const handleEditPublisher = (publisher: Publisher) => {
+        setSelectedPublisher(publisher)
+        setIsEditModalOpen(true)
     }
 
     return (
@@ -132,6 +142,7 @@ export function PublishersTable() {
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -162,12 +173,18 @@ export function PublishersTable() {
                                     </TableCell>
                                     <TableCell>{format(new Date(publisher.createdAt), "dd/MM/yyyy")}</TableCell>
                                     <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/publishers/${publisher.slug}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {publisher.name}</span>
-                                            </Link>
-                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditPublisher(publisher)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {publisher.name}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/publishers/${publisher.slug}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {publisher.name}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -184,6 +201,9 @@ export function PublishersTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+
+            {/* Unified modal for editing */}
+            <CreatePublisherModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} publisher={selectedPublisher} />
         </div>
     )
 }

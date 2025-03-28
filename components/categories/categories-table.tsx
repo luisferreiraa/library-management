@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, Pencil } from "lucide-react"
 import { useCategories } from "@/contexts/categories-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -22,6 +22,8 @@ import { useState } from "react"
 import { deleteCategoriesAction } from "@/app/categories/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
+import { Category } from "@/lib/categories"
+import { CreateCategoryModal } from "./create-category-modal"
 
 export function CategoriesTable() {
     const {
@@ -41,6 +43,8 @@ export function CategoriesTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
 
     // Verificar se todas as categorias estão selecionadas
     const allSelected =
@@ -83,6 +87,12 @@ export function CategoriesTable() {
         } finally {
             setIsDeleting(false)
         }
+    }
+
+    // Função para abrir o modal de edição
+    const handleEditCategory = (category: Category) => {
+        setSelectedCategory(category)
+        setIsEditModalOpen(true)
     }
 
 
@@ -133,6 +143,7 @@ export function CategoriesTable() {
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -163,12 +174,18 @@ export function CategoriesTable() {
                                     </TableCell>
                                     <TableCell>{format(new Date(category.createdAt), "dd/MM/yyyy")}</TableCell>
                                     <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/categories/${category.slug}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {category.name}</span>
-                                            </Link>
-                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditCategory(category)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {category.name}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/categories/${category.slug}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {category.name}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -185,6 +202,8 @@ export function CategoriesTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+            {/* Unified modal for editing */}
+            <CreateCategoryModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} category={selectedCategory} />
         </div>
     )
 }

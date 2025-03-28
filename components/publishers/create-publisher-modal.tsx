@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -16,10 +16,10 @@ import {
 } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { createPublisherAction } from "@/app/publishers/actions"
+import { createPublisherAction, updatePublisherAction } from "@/app/publishers/actions"
+import { Publisher } from "@/lib/publishers"
 
 const formSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
@@ -30,9 +30,11 @@ type FormValues = z.infer<typeof formSchema>
 interface CreatePublisherModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
+    publisher?: Publisher | null
 }
 
-export function CreatePublisherModal({ open, onOpenChange }: CreatePublisherModalProps) {
+export function CreatePublisherModal({ open, onOpenChange, publisher }: CreatePublisherModalProps) {
+    const isEditMode = !!publisher
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const { addPublisher } = usePublishers()
@@ -44,31 +46,50 @@ export function CreatePublisherModal({ open, onOpenChange }: CreatePublisherModa
         },
     })
 
+    // Atualizar valores quando a editora muda ou o modal abre/ fecha
+    useEffect(() => {
+        if (open) {
+            form.reset({
+                name: publisher?.name || "",
+            })
+            setError(null)
+        }
+    }, [open, publisher, form])
+
     async function onSubmit(values: FormValues) {
         setError(null)
         try {
             setIsSubmitting(true)
 
-            // Criar editora via Server Action
-            const newPublisher = await createPublisherAction(values)
+            let resultPublisher
+
+            if (isEditMode && publisher) {
+                // Atualizar editora via Server Action
+                resultPublisher = await updatePublisherAction({
+                    id: publisher.id,
+                    ...values,
+                })
+            } else {
+                resultPublisher = await createPublisherAction(values)
+            }
 
             // Atualizar UI otimisticamente
-            addPublisher(newPublisher)
+            addPublisher(resultPublisher)
 
             // Fechar modal e mostrar toast
             onOpenChange(false)
             form.reset()
 
             toast({
-                title: "Editora criada com sucesso",
-                description: `${newPublisher.name} foi adicionado à lista de editoras.`,
+                title: isEditMode ? "Editora atualizada com sucesso" : "Editora criada com sucesso",
+                description: `${resultPublisher.name} foi ${isEditMode ? "atualizada" : "adicionada"} à lista de editoras.`,
             })
         } catch (error: any) {
-            setError(error.message || "Ocorreu um erro ao criar a editora")
+            setError(error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} a editora.`)
 
             toast({
-                title: "Erro ao criar editora",
-                description: error.message || "Ocorreu um erro ao criar a editora. Tente novamente.",
+                title: `Erro ao ${isEditMode ? "atualizar" : "criar"} editora`,
+                description: error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} a editora. Tente novamente.`,
                 variant: "destructive",
             })
         } finally {
