@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { createAuthorAction } from "@/app/authors/actions"
+import { createAuthorAction, updateAuthorAction } from "@/app/authors/actions"
 import { useAuthors } from "@/contexts/authors-context"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Author } from "@/lib/authors"
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
@@ -32,9 +33,11 @@ type FormValues = z.infer<typeof formSchema>
 interface CreateAuthorModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  author?: Author | null
 }
 
-export function CreateAuthorModal({ open, onOpenChange }: CreateAuthorModalProps) {
+export function CreateAuthorModal({ open, onOpenChange, author }: CreateAuthorModalProps) {
+  const isEditMode = !!author
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { addAuthor } = useAuthors()
@@ -42,37 +45,60 @@ export function CreateAuthorModal({ open, onOpenChange }: CreateAuthorModalProps
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      bio: "",
+      name: author?.name || "",
+      email: author?.email || "",
+      bio: author?.bio || "",
     },
   })
+
+  // Atualizar valores quando o autor muda ou o modal abre/ fecha
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        name: author?.name || "",
+        email: author?.email || "",
+        bio: author?.bio || "",
+      })
+      setError(null)
+    }
+  }, [open, author, form])
 
   async function onSubmit(values: FormValues) {
     setError(null)
     try {
       setIsSubmitting(true)
 
-      // Criar autor via Server Action
-      const newAuthor = await createAuthorAction(values)
+      let resultAuthor
+
+      if (isEditMode && author) {
+        // Atualizar autor via Server Action
+        resultAuthor = await updateAuthorAction({
+          id: author.id,
+          ...values,
+        })
+      } else {
+        // Criar autor via Server Action
+        resultAuthor = await createAuthorAction(values)
+      }
 
       // Atualizar UI otimisticamente
-      addAuthor(newAuthor)
+      addAuthor(resultAuthor)
 
       // Fechar modal e mostrar toast
       onOpenChange(false)
       form.reset()
 
       toast({
-        title: "Autor criado com sucesso",
-        description: `${newAuthor.name} foi adicionado à lista de autores.`,
+        title: isEditMode ? "Autor atualizado com sucesso" : "Autor criado com sucesso",
+        description: `${resultAuthor.name} foi ${isEditMode ? "atualizado" : "adicionado"} à lista de autores.`,
       })
     } catch (error: any) {
-      setError(error.message || "Ocorreu um erro ao criar o autor")
+      setError(error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} o autor`)
 
       toast({
-        title: "Erro ao criar autor",
-        description: error.message || "Ocorreu um erro ao criar o autor. Tente novamente.",
+        title: `Erro ao ${isEditMode ? "atualizar" : "criar"} autor`,
+        description:
+          error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} o autor. Tente novamente.`,
         variant: "destructive",
       })
     } finally {
@@ -84,9 +110,12 @@ export function CreateAuthorModal({ open, onOpenChange }: CreateAuthorModalProps
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Criar Novo Autor</DialogTitle>
-          <DialogDescription>Preencha os dados do autor e clique em salvar quando terminar.</DialogDescription>
-        </DialogHeader>
+          <DialogTitle>{isEditMode ? "Editar Autor" : "Criar Novo Autor"}</DialogTitle>
+          <DialogDescription>
+            {isEditMode
+              ? "Edite os dados do autor e clique em salvar quando terminar."
+              : "Preencha os dados do autor e clique em salvar quando terminar."}
+          </DialogDescription>        </DialogHeader>
 
         {error && (
           <Alert variant="destructive" className="mt-4">

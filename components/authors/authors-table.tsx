@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, Pencil } from "lucide-react"
 import { useAuthors } from "@/contexts/authors-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -22,6 +22,8 @@ import { useState } from "react"
 import { deleteAuthorsAction } from "@/app/authors/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
+import { Author } from "@/lib/authors"
+import { CreateAuthorModal } from "./create-author-modal"
 
 export function AuthorsTable() {
   const {
@@ -41,6 +43,8 @@ export function AuthorsTable() {
 
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [selectedAuthor, setSelectedAuthor] = useState<Author | null>(null)
 
   // Verificar se todos os autores estão selecionados
   const allSelected =
@@ -83,6 +87,12 @@ export function AuthorsTable() {
     } finally {
       setIsDeleting(false)
     }
+  }
+
+  // Função para abir o modal de edição
+  const handleEditAuthor = (author: Author) => {
+    setSelectedAuthor(author)
+    setIsEditModalOpen(true)
   }
 
   return (
@@ -167,12 +177,18 @@ export function AuthorsTable() {
                   <TableCell className="max-w-xs truncate">{author.bio || "-"}</TableCell>
                   <TableCell>{formatDate(author.createdAt)}</TableCell>
                   <TableCell>
-                    <Button variant="ghost" size="icon" asChild>
-                      <Link href={`/authors/${author.id}`}>
-                        <ExternalLink className="h-4 w-4" />
-                        <span className="sr-only">Ver detalhes de {author.name}</span>
-                      </Link>
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button variant="ghost" size="icon" onClick={() => handleEditAuthor(author)}>
+                        <Pencil className="h-4 w-4" />
+                        <span className="sr-only">Editar {author.name}</span>
+                      </Button>
+                      <Button variant="ghost" size="icon" asChild>
+                        <Link href={`/authors/${author.id}`}>
+                          <ExternalLink className="h-4 w-4" />
+                          <span className="sr-only">Ver detalhes de {author.name}</span>
+                        </Link>
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))
@@ -189,6 +205,9 @@ export function AuthorsTable() {
         onPageSizeChange={setPageSize}
         className="mt-4"
       />
+
+      {/* Unified modal for editing */}
+      <CreateAuthorModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} author={selectedAuthor} />
     </div>
   )
 }

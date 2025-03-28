@@ -4,6 +4,7 @@ import { getAuditLogs } from "@/lib/auditlogs"
 import { AuditLogsProvider } from "@/contexts/logs-context"
 import { AuditLogsSearch } from "@/components/logs/audit-logs-search"
 import { AuditLogsTable } from "@/components/logs/audit-logs-table"
+import { OrderLogsBy } from "@/components/logs/order-logs-by"
 
 export default async function AuditLogsPage() {
     // Buscar dados no servidor
