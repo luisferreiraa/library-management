@@ -23,7 +23,7 @@ import { deletePublishersAction } from "@/app/publishers/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { Publisher } from "@/lib/publishers"
-import { CreatePublisherModal } from "./create-publisher-modal"
+import { PublisherModal } from "./publisher-modal"
 
 export function PublishersTable() {
     const {
@@ -202,8 +202,8 @@ export function PublishersTable() {
                 className="mt-4"
             />
 
-            {/* Unified modal for editing */}
-            <CreatePublisherModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} publisher={selectedPublisher} />
+            {/* Usar o novo modal de editora */}
+            <PublisherModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} publisher={selectedPublisher} />
         </div>
     )
 }
