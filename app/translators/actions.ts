@@ -1,9 +1,8 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createTranslator, deleteTranslators } from "@/lib/translators"
+import { createTranslator, deleteTranslators, updateTranslator } from "@/lib/translators"
 import { logAudit } from "@/lib/session";
-import { updateCategory } from "@/lib/categories";
 
 export async function createTranslatorAction(translatorData: { name: string }): Promise<any> {
     try {
@@ -28,7 +27,7 @@ export async function updateTranslatorAction(translatorData: {
 }): Promise<any> {
     try {
         // Atualizar o tradutor na base de dados
-        const updatedTranslator = await updateCategory(translatorData.id, {
+        const updatedTranslator = await updateTranslator(translatorData.id, {
             name: translatorData.name,
         })
 

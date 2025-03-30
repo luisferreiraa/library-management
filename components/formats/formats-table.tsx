@@ -24,6 +24,7 @@ import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { Format } from "@/lib/formats"
 import { CreateFormatModal } from "./create-format-modal"
+import { FormatModal } from "./format-modal"
 
 export function FormatsTable() {
     const {
@@ -201,8 +202,8 @@ export function FormatsTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
-            {/* Unified modal for editing */}
-            <CreateFormatModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} format={selectedFormat} />
+
+            <FormatModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} format={selectedFormat} />
         </div>
     )
 }

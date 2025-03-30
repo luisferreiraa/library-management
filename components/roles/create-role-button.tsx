@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CreateRoleModal } from "./create-role-modal"
+import { RoleModal } from "./role-modal"
 
 export function CreateRoleButton() {
     const [open, setOpen] = useState(false)
@@ -14,7 +14,7 @@ export function CreateRoleButton() {
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Novo Role
             </Button>
-            <CreateRoleModal open={open} onOpenChange={setOpen} />
+            <RoleModal open={open} onOpenChange={setOpen} />
         </>
     )
 }

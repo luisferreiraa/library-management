@@ -6,29 +6,28 @@ import { Input } from "@/components/ui/input"
 import type { UseFormReturn } from "react-hook-form"
 
 // Schema para validação da editora
-export const publisherSchema = z.object({
+export const languageSchema = z.object({
 
     name: z.string().min(2, { message: "Nome deve ter pelo menos dois caracteres" }),
 })
 
-export type PublisherFormValues = z.infer<typeof publisherSchema>
+export type LanguageFormValues = z.infer<typeof languageSchema>
 
 // Valores padrão para o formulário
-export const publisherDefaultValues: PublisherFormValues = {
+export const languageDefaultValues: LanguageFormValues = {
     name: "",
 }
 
-interface PublisherFormProps {
-    form: UseFormReturn<PublisherFormValues>
+interface LanguageFormProps {
+    form: UseFormReturn<LanguageFormValues>
     onSubmit: () => void
     isSubmitting: boolean
 }
 
-export function PublisherForm({ form, onSubmit, isSubmitting }: PublisherFormProps) {
+export function LanguageForm({ form, onSubmit, isSubmitting }: LanguageFormProps) {
     return (
         <Form {...form}>
             <form id="entity-form" onSubmit={onSubmit} className="space-y-4">
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}
                 <FormField
                     control={form.control}
                     name="name"
@@ -37,14 +36,13 @@ export function PublisherForm({ form, onSubmit, isSubmitting }: PublisherFormPro
                             <FormItem>
                                 <FormLabel>Nome</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Nome da editora" {...field} />
+                                    <Input placeholder="Nome do idioma" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )
                     }}
                 />
-                {/* </div> */}
             </form>
         </Form>
     )

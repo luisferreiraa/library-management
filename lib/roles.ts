@@ -36,7 +36,7 @@ export async function updateRole(id: string, data: { name?: string }): Promise<R
         updateData.slug = slugify(data.name, { lower: true });
     }
 
-    return prisma.translator.update({
+    return prisma.role.update({
         where: { id },
         data: updateData,
     });

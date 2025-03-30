@@ -6,29 +6,28 @@ import { Input } from "@/components/ui/input"
 import type { UseFormReturn } from "react-hook-form"
 
 // Schema para validação da editora
-export const publisherSchema = z.object({
+export const categorySchema = z.object({
 
     name: z.string().min(2, { message: "Nome deve ter pelo menos dois caracteres" }),
 })
 
-export type PublisherFormValues = z.infer<typeof publisherSchema>
+export type CategoryFormValues = z.infer<typeof categorySchema>
 
 // Valores padrão para o formulário
-export const publisherDefaultValues: PublisherFormValues = {
+export const categoryDefaultValues: CategoryFormValues = {
     name: "",
 }
 
-interface PublisherFormProps {
-    form: UseFormReturn<PublisherFormValues>
+interface CategoryFormProps {
+    form: UseFormReturn<CategoryFormValues>
     onSubmit: () => void
     isSubmitting: boolean
 }
 
-export function PublisherForm({ form, onSubmit, isSubmitting }: PublisherFormProps) {
+export function CategoryForm({ form, onSubmit, isSubmitting }: CategoryFormProps) {
     return (
         <Form {...form}>
             <form id="entity-form" onSubmit={onSubmit} className="space-y-4">
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}
                 <FormField
                     control={form.control}
                     name="name"
@@ -37,14 +36,13 @@ export function PublisherForm({ form, onSubmit, isSubmitting }: PublisherFormPro
                             <FormItem>
                                 <FormLabel>Nome</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Nome da editora" {...field} />
+                                    <Input placeholder="Nome da categoria" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )
                     }}
                 />
-                {/* </div> */}
             </form>
         </Form>
     )

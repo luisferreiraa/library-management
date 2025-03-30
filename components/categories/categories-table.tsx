@@ -23,7 +23,7 @@ import { deleteCategoriesAction } from "@/app/categories/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { Category } from "@/lib/categories"
-import { CreateCategoryModal } from "./create-category-modal"
+import { CategoryModal } from "./category-modal"
 
 export function CategoriesTable() {
     const {
@@ -203,7 +203,7 @@ export function CategoriesTable() {
                 className="mt-4"
             />
             {/* Unified modal for editing */}
-            <CreateCategoryModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} category={selectedCategory} />
+            <CategoryModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} category={selectedCategory} />
         </div>
     )
 }

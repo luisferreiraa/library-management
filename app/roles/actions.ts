@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createRole, deleteRoles } from "@/lib/roles"
+import { createRole, deleteRoles, updateRole } from "@/lib/roles"
 import { logAudit } from "@/lib/session";
 
 export async function createRoleAction(roleData: { name: string }): Promise<any> {
@@ -18,6 +18,32 @@ export async function createRoleAction(roleData: { name: string }): Promise<any>
         return newRole
     } catch (error: any) {
         throw new Error("Erro ao criar role: " + error.message)
+    }
+}
+
+export async function updateRoleAction(roleData: {
+    id: string
+    name: string
+}): Promise<any> {
+    try {
+        // Atualizar na base de dados
+        const updatedRole = await updateRole(roleData.id, {
+            name: roleData.name,
+        })
+
+        // Criar auditLog
+        await logAudit("Role", roleData.id, "UPDATE_ROLE")
+
+        // Revalidar o caminho para atualizar os dados
+        revalidatePath("/roles")
+        revalidatePath(`/roles/${roleData.id}`)
+
+        return updatedRole
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(`Erro ao atualizar role (ID: ${roleData.id}): ${error.message}`);
+        }
+        throw new Error("Erro desconhecido ao atualizar role.")
     }
 }
 

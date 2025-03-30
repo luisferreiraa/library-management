@@ -6,25 +6,25 @@ import { Input } from "@/components/ui/input"
 import type { UseFormReturn } from "react-hook-form"
 
 // Schema para validação da editora
-export const publisherSchema = z.object({
+export const formatSchema = z.object({
 
     name: z.string().min(2, { message: "Nome deve ter pelo menos dois caracteres" }),
 })
 
-export type PublisherFormValues = z.infer<typeof publisherSchema>
+export type FormatFormValues = z.infer<typeof formatSchema>
 
 // Valores padrão para o formulário
-export const publisherDefaultValues: PublisherFormValues = {
+export const formatDefaultValues: FormatFormValues = {
     name: "",
 }
 
-interface PublisherFormProps {
-    form: UseFormReturn<PublisherFormValues>
+interface FormatFormProps {
+    form: UseFormReturn<FormatFormValues>
     onSubmit: () => void
     isSubmitting: boolean
 }
 
-export function PublisherForm({ form, onSubmit, isSubmitting }: PublisherFormProps) {
+export function FormatForm({ form, onSubmit, isSubmitting }: FormatFormProps) {
     return (
         <Form {...form}>
             <form id="entity-form" onSubmit={onSubmit} className="space-y-4">
@@ -33,11 +33,12 @@ export function PublisherForm({ form, onSubmit, isSubmitting }: PublisherFormPro
                     control={form.control}
                     name="name"
                     render={({ field }) => {
+                        console.log("Valor do input name:", field.value); // Debug
                         return (
                             <FormItem>
                                 <FormLabel>Nome</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Nome da editora" {...field} />
+                                    <Input placeholder="Nome do formato" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

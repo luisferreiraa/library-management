@@ -23,7 +23,7 @@ import { deleteTranslatorsAction } from "@/app/translators/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { Translator } from "@/lib/translators"
-import { CreateTranslatorModal } from "./create-translator-modal"
+import { TranslatorModal } from "./translator-modal-2"
 
 export function TranslatorsTable() {
     const {
@@ -202,8 +202,7 @@ export function TranslatorsTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
-            {/* Unified modal for editing */}
-            <CreateTranslatorModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} translator={selectedTranslator} />
+            <TranslatorModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} translator={selectedTranslator} />
         </div>
     )
 }

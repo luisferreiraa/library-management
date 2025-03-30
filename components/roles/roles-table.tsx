@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, Pencil } from "lucide-react"
 import { useRoles } from "@/contexts/roles-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -22,6 +22,8 @@ import { useState } from "react"
 import { deleteRolesAction } from "@/app/roles/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
+import { RoleModal } from "./role-modal"
+import { Role } from "@/lib/roles"
 
 export function RolesTable() {
     const {
@@ -41,6 +43,8 @@ export function RolesTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [selectedRole, setSelectedRole] = useState<Role | null>(null)
 
     // Verificar se todas os roles estão selecionados
     const allSelected =
@@ -83,6 +87,12 @@ export function RolesTable() {
         } finally {
             setIsDeleting(false)
         }
+    }
+
+    // Função para abrir o modal de edição
+    const handleEditRole = (role: Role) => {
+        setSelectedRole(role)
+        setIsEditModalOpen(true)
     }
 
     return (
@@ -163,12 +173,18 @@ export function RolesTable() {
                                     </TableCell>
                                     <TableCell>{format(new Date(role.createdAt), "dd/MM/yyyy")}</TableCell>
                                     <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/roles/${role.slug}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {role.name}</span>
-                                            </Link>
-                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditRole(role)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {role.name}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/roles/${role.slug}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {role.name}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -185,6 +201,7 @@ export function RolesTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+            <RoleModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} role={selectedRole} />
         </div>
     )
 }

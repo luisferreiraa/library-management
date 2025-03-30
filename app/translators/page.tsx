@@ -19,10 +19,6 @@ export default async function TranslatorsPage() {
                     <CreateTranslatorButton />
                 </div>
 
-                <div className="mb-6 max-w-sm">
-                    <TranslatorsSearch />
-                </div>
-
                 <div className="flex flex-col sm:flex-row gap-4 mb-6">
                     <div className="w-full sm:max-w-sm">
                         <TranslatorsSearch />

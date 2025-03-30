@@ -23,7 +23,7 @@ import { deleteLanguagesAction } from "@/app/languages/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { Language } from "@/lib/languages"
-import { CreateLanguageModal } from "./create-language-modal"
+import { LanguageModal } from "./language-modal"
 
 export function LanguagesTable() {
     const {
@@ -202,8 +202,7 @@ export function LanguagesTable() {
                 className="mt-4"
             />
 
-            {/* Unified modal for editing */}
-            <CreateLanguageModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} language={selectedLanguage} />
+            <LanguageModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} language={selectedLanguage} />
         </div>
     )
 }
