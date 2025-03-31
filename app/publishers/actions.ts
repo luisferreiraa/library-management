@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createPublisher, deletePublishers, updatePublisher } from "@/lib/publishers"
 import { logAudit } from "@/lib/session";
 
-export async function createPublisherAction(publisherData: { name: string }): Promise<any> {
+export async function createPublisherAction(publisherData: { name: string, isActive: boolean }): Promise<any> {
     try {
         // Criar a editora na base de dados
         const newPublisher = await createPublisher(publisherData)
@@ -24,11 +24,13 @@ export async function createPublisherAction(publisherData: { name: string }): Pr
 export async function updatePublisherAction(publisherData: {
     id: string
     name: string
+    isActive: boolean
 }): Promise<any> {
     try {
         // Atualizar a editora na base de dados
         const updatedPublisher = await updatePublisher(publisherData.id, {
             name: publisherData.name,
+            isActive: publisherData.isActive,
         })
 
         // Criar auditLog

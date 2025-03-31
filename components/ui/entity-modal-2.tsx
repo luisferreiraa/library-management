@@ -10,9 +10,10 @@ import { Form, FormField, FormItem, FormControl, FormLabel, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import type { useEntityForm } from "@/hooks/use-entity-form"
+import { Switch } from "./switch"
 
 // Tipos de campos suportados
-type FieldType = "text" | "email" | "number" | "password" | "textarea" | "select"
+type FieldType = "text" | "email" | "number" | "password" | "textarea" | "select" | "switch"
 
 // Interface para opções de select
 interface SelectOption {
@@ -28,6 +29,8 @@ interface FieldConfig<T> {
     placeholder?: string
     options?: SelectOption[] // Para campos do tipo select
     required?: boolean
+    labelClass?: string // Classe para a label
+    switchClass?: string // Classe para o switch
 }
 
 // Modifique a definição da interface EntityModalProps para adicionar a restrição ao tipo T
@@ -65,7 +68,6 @@ export function EntityModal<T extends Record<string, any>, E = any>({
     // Confirmar antes de fechar se houver mudanças não salvas
     const handleOpenChange = (open: boolean) => {
         if (!open && isDirty) {
-            // Aqui você poderia usar um diálogo de confirmação mais elegante
             if (window.confirm("Há mudanças não salvas. Deseja realmente fechar?")) {
                 onClose()
             }
@@ -85,10 +87,14 @@ export function EntityModal<T extends Record<string, any>, E = any>({
                 name={field.name as unknown as Path<T>}
                 render={({ field: formField, fieldState }) => (
                     <FormItem>
-                        <FormLabel>
-                            {field.label}
-                            {field.required && <span className="text-destructive ml-1">*</span>}
-                        </FormLabel>
+                        {/* Se o campo não for um switch, renderiza a label normalmente */}
+                        {field.type !== "switch" && (
+                            <FormLabel className={field.labelClass}>
+                                {field.label}
+                                {field.required && <span className="text-destructive ml-1">*</span>}
+                            </FormLabel>
+                        )}
+
                         <FormControl>
                             {field.type === "textarea" ? (
                                 <Textarea {...formField} placeholder={field.placeholder} className="resize-none" rows={4} />
@@ -109,10 +115,24 @@ export function EntityModal<T extends Record<string, any>, E = any>({
                                         ))}
                                     </SelectContent>
                                 </Select>
+                            ) : field.type === "switch" ? (
+                                // Alinhamento correto do switch e label à direita
+                                <div className="flex justify-end items-center w-full">
+                                    <FormLabel className="text-gray-800 dark:text-white mr-3">
+                                        {field.label}
+                                    </FormLabel>
+                                    <Switch
+                                        checked={formField.value}
+                                        onCheckedChange={formField.onChange}
+                                        disabled={formField.disabled}
+                                        className={field.switchClass}
+                                    />
+                                </div>
                             ) : (
                                 <Input {...formField} type={field.type || "text"} placeholder={field.placeholder} />
                             )}
                         </FormControl>
+
                         {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
                     </FormItem>
                 )}
@@ -153,4 +173,5 @@ export function EntityModal<T extends Record<string, any>, E = any>({
         </Dialog>
     )
 }
+
 

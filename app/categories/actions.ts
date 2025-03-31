@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createCategory, deleteCategories, updateCategory } from "@/lib/categories"
 import { logAudit } from "@/lib/session";
 
-export async function createCategoryAction(categoryData: { name: string }): Promise<any> {
+export async function createCategoryAction(categoryData: { name: string, isActive: boolean }): Promise<any> {
     try {
         // Criar a categoria na base de dados
         const newCategory = await createCategory(categoryData)
@@ -24,11 +24,13 @@ export async function createCategoryAction(categoryData: { name: string }): Prom
 export async function updateCategoryAction(categoryData: {
     id: string
     name: string
+    isActive: boolean
 }): Promise<any> {
     try {
         // Atualizar a categoria na base de dados
         const updatedCategory = await updateCategory(categoryData.id, {
             name: categoryData.name,
+            isActive: categoryData.isActive,
         })
 
         // Criar auditLog

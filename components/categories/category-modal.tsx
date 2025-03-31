@@ -9,6 +9,7 @@ import { useMemo } from "react"
 // Schema de validação
 const categorySchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
+    isActive: z.boolean(),
 })
 
 // Tipo derivado do schema
@@ -17,6 +18,7 @@ type CategoryFormValues = z.infer<typeof categorySchema>
 // Valores padrão
 const defaultValues: CategoryFormValues = {
     name: "",
+    isActive: true,
 }
 
 interface CategoryModalProps {
@@ -31,7 +33,7 @@ export function CategoryModal({ open, onOpenChange, category, onSuccess }: Categ
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return category ? { name: category.name } : null
+        return category ? { name: category.name, isActive: category.isActive } : { name: "", isActive: true };
     }, [category])
 
     const formConfig = useEntityForm<CategoryFormValues, Category>({
@@ -67,6 +69,11 @@ export function CategoryModal({ open, onOpenChange, category, onSuccess }: Categ
             entity={category}
             description="Preencha os dados da categoria e clique em salvar quando terminar."
             fields={[
+                {
+                    name: "isActive",
+                    label: formConfig.form?.getValues("isActive") ? "Inativar" : "Ativar",
+                    type: "switch",
+                },
                 {
                     name: "name",
                     label: "Nome",

@@ -9,6 +9,7 @@ import { useMemo } from "react"
 // Schema de validação
 const bookStatusSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
+    isActive: z.boolean(),
 })
 
 // Tipo derivado do schema
@@ -17,6 +18,7 @@ type BookStatusFormValues = z.infer<typeof bookStatusSchema>
 // Valores padrão
 const defaultValues: BookStatusFormValues = {
     name: "",
+    isActive: true,
 }
 
 interface BookStatusModalProps {
@@ -31,7 +33,7 @@ export function BookStatusModal({ open, onOpenChange, bookStatus, onSuccess }: B
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return bookStatus ? { name: bookStatus.name } : null
+        return bookStatus ? { name: bookStatus.name, isActive: bookStatus.isActive } : { name: "", isActive: true };
     }, [bookStatus])
 
     const formConfig = useEntityForm<BookStatusFormValues, BookStatus>({
@@ -67,6 +69,11 @@ export function BookStatusModal({ open, onOpenChange, bookStatus, onSuccess }: B
             entity={bookStatus}
             description="Preencha os dados do estado e clique em salvar quando terminar."
             fields={[
+                {
+                    name: "isActive",
+                    label: formConfig.form?.getValues("isActive") ? "Inativar" : "Ativar",
+                    type: "switch",
+                },
                 {
                     name: "name",
                     label: "Nome",

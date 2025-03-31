@@ -27,6 +27,7 @@ model Publisher {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   books     Book[]
+  isActive  Boolean  @default(true)
 }
 
 model Category {
@@ -36,6 +37,7 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   books     Book[]   @relation("BookCategories")
+  isActive  Boolean  @default(true)
 }
 
 model Language {

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createBookStatus, deleteBookStatuses, updateBookStatus } from "@/lib/bookstatus"
 import { logAudit } from "@/lib/session"
 
-export async function createBookStatusAction(bookStatusData: { name: string }): Promise<any> {
+export async function createBookStatusAction(bookStatusData: { name: string, isActive: boolean }): Promise<any> {
     try {
         // Criar o bookStatus na base de dados
         const newBookStatus = await createBookStatus(bookStatusData)
@@ -24,11 +24,13 @@ export async function createBookStatusAction(bookStatusData: { name: string }): 
 export async function updateBookStatusAction(bookStatusData: {
     id: string
     name: string
+    isActive: boolean
 }): Promise<any> {
     try {
         // Atualizar o book status na base de dados
         const updatedBookStatus = await updateBookStatus(bookStatusData.id, {
             name: bookStatusData.name,
+            isActive: bookStatusData.isActive
         })
 
         // Criar auditLog

@@ -58,7 +58,7 @@ export async function getLanguageWithBooks(slug: string): Promise<LanguageWithBo
     });
 }
 
-export async function createLanguage(data: { name: string }): Promise<Language> {
+export async function createLanguage(data: { name: string, isActive: boolean }): Promise<Language> {
     const slug: string = slugify(data.name, { lower: true });
 
     return prisma.language.create({
@@ -69,8 +69,8 @@ export async function createLanguage(data: { name: string }): Promise<Language> 
     });
 }
 
-export async function updateLanguage(id: string, data: { name?: string }): Promise<Language> {
-    let updateData: { name?: string; slug?: string } = { ...data };
+export async function updateLanguage(id: string, data: { name?: string, isActive?: boolean }): Promise<Language> {
+    let updateData: { name?: string; isActive?: boolean; slug?: string } = { ...data };
 
     if (data.name) {
         updateData.slug = slugify(data.name, { lower: true });

@@ -58,7 +58,7 @@ export async function getCategoriesById(id: string): Promise<Category | null> {
     })
 }
 
-export async function createCategory(data: { name: string }): Promise<Category> {
+export async function createCategory(data: { name: string, isActive: boolean }): Promise<Category> {
     const slug: string = slugify(data.name, { lower: true });
 
     return prisma.category.create({
@@ -69,8 +69,8 @@ export async function createCategory(data: { name: string }): Promise<Category> 
     });
 }
 
-export async function updateCategory(id: string, data: { name?: string }): Promise<Category> {
-    let updateData: { name?: string; slug?: string } = { ...data };
+export async function updateCategory(id: string, data: { name?: string, isActive?: boolean }): Promise<Category> {
+    let updateData: { name?: string; isActive?: boolean; slug?: string } = { ...data };
 
     if (data.name) {
         updateData.slug = slugify(data.name, { lower: true });

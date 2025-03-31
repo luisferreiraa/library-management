@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createLanguage, deleteLanguages, updateLanguage } from "@/lib/languages"
 import { logAudit } from "@/lib/session";
 
-export async function createLanguageAction(languageData: { name: string }): Promise<any> {
+export async function createLanguageAction(languageData: { name: string, isActive: boolean }): Promise<any> {
     try {
         // Criar a language na base de dados
         const newLanguage = await createLanguage(languageData)
@@ -24,11 +24,13 @@ export async function createLanguageAction(languageData: { name: string }): Prom
 export async function updateLanguageAction(languageData: {
     id: string
     name: string
+    isActive: boolean
 }): Promise<any> {
     try {
         // Atualizar o idioma na base de dados
         const updatedLanguage = await updateLanguage(languageData.id, {
             name: languageData.name,
+            isActive: languageData.isActive,
         })
 
         // Criar auditLog

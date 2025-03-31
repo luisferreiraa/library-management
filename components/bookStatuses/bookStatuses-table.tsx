@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink, Pencil } from "lucide-react"
+import { Trash2, ExternalLink, Pencil, Check, X } from "lucide-react"
 import { useBookStatuses } from "@/contexts/bookstatus-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -24,6 +24,7 @@ import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { BookStatus } from "@/lib/bookstatus"
 import { BookStatusModal } from "./book-status-modal"
+import { Badge } from "../ui/badge"
 
 export function BookStatusesTable() {
     const {
@@ -142,6 +143,7 @@ export function BookStatusesTable() {
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Status</TableHead>
                             <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -172,6 +174,19 @@ export function BookStatusesTable() {
                                         </Link>
                                     </TableCell>
                                     <TableCell>{format(new Date(bookStatus.createdAt), "dd/MM/yyyy")}</TableCell>
+                                    <TableCell>
+                                        {bookStatus.isActive ? (
+                                            <Badge variant="success" className="flex items-center gap-1 w-fit">
+                                                <Check className="h-3 w-3" />
+                                                Ativo
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="destructive" className="flex items-center gap-1 w-fit">
+                                                <X className="h-3 w-3" />
+                                                Inativo
+                                            </Badge>
+                                        )}
+                                    </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
                                             <Button variant="ghost" size="icon" onClick={() => handleEditBookStatus(bookStatus)}>

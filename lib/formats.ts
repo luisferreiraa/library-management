@@ -58,7 +58,7 @@ export async function getFormatWithBooks(slug: string): Promise<FormatWithBooks 
     });
 }
 
-export async function createFormat(data: { name: string }): Promise<Format> {
+export async function createFormat(data: { name: string, isActive: boolean }): Promise<Format> {
     const slug: string = slugify(data.name, { lower: true });
 
     return prisma.format.create({
@@ -69,8 +69,8 @@ export async function createFormat(data: { name: string }): Promise<Format> {
     });
 }
 
-export async function updateFormat(id: string, data: { name?: string }): Promise<Format> {
-    let updateData: { name?: string; slug?: string } = { ...data };
+export async function updateFormat(id: string, data: { name?: string, isActive?: boolean }): Promise<Format> {
+    let updateData: { name?: string; isActive?: boolean; slug?: string } = { ...data };
 
     if (data.name) {
         updateData.slug = slugify(data.name, { lower: true });

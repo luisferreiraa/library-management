@@ -18,7 +18,7 @@ export async function getBookStatusById(id: string): Promise<BookStatus | null> 
     })
 }
 
-export async function createBookStatus(data: { name: string }): Promise<BookStatus> {
+export async function createBookStatus(data: { name: string, isActive: boolean }): Promise<BookStatus> {
     const slug: string = slugify(data.name, { lower: true });
 
     return prisma.bookStatus.create({
@@ -29,8 +29,8 @@ export async function createBookStatus(data: { name: string }): Promise<BookStat
     });
 }
 
-export async function updateBookStatus(id: string, data: { name?: string }): Promise<BookStatus> {
-    let updateData: { name?: string; slug?: string } = { ...data };
+export async function updateBookStatus(id: string, data: { name?: string, isActive?: boolean }): Promise<BookStatus> {
+    let updateData: { name?: string; isActive?: boolean; slug?: string } = { ...data };
 
     if (data.name) {
         updateData.slug = slugify(data.name, { lower: true });

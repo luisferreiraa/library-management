@@ -9,6 +9,7 @@ import { useMemo } from "react"
 // Schema de validação
 const publisherSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
+    isActive: z.boolean(),
 })
 
 // Tipo derivado do schema
@@ -17,6 +18,7 @@ type PublisherFormValues = z.infer<typeof publisherSchema>
 // Valores padrão
 const defaultValues: PublisherFormValues = {
     name: "",
+    isActive: true,
 }
 
 interface PublisherModalProps {
@@ -31,7 +33,7 @@ export function PublisherModal({ open, onOpenChange, publisher, onSuccess }: Pub
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return publisher ? { name: publisher.name } : null
+        return publisher ? { name: publisher.name, isActive: publisher.isActive } : { name: "", isActive: true };
     }, [publisher])
 
     const formConfig = useEntityForm<PublisherFormValues, Publisher>({
@@ -67,6 +69,11 @@ export function PublisherModal({ open, onOpenChange, publisher, onSuccess }: Pub
             entity={publisher}
             description="Preencha os dados da editora e clique em salvar quando terminar."
             fields={[
+                {
+                    name: "isActive",
+                    label: formConfig.form?.getValues("isActive") ? "Inativar" : "Ativar",
+                    type: "switch",
+                },
                 {
                     name: "name",
                     label: "Nome",
