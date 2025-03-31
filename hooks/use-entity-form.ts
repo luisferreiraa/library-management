@@ -46,7 +46,6 @@ export function useEntityForm<T extends FieldValues, U>({
     // Reset do formulário quando a entidade muda
     useEffect(() => {
         if (entity) {
-            console.log("Resetting form with entity:", entity)
             form.reset({ ...defaultValues, ...entity } as DefaultValues<T>)
         } else {
             form.reset(defaultValues)
@@ -104,4 +103,3 @@ export function useEntityForm<T extends FieldValues, U>({
         handleClose,
     }
 }
-

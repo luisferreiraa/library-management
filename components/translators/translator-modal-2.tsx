@@ -4,6 +4,7 @@ import { EntityModal } from "@/components/ui/entity-modal-2"
 import { useEntityForm } from "@/hooks/use-entity-form"
 import { createTranslatorAction, updateTranslatorAction } from "@/app/translators/actions"
 import type { Translator } from "@/lib/translators"
+import { useMemo } from "react"
 
 // Schema de validação para tradutor
 const translatorSchema = z.object({
@@ -28,6 +29,11 @@ interface TranslatorModalProps {
 export function TranslatorModal({ open, onOpenChange, translator, onSuccess }: TranslatorModalProps) {
     const isEditMode = !!translator
 
+    // Use useMemo to prevent creating a new object reference on every render
+    const entityData = useMemo(() => {
+        return translator ? { name: translator.name } : null
+    }, [translator])
+
     const formConfig = useEntityForm<TranslatorFormValues, Translator>({
         schema: translatorSchema,
         defaultValues,
@@ -41,11 +47,7 @@ export function TranslatorModal({ open, onOpenChange, translator, onSuccess }: T
                 return createTranslatorAction(values)
             }
         },
-        entity: translator
-            ? {
-                name: translator.name,
-            }
-            : null,
+        entity: entityData,
         entityName: "Tradutor",
         onSuccess: (result) => {
             onOpenChange(false)
@@ -62,6 +64,7 @@ export function TranslatorModal({ open, onOpenChange, translator, onSuccess }: T
             onOpenChange={onOpenChange}
             entityName="Tradutor"
             formConfig={formConfig}
+            entity={translator} // Pass the translator as the entity prop
             description="Preencha os dados do tradutor e clique em salvar quando terminar."
             fields={[
                 {
