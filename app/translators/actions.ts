@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createTranslator, deleteTranslators, updateTranslator } from "@/lib/translators"
 import { logAudit } from "@/lib/session";
 
-export async function createTranslatorAction(translatorData: { name: string }): Promise<any> {
+export async function createTranslatorAction(translatorData: { name: string, isActive: boolean }): Promise<any> {
     try {
         // Criar o tradutor na base de dados
         const newTranslator = await createTranslator(translatorData)
@@ -24,11 +24,13 @@ export async function createTranslatorAction(translatorData: { name: string }): 
 export async function updateTranslatorAction(translatorData: {
     id: string
     name: string
+    isActive: boolean
 }): Promise<any> {
     try {
         // Atualizar o tradutor na base de dados
         const updatedTranslator = await updateTranslator(translatorData.id, {
             name: translatorData.name,
+            isActive: translatorData.isActive
         })
 
         // Criar auditLog

@@ -9,6 +9,7 @@ import { useMemo } from "react"
 // Schema de validação para tradutor
 const translatorSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
+    isActive: z.boolean(),
 })
 
 // Tipo derivado do schema
@@ -17,6 +18,7 @@ type TranslatorFormValues = z.infer<typeof translatorSchema>
 // Valores padrão
 const defaultValues: TranslatorFormValues = {
     name: "",
+    isActive: true,
 }
 
 interface TranslatorModalProps {
@@ -31,7 +33,7 @@ export function TranslatorModal({ open, onOpenChange, translator, onSuccess }: T
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return translator ? { name: translator.name } : null
+        return translator ? { name: translator.name, isActive: translator.isActive } : { name: "", isActive: true };
     }, [translator])
 
     const formConfig = useEntityForm<TranslatorFormValues, Translator>({
@@ -67,6 +69,11 @@ export function TranslatorModal({ open, onOpenChange, translator, onSuccess }: T
             entity={translator}
             description="Preencha os dados do tradutor e clique em salvar quando terminar."
             fields={[
+                {
+                    name: "isActive",
+                    label: formConfig.form?.getValues("isActive") ? "Inativar" : "Ativar",
+                    type: "switch",
+                },
                 {
                     name: "name",
                     label: "Nome",

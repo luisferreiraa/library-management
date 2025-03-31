@@ -58,7 +58,7 @@ export async function getTranslatorById(id: string): Promise<Translator | null> 
     })
 }
 
-export async function createTranslator(data: { name: string }): Promise<Translator> {
+export async function createTranslator(data: { name: string, isActive: boolean }): Promise<Translator> {
     const slug: string = slugify(data.name, { lower: true });
 
     return prisma.translator.create({
@@ -69,8 +69,8 @@ export async function createTranslator(data: { name: string }): Promise<Translat
     });
 }
 
-export async function updateTranslator(id: string, data: { name?: string }): Promise<Translator> {
-    let updateData: { name?: string; slug?: string } = { ...data };
+export async function updateTranslator(id: string, data: { name?: string, isActive?: boolean }): Promise<Translator> {
+    let updateData: { name?: string; isActive?: boolean; slug?: string } = { ...data };
 
     if (data.name) {
         updateData.slug = slugify(data.name, { lower: true });
