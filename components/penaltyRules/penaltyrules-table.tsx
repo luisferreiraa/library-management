@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink } from "lucide-react"
+import { Trash2, ExternalLink, Pencil } from "lucide-react"
 import { usePenaltyRules } from "@/contexts/penaltyrules-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -22,6 +22,8 @@ import { useState } from "react"
 import { deletePenaltyRulesAction } from "@/app/penalty-rules/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
+import { PenaltyRuleModal } from "./penalty-rule-modal"
+import { PenaltyRule } from "@/lib/penaltyrules"
 
 export function PenaltyRulesTable() {
     const {
@@ -41,6 +43,8 @@ export function PenaltyRulesTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [selectedPenaltyRule, setSelectedPenaltyRule] = useState<PenaltyRule | null>(null)
 
     // Verificar se todas as penalty rules estão selecionadas
     const allSelected =
@@ -83,6 +87,12 @@ export function PenaltyRulesTable() {
         } finally {
             setIsDeleting(false)
         }
+    }
+
+    // Função para abrir o modal de edição
+    const handleEditPenaltyRule = (penaltyRule: PenaltyRule) => {
+        setSelectedPenaltyRule(penaltyRule)
+        setIsEditModalOpen(true)
     }
 
     return (
@@ -134,6 +144,7 @@ export function PenaltyRulesTable() {
                             <TableHead>Descrição</TableHead>
                             <TableHead>Valor p/ dia</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -157,6 +168,20 @@ export function PenaltyRulesTable() {
                                     <TableCell>{rule.description}</TableCell>
                                     <TableCell className="max-w-xs truncate">{rule.finePerDay + " €" || "-"}</TableCell>
                                     <TableCell>{format(new Date(rule.createdAt), "dd/MM/yyyy")}</TableCell>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditPenaltyRule(rule)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {rule.name}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/penalty-rules/${rule.slug}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {rule.name}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
+                                    </TableCell>
                                 </TableRow>
                             ))
                         )}
@@ -172,6 +197,8 @@ export function PenaltyRulesTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+
+            <PenaltyRuleModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} penaltyRule={selectedPenaltyRule} />
         </div>
     )
 }

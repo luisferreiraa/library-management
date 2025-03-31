@@ -23,7 +23,7 @@ import { deleteBookStatusesAction } from "@/app/book-status/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { BookStatus } from "@/lib/bookstatus"
-import { CreateBookStatusModal } from "./create-bookStatus-modal"
+import { BookStatusModal } from "./book-status-modal"
 
 export function BookStatusesTable() {
     const {
@@ -201,8 +201,7 @@ export function BookStatusesTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
-            {/* Unified modal for editing */}
-            <CreateBookStatusModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} bookStatus={selectedBookStatus} />
+            <BookStatusModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} bookStatus={selectedBookStatus} />
         </div>
     )
 }

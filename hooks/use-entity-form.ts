@@ -58,7 +58,7 @@ export function useEntityForm<T extends FieldValues, U>({
     const handleClose = () => {
         setError(null)
         setIsDirty(false)
-        form.reset(defaultValues)
+        // Don't reset the form here, as it will be reset when the modal is reopened
         if (onClose) {
             onClose()
         }
@@ -103,3 +103,4 @@ export function useEntityForm<T extends FieldValues, U>({
         handleClose,
     }
 }
+

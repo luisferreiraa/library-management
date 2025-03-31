@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CreateBookStatusModal } from "./create-bookStatus-modal"
+import { BookStatusModal } from "./book-status-modal"
 
 export function CreateBookStatusButton() {
     const [open, setOpen] = useState(false)
@@ -12,9 +12,9 @@ export function CreateBookStatusButton() {
         <>
             <Button onClick={() => setOpen(true)}>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Novo Book Status
+                Novo Estado
             </Button>
-            <CreateBookStatusModal open={open} onOpenChange={setOpen} />
+            <BookStatusModal open={open} onOpenChange={setOpen} />
         </>
     )
 }

@@ -1,79 +1,80 @@
 "use client"
-
-import { useFormats } from "@/contexts/formats-context"
-import { EntityModal } from "@/components/ui/entity-modal"
-import { useEntityModal } from "@/hooks/use-entity-modal"
-import { FormatForm, formatSchema, formatDefaultValues, type FormatFormValues } from "./format-form"
+import { z } from "zod"
+import { EntityModal } from "@/components/ui/entity-modal-2"
+import { useEntityForm } from "@/hooks/use-entity-form"
 import { createFormatAction, updateFormatAction } from "@/app/formats/actions"
 import type { Format } from "@/lib/formats"
-import { useEffect } from "react"
+import { useMemo } from "react"
+
+// Schema de validação
+const formatSchema = z.object({
+    name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
+})
+
+// Tipo derivado do schema
+type FormatFormValues = z.infer<typeof formatSchema>
+
+// Valores padrão
+const defaultValues: FormatFormValues = {
+    name: "",
+}
 
 interface FormatModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     format?: Format | null
+    onSuccess?: (format: Format) => void
 }
 
-export function FormatModal({ open, onOpenChange, format }: FormatModalProps) {
-    const { addFormat } = useFormats()
+export function FormatModal({ open, onOpenChange, format, onSuccess }: FormatModalProps) {
     const isEditMode = !!format
 
-    const handleSubmit = async (values: FormatFormValues) => {
-        if (isEditMode && format) {
-            return updateFormatAction({
-                id: format.id,
-                ...values,
-            })
-        } else {
-            return createFormatAction(values)
-        }
-    }
+    // Utilizar useMemo para prevenir criar um novo objeto a cada render
+    const entityData = useMemo(() => {
+        return format ? { name: format.name } : null
+    }, [format])
 
-    const {
-        isSubmitting,
-        error,
-        form,
-        handleSubmit: onSubmit,
-    } = useEntityModal<FormatFormValues, Format>({
+    const formConfig = useEntityForm<FormatFormValues, Format>({
         schema: formatSchema,
-        defaultValues: format
-            ? { ...formatDefaultValues, name: format.name }
-            : formatDefaultValues,
-        onSubmit: handleSubmit,
-        entity: format,
+        defaultValues,
+        onSubmit: async (values) => {
+            if (isEditMode && format) {
+                return updateFormatAction({
+                    id: format.id,
+                    ...values,
+                })
+            } else {
+                return createFormatAction(values)
+            }
+        },
+        entity: entityData,
         entityName: "Formato",
         onSuccess: (result) => {
-            addFormat(result);
             onOpenChange(false)
+            if (onSuccess) {
+                onSuccess(result)
+            }
         },
+        onClose: () => onOpenChange(false),
     })
-
-    // Atualiza os valores do formulário sempre que o modal abrir
-    useEffect(() => {
-        if (open) {
-            const values = format
-                ? { ...formatDefaultValues, name: format.name }
-                : formatDefaultValues
-
-            form.reset(values)
-        }
-    }, [open, format, form])
 
     return (
         <EntityModal
             open={open}
             onOpenChange={onOpenChange}
-            title={isEditMode ? "Editar Formato" : "Adicionar Novo Formato"}
-            description={
-                isEditMode
-                    ? "Edite os dados do formato e clique em salvar quando terminar."
-                    : "Preencha os dados do formato e clique em salvar quando terminar."
-            }
-            isSubmitting={isSubmitting}
-            error={error}
-        >
-            <FormatForm form={form} onSubmit={onSubmit} isSubmitting={isSubmitting} />
-        </EntityModal>
+            entityName="Formato"
+            formConfig={formConfig}
+            entity={format}
+            description="Preencha os dados do formato e clique em salvar quando terminar."
+            fields={[
+                {
+                    name: "name",
+                    label: "Nome",
+                    placeholder: "Nome do formato",
+                    required: true,
+                },
+            ]}
+        />
     )
 }
 

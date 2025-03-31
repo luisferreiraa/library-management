@@ -3,8 +3,7 @@
 import { useState } from "react"
 import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { TranslatorModal } from "./translator-modal-2"
-
+import { TranslatorModal } from "./translator-modal"
 
 export function CreateTranslatorButton() {
     const [open, setOpen] = useState(false)

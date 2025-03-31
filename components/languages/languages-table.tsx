@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink, Pencil } from "lucide-react"
+import { Trash2, ExternalLink, Pencil, Check, X } from "lucide-react"
 import { useLanguages } from "@/contexts/languages-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -24,6 +24,7 @@ import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { Language } from "@/lib/languages"
 import { LanguageModal } from "./language-modal"
+import { Badge } from "../ui/badge"
 
 export function LanguagesTable() {
     const {
@@ -142,6 +143,7 @@ export function LanguagesTable() {
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Status</TableHead>
                             <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -172,6 +174,19 @@ export function LanguagesTable() {
                                         </Link>
                                     </TableCell>
                                     <TableCell>{format(new Date(language.createdAt), "dd/MM/yyyy")}</TableCell>
+                                    <TableCell>
+                                        {language.isActive ? (
+                                            <Badge variant="success" className="flex items-center gap-1 w-fit">
+                                                <Check className="h-3 w-3" />
+                                                Ativo
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="destructive" className="flex items-center gap-1 w-fit">
+                                                <X className="h-3 w-3" />
+                                                Inativo
+                                            </Badge>
+                                        )}
+                                    </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
                                             <Button variant="ghost" size="icon" onClick={() => handleEditLanguage(language)}>

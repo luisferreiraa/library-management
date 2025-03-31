@@ -2,53 +2,53 @@
 import { z } from "zod"
 import { EntityModal } from "@/components/ui/entity-modal-2"
 import { useEntityForm } from "@/hooks/use-entity-form"
-import { createPublisherAction, updatePublisherAction } from "@/app/publishers/actions"
-import type { Publisher } from "@/lib/publishers"
+import { createBookStatusAction, updateBookStatusAction } from "@/app/book-status/actions"
+import type { BookStatus } from "@/lib/bookstatus"
 import { useMemo } from "react"
 
 // Schema de validação
-const publisherSchema = z.object({
+const bookStatusSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
 })
 
 // Tipo derivado do schema
-type PublisherFormValues = z.infer<typeof publisherSchema>
+type BookStatusFormValues = z.infer<typeof bookStatusSchema>
 
 // Valores padrão
-const defaultValues: PublisherFormValues = {
+const defaultValues: BookStatusFormValues = {
     name: "",
 }
 
-interface PublisherModalProps {
+interface BookStatusModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
-    publisher?: Publisher | null
-    onSuccess?: (publisher: Publisher) => void
+    bookStatus?: BookStatus | null
+    onSuccess?: (bookStatus: BookStatus) => void
 }
 
-export function PublisherModal({ open, onOpenChange, publisher, onSuccess }: PublisherModalProps) {
-    const isEditMode = !!publisher
+export function BookStatusModal({ open, onOpenChange, bookStatus, onSuccess }: BookStatusModalProps) {
+    const isEditMode = !!bookStatus
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return publisher ? { name: publisher.name } : null
-    }, [publisher])
+        return bookStatus ? { name: bookStatus.name } : null
+    }, [bookStatus])
 
-    const formConfig = useEntityForm<PublisherFormValues, Publisher>({
-        schema: publisherSchema,
+    const formConfig = useEntityForm<BookStatusFormValues, BookStatus>({
+        schema: bookStatusSchema,
         defaultValues,
         onSubmit: async (values) => {
-            if (isEditMode && publisher) {
-                return updatePublisherAction({
-                    id: publisher.id,
+            if (isEditMode && bookStatus) {
+                return updateBookStatusAction({
+                    id: bookStatus.id,
                     ...values,
                 })
             } else {
-                return createPublisherAction(values)
+                return createBookStatusAction(values)
             }
         },
         entity: entityData,
-        entityName: "Editora",
+        entityName: "Estado",
         onSuccess: (result) => {
             onOpenChange(false)
             if (onSuccess) {
@@ -62,15 +62,15 @@ export function PublisherModal({ open, onOpenChange, publisher, onSuccess }: Pub
         <EntityModal
             open={open}
             onOpenChange={onOpenChange}
-            entityName="Editora"
+            entityName="Estado"
             formConfig={formConfig}
-            entity={publisher}
-            description="Preencha os dados da editora e clique em salvar quando terminar."
+            entity={bookStatus}
+            description="Preencha os dados do estado e clique em salvar quando terminar."
             fields={[
                 {
                     name: "name",
                     label: "Nome",
-                    placeholder: "Nome da editora",
+                    placeholder: "Nome do estado",
                     required: true,
                 },
             ]}

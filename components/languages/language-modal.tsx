@@ -1,79 +1,80 @@
 "use client"
-
-import { useLanguages } from "@/contexts/languages-context"
-import { EntityModal } from "@/components/ui/entity-modal"
-import { useEntityModal } from "@/hooks/use-entity-modal"
-import { LanguageForm, languageSchema, languageDefaultValues, type LanguageFormValues } from "./language-form"
+import { z } from "zod"
+import { EntityModal } from "@/components/ui/entity-modal-2"
+import { useEntityForm } from "@/hooks/use-entity-form"
 import { createLanguageAction, updateLanguageAction } from "@/app/languages/actions"
 import type { Language } from "@/lib/languages"
-import { useEffect } from "react"
+import { useMemo } from "react"
+
+// Schema de validação
+const languageSchema = z.object({
+    name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
+})
+
+// Tipo derivado do schema
+type LanguageFormValues = z.infer<typeof languageSchema>
+
+// Valores padrão
+const defaultValues: LanguageFormValues = {
+    name: "",
+}
 
 interface LanguageModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     language?: Language | null
+    onSuccess?: (language: Language) => void
 }
 
-export function LanguageModal({ open, onOpenChange, language }: LanguageModalProps) {
-    const { addLanguage } = useLanguages()
+export function LanguageModal({ open, onOpenChange, language, onSuccess }: LanguageModalProps) {
     const isEditMode = !!language
 
-    const handleSubmit = async (values: LanguageFormValues) => {
-        if (isEditMode && language) {
-            return updateLanguageAction({
-                id: language.id,
-                ...values,
-            })
-        } else {
-            return createLanguageAction(values)
-        }
-    }
+    // Utilizar useMemo para prevenir criar um novo objeto a cada render
+    const entityData = useMemo(() => {
+        return language ? { name: language.name } : null
+    }, [language])
 
-    const {
-        isSubmitting,
-        error,
-        form,
-        handleSubmit: onSubmit,
-    } = useEntityModal<LanguageFormValues, Language>({
+    const formConfig = useEntityForm<LanguageFormValues, Language>({
         schema: languageSchema,
-        defaultValues: language
-            ? { ...languageDefaultValues, name: language.name }
-            : languageDefaultValues,
-        onSubmit: handleSubmit,
-        entity: language,
+        defaultValues,
+        onSubmit: async (values) => {
+            if (isEditMode && language) {
+                return updateLanguageAction({
+                    id: language.id,
+                    ...values,
+                })
+            } else {
+                return createLanguageAction(values)
+            }
+        },
+        entity: entityData,
         entityName: "Idioma",
         onSuccess: (result) => {
-            addLanguage(result);
             onOpenChange(false)
+            if (onSuccess) {
+                onSuccess(result)
+            }
         },
+        onClose: () => onOpenChange(false),
     })
-
-    // Atualiza os valores do formulário sempre que o modal abrir
-    useEffect(() => {
-        if (open) {
-            const values = language
-                ? { ...languageDefaultValues, name: language.name }
-                : languageDefaultValues
-
-            form.reset(values)
-        }
-    }, [open, language, form])
 
     return (
         <EntityModal
             open={open}
             onOpenChange={onOpenChange}
-            title={isEditMode ? "Editar Idioma" : "Adicionar Novo Idioma"}
-            description={
-                isEditMode
-                    ? "Edite os dados do idioma e clique em salvar quando terminar."
-                    : "Preencha os dados do idioma e clique em salvar quando terminar."
-            }
-            isSubmitting={isSubmitting}
-            error={error}
-        >
-            <LanguageForm form={form} onSubmit={onSubmit} isSubmitting={isSubmitting} />
-        </EntityModal>
+            entityName="Idioma"
+            formConfig={formConfig}
+            entity={language}
+            description="Preencha os dados do idioma e clique em salvar quando terminar."
+            fields={[
+                {
+                    name: "name",
+                    label: "Nome",
+                    placeholder: "Nome do idioma",
+                    required: true,
+                },
+            ]}
+        />
     )
 }
 

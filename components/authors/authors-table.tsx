@@ -23,7 +23,7 @@ import { deleteAuthorsAction } from "@/app/authors/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { Author } from "@/lib/authors"
-import { CreateAuthorModal } from "./create-author-modal"
+import { AuthorModal } from "./author-modal"
 
 export function AuthorsTable() {
   const {
@@ -206,8 +206,7 @@ export function AuthorsTable() {
         className="mt-4"
       />
 
-      {/* Unified modal for editing */}
-      <CreateAuthorModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} author={selectedAuthor} />
+      <AuthorModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} author={selectedAuthor} />
     </div>
   )
 }

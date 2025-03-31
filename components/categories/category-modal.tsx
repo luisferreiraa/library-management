@@ -1,79 +1,80 @@
 "use client"
-
-import { useCategories } from "@/contexts/categories-context"
-import { EntityModal } from "@/components/ui/entity-modal"
-import { useEntityModal } from "@/hooks/use-entity-modal"
-import { CategoryForm, categorySchema, categoryDefaultValues, type CategoryFormValues } from "./category-form"
+import { z } from "zod"
+import { EntityModal } from "@/components/ui/entity-modal-2"
+import { useEntityForm } from "@/hooks/use-entity-form"
 import { createCategoryAction, updateCategoryAction } from "@/app/categories/actions"
 import type { Category } from "@/lib/categories"
-import { useEffect } from "react"
+import { useMemo } from "react"
+
+// Schema de validação
+const categorySchema = z.object({
+    name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
+})
+
+// Tipo derivado do schema
+type CategoryFormValues = z.infer<typeof categorySchema>
+
+// Valores padrão
+const defaultValues: CategoryFormValues = {
+    name: "",
+}
 
 interface CategoryModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     category?: Category | null
+    onSuccess?: (category: Category) => void
 }
 
-export function CategoryModal({ open, onOpenChange, category }: CategoryModalProps) {
-    const { addCategory } = useCategories()
+export function CategoryModal({ open, onOpenChange, category, onSuccess }: CategoryModalProps) {
     const isEditMode = !!category
 
-    const handleSubmit = async (values: CategoryFormValues) => {
-        if (isEditMode && category) {
-            return updateCategoryAction({
-                id: category.id,
-                ...values,
-            })
-        } else {
-            return createCategoryAction(values)
-        }
-    }
+    // Utilizar useMemo para prevenir criar um novo objeto a cada render
+    const entityData = useMemo(() => {
+        return category ? { name: category.name } : null
+    }, [category])
 
-    const {
-        isSubmitting,
-        error,
-        form,
-        handleSubmit: onSubmit,
-    } = useEntityModal<CategoryFormValues, Category>({
+    const formConfig = useEntityForm<CategoryFormValues, Category>({
         schema: categorySchema,
-        defaultValues: category
-            ? { ...categoryDefaultValues, name: category.name }
-            : categoryDefaultValues,
-        onSubmit: handleSubmit,
-        entity: category,
+        defaultValues,
+        onSubmit: async (values) => {
+            if (isEditMode && category) {
+                return updateCategoryAction({
+                    id: category.id,
+                    ...values,
+                })
+            } else {
+                return createCategoryAction(values)
+            }
+        },
+        entity: entityData,
         entityName: "Categoria",
         onSuccess: (result) => {
-            addCategory(result);
             onOpenChange(false)
+            if (onSuccess) {
+                onSuccess(result)
+            }
         },
+        onClose: () => onOpenChange(false),
     })
-
-    // Atualiza os valores do formulário sempre que o modal abrir
-    useEffect(() => {
-        if (open) {
-            const values = category
-                ? { ...categoryDefaultValues, name: category.name }
-                : categoryDefaultValues
-
-            form.reset(values)
-        }
-    }, [open, category, form])
 
     return (
         <EntityModal
             open={open}
             onOpenChange={onOpenChange}
-            title={isEditMode ? "Editar Categoria" : "Adicionar Nova Categoria"}
-            description={
-                isEditMode
-                    ? "Edite os dados da categoria e clique em salvar quando terminar."
-                    : "Preencha os dados da categoria e clique em salvar quando terminar."
-            }
-            isSubmitting={isSubmitting}
-            error={error}
-        >
-            <CategoryForm form={form} onSubmit={onSubmit} isSubmitting={isSubmitting} />
-        </EntityModal>
+            entityName="Categoria"
+            formConfig={formConfig}
+            entity={category}
+            description="Preencha os dados da categoria e clique em salvar quando terminar."
+            fields={[
+                {
+                    name: "name",
+                    label: "Nome",
+                    placeholder: "Nome da categoria",
+                    required: true,
+                },
+            ]}
+        />
     )
 }
 

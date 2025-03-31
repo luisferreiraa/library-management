@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CreatePenaltyRuleModal } from "./create-penaltyrule-modal"
+import { PenaltyRuleModal } from "./penalty-rule-modal"
 
 export function CreatePenaltyRuleButton() {
     const [open, setOpen] = useState(false)
@@ -14,7 +14,7 @@ export function CreatePenaltyRuleButton() {
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Nova Regra
             </Button>
-            <CreatePenaltyRuleModal open={open} onOpenChange={setOpen} />
+            <PenaltyRuleModal open={open} onOpenChange={setOpen} />
         </>
     )
 }

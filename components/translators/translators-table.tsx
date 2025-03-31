@@ -23,7 +23,7 @@ import { deleteTranslatorsAction } from "@/app/translators/actions"
 import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { Translator } from "@/lib/translators"
-import { TranslatorModal } from "./translator-modal-2"
+import { TranslatorModal } from "./translator-modal"
 
 export function TranslatorsTable() {
     const {

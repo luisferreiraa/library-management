@@ -31,10 +31,10 @@ interface FieldConfig<T> {
 }
 
 // Modifique a definição da interface EntityModalProps para adicionar a restrição ao tipo T
-interface EntityModalProps<T extends Record<string, any>> {
+interface EntityModalProps<T extends Record<string, any>, E = any> {
     open: boolean
     onOpenChange: (open: boolean) => void
-    entity?: T | null
+    entity?: E | null
     entityName: string
     formConfig: ReturnType<typeof useEntityForm<T, any>>
     fields: FieldConfig<T>[]
@@ -43,7 +43,7 @@ interface EntityModalProps<T extends Record<string, any>> {
     children?: ReactNode
 }
 
-export function EntityModal<T extends Record<string, any>>({
+export function EntityModal<T extends Record<string, any>, E = any>({
     open,
     onOpenChange,
     entity,
@@ -53,7 +53,7 @@ export function EntityModal<T extends Record<string, any>>({
     description,
     maxWidth = "sm:max-w-[425px]",
     children,
-}: EntityModalProps<T>) {
+}: EntityModalProps<T, E>) {
     const { form, isSubmitting, error, handleSubmit, handleClose, isDirty } = formConfig
 
     // Função para fechar o modal

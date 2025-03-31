@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CreateAuthorModal } from "./create-author-modal"
+import { AuthorModal } from "./author-modal"
 
 export function CreateAuthorButton() {
   const [open, setOpen] = useState(false)
@@ -14,7 +14,7 @@ export function CreateAuthorButton() {
         <PlusCircle className="mr-2 h-4 w-4" />
         Novo Autor
       </Button>
-      <CreateAuthorModal open={open} onOpenChange={setOpen} />
+      <AuthorModal open={open} onOpenChange={setOpen} />
     </>
   )
 }
