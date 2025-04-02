@@ -283,6 +283,7 @@ export default async function BookPage({ params }: BookPageProps) {
                                                     <div className="text-sm text-muted-foreground">
                                                         Avaliado em: {formatDate(review.createdAt)}
                                                     </div>
+                                                    <div className="text-sm mt-2">{review.comment}</div>
                                                 </div>
                                             ))}
                                         </div>

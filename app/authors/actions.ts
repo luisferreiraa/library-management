@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createAuthor, deleteAuthors, updateAuthor } from "@/lib/authors"
 import { logAudit } from "@/lib/session";
 
-export async function createAuthorAction(authorData: { name: string; email: string; bio: string }): Promise<any> {
+export async function createAuthorAction(authorData: { name: string; email: string; bio: string; isActive: boolean }): Promise<any> {
   try {
     // Criar o autor no banco de dados
     const newAuthor = await createAuthor(authorData)
@@ -31,6 +31,7 @@ export async function updateAuthorAction(authorData: {
   name: string
   email: string
   bio?: string
+  isActive: boolean
 }): Promise<any> {
   try {
     // Atualizar o autor no banco de dados
@@ -38,6 +39,7 @@ export async function updateAuthorAction(authorData: {
       name: authorData.name,
       email: authorData.email,
       bio: authorData.bio,
+      isActive: authorData.isActive
     })
 
     // Criar auditLog

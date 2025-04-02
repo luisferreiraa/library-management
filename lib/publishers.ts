@@ -35,6 +35,12 @@ export async function getPublisherById(id: string): Promise<Publisher | null> {
     })
 }
 
+export async function getPublisherByName(name: string): Promise<Publisher | null> {
+    return prisma.publisher.findFirst({
+        where: { name },
+    })
+}
+
 export async function getPublisherWithBooks(slug: string): Promise<PublisherWithBooks | null> {
     return prisma.publisher.findUnique({
         where: { slug },

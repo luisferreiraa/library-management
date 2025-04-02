@@ -177,12 +177,12 @@ export function BorrowedBooksTable() {
                                         {borrowedBook.isActive ? (
                                             <Badge variant="pending" className="flex items-center gap-1 w-fit">
                                                 <X className="h-3 w-3" />
-                                                Ativo
+                                                A decorrer
                                             </Badge>
                                         ) : (
                                             <Badge variant="success" className="flex items-center gap-1 w-fit">
                                                 <Check className="h-3 w-3" />
-                                                Entregue
+                                                Devolvido
                                             </Badge>
                                         )}
                                     </TableCell>

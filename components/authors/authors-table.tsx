@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink, Pencil } from "lucide-react"
+import { Trash2, ExternalLink, Pencil, Check, X } from "lucide-react"
 import { useAuthors } from "@/contexts/authors-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -24,6 +24,7 @@ import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { Author } from "@/lib/authors"
 import { AuthorModal } from "./author-modal"
+import { Badge } from "../ui/badge"
 
 export function AuthorsTable() {
   const {
@@ -144,6 +145,7 @@ export function AuthorsTable() {
               <TableHead>Email</TableHead>
               <TableHead>Bio</TableHead>
               <TableHead>Data de Criação</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead className="w-[80px]">Ações</TableHead>
             </TableRow>
           </TableHeader>
@@ -176,6 +178,19 @@ export function AuthorsTable() {
                   <TableCell>{author.email}</TableCell>
                   <TableCell className="max-w-xs truncate">{author.bio || "-"}</TableCell>
                   <TableCell>{formatDate(author.createdAt)}</TableCell>
+                  <TableCell>
+                    {author.isActive ? (
+                      <Badge variant="success" className="flex items-center gap-1 w-fit">
+                        <Check className="h-3 w-3" />
+                        Ativo
+                      </Badge>
+                    ) : (
+                      <Badge variant="destructive" className="flex items-center gap-1 w-fit">
+                        <X className="h-3 w-3" />
+                        Inativo
+                      </Badge>
+                    )}
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Button variant="ghost" size="icon" onClick={() => handleEditAuthor(author)}>

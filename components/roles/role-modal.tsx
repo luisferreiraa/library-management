@@ -9,6 +9,7 @@ import { useMemo } from "react"
 // Schema de validação para role
 const roleSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
+    isActive: z.boolean(),
 })
 
 // Tipo derivado do schema
@@ -17,6 +18,7 @@ type RoleFormValues = z.infer<typeof roleSchema>
 // Valores padrão
 const defaultValues: RoleFormValues = {
     name: "",
+    isActive: true,
 }
 
 interface RoleModalProps {
@@ -31,7 +33,7 @@ export function RoleModal({ open, onOpenChange, role, onSuccess }: RoleModalProp
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return role ? { name: role.name } : null
+        return role ? { name: role.name, isActive: role.isActive } : { name: "", isActive: true };
     }, [role])
 
     const formConfig = useEntityForm<RoleFormValues, Role>({
@@ -67,6 +69,11 @@ export function RoleModal({ open, onOpenChange, role, onSuccess }: RoleModalProp
             entity={role}
             description="Preencha os dados do perfil e clique em salvar quando terminar."
             fields={[
+                {
+                    name: "isActive",
+                    label: formConfig.form?.getValues("isActive") ? "Inativar" : "Ativar",
+                    type: "switch",
+                },
                 {
                     name: "name",
                     label: "Nome",

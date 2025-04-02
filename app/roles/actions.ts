@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createRole, deleteRoles, updateRole } from "@/lib/roles"
 import { logAudit } from "@/lib/session";
 
-export async function createRoleAction(roleData: { name: string }): Promise<any> {
+export async function createRoleAction(roleData: { name: string, isActive: boolean }): Promise<any> {
     try {
         // Criar o role na base de dados
         const newRole = await createRole(roleData)
@@ -24,11 +24,13 @@ export async function createRoleAction(roleData: { name: string }): Promise<any>
 export async function updateRoleAction(roleData: {
     id: string
     name: string
+    isActive: boolean
 }): Promise<any> {
     try {
         // Atualizar na base de dados
         const updatedRole = await updateRole(roleData.id, {
             name: roleData.name,
+            isActive: roleData.isActive
         })
 
         // Criar auditLog

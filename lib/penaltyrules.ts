@@ -24,6 +24,7 @@ export async function createPenaltyRule(data: {
     finePerDay: number;
     minDaysLate: number;
     maxDaysLate?: number;
+    isActive: boolean;
 }): Promise<PenaltyRule> {
     const slug: string = slugify(data.name, { lower: true });
 
@@ -35,8 +36,8 @@ export async function createPenaltyRule(data: {
     });
 }
 
-export async function updatePenaltyRule(id: string, data: { name?: string; description?: string; finePerDay?: number; minDaysLate: number; maxDaysLate?: number; }): Promise<PenaltyRule> {
-    let updateData: { name?: string; slug?: string; description?: string; finePerDay?: number; minDaysLate: number; maxDaysLate?: number; } = { ...data };
+export async function updatePenaltyRule(id: string, data: { name?: string; description?: string; finePerDay?: number; minDaysLate: number; maxDaysLate?: number; isActive?: boolean }): Promise<PenaltyRule> {
+    let updateData: { name?: string; slug?: string; description?: string; finePerDay?: number; minDaysLate: number; maxDaysLate?: number; isActive?: boolean } = { ...data };
 
     if (data.name) {
         updateData.slug = slugify(data.name, { lower: true });

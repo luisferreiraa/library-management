@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { createPenaltyRule, deletePenaltyRules, updatePenaltyRule, } from "@/lib/penaltyrules"
 import { logAudit } from "@/lib/session";
 
-export async function createPenaltyRuleAction(penaltyRuleData: { name: string; description: string; finePerDay: number; minDaysLate: number; maxDaysLate?: number }): Promise<any> {
+export async function createPenaltyRuleAction(penaltyRuleData: { name: string; description: string; finePerDay: number; minDaysLate: number; maxDaysLate?: number; isActive: boolean }): Promise<any> {
     try {
         // Criar a multa na base de dados
         const newPenaltyRule = await createPenaltyRule(penaltyRuleData)
@@ -28,6 +28,7 @@ export async function updatePenaltyRuleAction(penaltyRuleData: {
     finePerDay: number
     minDaysLate: number
     maxDaysLate?: number
+    isActive?: boolean
 }): Promise<any> {
     try {
         // Atualizar a penalty rule na base de dados
@@ -37,6 +38,7 @@ export async function updatePenaltyRuleAction(penaltyRuleData: {
             finePerDay: penaltyRuleData.finePerDay,
             minDaysLate: penaltyRuleData.minDaysLate,
             maxDaysLate: penaltyRuleData.maxDaysLate,
+            isActive: penaltyRuleData.isActive,
         })
 
         // Criar auditLog

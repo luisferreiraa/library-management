@@ -13,6 +13,7 @@ const penaltyRuleSchema = z.object({
     finePerDay: z.coerce.number().positive({ message: "Multa por dia deve ser um número positivo" }),
     minDaysLate: z.coerce.number().positive({ message: "Número mínimo de dias de atraso deve ser positivo" }),
     maxDaysLate: z.coerce.number().min(0, { message: "Número máximo de dias de atraso deve ser positivo" }),
+    isActive: z.boolean(),
 })
 
 // Tipo derivado do schema
@@ -25,6 +26,7 @@ const defaultValues: PenaltyRuleFormValues = {
     finePerDay: 0,
     minDaysLate: 0,
     maxDaysLate: 0,
+    isActive: true,
 }
 
 interface PenaltyRuleModalProps {
@@ -44,7 +46,8 @@ export function PenaltyRuleModal({ open, onOpenChange, penaltyRule, onSuccess }:
             description: penaltyRule.description,
             finePerDay: penaltyRule.finePerDay,
             minDaysLate: penaltyRule.minDaysLate,
-            maxDaysLate: penaltyRule.maxDaysLate ?? 0
+            maxDaysLate: penaltyRule.maxDaysLate ?? 0,
+            isActive: penaltyRule.isActive,
         } : null
     }, [penaltyRule])
 
@@ -81,6 +84,11 @@ export function PenaltyRuleModal({ open, onOpenChange, penaltyRule, onSuccess }:
             entity={penaltyRule}
             description="Preencha os dados da regra e clique em salvar quando terminar."
             fields={[
+                {
+                    name: "isActive",
+                    label: formConfig.form?.getValues("isActive") ? "Inativar" : "Ativar",
+                    type: "switch",
+                },
                 {
                     name: "name",
                     label: "Nome",

@@ -18,6 +18,7 @@ model Author {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   books     Book[]
+  isActive  Boolean  @default(true)
 }
 
 model Publisher {
@@ -159,6 +160,7 @@ model Review {
   user         User      @relation(fields: [userId], references: [id])
   userId       String
   rating       Int
+  comment      String?
   createdAt    DateTime  @default(now())
   udatedAt     DateTime  @updatedAt
   isAproved    Boolean   @default(false)

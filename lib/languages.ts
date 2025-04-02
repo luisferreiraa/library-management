@@ -35,6 +35,12 @@ export async function getLanguagesById(id: string): Promise<Language | null> {
     })
 }
 
+export async function getLanguageByName(name: string): Promise<Language | null> {
+    return prisma.language.findFirst({
+        where: { name },
+    })
+}
+
 export async function getLanguageWithBooks(slug: string): Promise<LanguageWithBooks | null> {
     return prisma.language.findUnique({
         where: { slug },

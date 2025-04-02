@@ -18,7 +18,7 @@ export async function getRoleById(id: string): Promise<Role | null> {
     })
 }
 
-export async function createRole(data: { name: string }): Promise<Role> {
+export async function createRole(data: { name: string, isActive: boolean }): Promise<Role> {
     const slug: string = slugify(data.name, { lower: true });
 
     return prisma.role.create({
@@ -29,8 +29,8 @@ export async function createRole(data: { name: string }): Promise<Role> {
     });
 }
 
-export async function updateRole(id: string, data: { name?: string }): Promise<Role> {
-    let updateData: { name?: string; slug?: string } = { ...data };
+export async function updateRole(id: string, data: { name?: string, isActive?: boolean }): Promise<Role> {
+    let updateData: { name?: string; isActive?: boolean; slug?: string } = { ...data };
 
     if (data.name) {
         updateData.slug = slugify(data.name, { lower: true });

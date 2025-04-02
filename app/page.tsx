@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen, Users, BookCopy, LogOut } from "lucide-react"
+import { BookOpen, Users, BookCopy, LogOut, ScanSearch } from "lucide-react"
 import { signOut } from "next-auth/react"
 
 export default function HomePage() {
@@ -41,6 +41,22 @@ export default function HomePage() {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {isAdmin && (
                     <>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Pesquisa Bibliográfica</CardTitle>
+                                <CardDescription>Procure livros na Base Nacional de Dados Bibliográficos</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ScanSearch className="h-12 w-12 text-primary" />
+                            </CardContent>
+                            <CardFooter>
+                                <Button asChild className="w-full">
+                                    <Link href="/search-porbase">Aceder</Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+
                         <Card>
                             <CardHeader>
                                 <CardTitle>Gerir Livros</CardTitle>

@@ -25,6 +25,12 @@ export async function getAuthorById(id: string): Promise<Author | null> {
   })
 }
 
+export async function getAuthorByName(name: string): Promise<Author | null> {
+  return prisma.author.findFirst({
+    where: { name },
+  })
+}
+
 export async function getAuthorWithBooks(id: string): Promise<AuthorWithBooks | null> {
   return prisma.author.findUnique({
     where: { id },
@@ -38,13 +44,13 @@ export async function getAuthorWithBooks(id: string): Promise<AuthorWithBooks | 
   })
 }
 
-export async function createAuthor(data: { name: string; email: string; bio?: string }): Promise<Author> {
+export async function createAuthor(data: { name: string; email: string; bio?: string; isActive: boolean }): Promise<Author> {
   return prisma.author.create({
     data,
   })
 }
 
-export async function updateAuthor(id: string, data: { name?: string; email?: string; bio?: string }): Promise<Author> {
+export async function updateAuthor(id: string, data: { name?: string; email?: string; bio?: string; isActive?: boolean }): Promise<Author> {
   return prisma.author.update({
     where: { id },
     data,

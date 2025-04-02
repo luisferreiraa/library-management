@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink, Pencil } from "lucide-react"
+import { Trash2, ExternalLink, Pencil, Check, X } from "lucide-react"
 import { usePenaltyRules } from "@/contexts/penaltyrules-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -24,6 +24,7 @@ import { toast } from "@/components/ui/use-toast"
 import { Pagination } from "../ui/pagination"
 import { PenaltyRuleModal } from "./penalty-rule-modal"
 import { PenaltyRule } from "@/lib/penaltyrules"
+import { Badge } from "../ui/badge"
 
 export function PenaltyRulesTable() {
     const {
@@ -144,6 +145,7 @@ export function PenaltyRulesTable() {
                             <TableHead>Descrição</TableHead>
                             <TableHead>Valor p/ dia</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Status</TableHead>
                             <TableHead>Ações</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -168,6 +170,19 @@ export function PenaltyRulesTable() {
                                     <TableCell>{rule.description}</TableCell>
                                     <TableCell className="max-w-xs truncate">{rule.finePerDay + " €" || "-"}</TableCell>
                                     <TableCell>{format(new Date(rule.createdAt), "dd/MM/yyyy")}</TableCell>
+                                    <TableCell>
+                                        {rule.isActive ? (
+                                            <Badge variant="success" className="flex items-center gap-1 w-fit">
+                                                <Check className="h-3 w-3" />
+                                                Ativo
+                                            </Badge>
+                                        ) : (
+                                            <Badge variant="destructive" className="flex items-center gap-1 w-fit">
+                                                <X className="h-3 w-3" />
+                                                Inativo
+                                            </Badge>
+                                        )}
+                                    </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
                                             <Button variant="ghost" size="icon" onClick={() => handleEditPenaltyRule(rule)}>

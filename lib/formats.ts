@@ -35,6 +35,12 @@ export async function getFormatById(id: string): Promise<Format | null> {
     })
 }
 
+export async function getFormatByName(name: string): Promise<Format | null> {
+    return prisma.format.findFirst({
+        where: { name },
+    })
+}
+
 export async function getFormatWithBooks(slug: string): Promise<FormatWithBooks | null> {
     return prisma.format.findUnique({
         where: { slug },

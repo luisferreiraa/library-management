@@ -11,6 +11,7 @@ const authorSchema = z.object({
     name: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
     email: z.string().email({ message: "Email inválido" }),
     bio: z.string().min(10, { message: "Bio deve ter pelo menos 10 caracteres" }),
+    isActive: z.boolean(),
 })
 
 // Tipo derivado do schema
@@ -21,6 +22,7 @@ const defaultValues: AuthorFormValues = {
     name: "",
     email: "",
     bio: "",
+    isActive: true,
 }
 
 interface AuthorModalProps {
@@ -39,6 +41,7 @@ export function AuthorModal({ open, onOpenChange, author, onSuccess }: AuthorMod
             name: author.name,
             email: author.email,
             bio: author.bio || "",
+            isActive: author.isActive,
         } : null
     }, [author])
 
@@ -75,6 +78,11 @@ export function AuthorModal({ open, onOpenChange, author, onSuccess }: AuthorMod
             entity={author}
             description="Preencha os dados do autor e clique em salvar quando terminar."
             fields={[
+                {
+                    name: "isActive",
+                    label: formConfig.form?.getValues("isActive") ? "Inativar" : "Ativar",
+                    type: "switch",
+                },
                 {
                     name: "name",
                     label: "Nome",
