@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { createBarcodeAction } from "@/app/books/actions"
 import { PlusCircle } from "lucide-react"
@@ -58,18 +58,27 @@ export function CreateBarcodeModal({ open, onOpenChange, bookId }: CreateBarcode
             onOpenChange(false)
             form.reset()
 
-            toast({
-                title: "Código de barras criado com sucesso",
-                description: `${newBarcode.code} foi adicionado.`,
+            toast.success("Código de barras criado com sucesso", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } catch (error: any) {
             setError(error.message || "Ocorreu um erro ao criar o código de barras")
 
-            toast({
-                title: "Erro ao criar código de barras",
-                description: error.message || "Ocorreu um erro ao criar o código de barras. Tente novamente.",
-                variant: "destructive",
+            toast.error("Erro ao criar código de barras", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsSubmitting(false)
         }

@@ -33,7 +33,7 @@ export function CategoryModal({ open, onOpenChange, category, onSuccess }: Categ
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return category ? { name: category.name, isActive: category.isActive } : { name: "", isActive: true };
+        return category ? { name: category.name, isActive: category.isActive } : null;
     }, [category])
 
     const formConfig = useEntityForm<CategoryFormValues, Category>({
@@ -51,6 +51,7 @@ export function CategoryModal({ open, onOpenChange, category, onSuccess }: Categ
         },
         entity: entityData,
         entityName: "Categoria",
+        entityGender: "feminine",
         onSuccess: (result) => {
             onOpenChange(false)
             if (onSuccess) {

@@ -1,20 +1,24 @@
-import type React from "react"
-import { Inter } from "next/font/google"
-import { Navbar } from "@/components/navbar"
-import { ThemeProvider } from "next-themes"
-import { Toaster } from "@/components/ui/toaster"
-import "@/app/globals.css"
-import { AuthProvider } from "@/components/auth/session-provider"
+import type React from "react"  // Importação do tipo React para tipagem correta dos componentes
+import { Inter } from "next/font/google"  // Importação da font Inter 
+import { Navbar } from "@/components/navbar"  // Importação do componente navbar
+import { ThemeProvider } from "next-themes" // Gere o modo claro/escuro da aplicação
+import { Toaster } from "@/components/ui/toaster" // Importação do toaster
+import { ToastContainer } from "react-toastify"
+import "@/app/globals.css"  // Estilos globais da aplicação
+import { AuthProvider } from "@/components/auth/session-provider" // Contexto de autenticação da aplicação
 
+// Configura a font Inter com suporte ao subconjunto "latin"
 const inter = Inter({ subsets: ["latin"] })
 
+// Define os metadados da aplicação, incluindo título e descrição
 export const metadata = {
-  title: "Biblio.Gest",
-  description: "Gerenciamento de autores e livros",
+  title: "Biblio.Gest", // Título que aparece na aba do navegador
+  description: "Gerenciamento de autores e livros", // Descrição usada para SEO e Open Graph
 }
 
+// Define o RootLayout, utilizado para estruturar todas as páginas da aplicação 
 export default function RootLayout({
-  children,
+  children, // Contém o conteúdo dinâmico das páginas
 }: {
   children: React.ReactNode
 }) {
@@ -26,7 +30,7 @@ export default function RootLayout({
             <div className="flex flex-col min-h-screen">
               <Navbar />
               <main className="flex-grow">{children}</main>
-              <Toaster />
+              <ToastContainer />
             </div>
           </ThemeProvider>
         </AuthProvider>

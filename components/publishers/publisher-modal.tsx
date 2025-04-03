@@ -33,7 +33,7 @@ export function PublisherModal({ open, onOpenChange, publisher, onSuccess }: Pub
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return publisher ? { name: publisher.name, isActive: publisher.isActive } : { name: "", isActive: true };
+        return publisher ? { name: publisher.name, isActive: publisher.isActive } : null;
     }, [publisher])
 
     const formConfig = useEntityForm<PublisherFormValues, Publisher>({
@@ -51,6 +51,7 @@ export function PublisherModal({ open, onOpenChange, publisher, onSuccess }: Pub
         },
         entity: entityData,
         entityName: "Editora",
+        entityGender: "feminine",
         onSuccess: (result) => {
             onOpenChange(false)
             if (onSuccess) {
