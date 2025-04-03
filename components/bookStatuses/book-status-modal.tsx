@@ -33,7 +33,7 @@ export function BookStatusModal({ open, onOpenChange, bookStatus, onSuccess }: B
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return bookStatus ? { name: bookStatus.name, isActive: bookStatus.isActive } : { name: "", isActive: true };
+        return bookStatus ? { name: bookStatus.name, isActive: bookStatus.isActive } : null;
     }, [bookStatus])
 
     const formConfig = useEntityForm<BookStatusFormValues, BookStatus>({

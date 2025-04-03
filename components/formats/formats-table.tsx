@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deleteFormatsAction } from "@/app/formats/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 import { Format } from "@/lib/formats"
 import { FormatModal } from "./format-modal"
@@ -73,18 +73,35 @@ export function FormatsTable() {
             // Atualizar o estado local otimisticamente
             removeFormats(selectedFormatIds)
 
-            toast({
-                title: "Formatos excluídos com sucesso",
-                description: `${selectedFormatIds.length} formato(s) foram excluídos.`,
+            const message = selectedFormatIds.length === 1
+                ? "Formato excluído com sucesso"
+                : `Formatos excluídos com sucesso (${selectedFormatIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao excluir formatos",
-                description: "Ocorreu um erro ao exluir os formatos selecionados",
-                variant: "destructive",
+
+            const errorMessage = selectedFormatIds.length === 1
+                ? "Erro ao excluir formato"
+                : "Erro ao excluir formatos";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsDeleting(false)
         }

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const formSchema = z.object({
@@ -60,18 +60,27 @@ export function CreateBorrowedBookModal({ open, onOpenChange }: CreateBorrowedBo
             onOpenChange(false)
             form.reset()
 
-            toast({
-                title: "Livro emprestado com sucesso",
-                description: `${newBorrowedBook.id} foi adicionado à lista de empréstimos.`,
+            toast.success("Empréstimo registado com sucesso", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } catch (error: any) {
             setError(error.message || "Ocorreu um erro ao emprestar livro")
 
-            toast({
-                title: "Erro ao emprestar livro",
-                description: error.message || "Ocorreu um erro ao emprestar o livro. Tente novamente.",
-                variant: "destructive",
+            toast.error("Erro ao registar empréstimo", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsSubmitting(false)
         }

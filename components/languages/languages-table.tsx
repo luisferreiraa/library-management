@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deleteLanguagesAction } from "@/app/languages/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 import { Language } from "@/lib/languages"
 import { LanguageModal } from "./language-modal"
@@ -73,18 +73,35 @@ export function LanguagesTable() {
             // Atualizar o estado local otimisticamente
             removeLanguages(selectedLanguageIds)
 
-            toast({
-                title: "Idiomas excluídos com sucesso",
-                description: `${selectedLanguageIds.length} idioma(s) foram excluídos.`,
+            const message = selectedLanguageIds.length === 1
+                ? "Idioma excluído com sucesso"
+                : `Idiomas excluídos com sucesso (${selectedLanguageIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao excluir idiomas",
-                description: "Ocorreu um erro ao exluir os idiomas selecionados",
-                variant: "destructive",
+
+            const errorMessage = selectedLanguageIds.length === 1
+                ? "Erro ao excluir idioma"
+                : "Erro ao excluir idiomas";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsDeleting(false)
         }

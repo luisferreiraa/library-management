@@ -33,7 +33,7 @@ export function TranslatorModal({ open, onOpenChange, translator, onSuccess }: T
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return translator ? { name: translator.name, isActive: translator.isActive } : { name: "", isActive: true };
+        return translator ? { name: translator.name, isActive: translator.isActive } : null;
     }, [translator])
 
     const formConfig = useEntityForm<TranslatorFormValues, Translator>({

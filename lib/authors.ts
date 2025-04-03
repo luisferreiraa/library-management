@@ -19,6 +19,15 @@ export async function getAuthors(): Promise<Author[]> {
   })
 }
 
+export async function getActiveAuthors(): Promise<Author[]> {
+  return prisma.author.findMany({
+    where: { isActive: true },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
+
 export async function getAuthorById(id: string): Promise<Author | null> {
   return prisma.author.findUnique({
     where: { id },

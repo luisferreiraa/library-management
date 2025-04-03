@@ -19,7 +19,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { markMultipleBooksAsReturnedAction } from "@/app/borrowed-books/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { useBorrowedBooks } from "@/contexts/borrowed-books-context"
 import { Pagination } from "../ui/pagination"
 
@@ -69,18 +69,35 @@ export function BorrowedBooksTable() {
             // Atualizar o estado local otimisticamente
             markAsReturned(selectedBorrowedBookIds)
 
-            toast({
-                title: "Livros devolvidos com sucesso",
-                description: `${selectedBorrowedBookIds.length} livro(s) foram devolvidos.`,
+            const message = selectedBorrowedBookIds.length === 1
+                ? "Devolução registada com sucesso"
+                : `Devoluções registadas com sucesso (${selectedBorrowedBookIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao devolver livros",
-                description: "Ocorreu um erro ao devolver os livros selecionados.",
-                variant: "destructive",
+
+            const errorMessage = selectedBorrowedBookIds.length === 1
+                ? "Erro ao devolver livro"
+                : "Erro ao devolver livros";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsMarking(false)
         }

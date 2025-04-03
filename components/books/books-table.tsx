@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deleteBooksAction } from "@/app/books/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 
 export function BooksTable() {
@@ -70,18 +70,35 @@ export function BooksTable() {
             // Atualizar o estado local otimisticamente
             removeBooks(selectedBookIds)
 
-            toast({
-                title: "Livros excluídos com sucesso",
-                description: `${selectedBookIds.length} livro(s) foram excluídos.`,
+            const message = selectedBookIds.length === 1
+                ? "Livro excluído com sucesso"
+                : `Livros excluídos com sucesso (${selectedBookIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao excluir livros",
-                description: "Ocorreu um erro ao excluir os livros selecionados.",
-                variant: "destructive",
+
+            const errorMessage = selectedBookIds.length === 1
+                ? "Erro ao excluir livro"
+                : "Erro ao excluir livros";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsDeleting(false)
         }

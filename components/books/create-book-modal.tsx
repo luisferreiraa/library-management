@@ -18,7 +18,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ImageUpload } from "@/components/ui/image-upload"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -27,7 +27,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
-import { getAuthors } from "@/lib/authors"
+import { getActiveAuthors, getAuthors } from "@/lib/authors"
 import { getFormats, getLanguages, getPublishers, getCategories, getTranslators, getBookStatuses } from "@/lib/books"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
@@ -110,7 +110,7 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                         translatorsData,
                         bookStatusesData,
                     ] = await Promise.all([
-                        getAuthors(),
+                        getActiveAuthors(),
                         getFormats(),
                         getLanguages(),
                         getPublishers(),
@@ -128,11 +128,16 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                     setBookStatuses(bookStatusesData)
                 } catch (error) {
                     console.error("Erro ao carregar dados relacionados:", error)
-                    toast({
-                        title: "Erro ao carregar dados",
-                        description: "Não foi possível carregar todos os dados necessários.",
-                        variant: "destructive",
+
+                    toast.error("Erro ao carregar dados", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
                     })
+
                 }
             }
 
@@ -188,18 +193,27 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
             setCoverImageFile(null)
             setSelectedCategories([])
 
-            toast({
-                title: "Livro criado com sucesso",
-                description: `${newBook.title} foi adicionado à biblioteca.`,
+            toast.success("Livro adicionado com sucesso", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } catch (error: any) {
             setError(error.message || "Ocorreu um erro ao criar o livro")
 
-            toast({
-                title: "Erro ao criar livro",
-                description: error.message || "Ocorreu um erro ao criar o livro. Tente novamente.",
-                variant: "destructive",
+            toast.error("Erro ao adicionar livro", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsSubmitting(false)
         }

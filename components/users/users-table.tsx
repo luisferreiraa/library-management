@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deleteUsersAction } from "@/app/users/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Pagination } from "../ui/pagination"
@@ -75,18 +75,35 @@ export function UsersTable() {
             // Atualizar o estado local otimisticamente
             removeUsers(selectedUserIds)
 
-            toast({
-                title: "Usuários excluídos com sucesso",
-                description: `${selectedUserIds.length} usuário(s) foram excluídos.`,
+            const message = selectedUserIds.length === 1
+                ? "Utilizador excluído com sucesso"
+                : `Utilizadores excluídos com sucesso (${selectedUserIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao excluir usuários",
-                description: "Ocorreu um erro ao excluir os usuários selecionados.",
-                variant: "destructive",
+
+            const errorMessage = selectedUserIds.length === 1
+                ? "Erro ao excluir utilizador"
+                : "Erro ao excluir utilizadores";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsDeleting(false)
         }

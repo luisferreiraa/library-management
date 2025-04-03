@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deleteRolesAction } from "@/app/roles/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 import { RoleModal } from "./role-modal"
 import { Role } from "@/lib/roles"
@@ -73,18 +73,35 @@ export function RolesTable() {
             // Atualizar o estado local otimisticamente
             removeRoles(selectedRoleIds)
 
-            toast({
-                title: "Roles excluídos com sucesso",
-                description: `${selectedRoleIds.length} role(s) foram excluídos.`,
+            const message = selectedRoleIds.length === 1
+                ? "Perfil excluído com sucesso"
+                : `Perfis excluídos com sucesso (${selectedRoleIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao excluir roles",
-                description: "Ocorreu um erro ao exluir os roles selecionados",
-                variant: "destructive",
+
+            const errorMessage = selectedRoleIds.length === 1
+                ? "Erro ao excluir perfil"
+                : "Erro ao excluir perfis";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsDeleting(false)
         }

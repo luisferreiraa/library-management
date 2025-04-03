@@ -33,7 +33,7 @@ export function FormatModal({ open, onOpenChange, format, onSuccess }: FormatMod
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return format ? { name: format.name, isActive: format.isActive } : { name: "", isActive: true };
+        return format ? { name: format.name, isActive: format.isActive } : null;
     }, [format])
 
     const formConfig = useEntityForm<FormatFormValues, Format>({

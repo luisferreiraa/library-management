@@ -66,6 +66,7 @@ export function PenaltyRuleModal({ open, onOpenChange, penaltyRule, onSuccess }:
         },
         entity: entityData,
         entityName: "Regra",
+        entityGender: "feminine",
         onSuccess: (result) => {
             onOpenChange(false)
             if (onSuccess) {

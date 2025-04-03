@@ -34,7 +34,7 @@ export function LanguageModal({ open, onOpenChange, language, onSuccess }: Langu
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return language ? { name: language.name, isActive: language.isActive } : { name: "", isActive: true };
+        return language ? { name: language.name, isActive: language.isActive } : null;
     }, [language])
 
     const formConfig = useEntityForm<LanguageFormValues, Language>({

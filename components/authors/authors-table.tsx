@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deleteAuthorsAction } from "@/app/authors/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 import { Author } from "@/lib/authors"
 import { AuthorModal } from "./author-modal"
@@ -73,18 +73,35 @@ export function AuthorsTable() {
       // Atualizar o estado local otimisticamente
       removeAuthors(selectedAuthorIds)
 
-      toast({
-        title: "Autores excluídos com sucesso",
-        description: `${selectedAuthorIds.length} autor(es) foram excluídos.`,
+      const message = selectedAuthorIds.length === 1
+        ? "Autor excluído com sucesso"
+        : `Autores excluídos com sucesso (${selectedAuthorIds.length})`;
+
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       })
 
       setIsDialogOpen(false)
     } catch (error) {
-      toast({
-        title: "Erro ao excluir autores",
-        description: "Ocorreu um erro ao excluir os autores selecionados.",
-        variant: "destructive",
+
+      const errorMessage = selectedAuthorIds.length === 1
+        ? "Erro ao excluir autor"
+        : "Erro ao excluir autores";
+
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       })
+
     } finally {
       setIsDeleting(false)
     }

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ImageUpload } from "@/components/ui/image-upload"
@@ -89,18 +89,27 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
             form.reset()
             setProfileImageFile(null)
 
-            toast({
-                title: "Usuário criado com sucesso",
-                description: `${newUser.firstName} ${newUser.lastName} foi adicionado à lista de usuários.`,
+            toast.success("Utilizador adicionado com sucesso", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } catch (error: any) {
             setError(error.message || "Ocorreu um erro ao criar o usuário")
 
-            toast({
-                title: "Erro ao criar usuário",
-                description: error.message || "Ocorreu um erro ao criar o usuário. Tente novamente.",
-                variant: "destructive",
+            toast.success("Erro ao adicionar utilizador", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsSubmitting(false)
         }

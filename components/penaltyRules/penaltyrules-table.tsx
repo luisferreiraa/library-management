@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deletePenaltyRulesAction } from "@/app/penalty-rules/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 import { PenaltyRuleModal } from "./penalty-rule-modal"
 import { PenaltyRule } from "@/lib/penaltyrules"
@@ -73,18 +73,35 @@ export function PenaltyRulesTable() {
             // Atualizar o estado local otimisticamente
             removePenaltyRules(selectedPenaltyRuleIds)
 
-            toast({
-                title: "Multas excluídas com sucesso",
-                description: `${selectedPenaltyRuleIds.length} multa(s) foram excluídas.`,
+            const message = selectedPenaltyRuleIds.length === 1
+                ? "Regra excluída com sucesso"
+                : `Regras excluídas com sucesso (${selectedPenaltyRuleIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao excluir multas",
-                description: "Ocorreu um erro ao exluir as multas selecionadas",
-                variant: "destructive",
+
+            const errorMessage = selectedPenaltyRuleIds.length === 1
+                ? "Erro ao excluir regra"
+                : "Erro ao excluir regras";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsDeleting(false)
         }

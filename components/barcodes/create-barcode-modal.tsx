@@ -58,7 +58,7 @@ export function CreateBarcodeModal({ open, onOpenChange, bookId }: CreateBarcode
             onOpenChange(false)
             form.reset()
 
-            toast.success("Código de barras criado com sucesso", {
+            toast.success("Código de barras adicionado com sucesso", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -70,7 +70,7 @@ export function CreateBarcodeModal({ open, onOpenChange, bookId }: CreateBarcode
         } catch (error: any) {
             setError(error.message || "Ocorreu um erro ao criar o código de barras")
 
-            toast.error("Erro ao criar código de barras", {
+            toast.error("Erro ao adicionar código de barras", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,

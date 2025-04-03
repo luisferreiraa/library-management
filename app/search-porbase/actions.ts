@@ -46,12 +46,24 @@ export async function searchByISBN(isbn: string): Promise<BookData | string> {
 
 export async function createBookWithSearchElements(searchedBook: BookData): Promise<Book> {
 
+    // Extrai apenas a parte numérica do ISBN
+    const isbn = searchedBook.identifier[1].replace(/^URN:ISBN:/, "");
+
+    // Extrai o número de páginas (o primeiro número antes da vírgula ou espaço)
+    const pageCount = parseInt(searchedBook.format.match(/^\d+/)?.[0] || "100", 10);
+
+    // Extrai o número da edição
+    const edition = searchedBook.description[1].match(/\d+/)?.[0] || "-";
+
+    // Extrai o nome para colocar no email
+    const lastName = searchedBook.creator.split(',')[0].toLowerCase();
+
     // Verifica e cria o autor, se necessário
     let author = await getAuthorByName(searchedBook.creator);
     if (!author) {
         author = await createAuthor({
             name: searchedBook.creator,
-            email: "autor@email.com",
+            email: `${lastName}@email.com`,
             isActive: true
         });
     }
@@ -86,10 +98,10 @@ export async function createBookWithSearchElements(searchedBook: BookData): Prom
     // Cria o livro com os Ids Obtidos
     return createBook({
         title: searchedBook.title,
-        isbn: searchedBook.identifier[1],
+        isbn: isbn,
         publishingDate: new Date(),
-        edition: 1,
-        pageCount: 100,
+        edition: parseInt(edition),
+        pageCount: pageCount,
         formatId: format.id,
         languageId: language.id,
         publisherId: publisher.id,

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deleteTranslatorsAction } from "@/app/translators/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 import { Translator } from "@/lib/translators"
 import { TranslatorModal } from "./translator-modal"
@@ -73,18 +73,35 @@ export function TranslatorsTable() {
             // Atualizar o estado local otimisticamente
             removeTranslators(selectedTranslatorIds)
 
-            toast({
-                title: "Tradutores excluídos com sucesso",
-                description: `${selectedTranslatorIds.length} tradutor(es) foram excluídos.`,
+            const message = selectedTranslatorIds.length === 1
+                ? "Tradutor excluído com sucesso"
+                : `Tradutores excluídos com sucesso (${selectedTranslatorIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao excluir tradutores",
-                description: "Ocorreu um erro ao exluir os tradutores selecionados",
-                variant: "destructive",
+
+            const errorMessage = selectedTranslatorIds.length === 1
+                ? "Erro ao excluir tradutor"
+                : "Erro ao excluir tradutores";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsDeleting(false)
         }

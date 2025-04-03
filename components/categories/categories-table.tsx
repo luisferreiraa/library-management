@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deleteCategoriesAction } from "@/app/categories/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 import { Category } from "@/lib/categories"
 import { CategoryModal } from "./category-modal"
@@ -73,18 +73,35 @@ export function CategoriesTable() {
             // Atualizar o estado local otimisticamente
             removeCategories(selectedCategoryIds)
 
-            toast({
-                title: "Categorias excluídas com sucesso",
-                description: `${selectedCategoryIds.length} categoria(s) foram excluídas.`,
+            const message = selectedCategoryIds.length === 1
+                ? "Categoria excluída com sucesso"
+                : `Categorias excluídas com sucesso (${selectedCategoryIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao excluir categorias",
-                description: "Ocorreu um erro ao exluir as categorias selecionadas",
-                variant: "destructive",
+
+            const errorMessage = selectedCategoryIds.length === 1
+                ? "Erro ao excluir categoria"
+                : "Erro ao excluir categorias";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsDeleting(false)
         }

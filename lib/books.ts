@@ -283,12 +283,14 @@ export async function getLanguages() {
 
 export async function getPublishers() {
     return prisma.publisher.findMany({
+        where: { isActive: true },
         orderBy: { name: "asc" },
     })
 }
 
 export async function getCategories() {
     return prisma.category.findMany({
+        where: { isActive: true },
         orderBy: { name: "asc" },
     })
 }

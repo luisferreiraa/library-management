@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { deletePublishersAction } from "@/app/publishers/actions"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 import { Publisher } from "@/lib/publishers"
 import { PublisherModal } from "./publisher-modal"
@@ -73,18 +73,35 @@ export function PublishersTable() {
             // Atualizar o estado local otimisticamente
             removePublishers(selectedPublisherIds)
 
-            toast({
-                title: "Editoras excluídas com sucesso",
-                description: `${selectedPublisherIds.length} editora(s) foram excluídas.`,
+            const message = selectedPublisherIds.length === 1
+                ? "Editora excluída com sucesso"
+                : `Editoras excluídas com sucesso (${selectedPublisherIds.length})`;
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
 
             setIsDialogOpen(false)
         } catch (error) {
-            toast({
-                title: "Erro ao excluir editoras",
-                description: "Ocorreu um erro ao exluir as editoras selecionadas",
-                variant: "destructive",
+
+            const errorMessage = selectedPublisherIds.length === 1
+                ? "Erro ao excluir editora"
+                : "Erro ao excluir editoras";
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
             })
+
         } finally {
             setIsDeleting(false)
         }

@@ -33,7 +33,7 @@ export function RoleModal({ open, onOpenChange, role, onSuccess }: RoleModalProp
 
     // Utilizar useMemo para prevenir criar um novo objeto a cada render
     const entityData = useMemo(() => {
-        return role ? { name: role.name, isActive: role.isActive } : { name: "", isActive: true };
+        return role ? { name: role.name, isActive: role.isActive } : null;
     }, [role])
 
     const formConfig = useEntityForm<RoleFormValues, Role>({
