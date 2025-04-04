@@ -2,9 +2,11 @@
 
 import { createAuthor, getAuthorByName } from "@/lib/authors"
 import { Book, createBook } from "@/lib/books"
+import { getBookStatusById } from "@/lib/bookstatus"
 import { createFormat, getFormatByName } from "@/lib/formats"
 import { createLanguage, getLanguageByName } from "@/lib/languages"
 import { createPublisher, getPublisherByName } from "@/lib/publishers"
+import { getAuthenticatedUserId } from "@/lib/session"
 import type { BookData } from "@/types/book"
 import { getDate, getTime } from "date-fns"
 import { now } from "lodash"
@@ -58,6 +60,12 @@ export async function createBookWithSearchElements(searchedBook: BookData): Prom
     // Extrai o nome para colocar no email
     const lastName = searchedBook.creator.split(',')[0].toLowerCase();
 
+    // Buscar userId do utilizador autenticado
+    const userId = await getAuthenticatedUserId();
+
+    // Buscar bookStatusId
+    const bookStatus = await getBookStatusById("cm8eppzxx0003vy1omjluen6e");
+
     // Verifica e cria o autor, se necessário
     let author = await getAuthorByName(searchedBook.creator);
     if (!author) {
@@ -106,9 +114,9 @@ export async function createBookWithSearchElements(searchedBook: BookData): Prom
         languageId: language.id,
         publisherId: publisher.id,
         authorId: author.id,
-        bookStatusId: "cm8eppzxx0003vy1omjluen6e",
+        bookStatusId: bookStatus?.id ?? "cm8eppzxx0003vy1omjluen6e",
         categoryIds: ["cm8bhvmxv0001vyo8bu189ee6"],
-        createdByUserId: "cm8fu1vzg0000vybk77k3bck0",
+        createdByUserId: userId,
     })
 }
 

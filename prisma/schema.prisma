@@ -41,6 +41,42 @@ model Category {
   isActive  Boolean  @default(true)
 }
 
+model CDUClass {
+  id          Int                 @id @default(autoincrement())
+  notation    String              @unique
+  label       String
+  parentId    Int?
+  parent      CDUClass?           @relation("ParentChild", fields: [parentId], references: [id])
+  children    CDUClass[]          @relation("ParentChild")
+  level       Int
+  auxiliaries CDUClassAuxiliary[]
+}
+
+model CDUAuxiliary {
+  id       Int                 @id @default(autoincrement())
+  notation String              @unique
+  label    String
+  type     AuxiliaryType
+  classes  CDUClassAuxiliary[]
+}
+
+model CDUClassAuxiliary {
+  classId     Int
+  auxiliaryId Int
+
+  class     CDUClass     @relation(fields: [classId], references: [id])
+  auxiliary CDUAuxiliary @relation(fields: [auxiliaryId], references: [id])
+
+  @@id([classId, auxiliaryId])
+}
+
+enum AuxiliaryType {
+  place
+  form
+  time
+  other
+}
+
 model Language {
   id        String   @id @default(cuid())
   name      String
