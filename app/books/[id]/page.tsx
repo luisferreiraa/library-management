@@ -2,13 +2,14 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { format } from "date-fns"
-import { ChevronLeft, BookIcon, User, Building, Calendar, Hash, Languages, BookOpen, Tag, PlusCircle } from "lucide-react"
+import { ChevronLeft, BookIcon, User, Building, Calendar, Hash, Languages, BookOpen, Tag, PlusCircle, Check, X } from "lucide-react"
 import { getBookById } from "@/lib/books"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CreateBarcodeButton } from "@/components/barcodes/create-barcode-button"
+import { DeleteReviewButton } from "./DeleteReviewButton"
 
 interface BookPageProps {
     params: {
@@ -265,23 +266,39 @@ export default async function BookPage({ params }: BookPageProps) {
                                         <div className="space-y-4">
                                             {book.reviews.map((review) => (
                                                 <div key={review.id} className="border rounded-md p-4">
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <div className="font-medium">
-                                                            {review.user.firstName} {review.user.lastName}
+                                                    <div className="flex justify-between items-start mb-2">
+                                                        <div>
+                                                            <div className="font-medium">
+                                                                {review.user.firstName} {review.user.lastName}
+                                                            </div>
+                                                            <div className="text-sm text-muted-foreground">
+                                                                Avaliado em: {formatDate(review.createdAt)}
+                                                            </div>
                                                         </div>
-                                                        <div className="flex items-center">
-                                                            {Array.from({ length: 5 }).map((_, i) => (
-                                                                <span
-                                                                    key={i}
-                                                                    className={`text-lg ${i < review.rating ? "text-yellow-500" : "text-gray-300"}`}
-                                                                >
-                                                                    ★
-                                                                </span>
-                                                            ))}
+                                                        <div className="flex flex-col items-end gap-1">
+                                                            <div className="flex">
+                                                                {Array.from({ length: 5 }).map((_, i) => (
+                                                                    <span
+                                                                        key={i}
+                                                                        className={`text-lg ${i < review.rating ? "text-yellow-500" : "text-gray-300"}`}
+                                                                    >
+                                                                        ★
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                            {review.isActive ? (
+                                                                <Badge variant="success" className="flex items-center gap-1 w-fit">
+                                                                    <Check className="h-3 w-3" />
+                                                                </Badge>
+                                                            ) : (
+                                                                <Badge variant="destructive" className="flex items-center gap-1 w-fit">
+                                                                    <X className="h-3 w-3" />
+                                                                </Badge>
+                                                            )}
+
+                                                            <DeleteReviewButton reviewId={review.id} />
+
                                                         </div>
-                                                    </div>
-                                                    <div className="text-sm text-muted-foreground">
-                                                        Avaliado em: {formatDate(review.createdAt)}
                                                     </div>
                                                     <div className="text-sm mt-2">{review.comment}</div>
                                                 </div>

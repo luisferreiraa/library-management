@@ -31,11 +31,7 @@ export async function getBooks(): Promise<BookWithRelations[]> {
             translator: true,
             bookStatus: true,
             categories: true,
-            reviews: {
-                where: {
-                    isActive: true
-                },
-            },
+            reviews: true,
             barcodes: {
                 where: {
                     isActive: true,
@@ -62,10 +58,6 @@ export async function getBookById(id: string): Promise<BookWithRelations | null>
                 },
             },
             reviews: {
-                where: {
-                    isActive: true,
-                    isAproved: true,
-                },
                 include: {
                     user: true,
                 },
@@ -306,6 +298,12 @@ export async function getBookStatuses() {
     return prisma.bookStatus.findMany({
         where: { isActive: true },
         orderBy: { name: "asc" },
+    })
+}
+
+export async function deleteReviewById(id: string): Promise<void> {
+    await prisma.review.delete({
+        where: { id },
     })
 }
 

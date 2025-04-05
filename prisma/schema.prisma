@@ -41,42 +41,6 @@ model Category {
   isActive  Boolean  @default(true)
 }
 
-model UDCMainClass {
-  id              Int                 @id @default(autoincrement())
-  notation        String              @unique
-  label           String
-  parentId        Int?
-  parent          UDCMainClass?       @relation("UDCMainParentChild", fields: [parentId], references: [id])
-  children        UDCMainClass[]      @relation("UDCMainParentChild")
-  classifications UDCClassification[]
-}
-
-model UDCAuxiliary {
-  id              Int                 @id @default(autoincrement())
-  notation        String              @unique
-  label           String
-  kind            AuxiliaryKind
-  classifications UDCClassification[] @relation("ClassificationAuxiliaries")
-}
-
-model UDCClassification {
-  id           Int            @id @default(autoincrement())
-  book         Book           @relation(fields: [bookId], references: [id])
-  bookId       String
-  mainClass    UDCMainClass   @relation(fields: [mainClassId], references: [id])
-  mainClassId  Int
-  auxiliaries  UDCAuxiliary[] @relation("ClassificationAuxiliaries")
-  fullNotation String
-}
-
-enum AuxiliaryKind {
-  place
-  language
-  form
-  time
-  other
-}
-
 model Language {
   id        String   @id @default(cuid())
   name      String
@@ -131,39 +95,38 @@ model PenaltyRule {
 }
 
 model Book {
-  id                String              @id @default(cuid())
-  title             String
-  isbn              String              @unique
-  publishingDate    DateTime
-  edition           Int
-  summary           String?
-  coverImage        String?
-  publishedAt       DateTime?
-  pageCount         Int
-  createdAt         DateTime            @default(now())
-  createdByUser     User?               @relation("CreatedByUser", fields: [createdByUserId], references: [id])
-  createdByUserId   String?
-  updatedAt         DateTime            @updatedAt
-  updatedByUser     User?               @relation("UpdatedByUser", fields: [updatedByUserId], references: [id])
-  updatedByUserId   String?
-  isActive          Boolean             @default(true)
-  format            Format              @relation(fields: [formatId], references: [id])
-  formatId          String
-  language          Language            @relation(fields: [languageId], references: [id])
-  languageId        String
-  publisher         Publisher           @relation(fields: [publisherId], references: [id])
-  publisherId       String
-  categories        Category[]          @relation("BookCategories")
-  author            Author              @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId          String
-  translator        Translator?         @relation(fields: [translatorId], references: [id])
-  translatorId      String?
-  bookStatus        BookStatus          @relation(fields: [bookStatusId], references: [id])
-  bookStatusId      String
-  barcodes          Barcode[]
-  reviews           Review[]
-  recomendations    Recomendation[]
-  UDCClassification UDCClassification[]
+  id              String          @id @default(cuid())
+  title           String
+  isbn            String          @unique
+  publishingDate  DateTime
+  edition         Int
+  summary         String?
+  coverImage      String?
+  publishedAt     DateTime?
+  pageCount       Int
+  createdAt       DateTime        @default(now())
+  createdByUser   User?           @relation("CreatedByUser", fields: [createdByUserId], references: [id])
+  createdByUserId String?
+  updatedAt       DateTime        @updatedAt
+  updatedByUser   User?           @relation("UpdatedByUser", fields: [updatedByUserId], references: [id])
+  updatedByUserId String?
+  isActive        Boolean         @default(true)
+  format          Format          @relation(fields: [formatId], references: [id])
+  formatId        String
+  language        Language        @relation(fields: [languageId], references: [id])
+  languageId      String
+  publisher       Publisher       @relation(fields: [publisherId], references: [id])
+  publisherId     String
+  categories      Category[]      @relation("BookCategories")
+  author          Author          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId        String
+  translator      Translator?     @relation(fields: [translatorId], references: [id])
+  translatorId    String?
+  bookStatus      BookStatus      @relation(fields: [bookStatusId], references: [id])
+  bookStatusId    String
+  barcodes        Barcode[]
+  reviews         Review[]
+  recomendations  Recomendation[]
 }
 
 model Barcode {
