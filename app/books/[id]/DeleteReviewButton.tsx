@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { deleteReviewByIdAction } from "./actions"
+import { Trash2 } from "lucide-react"
 
 interface Props {
     reviewId: string
@@ -18,7 +19,7 @@ export function DeleteReviewButton({ reviewId }: Props) {
 
     return (
         <Button variant="destructive" size="sm" onClick={handleDelete}>
-            Eliminar
+            <Trash2 className="h-3 w-3" />
         </Button>
     )
 }
