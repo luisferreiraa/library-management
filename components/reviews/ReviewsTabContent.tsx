@@ -39,6 +39,46 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
     const [selectedReviews, setSelectedReviews] = useState<string[]>([])
     const [isPending, startTransition] = useTransition()
 
+    // Funções para verificar o estado das reviews selecionadas
+    const getSelectedReviewsData = () => {
+        return selectedReviews.map((id) => reviews.find((review) => review.id === id)).filter(Boolean) as Review[]
+    }
+
+    const hasApprovableReviews = () => {
+        const selectedReviewsData = getSelectedReviewsData()
+        return selectedReviewsData.some((review) => !review.isAproved && review.approvalDate === null)
+    }
+
+    const hasRejectableReviews = () => {
+        const selectedReviewsData = getSelectedReviewsData()
+        return selectedReviewsData.some((review) => !review.isAproved && review.approvalDate === null)
+    }
+
+    const hasApprovedReviews = () => {
+        const selectedReviewsData = getSelectedReviewsData()
+        return selectedReviewsData.some((review) => review.isAproved)
+    }
+
+    const hasRejectedReviews = () => {
+        const selectedReviewsData = getSelectedReviewsData()
+        return selectedReviewsData.some((review) => review.approvalDate !== null && !review.isAproved)
+    }
+
+    // Funções para filtrar IDs de reviews por estado
+    const getApprovableReviewIds = () => {
+        return selectedReviews.filter((id) => {
+            const review = reviews.find((r) => r.id === id)
+            return review && !review.isAproved && review.approvalDate === null
+        })
+    }
+
+    const getRejectableReviewIds = () => {
+        return selectedReviews.filter((id) => {
+            const review = reviews.find((r) => r.id === id)
+            return review && !review.isAproved && review.approvalDate === null
+        })
+    }
+
     const handleRemoveReviews = async () => {
         try {
             const result = await deleteReviewsAction(selectedReviews)
@@ -55,7 +95,11 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
 
     const handleApproveReviews = async () => {
         try {
-            const result = await approveReviewsAction(selectedReviews)
+            // Apenas aprovar reviews que podem ser aprovadas
+            const approvableIds = getApprovableReviewIds()
+            if (approvableIds.length === 0) return
+
+            const result = await approveReviewsAction(approvableIds)
 
             if (result.success) {
                 setSelectedReviews([])
@@ -74,7 +118,11 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
 
     const handleRejectReviews = async () => {
         try {
-            const result = await rejectReviewsAction(selectedReviews)
+            // Apenas rejeitar reviews que podem ser rejeitadas
+            const rejectableIds = getRejectableReviewIds()
+            if (rejectableIds.length === 0) return
+
+            const result = await rejectReviewsAction(rejectableIds)
 
             if (result.success) {
                 setSelectedReviews([])
@@ -89,6 +137,10 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
             console.error("Erro ao rejeitar avaliações:", error)
         }
     }
+
+    // Contadores para o texto dos botões
+    const approvableCount = getApprovableReviewIds().length
+    const rejectableCount = getRejectableReviewIds().length
 
     return (
         <Card>
@@ -138,47 +190,59 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
                             </AlertDialogContent>
                         </AlertDialog>
 
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm">
-                                    Rejeitar {selectedReviews.length > 1 ? `(${selectedReviews.length})` : ""}
-                                </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Confirmar rejeição</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        Tem certeza que deseja rejeitar{" "}
-                                        {selectedReviews.length === 1 ? "esta avaliação" : `estas ${selectedReviews.length} avaliações`}?
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleRejectReviews}>Rejeitar</AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                        {rejectableCount > 0 && (
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button variant="outline" size="sm">
+                                        Rejeitar {rejectableCount > 1 ? `(${rejectableCount})` : ""}
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Confirmar rejeição</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Tem certeza que deseja rejeitar{" "}
+                                            {rejectableCount === 1 ? "esta avaliação" : `estas ${rejectableCount} avaliações`}?
+                                            {hasApprovedReviews() ||
+                                                (hasRejectedReviews() && (
+                                                    <p className="mt-2 text-amber-600">Nota: Apenas as avaliações pendentes serão rejeitadas.</p>
+                                                ))}
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                        <AlertDialogAction onClick={handleRejectReviews}>Rejeitar</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        )}
 
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm">
-                                    Aprovar {selectedReviews.length > 1 ? `(${selectedReviews.length})` : ""}
-                                </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Confirmar aprovação</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        Tem certeza que deseja aprovar{" "}
-                                        {selectedReviews.length === 1 ? "esta avaliação" : `estas ${selectedReviews.length} avaliações`}?
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleApproveReviews}>Aprovar</AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                        {approvableCount > 0 && (
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button variant="outline" size="sm">
+                                        Aprovar {approvableCount > 1 ? `(${approvableCount})` : ""}
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Confirmar aprovação</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            Tem certeza que deseja aprovar{" "}
+                                            {approvableCount === 1 ? "esta avaliação" : `estas ${approvableCount} avaliações`}?
+                                            {hasApprovedReviews() ||
+                                                (hasRejectedReviews() && (
+                                                    <p className="mt-2 text-amber-600">Nota: Apenas as avaliações pendentes serão aprovadas.</p>
+                                                ))}
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                        <AlertDialogAction onClick={handleApproveReviews}>Aprovar</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        )}
                     </div>
                 )}
             </CardHeader>
@@ -210,15 +274,16 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
                                                 <div className="font-medium">
                                                     {review.user.firstName} {review.user.lastName}
                                                 </div>
-                                                <div className="text-sm text-muted-foreground">
-                                                    Avaliado em: {formatDate(review.createdAt)}
-                                                </div>
+                                                <div className="text-sm text-muted-foreground">Avaliado em: {formatDate(review.createdAt)}</div>
                                             </div>
 
                                             <div className="flex flex-col items-end gap-1">
                                                 <div className="flex">
                                                     {Array.from({ length: 5 }).map((_, i) => (
-                                                        <span key={i} className={`text-lg ${i < review.rating ? "text-yellow-500" : "text-gray-300"}`}>
+                                                        <span
+                                                            key={i}
+                                                            className={`text-lg ${i < review.rating ? "text-yellow-500" : "text-gray-300"}`}
+                                                        >
                                                             ★
                                                         </span>
                                                     ))}
