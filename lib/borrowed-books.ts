@@ -9,6 +9,16 @@ export type BorrowedBookWithRelations = Prisma.BorrowedBookGetPayload<{
     }
 }>
 
+export async function getBorrowedBookById(id: string) {
+    return await prisma.borrowedBook.findUnique({
+        where: { id },
+        include: {
+            user: true,
+            barcode: true,
+        },
+    })
+}
+
 export async function getBorrowedBooks(): Promise<BorrowedBookWithRelations[]> {
     return prisma.borrowedBook.findMany({
         orderBy: {

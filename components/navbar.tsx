@@ -38,7 +38,7 @@ const navItems: NavItem[] = [
         children: [
             { label: "Empréstimos", href: "/borrowed-books", icon: BookCheck, adminOnly: true },
             { label: "Utilizadores", href: "/users", icon: User, adminOnly: true },
-            { label: "Roles", href: "/roles", icon: ShieldAlert, adminOnly: true },
+            { label: "Perfis", href: "/roles", icon: ShieldAlert, adminOnly: true },
         ],
     },
     {

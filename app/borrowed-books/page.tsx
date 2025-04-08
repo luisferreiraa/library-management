@@ -6,6 +6,7 @@ import { CreateBorrowedBookButton } from "@/components/borrowed-books/create-bor
 import { BorrowedBooksSearch } from "@/components/borrowed-books/borrowed-books-search"
 import { BorrowedBooksTable } from "@/components/borrowed-books/borrowed-books-table"
 import { OrderBorrowedBooksBy } from "@/components/borrowed-books/order-borrowed-books-by"
+import { FilterBorrowedBooks } from "@/components/borrowed-books/filter-borrowed-books"
 
 export default async function BorrowedBooksPage() {
     // Buscar dados no servidor
@@ -25,6 +26,9 @@ export default async function BorrowedBooksPage() {
                     </div>
                     <div className="w-full sm:max-w-xs">
                         <OrderBorrowedBooksBy />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <FilterBorrowedBooks />
                     </div>
                 </div>
 

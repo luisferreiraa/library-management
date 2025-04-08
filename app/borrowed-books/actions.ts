@@ -1,9 +1,10 @@
 "use server"
 
 import { revalidatePath } from "next/cache";
-import { createBorrowedBook, markBookAsReturned, markMultipleBooksAsReturned } from "@/lib/borrowed-books";
+import { createBorrowedBook, getBorrowedBookById, markBookAsReturned, markMultipleBooksAsReturned } from "@/lib/borrowed-books";
 import { logAudit } from "@/lib/session";
 import { getBarcodeIdByCode } from "@/lib/barcodes";
+import { sendBorrowedBookEmail, sendReturnedBorrowedBookEmail } from "@/lib/email/borrowed-book-emails";
 
 export async function createBorrowedBookAction(borrowedBookData: { code: string, userId: string }): Promise<any> {
     try {
@@ -24,6 +25,18 @@ export async function createBorrowedBookAction(borrowedBookData: { code: string,
         // Revalidar o caminho para atualizar dados
         revalidatePath("/borrowed-books");
 
+        const borrowedBook = await getBorrowedBookById(newBorrowedBook.id)
+
+
+        if (borrowedBook) {
+            const result = await sendBorrowedBookEmail(borrowedBook)
+            if (!result.success) {
+                console.error(`Erro ao enviar email para o utilizador:`, result.error)
+            }
+        } else {
+            console.error("Empréstimo não encontrado ao tentar enviar email.")
+        }
+
         return newBorrowedBook;
     } catch (error: any) {
         throw new Error("Erro ao criar empréstimo: " + error.message);
@@ -41,6 +54,18 @@ export async function markBookAsReturnedAction(borrowedBookId: string): Promise<
 
         // Revalidar o caminho para atualizar os dados
         revalidatePath("/borrowed-books")
+
+        // Obter os dados do empréstimo com as relações necessárias
+        const borrowedBook = await getBorrowedBookById(borrowedBookId)
+        if (borrowedBook) {
+            const result = await sendReturnedBorrowedBookEmail(borrowedBook)
+            if (!result.success) {
+                console.error(`Erro ao enviar email para o utilizador:`, result.error)
+            }
+        } else {
+            console.error("Empréstimo não encontrado ao tentar enviar email.")
+        }
+
     } catch (error: any) {
         throw new Error("Erro ao marcar como devolvido: " + error.message)
     }
@@ -56,6 +81,25 @@ export async function markMultipleBooksAsReturnedAction(borrowedBookIds: string[
 
         // Revalidar o caminho para atualizar os dados
         revalidatePath("/borrowed-books")
+
+        // Envia emails para cada utilizador
+        const emailPromises = borrowedBookIds.map(async (id) => {
+            const borrowedBook = await getBorrowedBookById(id)
+            if (borrowedBook) {
+                return sendReturnedBorrowedBookEmail(borrowedBook)
+            }
+            return { success: false, error: "Empréstimo não encontrado" }
+        })
+
+        // Aguarda o envio de todos os emails
+        const emailResults = await Promise.allSettled(emailPromises)
+
+        emailResults.forEach((result, index) => {
+            if (result.status === "rejected") {
+                console.error(`Erro ao enviar email para o empréstimo ${borrowedBookIds[index]}:`, result.reason)
+            }
+        })
+
     } catch (error: any) {
         throw new Error("Erro ao marcar como devolvido: " + error.message)
     }

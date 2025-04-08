@@ -9,6 +9,9 @@ export type SortOption = {
     direction: "asc" | "desc"
 }
 
+// Definir FilterOption type para isActive
+export type ActiveFilterOption = "all" | "active" | "inactive"
+
 interface BookStatusesContextType {
     bookStatuses: BookStatus[]
     addBookStatus: (bookstatus: BookStatus) => void
@@ -30,6 +33,8 @@ interface BookStatusesContextType {
     totalPages: number
     sortOption: SortOption | null
     setSortOption: (option: SortOption) => void
+    activeFilter: ActiveFilterOption
+    setActiveFilter: (filter: ActiveFilterOption) => void
 }
 
 const BookStatusesContext = createContext<BookStatusesContextType | undefined>(undefined)
@@ -67,11 +72,20 @@ export function BookStatusesProvider({
     // Estado para ordenação
     const [sortOption, setSortOption] = useState<SortOption | null>(null)
 
+    // Estado para filtro de isActive
+    const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")
+
     // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
     // garantindo melhor performance
     const filteredBookStatuses = useMemo(() => {
         // Criamos uma cópia da lista de autores para evitar modificar o estado original
         let result = [...optimisticBookStatuses]
+
+        // Aplicar filtro por isActive
+        if (activeFilter != "all") {
+            const isActive = activeFilter === "active"
+            result = result.filter((borrowedbook) => borrowedbook.isActive === isActive)
+        }
 
         // Se houver um termo de pesquisa, filtramos os autores pelo nome ou biografia
         if (searchTerm !== "") {
@@ -121,7 +135,7 @@ export function BookStatusesProvider({
 
         // Retornamos a lista filtrada e ordenada
         return result
-    }, [searchTerm, optimisticBookStatuses, sortOption])     // Dependências: recalcula apenas quando uma delas mudar
+    }, [searchTerm, optimisticBookStatuses, sortOption, activeFilter])     // Dependências: recalcula apenas quando uma delas mudar
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -138,7 +152,7 @@ export function BookStatusesProvider({
     // Resetar para a primeira página quando o sorting altera
     useEffect(() => {
         setCurrentPage(1)
-    }, [sortOption])
+    }, [sortOption, activeFilter])
 
     // Obter os status paginados
     const paginatedBookStatuses = useMemo(() => {
@@ -205,6 +219,8 @@ export function BookStatusesProvider({
                 totalPages,
                 sortOption,
                 setSortOption,
+                activeFilter,
+                setActiveFilter,
             }}
         >
             {children}

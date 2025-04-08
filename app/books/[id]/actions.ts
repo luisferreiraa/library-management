@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { deleteReviews, approveReviews, rejectReviews, getReviewById } from "@/lib/reviews"
 import { sendReviewApprovalEmail, sendReviewRejectionEmail } from "@/lib/email/review-emails"
+import { logAudit } from "@/lib/session"
 
 export async function deleteReviewsAction(reviewIds: string[]) {
     try {
@@ -30,6 +31,9 @@ export async function approveReviewsAction(reviewIds: string[]) {
     try {
         // Primeiro, aprova as reviews na base de dados
         const result = await approveReviews(reviewIds)
+
+        // Criar auditLog
+        await logAudit("Review", reviewIds, "APPROVE_REVIEW")
 
         // Revalida o caminho para atualizar a UI
         revalidatePath("/books/[id]")
@@ -70,6 +74,9 @@ export async function rejectReviewsAction(reviewIds: string[]) {
     try {
         // Primeiro, rejeita as reviews na base de dados
         const result = await rejectReviews(reviewIds)
+
+        // Criar auditLog
+        await logAudit("Review", reviewIds, "REJECT_REVIEW")
 
         // Revalida o caminho para atualizar a UI
         revalidatePath("/books/[id]")

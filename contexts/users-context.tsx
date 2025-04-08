@@ -11,6 +11,9 @@ export type SortOption = {
     direction: "asc" | "desc"
 }
 
+// Definir FilterOption type para isActive
+export type ActiveFilterOption = "all" | "active" | "inactive"
+
 interface UsersContextType {
     users: User[]
     addUser: (user: User) => void
@@ -32,6 +35,8 @@ interface UsersContextType {
     totalPages: number
     sortOption: SortOption | null
     setSortOption: (option: SortOption) => void
+    activeFilter: ActiveFilterOption
+    setActiveFilter: (filter: ActiveFilterOption) => void
 }
 
 const UsersContext = createContext<UsersContextType | undefined>(undefined)
@@ -69,11 +74,20 @@ export function UsersProvider({
     // Estado para ordenação
     const [sortOption, setSortOption] = useState<SortOption | null>(null)
 
+    // Estado para filtro de isActive
+    const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")
+
     // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
     // garantindo melhor performance
     const filteredUsers = useMemo(() => {
         // Criamos uma cópia da lista de autores para evitar modificar o estado original
         let result = [...optimisticUsers]
+
+        // Aplicar filtro por isActive
+        if (activeFilter != "all") {
+            const isActive = activeFilter === "active"
+            result = result.filter((borrowedBook) => borrowedBook.isActive === isActive)
+        }
 
         // Se houver um termo de pesquisa, filtramos os autores pelo nome ou biografia
         if (searchTerm !== "") {
@@ -131,7 +145,7 @@ export function UsersProvider({
 
         // Retornamos a lista filtrada e ordenada
         return result
-    }, [searchTerm, optimisticUsers, sortOption])     // Dependências: recalcula apenas quando uma delas mudar
+    }, [searchTerm, optimisticUsers, sortOption, activeFilter])     // Dependências: recalcula apenas quando uma delas mudar
 
 
     // Calcular total de páginas
@@ -155,7 +169,7 @@ export function UsersProvider({
     // Resetar para a primeira página quando o sorting altera
     useEffect(() => {
         setCurrentPage(1)
-    }, [sortOption])
+    }, [sortOption, activeFilter])
 
     const addUser = (user: User) => {
         startTransition(() => {
@@ -214,6 +228,8 @@ export function UsersProvider({
                 totalPages,
                 sortOption,
                 setSortOption,
+                activeFilter,
+                setActiveFilter,
             }}
         >
             {children}

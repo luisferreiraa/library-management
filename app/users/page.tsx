@@ -6,6 +6,7 @@ import { CreateUserButton } from "@/components/users/create-user-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { UsersProvider } from "@/contexts/users-context"
 import { OrderUsersBy } from "@/components/users/order-users-by"
+import { FilterUsers } from "@/components/users/filter-users"
 
 export default async function UsersPage() {
     // Buscar dados no servidor
@@ -25,6 +26,9 @@ export default async function UsersPage() {
                     </div>
                     <div className="w-full sm:max-w-xs">
                         <OrderUsersBy />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <FilterUsers />
                     </div>
                 </div>
 

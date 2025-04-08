@@ -6,6 +6,7 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { RolesProvider } from "@/contexts/roles-context"
 import { RolesSearch } from "@/components/roles/roles-search"
 import { OrderRolesBy } from "@/components/roles/order-roles-by"
+import { FilterRoles } from "@/components/roles/filter-roles"
 
 export default async function RolesPage() {
     // Buscar dados no servidor
@@ -15,7 +16,7 @@ export default async function RolesPage() {
         <div className="container mx-auto px-4 py-10 max-w-6xl">
             <RolesProvider initialRoles={roles}>
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold tracking-tight">Roles</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">Perfis</h1>
                     <CreateRoleButton />
                 </div>
 
@@ -25,6 +26,9 @@ export default async function RolesPage() {
                     </div>
                     <div className="w-full sm:max-w-xs">
                         <OrderRolesBy />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <FilterRoles />
                     </div>
                 </div>
 

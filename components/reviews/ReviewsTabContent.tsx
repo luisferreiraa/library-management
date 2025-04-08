@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation"
 import type { Review } from "@/lib/reviews"
 import { approveReviewsAction, deleteReviewsAction, rejectReviewsAction } from "@/app/books/[id]/actions"
 import { Pagination } from "@/components/ui/pagination"
+import { toast } from "react-toastify"
 
 // Função para formatar a data
 const formatDate = (dateValue: Date | string | null) => {
@@ -119,6 +120,20 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
     const handleRemoveReviews = async () => {
         try {
             const result = await deleteReviewsAction(selectedReviews)
+
+            const message = selectedReviews.length === 1
+                ? "Avaliação removida com sucesso"
+                : `Avaliações removidas com sucesso (${selectedReviews.length})`
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            })
+
             if (result.success) {
                 setSelectedReviews([])
                 router.refresh()
@@ -127,6 +142,15 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
             }
         } catch (error) {
             console.error("Erro ao remover avaliações:", error)
+
+            toast.error("Erro ao remover avaliações", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            })
         }
     }
 
@@ -137,6 +161,19 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
             if (approvableIds.length === 0) return
 
             const result = await approveReviewsAction(approvableIds)
+
+            const message = approvableIds.length === 1
+                ? "Avaliação aprovada com sucesso"
+                : `Avaliações aprovadas com sucesso (${approvableIds.length})`
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true
+            })
 
             if (result.success) {
                 setSelectedReviews([])
@@ -150,6 +187,15 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
             }
         } catch (error) {
             console.error("Erro ao aprovar avaliações:", error)
+
+            toast.error("Erro ao aprovar avaliações", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            })
         }
     }
 
@@ -160,6 +206,19 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
             if (rejectableIds.length === 0) return
 
             const result = await rejectReviewsAction(rejectableIds)
+
+            const message = rejectableIds.length === 1
+                ? "Avaliação reprovada com sucesso"
+                : `Avaliações aprovadas com sucesso (${rejectableIds.length})`
+
+            toast.success(message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            })
 
             if (result.success) {
                 setSelectedReviews([])
@@ -172,6 +231,15 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
             }
         } catch (error) {
             console.error("Erro ao rejeitar avaliações:", error)
+
+            toast.error("Erro ao reprovar avaliações", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            })
         }
     }
 
@@ -216,7 +284,7 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
                                 checked={areAllCurrentPageSelected}
                             />
                             <label htmlFor="select-all-reviews" className="text-sm cursor-pointer">
-                                Selecionar todas desta página
+                                Selecionar todas
                             </label>
                         </div>
                     )}

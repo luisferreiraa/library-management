@@ -1,6 +1,7 @@
 import type { Review } from "../reviews"
 import type { Book } from "../books"
 import type { User } from "../users"
+import { BorrowedBookWithRelations } from "../borrowed-books"
 
 export function getApprovalEmailTemplate(review: Review, book: Book, user: User) {
   const bookTitle = book.title
@@ -162,4 +163,162 @@ export function getRejectionEmailTemplate(review: Review, book: Book, user: User
     </body>
     </html>
   `
+}
+
+export function getReturnBorrowedBookEmailTemplate(borrowedBook: BorrowedBookWithRelations, book: Book, user: User) {
+  const bookTitle = book.title
+  const userName = `${user.firstName} ${user.lastName}`
+  const barcode = borrowedBook.barcode.code
+  const borrowedDate = borrowedBook.borrowedAt
+  const returnDate = borrowedBook.returnDate
+  const fine = borrowedBook.fineValue
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+        .container {
+          padding: 20px;
+          border: 1px solid #eaeaea;
+          border-radius: 5px;
+        }
+        .header {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px;
+          text-align: center;
+          border-radius: 5px 5px 0 0;
+        }
+        .content {
+          padding: 20px;
+        }
+        .footer {
+          text-align: center;
+          margin-top: 20px;
+          font-size: 12px;
+          color: #666;
+        }
+        .info-box {
+          background-color: #f9f9f9;
+          border-left: 4px solid #4CAF50;
+          padding: 10px;
+          margin: 10px 0;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h2>Confirmação de Devolução</h2>
+        </div>
+        <div class="content">
+          <p>Olá, ${userName}!</p>
+          
+          <p>Confirmamos que o livro <strong>${bookTitle}</strong> foi devolvido com sucesso.</p>
+                    
+          <div class="info-box">
+            <p><strong>Título:</strong> ${book.title}</p>
+            <p><strong>Código de Barras:</strong> ${barcode}</p>
+            <p><strong>Data de Empréstimo:</strong> ${borrowedDate}</p>
+            <p><strong>Data de Devolução:</strong> ${returnDate}</p>
+            <p><strong>Multa:</strong> ${fine && fine > 0 ? fine.toFixed(2) + '€' : 'Sem multa'}</p>
+      </div>
+
+      <p>Agradecemos por utilizar a Biblio.Gest. Esperamos vê-lo novamente em breve!</p>
+
+        <p>Atenciosamente, <br>Equipa Biblio.Gest </p>
+          </div>
+          <div class="footer">
+            <p>Este é um email automático.Por favor, não responda a este email.</p>
+              </div>
+              </div>
+              </body>
+              </html>
+                `
+}
+
+export function getBorrowedBookEmailTemplate(borrowedBook: BorrowedBookWithRelations, book: Book, user: User) {
+  const bookTitle = book.title
+  const userName = `${user.firstName} ${user.lastName}`
+  const barcode = borrowedBook.barcode.code
+  const borrowedDate = borrowedBook.borrowedAt
+  const dueDate = borrowedBook.dueDate
+
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+        .container {
+          padding: 20px;
+          border: 1px solid #eaeaea;
+          border-radius: 5px;
+        }
+        .header {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px;
+          text-align: center;
+          border-radius: 5px 5px 0 0;
+        }
+        .content {
+          padding: 20px;
+        }
+        .footer {
+          text-align: center;
+          margin-top: 20px;
+          font-size: 12px;
+          color: #666;
+        }
+        .info-box {
+          background-color: #f9f9f9;
+          border-left: 4px solid #4CAF50;
+          padding: 10px;
+          margin: 10px 0;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h2>Confirmação de Empréstimo</h2>
+        </div>
+        <div class="content">
+          <p>Olá, ${userName}!</p>
+          
+          <p>Confirmamos que o livro <strong>${bookTitle}</strong> foi emprestado com sucesso.</p>
+                    
+          <div class="info-box">
+            <p><strong>Título:</strong> ${book.title}</p>
+            <p><strong>Código de Barras:</strong> ${barcode}</p>
+            <p><strong>Data de Empréstimo:</strong> ${borrowedDate}</p>
+            <p><strong>Data Prevista p/ Devolução:</strong> ${dueDate}</p>
+      </div>
+
+      <p>Agradecemos por utilizar a Biblio.Gest. Esperamos vê-lo novamente em breve!</p>
+
+        <p>Atenciosamente, <br>Equipa Biblio.Gest </p>
+          </div>
+          <div class="footer">
+            <p>Este é um email automático.Por favor, não responda a este email.</p>
+              </div>
+              </div>
+              </body>
+              </html>
+                `
 }
