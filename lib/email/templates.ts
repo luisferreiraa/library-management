@@ -3,12 +3,12 @@ import type { Book } from "../books"
 import type { User } from "../users"
 
 export function getApprovalEmailTemplate(review: Review, book: Book, user: User) {
-    const bookTitle = book.title
-    const userName = `${user.firstName} ${user.lastName}`
-    const rating = review.rating
-    const comment = review.comment
+  const bookTitle = book.title
+  const userName = `${user.firstName} ${user.lastName}`
+  const rating = review.rating
+  const comment = review.comment
 
-    return `
+  return `
     <!DOCTYPE html>
     <html>
     <head>
@@ -61,17 +61,17 @@ export function getApprovalEmailTemplate(review: Review, book: Book, user: User)
         <div class="content">
           <p>Olá, ${userName}!</p>
           
-          <p>Temos o prazer de informar que sua avaliação para o livro <strong>${bookTitle}</strong> foi aprovada e já está publicada em nosso site.</p>
+          <p>Temos o prazer de informar que a sua avaliação para o livro <strong>${bookTitle}</strong> foi aprovada e já está publicada na nossa plataforma.</p>
           
           <div class="review-box">
-            <p><strong>Sua avaliação:</strong></p>
+            <p><strong>A sua avaliação:</strong></p>
             <p class="stars">${"★".repeat(rating)}${"☆".repeat(5 - rating)}</p>
             <p><em>"${comment}"</em></p>
           </div>
           
           <p>Agradecemos por compartilhar a sua opinião com a comunidade Biblio.Gest!</p>
           
-          <p>Atenciosamente,<br>Equipe Biblio.Gest</p>
+          <p>Atenciosamente,<br>Equipa Biblio.Gest</p>
         </div>
         <div class="footer">
           <p>Este é um email automático. Por favor, não responda a este email.</p>
@@ -83,12 +83,12 @@ export function getApprovalEmailTemplate(review: Review, book: Book, user: User)
 }
 
 export function getRejectionEmailTemplate(review: Review, book: Book, user: User) {
-    const bookTitle = book.title
-    const userName = `${user.firstName} ${user.lastName}`
-    const rating = review.rating
-    const comment = review.comment
+  const bookTitle = book.title
+  const userName = `${user.firstName} ${user.lastName}`
+  const rating = review.rating
+  const comment = review.comment
 
-    return `
+  return `
     <!DOCTYPE html>
     <html>
     <head>
@@ -136,14 +136,14 @@ export function getRejectionEmailTemplate(review: Review, book: Book, user: User
     <body>
       <div class="container">
         <div class="header">
-          <h2>Atualização sobre sua avaliação</h2>
+          <h2>Atualização sobre a sua avaliação</h2>
         </div>
         <div class="content">
           <p>Olá, ${userName}!</p>
           
-          <p>Agradecemos por compartilhar sua opinião sobre o livro <strong>${bookTitle}</strong>.</p>
+          <p>Agradecemos por compartilhar a sua opinião sobre o livro <strong>${bookTitle}</strong>.</p>
           
-          <p>Após revisão, sua avaliação não foi aprovada para publicação em nosso site. Isso pode ocorrer por diversos motivos, incluindo o não cumprimento das nossas diretrizes de conteúdo.</p>
+          <p>Após revisão, a sua avaliação não foi aprovada para publicação na nossa plataforma. Isso pode ocorrer por diversos motivos, incluindo o não cumprimento das nossas diretrizes de conteúdo.</p>
           
           <div class="review-box">
             <p><strong>Sua avaliação:</strong></p>
@@ -151,9 +151,9 @@ export function getRejectionEmailTemplate(review: Review, book: Book, user: User
             <p><em>"${comment}"</em></p>
           </div>
           
-          <p>Você pode enviar uma nova avaliação a qualquer momento, seguindo nossas diretrizes de conteúdo.</p>
+          <p>Pode enviar uma nova avaliação a qualquer momento, seguindo as nossas diretrizes de conteúdo.</p>
           
-          <p>Atenciosamente,<br>Equipe Biblio.Gest</p>
+          <p>Atenciosamente,<br>Equipa Biblio.Gest</p>
         </div>
         <div class="footer">
           <p>Este é um email automático. Por favor, não responda a este email.</p>

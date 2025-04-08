@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react"
 import { format } from "date-fns"
 import { Check, Clock, X } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -21,6 +21,7 @@ import {
 import { useRouter } from "next/navigation"
 import type { Review } from "@/lib/reviews"
 import { approveReviewsAction, deleteReviewsAction, rejectReviewsAction } from "@/app/books/[id]/actions"
+import { Pagination } from "@/components/ui/pagination"
 
 // Função para formatar a data
 const formatDate = (dateValue: Date | string | null) => {
@@ -45,10 +46,26 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
     const [hasApproved, setHasApproved] = useState(false)
     const [hasRejected, setHasRejected] = useState(false)
 
+    // Estados para paginação
+    const [currentPage, setCurrentPage] = useState(1)
+    const [pageSize, setPageSize] = useState(5)
+    const [paginatedReviews, setPaginatedReviews] = useState<Review[]>([])
+    const totalPages = Math.ceil(reviews.length / pageSize)
+
     // Atualiza os estados quando as reviews selecionadas mudam
     useEffect(() => {
         updateActionButtonStates()
     }, [selectedReviews])
+
+    // Atualiza as reviews paginadas quando a página ou o número de itens por página muda
+    useEffect(() => {
+        const startIndex = (currentPage - 1) * pageSize
+        const endIndex = startIndex + pageSize
+        setPaginatedReviews(reviews.slice(startIndex, endIndex))
+
+        // Limpa as seleções quando a página muda
+        setSelectedReviews([])
+    }, [currentPage, pageSize, reviews])
 
     // Função para atualizar os estados dos botões de ação
     const updateActionButtonStates = () => {
@@ -158,14 +175,30 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
         }
     }
 
-    // Debug info
-    console.log({
-        selectedCount: selectedReviews.length,
-        approvableCount,
-        rejectableCount,
-        hasApproved,
-        hasRejected,
-    })
+    // Função para selecionar/desselecionar todas as reviews da página atual
+    const toggleSelectAllCurrentPage = (checked: boolean) => {
+        if (checked) {
+            const currentPageIds = paginatedReviews.map((review) => review.id)
+            setSelectedReviews((prev) => [...prev, ...currentPageIds.filter((id) => !prev.includes(id))])
+        } else {
+            const currentPageIds = paginatedReviews.map((review) => review.id)
+            setSelectedReviews((prev) => prev.filter((id) => !currentPageIds.includes(id)))
+        }
+    }
+
+    // Verifica se todas as reviews da página atual estão selecionadas
+    const areAllCurrentPageSelected =
+        paginatedReviews.length > 0 && paginatedReviews.every((review) => selectedReviews.includes(review.id))
+
+    // Handlers para paginação
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page)
+    }
+
+    const handlePageSizeChange = (size: number) => {
+        setPageSize(size)
+        setCurrentPage(1) // Reset para a primeira página quando mudar o tamanho
+    }
 
     return (
         <Card>
@@ -175,18 +208,15 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
                         <CardTitle>Avaliações</CardTitle>
                         <CardDescription>Avaliações dos utilizadores sobre este livro</CardDescription>
                     </div>
-                    {reviews.length > 0 && (
+                    {paginatedReviews.length > 0 && (
                         <div className="flex items-center gap-2">
                             <Checkbox
                                 id="select-all-reviews"
-                                onCheckedChange={(checked) => {
-                                    const newSelectedReviews = checked ? reviews.map((review) => review.id) : []
-                                    setSelectedReviews(newSelectedReviews)
-                                }}
-                                checked={selectedReviews.length === reviews.length && reviews.length > 0}
+                                onCheckedChange={toggleSelectAllCurrentPage}
+                                checked={areAllCurrentPageSelected}
                             />
                             <label htmlFor="select-all-reviews" className="text-sm cursor-pointer">
-                                Selecionar todas
+                                Selecionar todas desta página
                             </label>
                         </div>
                     )}
@@ -272,7 +302,7 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
             <CardContent>
                 {reviews.length > 0 ? (
                     <div className="space-y-4">
-                        {reviews.map((review) => (
+                        {paginatedReviews.map((review) => (
                             <div key={review.id} className="border rounded-md p-4">
                                 <div className="flex justify-between items-start mb-2 gap-4">
                                     {/* Checkbox */}
@@ -341,7 +371,20 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
                     <div className="text-center py-6 text-muted-foreground">Nenhuma avaliação para este livro.</div>
                 )}
             </CardContent>
+            {reviews.length > 0 && (
+                <CardFooter className="border-t p-4">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        totalItems={reviews.length}
+                        pageSize={pageSize}
+                        onPageSizeChange={handlePageSizeChange}
+                        pageSizeOptions={[5, 10, 20, 50]}
+                        className="w-full"
+                    />
+                </CardFooter>
+            )}
         </Card>
     )
 }
-
