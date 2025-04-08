@@ -5,6 +5,16 @@ import { now } from "lodash"
 
 export type Review = PrismaReview
 
+export async function getReviewById(id: string) {
+    return await prisma.review.findUnique({
+        where: { id },
+        include: {
+            user: true,
+            book: true,
+        },
+    })
+}
+
 export async function deleteReviews(reviewIds: string[]) {
     const result = await prisma.review.deleteMany({
         where: {

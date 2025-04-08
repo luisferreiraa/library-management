@@ -1,7 +1,8 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { deleteReviews, approveReviews, rejectReviews } from "@/lib/reviews"
+import { deleteReviews, approveReviews, rejectReviews, getReviewById } from "@/lib/reviews"
+import { sendReviewApprovalEmail, sendReviewRejectionEmail } from "@/lib/email/review-emails"
 
 export async function deleteReviewsAction(reviewIds: string[]) {
     try {
@@ -27,15 +28,33 @@ export async function deleteReviewsAction(reviewIds: string[]) {
 
 export async function approveReviewsAction(reviewIds: string[]) {
     try {
-        const updatedCount = await approveReviews(reviewIds)
+        // Primeiro, aprova as reviews na base de dados
+        const result = await approveReviews(reviewIds)
 
-        // Revalidate the book page to show updated data
+        // Revalida o caminho para atualizar a UI
         revalidatePath("/books/[id]")
+
+        // Envia emails para cada utilizador
+        const emailPromises = reviewIds.map(async (id) => {
+            const review = await getReviewById(id)
+            if (review) {
+                return sendReviewApprovalEmail(review)
+            }
+            return { success: false, error: "Review não encontrada" }
+        })
+
+        // Aguarda o envio de todos os emails
+        const emailResults = await Promise.allSettled(emailPromises)
+
+        // Conta quantos emails foram enviados com sucesso
+        const successfulEmails = emailResults.filter(
+            (result) => result.status === "fulfilled" && result.value.success,
+        ).length
 
         return {
             success: true,
-            message: `${updatedCount} avaliação(ões) aprovada(s) com sucesso.`,
-            count: updatedCount,
+            message: `${result} avaliação(ões) aprovada(s) com sucesso. ${successfulEmails} email(s) enviado(s).`,
+            count: result,
         }
     } catch (error) {
         console.error("Erro ao aprovar avaliações:", error)
@@ -49,14 +68,33 @@ export async function approveReviewsAction(reviewIds: string[]) {
 
 export async function rejectReviewsAction(reviewIds: string[]) {
     try {
-        const updatedCount = await rejectReviews(reviewIds)
+        // Primeiro, rejeita as reviews na base de dados
+        const result = await rejectReviews(reviewIds)
 
+        // Revalida o caminho para atualizar a UI
         revalidatePath("/books/[id]")
+
+        // Envia emails para cada utilizador
+        const emailPromises = reviewIds.map(async (id) => {
+            const review = await getReviewById(id)
+            if (review) {
+                return sendReviewRejectionEmail(review)
+            }
+            return { success: false, error: "Review não encontrada" }
+        })
+
+        // Aguarda o envio de todos os emails
+        const emailResults = await Promise.allSettled(emailPromises)
+
+        // Conta quantos emails foram enviados com sucesso
+        const successfulEmails = emailResults.filter(
+            (result) => result.status === "fulfilled" && result.value.success,
+        ).length
 
         return {
             success: true,
-            message: `${updatedCount} avaliação(ões) reprovada(s) com sucesso.`,
-            count: updatedCount,
+            message: `${result} avaliação(ões) reprovada(s) com sucesso. ${successfulEmails} email(s) enviado(s).`,
+            count: result,
         }
     } catch (error) {
         console.error("Erro ao rejeitar avaliações:", error)
