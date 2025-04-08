@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { format } from "date-fns"
 import { Check, Clock, X } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -39,43 +39,63 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
     const [selectedReviews, setSelectedReviews] = useState<string[]>([])
     const [isPending, startTransition] = useTransition()
 
-    // Funções para verificar o estado das reviews selecionadas
-    const getSelectedReviewsData = () => {
-        return selectedReviews.map((id) => reviews.find((review) => review.id === id)).filter(Boolean) as Review[]
-    }
+    // Estados para controlar quais botões mostrar
+    const [approvableCount, setApprovableCount] = useState(0)
+    const [rejectableCount, setRejectableCount] = useState(0)
+    const [hasApproved, setHasApproved] = useState(false)
+    const [hasRejected, setHasRejected] = useState(false)
 
-    const hasApprovableReviews = () => {
-        const selectedReviewsData = getSelectedReviewsData()
-        return selectedReviewsData.some((review) => !review.isAproved && review.approvalDate === null)
-    }
+    // Atualiza os estados quando as reviews selecionadas mudam
+    useEffect(() => {
+        updateActionButtonStates()
+    }, [selectedReviews])
 
-    const hasRejectableReviews = () => {
-        const selectedReviewsData = getSelectedReviewsData()
-        return selectedReviewsData.some((review) => !review.isAproved && review.approvalDate === null)
-    }
+    // Função para atualizar os estados dos botões de ação
+    const updateActionButtonStates = () => {
+        const selectedReviewsData = selectedReviews
+            .map((id) => reviews.find((review) => review.id === id))
+            .filter(Boolean) as Review[]
 
-    const hasApprovedReviews = () => {
-        const selectedReviewsData = getSelectedReviewsData()
-        return selectedReviewsData.some((review) => review.isAproved)
-    }
+        // Conta reviews por estado
+        let approvable = 0
+        let rejectable = 0
+        let approved = false
+        let rejected = false
 
-    const hasRejectedReviews = () => {
-        const selectedReviewsData = getSelectedReviewsData()
-        return selectedReviewsData.some((review) => review.approvalDate !== null && !review.isAproved)
+        selectedReviewsData.forEach((review) => {
+            // Review pendente (pode ser aprovada ou rejeitada)
+            if (review.approvalDate === null) {
+                approvable++
+                rejectable++
+            }
+            // Review já aprovada
+            else if (review.isAproved) {
+                approved = true
+            }
+            // Review já rejeitada
+            else {
+                rejected = true
+            }
+        })
+
+        setApprovableCount(approvable)
+        setRejectableCount(rejectable)
+        setHasApproved(approved)
+        setHasRejected(rejected)
     }
 
     // Funções para filtrar IDs de reviews por estado
     const getApprovableReviewIds = () => {
         return selectedReviews.filter((id) => {
             const review = reviews.find((r) => r.id === id)
-            return review && !review.isAproved && review.approvalDate === null
+            return review && review.approvalDate === null
         })
     }
 
     const getRejectableReviewIds = () => {
         return selectedReviews.filter((id) => {
             const review = reviews.find((r) => r.id === id)
-            return review && !review.isAproved && review.approvalDate === null
+            return review && review.approvalDate === null
         })
     }
 
@@ -138,9 +158,14 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
         }
     }
 
-    // Contadores para o texto dos botões
-    const approvableCount = getApprovableReviewIds().length
-    const rejectableCount = getRejectableReviewIds().length
+    // Debug info
+    console.log({
+        selectedCount: selectedReviews.length,
+        approvableCount,
+        rejectableCount,
+        hasApproved,
+        hasRejected,
+    })
 
     return (
         <Card>
@@ -203,10 +228,9 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
                                         <AlertDialogDescription>
                                             Tem certeza que deseja rejeitar{" "}
                                             {rejectableCount === 1 ? "esta avaliação" : `estas ${rejectableCount} avaliações`}?
-                                            {hasApprovedReviews() ||
-                                                (hasRejectedReviews() && (
-                                                    <p className="mt-2 text-amber-600">Nota: Apenas as avaliações pendentes serão rejeitadas.</p>
-                                                ))}
+                                            {(hasApproved || hasRejected) && (
+                                                <p className="mt-2 text-amber-600">Nota: Apenas as avaliações pendentes serão rejeitadas.</p>
+                                            )}
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
@@ -230,10 +254,9 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
                                         <AlertDialogDescription>
                                             Tem certeza que deseja aprovar{" "}
                                             {approvableCount === 1 ? "esta avaliação" : `estas ${approvableCount} avaliações`}?
-                                            {hasApprovedReviews() ||
-                                                (hasRejectedReviews() && (
-                                                    <p className="mt-2 text-amber-600">Nota: Apenas as avaliações pendentes serão aprovadas.</p>
-                                                ))}
+                                            {(hasApproved || hasRejected) && (
+                                                <p className="mt-2 text-amber-600">Nota: Apenas as avaliações pendentes serão aprovadas.</p>
+                                            )}
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>

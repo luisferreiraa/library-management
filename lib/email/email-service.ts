@@ -17,7 +17,7 @@ export async function sendEmail({
     html,
     from
 }: EmailData) {
-    const defaultFrom = "Biblio.Gest<noreply@omeudominio.com>"
+    const defaultFrom = "Biblio.Gest<onboarding@resend.dev>"
 
     try {
         const { data, error } = await resend.emails.send({
