@@ -6,6 +6,7 @@ import { CreateAuthorButton } from "@/components/authors/create-author-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { AuthorsProvider } from "@/contexts/authors-context"
 import { OrderAuthorsBy } from "@/components/authors/order-authors-by"
+import { FilterAuthors } from "@/components/authors/filter-authors"
 
 export default async function AuthorsPage() {
   // Buscar dados no servidor
@@ -25,6 +26,9 @@ export default async function AuthorsPage() {
           </div>
           <div className="w-full sm:max-w-xs">
             <OrderAuthorsBy />
+          </div>
+          <div className="w-full sm:max-w-xs">
+            <FilterAuthors />
           </div>
         </div>
 

@@ -6,6 +6,7 @@ import { CreateBookButton } from "@/components/books/create-book-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { BooksProvider } from "@/contexts/books-context"
 import { OrderBooksBy } from "@/components/books/order-books-by"
+import { FilterBooks } from "@/components/books/filter-books"
 
 export default async function BooksPage() {
     // Buscar dados no servidor
@@ -25,6 +26,9 @@ export default async function BooksPage() {
                     </div>
                     <div className="w-full sm:max-w-xs">
                         <OrderBooksBy />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <FilterBooks />
                     </div>
                 </div>
 

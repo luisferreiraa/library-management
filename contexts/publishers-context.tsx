@@ -9,6 +9,9 @@ export type SortOption = {
     direction: "asc" | "desc"
 }
 
+// Definir FilterOption type para isActive
+export type ActiveFilterOption = "all" | "active" | "inactive"
+
 interface PublishersContextType {
     publishers: Publisher[]
     addPublisher: (publisher: Publisher) => void
@@ -30,6 +33,8 @@ interface PublishersContextType {
     totalPages: number
     sortOption: SortOption | null
     setSortOption: (option: SortOption) => void
+    activeFilter: ActiveFilterOption
+    setActiveFilter: (filter: ActiveFilterOption) => void
 }
 
 const PublishersContext = createContext<PublishersContextType | undefined>(undefined)
@@ -67,11 +72,20 @@ export function PublishersProvider({
     // Estado para ordenação
     const [sortOption, setSortOption] = useState<SortOption | null>(null)
 
+    // Estado para filtro de isActive
+    const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")
+
     // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
     // garantindo melhor performance
     const filteredPublishers = useMemo(() => {
         // Criamos uma cópia da lista de autores para evitar modificar o estado original
         let result = [...optimisticPublishers]
+
+        // Aplicar filtro por isActive
+        if (activeFilter != "all") {
+            const isActive = activeFilter === "active"
+            result = result.filter((publisher) => publisher.isActive === isActive)
+        }
 
         // Se houver um termo de pesquisa, filtramos os autores pelo nome ou biografia
         if (searchTerm !== "") {
@@ -121,7 +135,7 @@ export function PublishersProvider({
 
         // Retornamos a lista filtrada e ordenada
         return result
-    }, [searchTerm, optimisticPublishers, sortOption])     // Dependências: recalcula apenas quando uma delas mudar
+    }, [searchTerm, optimisticPublishers, sortOption, activeFilter])     // Dependências: recalcula apenas quando uma delas mudar
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -144,7 +158,7 @@ export function PublishersProvider({
     // Resetar para a primeira página quando o sorting altera
     useEffect(() => {
         setCurrentPage(1)
-    }, [sortOption])
+    }, [sortOption, activeFilter])
 
     const addPublisher = (publisher: Publisher) => {
         startTransition(() => {
@@ -205,6 +219,8 @@ export function PublishersProvider({
                 totalPages,
                 sortOption,
                 setSortOption,
+                activeFilter,
+                setActiveFilter,
             }}
         >
             {children}

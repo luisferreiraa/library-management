@@ -9,6 +9,9 @@ export type SortOption = {
     direction: "asc" | "desc"
 }
 
+// Definir FilterOption type para isActive
+export type ActiveFilterOption = "all" | "active" | "inactive"
+
 interface PenaltyRulesContextType {
     penaltyRules: PenaltyRule[]
     addPenaltyRule: (penaltyRule: PenaltyRule) => void
@@ -30,6 +33,8 @@ interface PenaltyRulesContextType {
     totalPages: number
     sortOption: SortOption | null
     setSortOption: (option: SortOption) => void
+    activeFilter: ActiveFilterOption
+    setActiveFilter: (filter: ActiveFilterOption) => void
 }
 
 const PenaltyRulesContext = createContext<PenaltyRulesContextType | undefined>(undefined)
@@ -67,11 +72,20 @@ export function PenaltyRulesProvider({
     // Estado para ordenação
     const [sortOption, setSortOption] = useState<SortOption | null>(null)
 
+    // Estado para filtro de isActive
+    const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")
+
     // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
     // garantindo melhor performance
     const filteredPenaltyRules = useMemo(() => {
         // Criamos uma cópia da lista de autores para evitar modificar o estado original
         let result = [...optimisticPenaltyRules]
+
+        // Aplicar filtro por isActive
+        if (activeFilter != "all") {
+            const isActive = activeFilter === "active"
+            result = result.filter((penaltyRule) => penaltyRule.isActive === isActive)
+        }
 
         // Se houver um termo de pesquisa, filtramos os autores pelo nome ou biografia
         if (searchTerm !== "") {
@@ -121,7 +135,7 @@ export function PenaltyRulesProvider({
 
         // Retornamos a lista filtrada e ordenada
         return result
-    }, [searchTerm, optimisticPenaltyRules, sortOption])     // Dependências: recalcula apenas quando uma delas mudar
+    }, [searchTerm, optimisticPenaltyRules, sortOption, activeFilter])     // Dependências: recalcula apenas quando uma delas mudar
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -144,7 +158,7 @@ export function PenaltyRulesProvider({
     // Resetar para a primeira página quando o sorting altera
     useEffect(() => {
         setCurrentPage(1)
-    }, [sortOption])
+    }, [sortOption, activeFilter])
 
     const addPenaltyRule = (penaltyRule: PenaltyRule) => {
         startTransition(() => {
@@ -205,6 +219,8 @@ export function PenaltyRulesProvider({
                 totalPages,
                 sortOption,
                 setSortOption,
+                activeFilter,
+                setActiveFilter,
             }}
         >
             {children}

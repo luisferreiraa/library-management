@@ -6,6 +6,7 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { PublishersProvider } from "@/contexts/publishers-context"
 import { PublishersSearch } from "@/components/publishers/publishers-search"
 import { OrderPublishersBy } from "@/components/publishers/order-publishers-by"
+import { FilterPublishers } from "@/components/publishers/filter-publishers"
 
 export default async function PublishersPage() {
     // Buscar dados no servidor
@@ -25,6 +26,9 @@ export default async function PublishersPage() {
                     </div>
                     <div className="w-full sm:max-w-xs">
                         <OrderPublishersBy />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <FilterPublishers />
                     </div>
                 </div>
 

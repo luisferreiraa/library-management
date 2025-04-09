@@ -6,6 +6,7 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { PenaltyRulesProvider } from "@/contexts/penaltyrules-context"
 import { PenaltyRulesSearch } from "@/components/penaltyRules/penaltyrules-search"
 import { OrderPenaltyRulesBy } from "@/components/penaltyRules/order-penalty-rules-by"
+import { FilterPenaltyRules } from "@/components/penaltyRules/filter-penalty-rules"
 
 export default async function PenaltyRulesPage() {
     // Buscar dados no servidor
@@ -25,6 +26,9 @@ export default async function PenaltyRulesPage() {
                     </div>
                     <div className="w-full sm:max-w-xs">
                         <OrderPenaltyRulesBy />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <FilterPenaltyRules />
                     </div>
                 </div>
 

@@ -6,6 +6,7 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { TranslatorsProvider } from "@/contexts/translators-context"
 import { TranslatorsSearch } from "@/components/translators/translators-search"
 import { OrderTranslatorsBy } from "@/components/translators/order-translators-by"
+import { FilterTranslators } from "@/components/translators/filter-translators"
 
 export default async function TranslatorsPage() {
     // Buscar dados no servidor
@@ -25,6 +26,9 @@ export default async function TranslatorsPage() {
                     </div>
                     <div className="w-full sm:max-w-xs">
                         <OrderTranslatorsBy />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <FilterTranslators />
                     </div>
                 </div>
 

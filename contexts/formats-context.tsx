@@ -9,6 +9,9 @@ export type SortOption = {
     direction: "asc" | "desc"
 }
 
+// Definir FilterOption type para isActive
+export type ActiveFilterOption = "all" | "active" | "inactive"
+
 interface FormatsContextType {
     formats: Format[]
     addFormat: (format: Format) => void
@@ -30,6 +33,8 @@ interface FormatsContextType {
     totalPages: number
     sortOption: SortOption | null
     setSortOption: (option: SortOption) => void
+    activeFilter: ActiveFilterOption
+    setActiveFilter: (filter: ActiveFilterOption) => void
 }
 
 const FormatsContext = createContext<FormatsContextType | undefined>(undefined)
@@ -67,20 +72,20 @@ export function FormatsProvider({
     // Estado para ordenação
     const [sortOption, setSortOption] = useState<SortOption | null>(null)
 
-    // Usar useMemo em vez de useEffect + useState para filtrar formatos
-    const filteredFormats = useMemo(() => {
-        if (searchTerm === "") {
-            return optimisticFormats
-        }
-
-        return optimisticFormats.filter((format) => format.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    }, [searchTerm, optimisticFormats])
+    // Estado para filtro de isActive
+    const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")
 
     // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
     // garantindo melhor performance
-    const filteredAuthors = useMemo(() => {
+    const filteredFormats = useMemo(() => {
         // Criamos uma cópia da lista de autores para evitar modificar o estado original
         let result = [...optimisticFormats]
+
+        // Aplicar filtro por isActive
+        if (activeFilter != "all") {
+            const isActive = activeFilter === "active"
+            result = result.filter((format) => format.isActive === isActive)
+        }
 
         // Se houver um termo de pesquisa, filtramos os autores pelo nome ou biografia
         if (searchTerm !== "") {
@@ -130,7 +135,7 @@ export function FormatsProvider({
 
         // Retornamos a lista filtrada e ordenada
         return result
-    }, [searchTerm, optimisticFormats, sortOption])     // Dependências: recalcula apenas quando uma delas mudar
+    }, [searchTerm, optimisticFormats, sortOption, activeFilter])     // Dependências: recalcula apenas quando uma delas mudar
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -153,7 +158,7 @@ export function FormatsProvider({
     // Resetar para a primeira página quando o sorting altera
     useEffect(() => {
         setCurrentPage(1)
-    }, [sortOption])
+    }, [sortOption, activeFilter])
 
     const addFormat = (format: Format) => {
         startTransition(() => {
@@ -214,6 +219,8 @@ export function FormatsProvider({
                 totalPages,
                 sortOption,
                 setSortOption,
+                activeFilter,
+                setActiveFilter,
             }}
         >
             {children}

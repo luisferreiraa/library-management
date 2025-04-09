@@ -6,6 +6,7 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { FormatsProvider } from "@/contexts/formats-context"
 import { FormatsSearch } from "@/components/formats/formats-search"
 import { OrderFormatsBy } from "@/components/formats/order-formats-by"
+import { FilterFormats } from "@/components/formats/filter-formats"
 
 export default async function FormatsPage() {
     // Buscar dados no servidor
@@ -25,6 +26,9 @@ export default async function FormatsPage() {
                     </div>
                     <div className="w-full sm:max-w-xs">
                         <OrderFormatsBy />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <FilterFormats />
                     </div>
                 </div>
 

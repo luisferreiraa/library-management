@@ -6,6 +6,7 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { LanguagesProvider } from "@/contexts/languages-context"
 import { LanguagesSearch } from "@/components/languages/languages-search"
 import { OrderLanguagesBy } from "@/components/languages/order-languages-by"
+import { FilterLanguages } from "@/components/languages/filter-languages"
 
 export default async function LanguagesPage() {
     // Buscar dados no servidor
@@ -25,6 +26,9 @@ export default async function LanguagesPage() {
                     </div>
                     <div className="w-full sm:max-w-xs">
                         <OrderLanguagesBy />
+                    </div>
+                    <div className="w-full sm:max-w-xs">
+                        <FilterLanguages />
                     </div>
                 </div>
 

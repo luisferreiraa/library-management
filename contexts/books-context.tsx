@@ -9,6 +9,9 @@ export type SortOption = {
     direction: "asc" | "desc"
 }
 
+// Definir FilterOption type para isActive
+export type ActiveFilterOption = "all" | "active" | "inactive"
+
 interface BooksContextType {
     books: BookWithRelations[]
     addBook: (book: BookWithRelations) => void
@@ -31,6 +34,8 @@ interface BooksContextType {
     // Adicionar propriedades de ordenação ao context
     sortOption: SortOption | null
     setSortOption: (option: SortOption) => void
+    activeFilter: ActiveFilterOption
+    setActiveFilter: (filter: ActiveFilterOption) => void
 }
 
 const BooksContext = createContext<BooksContextType | undefined>(undefined)
@@ -68,10 +73,19 @@ export function BooksProvider({
     // Estado para ordenação
     const [sortOption, setSortOption] = useState<SortOption | null>(null)
 
+    // Estado para filtro de isActive
+    const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")
+
     // Use useMemo para filtrar e ordenar livros
     const filteredBooks = useMemo(() => {
         // Primeiro, filtramos os livros
         let result = [...optimisticBooks]
+
+        // Aplicar filtro por isActive
+        if (activeFilter != "all") {
+            const isActive = activeFilter === "active"
+            result = result.filter((book) => book.isActive === isActive)
+        }
 
         if (searchTerm !== "") {
             const lowerSearchTerm = searchTerm.toLowerCase()
@@ -129,7 +143,7 @@ export function BooksProvider({
         }
 
         return result
-    }, [searchTerm, optimisticBooks, sortOption])
+    }, [searchTerm, optimisticBooks, sortOption, activeFilter])
 
     // Calcular total de páginas
     const totalPages = useMemo(() => {
@@ -152,7 +166,7 @@ export function BooksProvider({
     // Reset to first page when sorting changes
     useEffect(() => {
         setCurrentPage(1)
-    }, [sortOption])
+    }, [sortOption, activeFilter])
 
 
     const addBook = (book: BookWithRelations) => {
@@ -212,6 +226,8 @@ export function BooksProvider({
                 totalPages,
                 sortOption,
                 setSortOption,
+                activeFilter,
+                setActiveFilter,
             }}
         >
             {children}
