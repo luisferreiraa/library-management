@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"  // Função para redirecionamento de
 import Link from "next/link"    // Componente para navegação interna entre páginas
 import { Button } from "@/components/ui/button" // Componente de botão importadoda UI personalizada
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"    // Componentes de Card para UI
-import { BookOpen, Users, BookCopy, LogOut, ScanSearch } from "lucide-react"    // Ícones importados da biblioteca Lucide
+import { BookOpen, Users, BookCopy, LogOut, ScanSearch, CircleUser } from "lucide-react"    // Ícones importados da biblioteca Lucide
 import { signOut } from "next-auth/react"   // Função para logout do NextAuth
 
 export default function HomePage() {
@@ -124,6 +124,21 @@ export default function HomePage() {
                     <CardFooter>
                         <Button asChild className="w-full">
                             <Link href="/catalog">Aceder</Link>
+                        </Button>
+                    </CardFooter>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>A Minha Conta</CardTitle>
+                        <CardDescription>Explore o seu histórico de empréstimos e a sua conta corrente</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <CircleUser className="h-12 w-12 text-primary" />
+                    </CardContent>
+                    <CardFooter>
+                        <Button asChild className="w-full">
+                            <Link href="/my-account">Aceder</Link>
                         </Button>
                     </CardFooter>
                 </Card>

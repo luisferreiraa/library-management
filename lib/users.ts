@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache"
 import { prisma } from "./prisma"
 import type { User as PrismaUser } from "@prisma/client"
 
@@ -54,6 +55,43 @@ export async function updateUser(
         where: { id },
         data,
     })
+}
+
+export async function updateUserLastLogin(userId: string) {
+    if (!userId) {
+        console.log("ID do usuário não fornecido")
+        return { success: false, message: "ID do usuário não fornecido" }
+    }
+
+    try {
+        console.log("Atualizando último login para:", userId)
+
+        // Atualizar o último login diretamente no banco de dados
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: { lastLogin: new Date() },
+            select: { id: true, lastLogin: true },
+        })
+
+        console.log("Usuário atualizado:", updatedUser)
+
+        // Revalidar caminhos relevantes
+        revalidatePath("/users")
+        revalidatePath("/dashboard")
+
+        return {
+            success: true,
+            message: "Último login atualizado com sucesso!",
+            user: updatedUser,
+        }
+    } catch (error) {
+        console.error("Erro ao atualizar último login:", error)
+        return {
+            success: false,
+            message: error instanceof Error ? error.message : "Falha ao atualizar último login",
+            error: error,
+        }
+    }
 }
 
 export async function deleteUser(id: string): Promise<User> {

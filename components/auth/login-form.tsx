@@ -40,6 +40,7 @@ export function LoginForm() {
         setError(null)
 
         try {
+            // Tentar fazer login
             const result = await signIn("credentials", {
                 username: data.username,
                 password: data.password,
@@ -52,8 +53,9 @@ export function LoginForm() {
                 return
             }
 
-            // Se o login for bem-sucedido, redirecionar para a página inicial
-            window.location.href = callbackUrl
+            // Se o login for bem-sucedido, redirecionar para a página de destino
+            // A atualização do último login é feita no método authorize
+            window.location.href = callbackUrl // Usar window.location em vez de router.push
         } catch (error) {
             console.error("Erro ao fazer login:", error)
             setError("Ocorreu um erro ao fazer login. Por favor, tente novamente.")
@@ -108,8 +110,7 @@ export function LoginForm() {
                         <Button type="submit" className="w-full" disabled={isLoading}>
                             {isLoading ? (
                                 <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    A entrar...
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />A entrar...
                                 </>
                             ) : (
                                 "Entrar"
@@ -124,4 +125,3 @@ export function LoginForm() {
         </Card>
     )
 }
-

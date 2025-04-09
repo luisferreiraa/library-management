@@ -42,6 +42,18 @@ export const authOptions: NextAuthOptions = {
                         return null
                     }
 
+                    // Atualizar o último login aqui, dentro do authorize
+                    try {
+                        await prisma.user.update({
+                            where: { id: user.id },
+                            data: { lastLogin: new Date() },
+                        })
+                        console.log("[NextAuth] Último login atualizado para:", user.id)
+                    } catch (updateError) {
+                        // Apenas registrar o erro, não impedir o login
+                        console.error("[NextAuth] Erro ao atualizar último login:", updateError)
+                    }
+
                     return {
                         id: user.id,
                         name: `${user.firstName} ${user.lastName}`,
