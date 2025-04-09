@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache"
 import { prisma } from "./prisma"
 import type { User as PrismaUser } from "@prisma/client"
+import { Role } from "./roles"
 
 export type User = PrismaUser
 
@@ -29,6 +30,29 @@ export async function createUser(data: {
     idNumber: string
     nifNumber: number
     profilePicture?: string
+}): Promise<User> {
+    return prisma.user.create({
+        data,
+    })
+}
+
+export async function registerUser(data: {
+    username: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    address: string
+    phoneNumber: string
+    idNumber: string
+    nifNumber: number
+    profilePicture?: string
+    isActive: boolean
+    role: {
+        connect: {
+            id: string
+        }
+    }
 }): Promise<User> {
     return prisma.user.create({
         data,

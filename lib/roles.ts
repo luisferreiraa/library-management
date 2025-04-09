@@ -18,6 +18,12 @@ export async function getRoleById(id: string): Promise<Role | null> {
     })
 }
 
+export async function getRoleByName(name: string): Promise<Role | null> {
+    return prisma.role.findUnique({
+        where: { name }
+    })
+}
+
 export async function createRole(data: { name: string, isActive: boolean }): Promise<Role> {
     const slug: string = slugify(data.name, { lower: true });
 

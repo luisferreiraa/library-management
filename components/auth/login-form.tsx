@@ -12,9 +12,10 @@ import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, Loader2 } from "lucide-react"
+import Link from "next/link"
 
 const loginSchema = z.object({
-    username: z.string().min(1, "Nome de usuário é obrigatório"),
+    username: z.string().min(1, "Nome de utilizador é obrigatório"),
     password: z.string().min(1, "Senha é obrigatória"),
 })
 
@@ -119,8 +120,24 @@ export function LoginForm() {
                     </form>
                 </Form>
             </CardContent>
-            <CardFooter className="flex justify-center">
-                <p className="text-sm text-muted-foreground">Sistema de Gestão de Biblioteca</p>
+            <CardFooter className="flex flex-col items-center gap-2">
+                <div className="flex gap-4">
+                    <Link
+                        href="/sign-up"
+                        className="text-sm font-medium text-primary hover:underline"
+                        prefetch={false}
+                    >
+                        Criar nova conta
+                    </Link>
+                    <Link
+                        href="/recuperar-password"
+                        className="text-sm font-medium text-primary hover:underline"
+                        prefetch={false}
+                    >
+                        Recuperar senha
+                    </Link>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">Sistema de Gestão de Biblioteca</p>
             </CardFooter>
         </Card>
     )

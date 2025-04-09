@@ -1,10 +1,11 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createUser, deleteUsers } from "@/lib/users"
+import { createUser, deleteUsers, registerUser, User } from "@/lib/users"
 import { uploadProfilePicture } from "@/lib/upload"
 import bcrypt from "bcryptjs"
 import { logAudit } from "@/lib/session"
+import { createRole, getRoleByName } from "@/lib/roles"
 
 export async function uploadProfilePictureAction(formData: FormData): Promise<string> {
     try {
@@ -62,6 +63,69 @@ export async function createUserAction(userData: {
             }
             if (error.meta?.target?.includes("username")) {
                 throw new Error("Este nome de usuário já está em uso")
+            }
+        }
+
+        throw new Error("Erro ao criar usuário: " + error.message)
+    }
+}
+
+export async function registerUserAction(userData: {
+    username: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    address: string
+    phoneNumber: string
+    idNumber: string
+    nifNumber: string
+    profilePicture?: string
+}): Promise<Omit<User, 'password'>> {
+    try {
+        let roleId: string
+        const existingRole = await getRoleByName("USER")
+
+        if (existingRole) {
+            roleId = existingRole.id
+        } else {
+            const newRole = await createRole({
+                name: "USER",
+                isActive: true,
+            })
+            roleId = newRole.id
+        }
+
+        // Hash da senha
+        const hashedPassword = await bcrypt.hash(userData.password, 10)
+
+        // Criar o usuário no banco de dados
+        const newUser = await registerUser({
+            ...userData,
+            password: hashedPassword,
+            nifNumber: Number.parseInt(userData.nifNumber),
+            isActive: false,
+            role: {
+                connect: {
+                    id: roleId
+                }
+            }
+        })
+
+        // Revalidar o caminho para atualizar os dados
+        revalidatePath("/login")
+
+        const { password, ...safeUser } = newUser
+        return safeUser
+
+    } catch (error: any) {
+        // Verificar se é um erro de email ou username duplicado
+        if (error.code === "P2002") {
+            if (error.meta?.target?.includes("email")) {
+                throw new Error("Este email já está em uso")
+            }
+            if (error.meta?.target?.includes("username")) {
+                throw new Error("Este nome de utilizador já está em uso")
             }
         }
 

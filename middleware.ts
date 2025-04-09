@@ -20,7 +20,7 @@ export async function middleware(request: NextRequest) {
     const isAuthenticated = !!token
 
     // Rotas públicas que não precisam de autenticação
-    const publicRoutes = ["/login"]
+    const publicRoutes = ["/login", "/sign-up"]
     const isPublicRoute = publicRoutes.includes(pathname)
 
     // Rotas que exigem permissão de administrador
