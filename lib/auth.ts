@@ -1,3 +1,4 @@
+// lib/auth.ts
 import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
@@ -33,7 +34,12 @@ export const authOptions: NextAuthOptions = {
                     })
 
                     if (!user) {
-                        return null
+                        throw new Error("Utilizador não encontrado.")
+                    }
+
+                    // Verificar se o utilizador está activo
+                    if (!user.isActive) {
+                        throw new Error("Conta desativada. Por favor, contacte o administrador.")
                     }
 
                     const passwordMatch = await bcrypt.compare(credentials.password, user.password)
@@ -65,6 +71,10 @@ export const authOptions: NextAuthOptions = {
                     }
                 } catch (error) {
                     console.error("Erro na autenticação:", error)
+                    // Propagar a mensagem de erro para o cliente
+                    if (error instanceof Error) {
+                        throw new Error(error.message)
+                    }
                     return null
                 }
             },

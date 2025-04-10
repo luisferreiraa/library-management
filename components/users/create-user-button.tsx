@@ -14,7 +14,7 @@ export function CreateUserButton() {
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Novo Utilizador
             </Button>
-            <CreateUserModal open={open} onOpenChange={setOpen} />
+            <CreateUserModal open={open} onOpenChange={setOpen} mode={"create"} />
         </>
     )
 }

@@ -6,6 +6,7 @@ import { uploadProfilePicture } from "@/lib/upload"
 import bcrypt from "bcryptjs"
 import { logAudit } from "@/lib/session"
 import { createRole, getRoleByName } from "@/lib/roles"
+import prisma from "@/lib/prisma"
 
 export async function uploadProfilePictureAction(formData: FormData): Promise<string> {
     try {
@@ -145,6 +146,46 @@ export async function deleteUsersAction(userIds: string[]): Promise<void> {
         revalidatePath("/users")
     } catch (error: any) {
         throw new Error("Erro ao excluir usuários: " + error.message)
+    }
+}
+
+export async function updateUserAction(userData: Partial<User> & { id: string }): Promise<User> {
+    try {
+        const { id, password, nifNumber, ...rest } = userData
+
+        // Preparar os dados para atualização
+        const updateData: any = {
+            ...rest,
+            // Garantir que nifNumber seja um número se fornecido
+            ...(nifNumber !== undefined ? { nifNumber: Number(nifNumber) } : {}),
+        }
+
+        // Se uma nova senha foi fornecida, hash
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10)
+            updateData.password = hashedPassword
+        }
+
+        // Atualizar o utilizador na base de dados
+        const updatedUser = await prisma.user.update({
+            where: { id },
+            data: updateData,
+            include: {
+                role: true,
+            },
+        })
+
+        // Revalidar o caminho para atualizar os dados
+        revalidatePath("/users")
+
+        // Retornar o utilizador atualizado
+        return {
+            ...updatedUser,
+            role: updatedUser,
+        } as unknown as User
+    } catch (error) {
+        console.error("Erro ao atualizar o utilizador:", error)
+        throw new Error("Falha ao atualizar o utilizador. Por favor, tente novamente.")
     }
 }
 

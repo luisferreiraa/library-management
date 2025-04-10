@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { signIn } from "next-auth/react"
+import { getSession, signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -49,7 +49,12 @@ export function LoginForm() {
             })
 
             if (result?.error) {
-                setError("Credenciais inválidas. Por favor, tente novamente.")
+                // Verificar se a mensagem de erro é sobre conta desativada
+                if (result.error.includes("Conta desativada")) {
+                    setError("Conta desativada. Por favor, contacte o administrador.")
+                } else {
+                    setError("Credenciais inválidas. Por favor, tente novamente.")
+                }
                 setIsLoading(false)
                 return
             }

@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { FormDescription } from "@/components/ui/form"
+
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { createUserAction, uploadProfilePictureAction } from "@/app/users/actions"
+import { createUserAction, updateUserAction, uploadProfilePictureAction } from "@/app/users/actions"
 import { useUsers } from "@/contexts/users-context"
 import { Button } from "@/components/ui/button"
 import {
@@ -21,32 +23,42 @@ import { toast } from "react-toastify"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ImageUpload } from "@/components/ui/image-upload"
+import { Switch } from "@/components/ui/switch"
+import type { User } from "@/lib/users"
+
+// Update the form schema to handle nifNumber correctly
 
 const formSchema = z.object({
     username: z.string().min(3, { message: "Nome de usuário deve ter pelo menos 3 caracteres" }),
     email: z.string().email({ message: "Email inválido" }),
-    password: z.string().min(8, { message: "Senha deve ter pelo menos 8 caracteres" }),
+    password: z.string().min(8, { message: "Senha deve ter pelo menos 8 caracteres" }).optional(),
     firstName: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }),
     lastName: z.string().min(2, { message: "Sobrenome deve ter pelo menos 2 caracteres" }),
     address: z.string().min(5, { message: "Endereço deve ter pelo menos 5 caracteres" }),
     phoneNumber: z.string().min(9, { message: "Número de telefone inválido" }),
     idNumber: z.string().min(1, { message: "Número de identificação é obrigatório" }),
-    nifNumber: z.string().refine((val) => !isNaN(Number(val)), { message: "NIF deve ser um número" }),
+    nifNumber: z.string().refine((val) => !val || !isNaN(Number(val)), {
+        message: "NIF deve ser um número",
+    }),
     profilePicture: z.string().optional(),
+    isActive: z.boolean().default(true),
 })
 
 type FormValues = z.infer<typeof formSchema>
 
-interface CreateUserModalProps {
+interface UserFormModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
+    user?: User | null // Usuário para edição (opcional)
+    mode: "create" | "edit"
 }
 
-export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
+export function CreateUserModal({ open, onOpenChange, user, mode = "create" }: UserFormModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [profileImageFile, setProfileImageFile] = useState<File | null>(null)
     const { addUser } = useUsers()
+    const isEditMode = mode === "edit"
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -61,8 +73,43 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
             idNumber: "",
             nifNumber: "",
             profilePicture: "",
+            isActive: true,
         },
     })
+
+    // Preencher o formulário quando estiver no modo de edição e o usuário for fornecido
+    useEffect(() => {
+        if (isEditMode && user) {
+            form.reset({
+                username: user.username,
+                email: user.email,
+                // Não incluir senha no modo de edição
+                firstName: user.firstName,
+                lastName: user.lastName,
+                address: user.address || "",
+                phoneNumber: user.phoneNumber || "",
+                idNumber: user.idNumber || "",
+                nifNumber: user.nifNumber ? String(user.nifNumber) : "",
+                profilePicture: user.profilePicture || "",
+                isActive: user.isActive,
+            })
+        } else {
+            // Resetar o formulário quando abrir no modo de criação
+            form.reset({
+                username: "",
+                email: "",
+                password: "",
+                firstName: "",
+                lastName: "",
+                address: "",
+                phoneNumber: "",
+                idNumber: "",
+                nifNumber: "",
+                profilePicture: "",
+                isActive: true,
+            })
+        }
+    }, [form, user, isEditMode, open])
 
     async function onSubmit(values: FormValues) {
         setError(null)
@@ -78,30 +125,83 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
                 values.profilePicture = imageUrl
             }
 
-            // Criar usuário via Server Action
-            const newUser = await createUserAction(values)
+            if (isEditMode && user) {
+                // Converter nifNumber para número e preparar dados para atualização
+                const userData: {
+                    id: string;
+                    username: string;
+                    email: string;
+                    firstName: string;
+                    lastName: string;
+                    address: string;
+                    phoneNumber: string;
+                    idNumber: string;
+                    nifNumber?: number;
+                    isActive: boolean;
+                    profilePicture?: string;
+                    password?: string;
+                } = {
+                    id: user.id,
+                    username: values.username,
+                    email: values.email,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    address: values.address,
+                    phoneNumber: values.phoneNumber,
+                    idNumber: values.idNumber,
+                    nifNumber: values.nifNumber ? Number(values.nifNumber) : undefined,
+                    isActive: values.isActive,
+                    profilePicture: values.profilePicture,
+                }
 
-            // Atualizar UI otimisticamente
-            addUser(newUser)
+                // Se a senha foi fornecida, incluí-la
+                if (values.password) {
+                    userData.password = values.password
+                }
 
-            // Fechar modal e mostrar toast
+                // Atualizar usuário existente
+                const updatedUser = await updateUserAction(userData)
+
+                // Atualizar UI otimisticamente
+                /* updateUser(updatedUser) */
+
+                toast.success("Utilizador atualizado com sucesso", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                })
+            } else {
+                // Criar novo usuário
+                const newUser = await createUserAction({
+                    ...values,
+                    nifNumber: values.nifNumber ? String(Number(values.nifNumber)) : "",
+                    password: values.password || "", // Garantir que password não é undefined
+                })
+
+                // Atualizar UI otimisticamente
+                addUser(newUser)
+
+                toast.success("Utilizador adicionado com sucesso", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                })
+            }
+
+            // Fechar modal e resetar formulário
             onOpenChange(false)
             form.reset()
             setProfileImageFile(null)
-
-            toast.success("Utilizador adicionado com sucesso", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-            })
-
         } catch (error: any) {
-            setError(error.message || "Ocorreu um erro ao criar o usuário")
+            setError(error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} o usuário`)
 
-            toast.success("Erro ao adicionar utilizador", {
+            toast.error(`Erro ao ${isEditMode ? "atualizar" : "adicionar"} utilizador`, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -109,7 +209,6 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
                 pauseOnHover: true,
                 draggable: true,
             })
-
         } finally {
             setIsSubmitting(false)
         }
@@ -119,8 +218,12 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
-                    <DialogTitle>Criar Novo Usuário</DialogTitle>
-                    <DialogDescription>Preencha os dados do usuário e clique em salvar quando terminar.</DialogDescription>
+                    <DialogTitle>{isEditMode ? "Editar Usuário" : "Criar Novo Usuário"}</DialogTitle>
+                    <DialogDescription>
+                        {isEditMode
+                            ? "Atualize os dados do usuário e clique em salvar quando terminar."
+                            : "Preencha os dados do usuário e clique em salvar quando terminar."}
+                    </DialogDescription>
                 </DialogHeader>
 
                 {error && (
@@ -203,19 +306,39 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
                                     />
                                 </div>
 
-                                <FormField
-                                    control={form.control}
-                                    name="password"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Senha</FormLabel>
-                                            <FormControl>
-                                                <Input type="password" placeholder="********" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                {!isEditMode && (
+                                    <FormField
+                                        control={form.control}
+                                        name="password"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Senha</FormLabel>
+                                                <FormControl>
+                                                    <Input type="password" placeholder="********" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                )}
+
+                                {isEditMode && (
+                                    <FormField
+                                        control={form.control}
+                                        name="isActive"
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                                <div className="space-y-0.5">
+                                                    <FormLabel>Status da Conta</FormLabel>
+                                                    <FormDescription>{field.value ? "Conta ativa" : "Conta inativa"}</FormDescription>
+                                                </div>
+                                                <FormControl>
+                                                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                )}
                             </TabsContent>
 
                             <TabsContent value="personal" className="space-y-4 mt-4">
@@ -323,4 +446,3 @@ export function CreateUserModal({ open, onOpenChange }: CreateUserModalProps) {
         </Dialog>
     )
 }
-

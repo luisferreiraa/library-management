@@ -2,7 +2,7 @@
 
 import { format } from "date-fns"
 import Link from "next/link"
-import { Trash2, ExternalLink, Check, X } from "lucide-react"
+import { Trash2, ExternalLink, Check, X, Pencil } from "lucide-react"
 import { useUsers } from "@/contexts/users-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -24,6 +24,8 @@ import { toast } from "react-toastify"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Pagination } from "../ui/pagination"
+import { User } from "@/lib/users"
+import { CreateUserModal } from "./create-user-modal"
 
 export function UsersTable() {
     const {
@@ -43,6 +45,9 @@ export function UsersTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isUserModalOpen, setIsUserModalOpen] = useState(false)
+    const [selectedUser, setSelectedUser] = useState<User | null>(null)
+    const [modalMode, setModalMode] = useState<"create" | "edit">("create")
 
     // Verificar se todos os usuários estão selecionados
     const allSelected = paginatedUsers.length > 0 && paginatedUsers.every((user) => selectedUserIds.includes(user.id))
@@ -109,6 +114,13 @@ export function UsersTable() {
         }
     }
 
+    // Função para abrir o modal de edição
+    const handleEditUser = (user: User) => {
+        setSelectedUser(user)
+        setModalMode("edit")
+        setIsUserModalOpen(true)
+    }
+
     return (
         <div className="space-y-4">
             {hasSelection && (
@@ -154,7 +166,7 @@ export function UsersTable() {
                                     aria-label="Selecionar todos os usuários"
                                 />
                             </TableHead>
-                            <TableHead>Usuário</TableHead>
+                            <TableHead>Utilizador</TableHead>
                             <TableHead>Email</TableHead>
                             <TableHead>Telefone</TableHead>
                             <TableHead>Status</TableHead>
@@ -216,14 +228,18 @@ export function UsersTable() {
                                     </TableCell>
                                     <TableCell>{formatDate(user.lastLogin)}</TableCell>
                                     <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/users/${user.id}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">
-                                                    Ver detalhes de {user.firstName} {user.lastName}
-                                                </span>
-                                            </Link>
-                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditUser(user)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {user.username}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/users/${user.id}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {user.username}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -240,6 +256,13 @@ export function UsersTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+
+            {/* Modal de edição de utilizador */}
+            <CreateUserModal
+                open={isUserModalOpen}
+                onOpenChange={setIsUserModalOpen}
+                user={selectedUser}
+                mode={modalMode} />
         </div>
     )
 }
