@@ -118,6 +118,13 @@ export async function updateUserLastLogin(userId: string) {
     }
 }
 
+export async function updateUserIsActive(userId: string, isActive: boolean) {
+    return prisma.user.update({
+        where: { id: userId },
+        data: { isActive },
+    })
+}
+
 export async function deleteUser(id: string): Promise<User> {
     return prisma.user.delete({
         where: { id },

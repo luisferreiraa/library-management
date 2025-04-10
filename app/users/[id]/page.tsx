@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { UserActionButtons } from "@/components/users/user-action-buttons"
 
 interface UserPageProps {
     params: {
@@ -127,13 +128,7 @@ export default async function UserPage({ params }: UserPageProps) {
                             <div className="space-y-4">
                                 <h3 className="text-lg font-medium">Ações</h3>
                                 <div className="flex flex-wrap gap-2">
-                                    <Button variant="outline">Editar Utilizador</Button>
-                                    <Button variant="outline">Redefinir Senha</Button>
-                                    {user.isActive ? (
-                                        <Button variant="destructive">Desativar Conta</Button>
-                                    ) : (
-                                        <Button variant="default">Ativar Conta</Button>
-                                    )}
+                                    <UserActionButtons user={user} />
                                 </div>
                             </div>
                         </CardContent>

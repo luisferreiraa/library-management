@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { createUser, deleteUsers, registerUser, User } from "@/lib/users"
+import { createUser, deleteUsers, registerUser, updateUserIsActive, User } from "@/lib/users"
 import { uploadProfilePicture } from "@/lib/upload"
 import bcrypt from "bcryptjs"
 import { logAudit } from "@/lib/session"
@@ -187,5 +187,19 @@ export async function updateUserAction(userData: Partial<User> & { id: string })
         console.error("Erro ao atualizar o utilizador:", error)
         throw new Error("Falha ao atualizar o utilizador. Por favor, tente novamente.")
     }
+}
+
+export async function updateUserIsActiveAction(userId: string, isActive: boolean) {
+    try {
+        await updateUserIsActive(userId, isActive)
+
+        revalidatePath(`/users/${userId}`)
+
+        return { success: true }
+    } catch (error) {
+        console.error("Erro ao atualizar status do utilizador:", error)
+        throw new Error("Falha ao atualizar o status do utilizador. Por favor, tente novamente.")
+    }
+
 }
 
