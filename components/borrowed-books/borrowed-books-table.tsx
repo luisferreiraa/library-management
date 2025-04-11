@@ -23,7 +23,26 @@ import { toast } from "react-toastify"
 import { useBorrowedBooks } from "@/contexts/borrowed-books-context"
 import { Pagination } from "../ui/pagination"
 
-export function BorrowedBooksTable() {
+// Definir colunas que podem ser exibidas
+export type BorrowedBooksColumn = "barcode" | "user" | "borrowedAt" | "dueDate" | "returnDate" | "fine" | "status"
+
+interface BorrowedBooksTableProps {
+    // Definir quais as colunas para incluir
+    columns?: BorrowedBooksColumn[]
+    // Mostrar checkboxes e ações?
+    showSelection?: boolean
+    // Mostrar paginação?
+    showPagination?: boolean
+    // Título opcional para a tabela
+    title?: string
+}
+
+export function BorrowedBooksTable({
+    columns = ["barcode", "user", "borrowedAt", "dueDate", "returnDate", "fine", "status"],
+    showSelection = true,
+    showPagination = true,
+    title,
+}: BorrowedBooksTableProps) {
     const {
         paginatedBorrowedBooks,
         filteredBorrowedBooks,
@@ -105,7 +124,9 @@ export function BorrowedBooksTable() {
 
     return (
         <div className="space-y-4">
-            {hasSelection && (
+            {title && <h3 className="text-lg font-medium">{title}</h3>}
+
+            {showSelection && hasSelection && (
                 <div className="flex justify-end">
                     <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                         <AlertDialogTrigger asChild>
@@ -141,27 +162,29 @@ export function BorrowedBooksTable() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[50px]">
-                                <IndeterminateCheckbox
-                                    checked={allSelected}
-                                    indeterminate={someSelected}
-                                    onCheckedChange={toggleAllBorrowedBooks}
-                                    aria-label="Selecionar todos os empréstimos"
-                                />
-                            </TableHead>
-                            <TableHead>Código de Barras</TableHead>
-                            <TableHead>Utilizador</TableHead>
-                            <TableHead>Data de Empréstimo</TableHead>
-                            <TableHead>Prazo p/ Devolução</TableHead>
-                            <TableHead>Data de Devolução</TableHead>
-                            <TableHead>Multa</TableHead>
-                            <TableHead>Estado</TableHead>
+                            {showSelection && (
+                                <TableHead className="w-[50px]">
+                                    <IndeterminateCheckbox
+                                        checked={allSelected}
+                                        indeterminate={someSelected}
+                                        onCheckedChange={toggleAllBorrowedBooks}
+                                        aria-label="Selecionar todos os empréstimos"
+                                    />
+                                </TableHead>
+                            )}
+                            {columns.includes("barcode") && <TableHead>Código de Barras</TableHead>}
+                            {columns.includes("user") && <TableHead>Utilizador</TableHead>}
+                            {columns.includes("borrowedAt") && <TableHead>Data de Empréstimo</TableHead>}
+                            {columns.includes("dueDate") && <TableHead>Prazo p/ Devolução</TableHead>}
+                            {columns.includes("returnDate") && <TableHead>Data de Devolução</TableHead>}
+                            {columns.includes("fine") && <TableHead>Multa</TableHead>}
+                            {columns.includes("status") && <TableHead>Estado</TableHead>}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {paginatedBorrowedBooks.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={8} className="h-24 text-center">
+                                <TableCell colSpan={showSelection ? columns.length + 1 : columns.length} className="h-24 text-center">
                                     Nenhum empréstimo encontrado.
                                 </TableCell>
                             </TableRow>
@@ -169,55 +192,73 @@ export function BorrowedBooksTable() {
                             paginatedBorrowedBooks.map((borrowedBook) => (
                                 <TableRow
                                     key={borrowedBook.id}
-                                    className={selectedBorrowedBookIds.includes(borrowedBook.id) ? "bg-muted/50" : ""}
+                                    className={showSelection && selectedBorrowedBookIds.includes(borrowedBook.id) ? "bg-muted/50" : ""}
                                 >
-                                    <TableCell>
-                                        <IndeterminateCheckbox
-                                            checked={selectedBorrowedBookIds.includes(borrowedBook.id)}
-                                            onCheckedChange={() => toggleBorrowedBookSelection(borrowedBook.id)}
-                                            aria-label={`Selecionar ${borrowedBook.id}`}
-                                        />
-                                    </TableCell>
-                                    <TableCell className="font-medium">
-                                        {borrowedBook.barcode ? borrowedBook.barcode.code : "Código não disponível"}
-                                    </TableCell>
-                                    <TableCell>
-                                        {borrowedBook.user
-                                            ? `${borrowedBook.user.firstName} ${borrowedBook.user.lastName}`
-                                            : "Utilizador não disponível"}
-                                    </TableCell>
-                                    <TableCell>{borrowedBook.borrowedAt ? formatDate(borrowedBook.borrowedAt) : "-"}</TableCell>
-                                    <TableCell>{borrowedBook.dueDate ? formatDate(borrowedBook.dueDate) : "-"}</TableCell>
-                                    <TableCell>{borrowedBook.returnDate ? formatDate(borrowedBook.returnDate) : "-"}</TableCell>
-                                    <TableCell>{borrowedBook.isActive ? "-" : `${borrowedBook.fineValue || 0} €`}</TableCell>
-                                    <TableCell>
-                                        {borrowedBook.isActive ? (
-                                            <Badge variant="pending" className="flex items-center gap-1 w-fit">
-                                                <X className="h-3 w-3" />
-                                                A decorrer
-                                            </Badge>
-                                        ) : (
-                                            <Badge variant="success" className="flex items-center gap-1 w-fit">
-                                                <Check className="h-3 w-3" />
-                                                Devolvido
-                                            </Badge>
-                                        )}
-                                    </TableCell>
+                                    {showSelection && (
+                                        <TableCell>
+                                            <IndeterminateCheckbox
+                                                checked={selectedBorrowedBookIds.includes(borrowedBook.id)}
+                                                onCheckedChange={() => toggleBorrowedBookSelection(borrowedBook.id)}
+                                                aria-label={`Selecionar ${borrowedBook.id}`}
+                                            />
+                                        </TableCell>
+                                    )}
+                                    {columns.includes("barcode") && (
+                                        <TableCell className="font-medium">
+                                            {borrowedBook.barcode ? borrowedBook.barcode.code : "Código não disponível"}
+                                        </TableCell>
+                                    )}
+                                    {columns.includes("user") && (
+                                        <TableCell>
+                                            {borrowedBook.user
+                                                ? `${borrowedBook.user.firstName} ${borrowedBook.user.lastName}`
+                                                : "Utilizador não disponível"}
+                                        </TableCell>
+                                    )}
+                                    {columns.includes("borrowedAt") && (
+                                        <TableCell>{borrowedBook.borrowedAt ? formatDate(borrowedBook.borrowedAt) : "-"}</TableCell>
+                                    )}
+                                    {columns.includes("dueDate") && (
+                                        <TableCell>{borrowedBook.dueDate ? formatDate(borrowedBook.dueDate) : "-"}</TableCell>
+                                    )}
+                                    {columns.includes("returnDate") && (
+                                        <TableCell>{borrowedBook.returnDate ? formatDate(borrowedBook.returnDate) : "-"}</TableCell>
+                                    )}
+                                    {columns.includes("fine") && (
+                                        <TableCell>{borrowedBook.isActive ? "-" : `${borrowedBook.fineValue || 0} €`}</TableCell>
+                                    )}
+                                    {columns.includes("status") && (
+                                        <TableCell>
+                                            {borrowedBook.isActive ? (
+                                                <Badge variant="pending" className="flex items-center gap-1 w-fit">
+                                                    <X className="h-3 w-3" />A decorrer
+                                                </Badge>
+                                            ) : (
+                                                <Badge variant="success" className="flex items-center gap-1 w-fit">
+                                                    <Check className="h-3 w-3" />
+                                                    Devolvido
+                                                </Badge>
+                                            )}
+                                        </TableCell>
+                                    )}
                                 </TableRow>
                             ))
                         )}
                     </TableBody>
                 </Table>
             </div>
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-                totalItems={filteredBorrowedBooks.length}
-                pageSize={pageSize}
-                onPageSizeChange={setPageSize}
-                className="mt-4"
-            />
+
+            {showPagination && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    totalItems={filteredBorrowedBooks.length}
+                    pageSize={pageSize}
+                    onPageSizeChange={setPageSize}
+                    className="mt-4"
+                />
+            )}
         </div>
     )
 }

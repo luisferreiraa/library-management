@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator"
 import { UserActionButtons } from "@/components/users/user-action-buttons"
 import { TabsContent } from "@radix-ui/react-tabs"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getBorrowedBooksByUserId } from "@/lib/borrowed-books"
+import { getBorrowedBooksByUserId, getTotalFineValueByUserId } from "@/lib/borrowed-books"
 import { BorrowedBooksTable } from "@/components/borrowed-books/borrowed-books-table"
 import { BorrowedBooksProvider } from "@/contexts/borrowed-books-context"
 
@@ -25,6 +25,7 @@ export default async function UserPage({ params }: UserPageProps) {
     const { id } = params
     const user = await getUserById(id)
     const borrowedBooks = await getBorrowedBooksByUserId(user!.id)
+    const totalFineValue = await getTotalFineValueByUserId(user!.id)
 
     if (!user) {
         notFound()
@@ -140,7 +141,7 @@ export default async function UserPage({ params }: UserPageProps) {
                         </CardContent>
                     </Card>
                     <div className="md:col-span-2 mt-5">
-                        <Tabs defaultValue="details" className="w-full">
+                        <Tabs defaultValue="borrowedBooks" className="w-full">
                             <TabsList className="grid w-full grid-cols-3">
                                 <TabsTrigger value="borrowedBooks">Empréstimos</TabsTrigger>
                                 <TabsTrigger value="finesAccount">Conta-corrente</TabsTrigger>
@@ -150,9 +151,21 @@ export default async function UserPage({ params }: UserPageProps) {
                             <TabsContent value="borrowedBooks" className="space-y-6 mt-6">
                                 <div>
                                     <BorrowedBooksProvider initialBorrowedBooks={borrowedBooks}>
-                                        <BorrowedBooksTable />
+                                        <BorrowedBooksTable
+                                            columns={["barcode", "dueDate", "fine", "status"]}
+                                            showSelection={true}
+                                            title="Empréstimos do Utilizador"
+                                        />
                                     </BorrowedBooksProvider>
                                 </div>
+                            </TabsContent>
+
+                            <TabsContent value="finesAccount" className="space-y-6 mt-6">
+                                <div>
+                                    <h1>Valor Total de Multas: {totalFineValue}€</h1>
+                                </div>
+                                <div>Pago:</div>
+                                <div>Por pagar:</div>
                             </TabsContent>
                         </Tabs>
                     </div>
