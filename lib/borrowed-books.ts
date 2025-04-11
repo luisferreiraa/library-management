@@ -31,6 +31,17 @@ export async function getBorrowedBooks(): Promise<BorrowedBookWithRelations[]> {
     });
 }
 
+export async function getBorrowedBooksByUserId(userId: string): Promise<BorrowedBookWithRelations[]> {
+    return prisma.borrowedBook.findMany({
+        where: { userId },
+        orderBy: { borrowedAt: 'desc' },
+        include: {
+            barcode: true,
+            user: true,
+        }
+    })
+}
+
 export async function createBorrowedBook(
     barcodeId: string,
     userId: string,

@@ -15,7 +15,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "react-toastify"
@@ -34,6 +34,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Badge } from "@/components/ui/badge"
 import { X } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { Switch } from "../ui/switch"
 
 // Definir UpdateBookInput
 interface UpdateBookInput {
@@ -502,23 +503,14 @@ export function CreateBookModal({ open, onOpenChange, book = null, mode = "creat
                                                 control={form.control}
                                                 name="isActive"
                                                 render={({ field }) => (
-                                                    <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
-                                                        <FormControl>
-                                                            <input
-                                                                type="checkbox"
-                                                                className="h-4 w-4"
-                                                                checked={field.value}
-                                                                onChange={field.onChange}
-                                                            />
-                                                        </FormControl>
-                                                        <div className="space-y-1 leading-none">
-                                                            <FormLabel>Livro Ativo</FormLabel>
-                                                            <p className="text-sm text-muted-foreground">
-                                                                {field.value
-                                                                    ? "O livro está ativo e disponível no sistema"
-                                                                    : "O livro está inativo e não aparecerá nas buscas"}
-                                                            </p>
+                                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                                        <div className="space-y-0.5">
+                                                            <FormLabel>Status do Livro</FormLabel>
+                                                            <FormDescription>{field.value ? "Livro ativo" : "Livro inativo"}</FormDescription>
                                                         </div>
+                                                        <FormControl>
+                                                            <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                                        </FormControl>
                                                     </FormItem>
                                                 )}
                                             />

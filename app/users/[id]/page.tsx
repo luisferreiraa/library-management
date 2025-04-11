@@ -9,6 +9,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { UserActionButtons } from "@/components/users/user-action-buttons"
+import { TabsContent } from "@radix-ui/react-tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getBorrowedBooksByUserId } from "@/lib/borrowed-books"
+import { BorrowedBooksTable } from "@/components/borrowed-books/borrowed-books-table"
+import { BorrowedBooksProvider } from "@/contexts/borrowed-books-context"
 
 interface UserPageProps {
     params: {
@@ -19,6 +24,7 @@ interface UserPageProps {
 export default async function UserPage({ params }: UserPageProps) {
     const { id } = params
     const user = await getUserById(id)
+    const borrowedBooks = await getBorrowedBooksByUserId(user!.id)
 
     if (!user) {
         notFound()
@@ -133,9 +139,25 @@ export default async function UserPage({ params }: UserPageProps) {
                             </div>
                         </CardContent>
                     </Card>
+                    <div className="md:col-span-2 mt-5">
+                        <Tabs defaultValue="details" className="w-full">
+                            <TabsList className="grid w-full grid-cols-3">
+                                <TabsTrigger value="borrowedBooks">Empréstimos</TabsTrigger>
+                                <TabsTrigger value="finesAccount">Conta-corrente</TabsTrigger>
+                                <TabsTrigger value="reviews">Avaliações</TabsTrigger>
+                            </TabsList>
+
+                            <TabsContent value="borrowedBooks" className="space-y-6 mt-6">
+                                <div>
+                                    <BorrowedBooksProvider initialBorrowedBooks={borrowedBooks}>
+                                        <BorrowedBooksTable />
+                                    </BorrowedBooksProvider>
+                                </div>
+                            </TabsContent>
+                        </Tabs>
+                    </div>
                 </div>
             </div>
         </div>
     )
 }
-

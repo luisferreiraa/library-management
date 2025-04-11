@@ -150,6 +150,7 @@ model BorrowedBook {
   dueDate    DateTime
   returnDate DateTime?
   fineValue  Float
+  isPaid     Boolean   @default(false)
   isActive   Boolean   @default(true)
 }
 
