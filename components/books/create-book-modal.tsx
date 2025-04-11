@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { createBookAction, uploadCoverImageAction } from "@/app/books/actions"
+import { createBookAction, updateBookAction, uploadCoverImageAction } from "@/app/books/actions"
 import { useBooks } from "@/contexts/books-context"
 import { Button } from "@/components/ui/button"
 import {
@@ -28,11 +28,32 @@ import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { getActiveAuthors, getAuthors } from "@/lib/authors"
-import { getFormats, getLanguages, getPublishers, getCategories, getTranslators, getBookStatuses } from "@/lib/books"
+import { getFormats, getLanguages, getPublishers, getCategories, getTranslators, getBookStatuses, Book, BookWithRelations } from "@/lib/books"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Badge } from "@/components/ui/badge"
 import { X } from "lucide-react"
+import { useRouter } from "next/navigation"
+
+// Definir UpdateBookInput
+interface UpdateBookInput {
+    id: string
+    title: string
+    isbn: string
+    publishingDate: Date
+    edition: number
+    pageCount: number
+    summary?: string | null
+    coverImage?: string | null
+    formatId: string
+    languageId: string
+    publisherId: string
+    authorId: string
+    translatorId?: string | null
+    bookStatusId: string
+    categoryIds?: string[]
+    isActive: boolean
+}
 
 const formSchema = z.object({
     title: z.string().min(2, { message: "Título deve ter pelo menos 2 caracteres" }),
@@ -49,6 +70,7 @@ const formSchema = z.object({
     translatorId: z.string().optional(),
     bookStatusId: z.string().min(1, { message: "Status é obrigatório" }),
     categoryIds: z.array(z.string()).min(1, { message: "Selecione pelo menos uma categoria" }),
+    isActive: z.boolean().default(true)
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -56,13 +78,18 @@ type FormValues = z.infer<typeof formSchema>
 interface CreateBookModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
+    book?: BookWithRelations | null
+    mode?: "create" | "edit"
+    onSuccess?: () => void
 }
 
-export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
+export function CreateBookModal({ open, onOpenChange, book = null, mode = "create", onSuccess }: CreateBookModalProps) {
+    const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [coverImageFile, setCoverImageFile] = useState<File | null>(null)
     const { addBook } = useBooks()
+    const isEditMode = mode === "edit"
 
     // Estados para os dados relacionados
     const [authors, setAuthors] = useState<{ id: string; name: string }[]>([])
@@ -93,6 +120,7 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
             translatorId: "",
             bookStatusId: "",
             categoryIds: [],
+            isActive: true,
         },
     })
 
@@ -145,6 +173,58 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
         }
     }, [open])
 
+    // Preencher o formulário quando estiver no modo de edição e o livro for fornecido
+    useEffect(() => {
+        if (isEditMode && book && open) {
+            // Preencher as categorias selecionadas
+            if (book.categories && book.categories.length > 0) {
+                const bookCategories = book.categories.map((cat) => ({
+                    id: cat.id,
+                    name: cat.name,
+                }))
+                setSelectedCategories(bookCategories)
+            }
+
+            // Preencher o formulário com os dados do livro
+            form.reset({
+                title: book.title,
+                isbn: book.isbn,
+                publishingDate: new Date(book.publishingDate),
+                edition: book.edition,
+                pageCount: book.pageCount,
+                summary: book.summary || "",
+                coverImage: book.coverImage || "",
+                formatId: book.formatId,
+                languageId: book.languageId,
+                publisherId: book.publisherId,
+                authorId: book.authorId,
+                translatorId: book.translatorId || "",
+                bookStatusId: book.bookStatusId,
+                categoryIds: book.categories?.map((cat) => cat.id) || [],
+                isActive: book.isActive,
+            })
+        } else if (!isEditMode && open) {
+            // Resetar o formulário quando abrir no modo de criação
+            form.reset({
+                title: "",
+                isbn: "",
+                edition: 1,
+                pageCount: 0,
+                summary: "",
+                coverImage: "",
+                formatId: "",
+                languageId: "",
+                publisherId: "",
+                authorId: "",
+                translatorId: "",
+                bookStatusId: "",
+                categoryIds: [],
+                isActive: true,
+            })
+            setSelectedCategories([])
+        }
+    }, [form, book, isEditMode, open])
+
     // Função para adicionar uma categoria
     const addCategory = (category: { id: string; name: string }) => {
         if (!selectedCategories.some((c) => c.id === category.id)) {
@@ -181,31 +261,78 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                 values.coverImage = imageUrl
             }
 
-            // Criar livro via Server Action
-            const newBook = await createBookAction(values)
+            if (isEditMode && book) {
+                // Preparar os dados para atualização com o tipo correto
+                const updateData: UpdateBookInput = {
+                    id: book.id,
+                    title: values.title,
+                    isbn: values.isbn,
+                    publishingDate: values.publishingDate,
+                    edition: values.edition,
+                    pageCount: values.pageCount,
+                    summary: values.summary || null,
+                    coverImage: values.coverImage || null,
+                    formatId: values.formatId,
+                    languageId: values.languageId,
+                    publisherId: values.publisherId,
+                    authorId: values.authorId,
+                    translatorId: values.translatorId || null,
+                    bookStatusId: values.bookStatusId,
+                    categoryIds: values.categoryIds,
+                    isActive: values.isActive,
+                }
 
-            // Atualizar UI otimisticamente
-            addBook(newBook)
+                // Atualizar livro existente
+                const updatedBook = await updateBookAction(updateData)
 
-            // Fechar modal e mostrar toast
+                toast.success("Livro atualizado com sucesso", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                })
+
+                // Chamar o callback de sucesso se fornecido
+                if (onSuccess) {
+                    onSuccess()
+                }
+
+                // Atualizar a página se estivermos na página de detalhes do livro
+                router.refresh()
+            } else {
+                // Criar livro via Server Action
+                const newBook = await createBookAction(values)
+
+                // Atualizar UI otimisticamente
+                addBook(newBook)
+
+                toast.success("Livro adicionado com sucesso", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                })
+
+                // Chamar o callback de sucesso se fornecido
+                if (onSuccess) {
+                    onSuccess()
+                }
+            }
+
+            // Fechar modal e resetar formulário
             onOpenChange(false)
             form.reset()
             setCoverImageFile(null)
             setSelectedCategories([])
-
-            toast.success("Livro adicionado com sucesso", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-            })
-
         } catch (error: any) {
-            setError(error.message || "Ocorreu um erro ao criar o livro")
+            console.error("Erro ao processar livro:", error)
+            setError(error.message || `Ocorreu um erro ao ${isEditMode ? "atualizar" : "criar"} o livro`)
 
-            toast.error("Erro ao adicionar livro", {
+            toast.error(`Erro ao ${isEditMode ? "atualizar" : "adicionar"} livro`, {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -213,7 +340,6 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                 pauseOnHover: true,
                 draggable: true,
             })
-
         } finally {
             setIsSubmitting(false)
         }
@@ -223,8 +349,12 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[800px]">
                 <DialogHeader>
-                    <DialogTitle>Adicionar Novo Livro</DialogTitle>
-                    <DialogDescription>Preencha os dados do livro e clique em salvar quando terminar.</DialogDescription>
+                    <DialogTitle>{isEditMode ? "Editar Livro" : "Adicionar Novo Livro"}</DialogTitle>
+                    <DialogDescription>
+                        {isEditMode
+                            ? "Atualize os dados do livro e clique em salvar quando terminar."
+                            : "Preencha os dados do livro e clique em salvar quando terminar."}
+                    </DialogDescription>
                 </DialogHeader>
 
                 {error && (
@@ -366,6 +496,33 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                                                 </FormItem>
                                             )}
                                         />
+
+                                        {isEditMode && (
+                                            <FormField
+                                                control={form.control}
+                                                name="isActive"
+                                                render={({ field }) => (
+                                                    <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+                                                        <FormControl>
+                                                            <input
+                                                                type="checkbox"
+                                                                className="h-4 w-4"
+                                                                checked={field.value}
+                                                                onChange={field.onChange}
+                                                            />
+                                                        </FormControl>
+                                                        <div className="space-y-1 leading-none">
+                                                            <FormLabel>Livro Ativo</FormLabel>
+                                                            <p className="text-sm text-muted-foreground">
+                                                                {field.value
+                                                                    ? "O livro está ativo e disponível no sistema"
+                                                                    : "O livro está inativo e não aparecerá nas buscas"}
+                                                            </p>
+                                                        </div>
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </TabsContent>
@@ -378,7 +535,7 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Autor</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <Select onValueChange={field.onChange} value={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Selecione um autor" />
@@ -403,7 +560,7 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Editora</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <Select onValueChange={field.onChange} value={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Selecione uma editora" />
@@ -428,7 +585,7 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Formato</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <Select onValueChange={field.onChange} value={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Selecione um formato" />
@@ -453,7 +610,7 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Idioma</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <Select onValueChange={field.onChange} value={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Selecione um idioma" />
@@ -478,7 +635,7 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Tradutor (opcional)</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <Select onValueChange={field.onChange} value={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Selecione um tradutor" />
@@ -504,7 +661,7 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Status</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <Select onValueChange={field.onChange} value={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
                                                             <SelectValue placeholder="Selecione um status" />
@@ -569,12 +726,9 @@ export function CreateBookModal({ open, onOpenChange }: CreateBookModalProps) {
                                                                             <CommandItem
                                                                                 key={category.id}
                                                                                 onSelect={() => {
-                                                                                    console.log("Selecionado:", category);
-                                                                                    addCategory(category);
-                                                                                    setCommandOpen(false);
+                                                                                    addCategory(category)
+                                                                                    setCommandOpen(false)
                                                                                 }}
-                                                                                disabled={false} // <-- Certifique-se de que não está `true`
-                                                                                tabIndex={0} // Garante que pode receber foco
                                                                             >
                                                                                 {category.name}
                                                                             </CommandItem>

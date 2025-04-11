@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CreateBarcodeButton } from "@/components/barcodes/create-barcode-button"
 import { ReviewsTabContent } from "@/components/reviews/ReviewsTabContent"
+import { BookActionButtons } from "@/components/books/book-action-buttons"
 
 interface BookPageProps {
     params: {
@@ -64,12 +65,7 @@ export default async function BookPage({ params }: BookPageProps) {
                         )}
 
                         <div className="flex flex-col gap-2 w-full max-w-[300px]">
-                            <Button variant="outline" className="w-full">
-                                Editar Livro
-                            </Button>
-                            <Button variant="destructive" className="w-full">
-                                Excluir Livro
-                            </Button>
+                            <BookActionButtons book={book} />
                         </div>
                     </div>
                 </div>

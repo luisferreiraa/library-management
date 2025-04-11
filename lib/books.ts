@@ -240,6 +240,13 @@ export async function updateBook(
     })
 }
 
+export async function updateBookIsActive(bookId: string, isActive: boolean) {
+    return prisma.book.update({
+        where: { id: bookId },
+        data: { isActive },
+    })
+}
+
 export async function deleteBook(id: string): Promise<Book> {
     return prisma.book.delete({
         where: { id },

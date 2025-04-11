@@ -3,7 +3,7 @@
 import { format } from "date-fns"
 import Link from "next/link"
 import Image from "next/image"
-import { Trash2, ExternalLink, BookIcon, Check, X } from "lucide-react"
+import { Trash2, ExternalLink, BookIcon, Check, X, Pencil } from "lucide-react"
 import { useBooks } from "@/contexts/books-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
@@ -24,6 +24,9 @@ import { useState } from "react"
 import { deleteBooksAction } from "@/app/books/actions"
 import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
+import { CreateBookModal } from "./create-book-modal"
+
+import type { Book, BookWithRelations } from "@/lib/books"
 
 export function BooksTable() {
     const {
@@ -43,6 +46,8 @@ export function BooksTable() {
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [selectedBook, setSelectedBook] = useState<BookWithRelations | null>(null)
 
     // Verificar se todos os livros estão selecionados
     const allSelected = paginatedBooks.length > 0 && paginatedBooks.every((book) => selectedBookIds.includes(book.id))
@@ -102,6 +107,12 @@ export function BooksTable() {
         } finally {
             setIsDeleting(false)
         }
+    }
+
+    // Função para abrir o modal de edição
+    const handleEditBook = (book: BookWithRelations) => {
+        setSelectedBook(book)
+        setIsEditModalOpen(true)
     }
 
     return (
@@ -231,12 +242,18 @@ export function BooksTable() {
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <Button variant="ghost" size="icon" asChild>
-                                            <Link href={`/books/${book.id}`}>
-                                                <ExternalLink className="h-4 w-4" />
-                                                <span className="sr-only">Ver detalhes de {book.title}</span>
-                                            </Link>
-                                        </Button>
+                                        <div className="flex items-center gap-2">
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditBook(book)}>
+                                                <Pencil className="h-4 w-4" />
+                                                <span className="sr-only">Editar {book.title}</span>
+                                            </Button>
+                                            <Button variant="ghost" size="icon" asChild>
+                                                <Link href={`/books/${book.id}`}>
+                                                    <ExternalLink className="h-4 w-4" />
+                                                    <span className="sr-only">Ver detalhes de {book.title}</span>
+                                                </Link>
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -253,6 +270,9 @@ export function BooksTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
+
+            {/* Modal de edição de livro */}
+            <CreateBookModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} book={selectedBook} mode="edit" />
         </div>
     )
 }
