@@ -81,6 +81,13 @@ export async function updateUser(
     })
 }
 
+export async function updateUserPassword(userId: string, newPassword: string) {
+    return prisma.user.update({
+        where: { id: userId },
+        data: { password: newPassword },
+    })
+}
+
 export async function updateUserLastLogin(userId: string) {
     if (!userId) {
         console.log("ID do usuário não fornecido")

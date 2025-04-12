@@ -221,8 +221,8 @@ export function CreateUserModal({ open, onOpenChange, user, mode = "create" }: U
                     <DialogTitle>{isEditMode ? "Editar Usuário" : "Criar Novo Usuário"}</DialogTitle>
                     <DialogDescription>
                         {isEditMode
-                            ? "Atualize os dados do usuário e clique em salvar quando terminar."
-                            : "Preencha os dados do usuário e clique em salvar quando terminar."}
+                            ? "Atualize os dados do utilizador e clique em salvar quando terminar."
+                            : "Preencha os dados do utilizador e clique em salvar quando terminar."}
                     </DialogDescription>
                 </DialogHeader>
 

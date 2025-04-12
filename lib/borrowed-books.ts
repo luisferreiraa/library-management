@@ -51,6 +51,18 @@ export async function getTotalFineValueByUserId(userId: string) {
     return result._sum.fineValue ?? 0
 }
 
+export async function getPaidFinesTotalByUserId(userId: string) {
+    const result = await prisma.borrowedBook.aggregate({
+        where: {
+            userId,
+            isPaid: true,
+        },
+        _sum: { fineValue: true },
+    })
+
+    return result._sum.fineValue ?? 0
+}
+
 export async function createBorrowedBook(
     barcodeId: string,
     userId: string,

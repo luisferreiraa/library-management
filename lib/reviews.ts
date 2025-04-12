@@ -15,6 +15,15 @@ export async function getReviewById(id: string) {
     })
 }
 
+export async function getReviewsByUserId(userId: string) {
+    return await prisma.review.findMany({
+        where: { userId },
+        include: {
+            user: true,
+        },
+    })
+}
+
 export async function deleteReviews(reviewIds: string[]) {
     const result = await prisma.review.deleteMany({
         where: {

@@ -11,9 +11,11 @@ import { Separator } from "@/components/ui/separator"
 import { UserActionButtons } from "@/components/users/user-action-buttons"
 import { TabsContent } from "@radix-ui/react-tabs"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getBorrowedBooksByUserId, getTotalFineValueByUserId } from "@/lib/borrowed-books"
+import { getBorrowedBooksByUserId, getPaidFinesTotalByUserId, getTotalFineValueByUserId } from "@/lib/borrowed-books"
 import { BorrowedBooksTable } from "@/components/borrowed-books/borrowed-books-table"
 import { BorrowedBooksProvider } from "@/contexts/borrowed-books-context"
+import { ReviewsTabContent } from "@/components/reviews/ReviewsTabContent"
+import { getReviewsByUserId } from "@/lib/reviews"
 
 interface UserPageProps {
     params: {
@@ -26,6 +28,9 @@ export default async function UserPage({ params }: UserPageProps) {
     const user = await getUserById(id)
     const borrowedBooks = await getBorrowedBooksByUserId(user!.id)
     const totalFineValue = await getTotalFineValueByUserId(user!.id)
+    const totalPaidFineValue = await getPaidFinesTotalByUserId(user!.id)
+    const totalInDebt = totalFineValue - totalPaidFineValue
+    const userReviews = await getReviewsByUserId(user!.id)
 
     if (!user) {
         notFound()
@@ -161,11 +166,31 @@ export default async function UserPage({ params }: UserPageProps) {
                             </TabsContent>
 
                             <TabsContent value="finesAccount" className="space-y-6 mt-6">
-                                <div>
-                                    <h1>Valor Total de Multas: {totalFineValue}€</h1>
-                                </div>
-                                <div>Pago:</div>
-                                <div>Por pagar:</div>
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="text-lg">Resumo da Conta-Corrente</CardTitle>
+                                        <CardDescription>Detalhes sobre as multas do utilizador</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-muted-foreground">Valor Total de Multas</span>
+                                            <span className="text-xl font-semibold text-destructive">{totalFineValue}€</span>
+                                        </div>
+                                        <Separator />
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-muted-foreground">Valor Pago</span>
+                                            <span className="text-green-600 font-medium">{totalPaidFineValue}€</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-muted-foreground">Por Pagar</span>
+                                            <span className="text-orange-600 font-medium">{totalInDebt}€</span>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </TabsContent>
+
+                            <TabsContent value="reviews" className="space-y-6 mt-6">
+                                <ReviewsTabContent reviews={userReviews} isUser={true} />
                             </TabsContent>
                         </Tabs>
                     </div>

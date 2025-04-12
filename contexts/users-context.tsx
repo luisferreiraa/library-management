@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 
 import { createContext, useContext, useMemo, type ReactNode, useOptimistic, useTransition } from "react"
 import type { User } from "@/lib/users"
+import { getTotalFineValueByUserId } from "@/lib/borrowed-books"
 
 // Definir SortOption type
 export type SortOption = {
@@ -37,6 +38,7 @@ interface UsersContextType {
     setSortOption: (option: SortOption) => void
     activeFilter: ActiveFilterOption
     setActiveFilter: (filter: ActiveFilterOption) => void
+    getUserTotalFineValue: (userId: string) => Promise<number>
 }
 
 const UsersContext = createContext<UsersContextType | undefined>(undefined)
@@ -203,6 +205,17 @@ export function UsersProvider({
         setSelectedUserIds([])
     }
 
+    const getUserTotalFineValue = async (userId: string): Promise<number> => {
+        try {
+            const fineValue = await getTotalFineValueByUserId(userId)
+            return fineValue ?? 0
+        } catch (error) {
+            console.error("Erro ao obter multas do usuário:", error)
+            return 0
+        }
+    }
+
+
     const hasSelection = selectedUserIds.length > 0
 
     return (
@@ -230,6 +243,7 @@ export function UsersProvider({
                 setSortOption,
                 activeFilter,
                 setActiveFilter,
+                getUserTotalFineValue,
             }}
         >
             {children}

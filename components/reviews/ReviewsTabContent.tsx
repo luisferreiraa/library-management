@@ -32,11 +32,12 @@ const formatDate = (dateValue: Date | string | null) => {
 }
 
 interface ReviewsTabContentProps {
-    bookId: string
+    bookId?: string
     reviews: Review[]
+    isUser?: boolean
 }
 
-export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
+export function ReviewsTabContent({ bookId, reviews, isUser }: ReviewsTabContentProps) {
     const router = useRouter()
     const [selectedReviews, setSelectedReviews] = useState<string[]>([])
     const [isPending, startTransition] = useTransition()
@@ -274,7 +275,12 @@ export function ReviewsTabContent({ bookId, reviews }: ReviewsTabContentProps) {
                 <div className="flex items-center justify-between">
                     <div>
                         <CardTitle>Avaliações</CardTitle>
-                        <CardDescription>Avaliações dos utilizadores sobre este livro</CardDescription>
+                        <CardDescription>
+                            {!isUser
+                                ? "Avaliações dos utilizadores sobre este livro"
+                                : "Todas as avaliações do utilizador"}
+                        </CardDescription>
+
                     </div>
                     {paginatedReviews.length > 0 && (
                         <div className="flex items-center gap-2">

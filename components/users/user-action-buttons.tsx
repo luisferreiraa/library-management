@@ -8,6 +8,7 @@ import { toast } from "react-toastify"
 import { CreateUserModal } from "./create-user-modal"
 import type { User } from "@/lib/users"
 import { UsersProvider } from "@/contexts/users-context"
+import { ResetPasswordModal } from "./user-password-reset-modal"
 
 interface UserActionButtonsProps {
     user: User
@@ -17,6 +18,7 @@ export function UserActionButtons({ user }: UserActionButtonsProps) {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false)
 
     // Função para alternar o status do utilizador
     const toggleUserActiveStatus = async () => {
@@ -62,13 +64,18 @@ export function UserActionButtons({ user }: UserActionButtonsProps) {
         setIsEditModalOpen(true)
     }
 
+    // Função para abrir o modal de reset de senha
+    const handleResetPassword = () => {
+        setIsResetPasswordModalOpen(true)
+    }
+
     return (
         <>
             <UsersProvider initialUsers={[]}>
                 <Button variant="outline" onClick={handleEditUser}>
                     Editar Utilizador
                 </Button>
-                <Button variant="outline">Redefinir Senha</Button>
+                <Button variant="outline" onClick={handleResetPassword}>Redefinir Senha</Button>
                 {user.isActive ? (
                     <Button variant="destructive" onClick={toggleUserActiveStatus} disabled={isLoading}>
                         {isLoading ? "Processando..." : "Desativar Conta"}
@@ -81,6 +88,12 @@ export function UserActionButtons({ user }: UserActionButtonsProps) {
 
                 {/* Modal de edição */}
                 <CreateUserModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} user={user} mode="edit" />
+                <ResetPasswordModal
+                    open={isResetPasswordModalOpen}
+                    onOpenChange={setIsResetPasswordModalOpen}
+                    user={user}
+                    isAdmin={true}
+                />
             </UsersProvider>
         </>
     )
