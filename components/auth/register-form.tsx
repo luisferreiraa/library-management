@@ -11,7 +11,6 @@ import { AlertCircle, Loader2 } from "lucide-react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Label } from "../ui/label"
 import { Textarea } from "../ui/textarea"
@@ -104,9 +103,9 @@ export function RegisterForm() {
                                 name="username"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Nome de Usuário</FormLabel>
+                                        <FormLabel>Nome de Utilizador</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Escolha um nome de usuário" {...field} />
+                                            <Input placeholder="Escolha um nome de utilizador" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -193,7 +192,7 @@ export function RegisterForm() {
                                     <FormItem>
                                         <FormLabel>Morada</FormLabel>
                                         <FormControl>
-                                            <Textarea placeholder="Sua morada completa" {...field} rows={2} />
+                                            <Textarea placeholder="A Sua morada completa" {...field} rows={2} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
