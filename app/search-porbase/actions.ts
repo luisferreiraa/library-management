@@ -19,16 +19,21 @@ export async function searchByISBN(isbn: string): Promise<BookData | string> {
     }
 
     try {
-        const baseUrl = process.env.VERCEL_URL
-            ? `https://${process.env.VERCEL_URL}` // Produção no Vercel
-            : 'http://localhost:3000'             // Desenvolvimento local
-
-        // Usando nossa rota de API local
-        /* const url = `http://localhost:3000/api/isbn?isbn=${cleanedISBN}` */
+        /* const baseUrl = process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : 'http://localhost:3000'
 
         const url = `${baseUrl}/api/isbn?isbn=${cleanedISBN}`
 
         const response = await fetch(url, {
+            cache: "no-store",
+            next: { revalidate: 0 },
+        }) */
+
+        const url = new URL('/api/isbn', process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000')
+        url.searchParams.set('isbn', cleanedISBN)
+
+        const response = await fetch(url.toString(), {
             cache: "no-store",
             next: { revalidate: 0 },
         })
