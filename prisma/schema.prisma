@@ -17,6 +17,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model LibraryNetwork {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  libraries Library[]
+  isActive  Boolean   @default(true)
+}
+
+model Library {
+  id               String         @id @default(cuid())
+  name             String
+  location         String
+  libraryNetwork   LibraryNetwork @relation(fields: [libraryNetworkId], references: [id])
+  libraryNetworkId String
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  isActive         Boolean        @default(true)
+  catalog          Catalog[]
+}
+
+model Catalog {
+  id        String        @id @default(cuid())
+  library   Library       @relation(fields: [libraryId], references: [id])
+  libraryId String
+  items     CatalogItem[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  isActive  Boolean       @default(true)
+}
+
+model CatalogItem {
+  id        String   @id @default(cuid())
+  type      ItemType
+  title     String
+  author    String?
+  isbn      String?
+  publisher String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isActive  Boolean  @default(true)
+  Catalog   Catalog? @relation(fields: [catalogId], references: [id])
+  catalogId String?
+}
+
+enum ItemType {
+  BOOK
+  PERIODICAL
+  DVD
+  VHS
+  CD
+}
+
 model Author {
   id        String   @id @default(cuid())
   name      String
