@@ -28,13 +28,13 @@ import { Badge } from "../ui/badge"
 
 export function LanguagesTable() {
     const {
-        paginatedLanguages,
-        filteredLanguages,
-        selectedLanguageIds,
-        toggleLanguageSelection,
-        toggleAllLanguages,
+        paginatedEntities,
+        filteredEntities,
+        selectedEntityIds,
+        toggleEntitySelection,
+        toggleAllEntities,
         hasSelection,
-        removeLanguages,
+        removeEntities,
         currentPage,
         setCurrentPage,
         pageSize,
@@ -49,10 +49,10 @@ export function LanguagesTable() {
 
     // Verificar se todos os idiomas estão selecionados
     const allSelected =
-        paginatedLanguages.length > 0 && paginatedLanguages.every((language) => selectedLanguageIds.includes(language.id))
+        paginatedEntities.length > 0 && paginatedEntities.every((entity) => selectedEntityIds.includes(entity.id))
 
     // Verificar se alguns idiomas estão selecionados
-    const someSelected = selectedLanguageIds.length > 0 && !allSelected
+    const someSelected = selectedEntityIds.length > 0 && !allSelected
 
     // Função para formatar a data corretamente
     const formatDate = (dateValue: Date | string) => {
@@ -62,20 +62,20 @@ export function LanguagesTable() {
 
     // Função para excluir os idiomas selecionados
     const handleDeleteSelected = async () => {
-        if (selectedLanguageIds.length === 0) return
+        if (selectedEntityIds.length === 0) return
 
         try {
             setIsDeleting(true)
 
             // Chamar a Server Action para excluir os idiomas
-            await deleteLanguagesAction(selectedLanguageIds)
+            await deleteLanguagesAction(selectedEntityIds)
 
             // Atualizar o estado local otimisticamente
-            removeLanguages(selectedLanguageIds)
+            removeEntities(selectedEntityIds)
 
-            const message = selectedLanguageIds.length === 1
+            const message = selectedEntityIds.length === 1
                 ? "Idioma excluído com sucesso"
-                : `Idiomas excluídos com sucesso (${selectedLanguageIds.length})`;
+                : `Idiomas excluídos com sucesso (${selectedEntityIds.length})`;
 
             toast.success(message, {
                 position: "top-right",
@@ -89,7 +89,7 @@ export function LanguagesTable() {
             setIsDialogOpen(false)
         } catch (error) {
 
-            const errorMessage = selectedLanguageIds.length === 1
+            const errorMessage = selectedEntityIds.length === 1
                 ? "Erro ao excluir idioma"
                 : "Erro ao excluir idiomas";
 
@@ -121,14 +121,14 @@ export function LanguagesTable() {
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" size="sm" className="flex items-center gap-2">
                                 <Trash2 className="h-4 w-4" />
-                                Excluir Selecionados ({selectedLanguageIds.length})
+                                Excluir Selecionados ({selectedEntityIds.length})
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Excluir categorias</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja excluir {selectedLanguageIds.length} idioma(s)? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja excluir {selectedEntityIds.length} idioma(s)? Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -154,7 +154,7 @@ export function LanguagesTable() {
                                 <IndeterminateCheckbox
                                     checked={allSelected}
                                     indeterminate={someSelected}
-                                    onCheckedChange={toggleAllLanguages}
+                                    onCheckedChange={toggleAllEntities}
                                     aria-label="Selecionar todos os idiomas"
                                 />
                             </TableHead>
@@ -165,19 +165,19 @@ export function LanguagesTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginatedLanguages.length === 0 ? (
+                        {paginatedEntities.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhum idioma encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedLanguages.map((language) => (
-                                <TableRow key={language.id} className={selectedLanguageIds.includes(language.id) ? "bg-muted/50" : ""}>
+                            paginatedEntities.map((language) => (
+                                <TableRow key={language.id} className={selectedEntityIds.includes(language.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
-                                            checked={selectedLanguageIds.includes(language.id)}
-                                            onCheckedChange={() => toggleLanguageSelection(language.id)}
+                                            checked={selectedEntityIds.includes(language.id)}
+                                            onCheckedChange={() => toggleEntitySelection(language.id)}
                                             aria-label={`Selecionar ${language.name}`}
                                         />
                                     </TableCell>
@@ -228,7 +228,7 @@ export function LanguagesTable() {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
-                totalItems={filteredLanguages.length}
+                totalItems={filteredEntities.length}
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
                 className="mt-4"

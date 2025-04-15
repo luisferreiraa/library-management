@@ -1,37 +1,25 @@
 "use client"
 
-import { useLanguages, type ActiveFilterOption } from "@/contexts/languages-context"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+import { useLanguages } from "@/contexts/languages-context"
+import { FilterEntities } from "../global-entities/filter-entities"
+import type { ActiveFilterOption } from "@/types/types"
+
+const filterOptions = [
+    { value: "all", label: "Todos" },
+    { value: "active", label: "Ativos" },
+    { value: "inactive", label: "Inativos" },
+] as const
 
 export function FilterLanguages() {
     const { activeFilter, setActiveFilter } = useLanguages()
 
-    const handleFilterChange = (value: string) => {
-        setActiveFilter(value as ActiveFilterOption)
-    }
-
     return (
-        <div className="flex items-center gap-3">
-            <Label htmlFor="status-filter" className="text-sm font-medium">
-                Estado:
-            </Label>
-            <Select value={activeFilter} onValueChange={handleFilterChange}>
-                <SelectTrigger id="status-filter" className="w-[180px]">
-                    <SelectValue placeholder="Filtrar por status" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="active">Ativo</SelectItem>
-                    <SelectItem value="inactive">Inativo</SelectItem>
-                </SelectContent>
-            </Select>
-        </div>
+        <FilterEntities<ActiveFilterOption>
+            value={activeFilter}
+            onValueChange={setActiveFilter}
+            options={filterOptions}
+            label="Estado:"
+            placeholder="Filtrar Idiomas"
+        />
     )
 }

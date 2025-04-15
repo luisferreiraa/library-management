@@ -6,7 +6,7 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { BookStatusesProvider } from "@/contexts/bookstatus-context"
 import { BookStatusSearch } from "@/components/bookStatuses/bookstatus-search"
 import { OrderBookStatusBy } from "@/components/bookStatuses/order-book-status-by"
-import { FilterBookStatus } from "@/components/borrowed-books/filter-book-status"
+import { FilterBookStatus } from "@/components/bookStatuses/filter-book-status"
 
 export default async function BookStatusPage() {
     // Buscar dados no servidor

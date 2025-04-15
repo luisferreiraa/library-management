@@ -6,7 +6,7 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { CategoryProvider } from "@/contexts/categories-context"
 import { CategoriesSearch } from "@/components/categories/categories-search"
 import { OrderCategoriesBy } from "@/components/categories/order-categories-by"
-import { FilterCategories } from "@/components/publishers/filter-categories"
+import { FilterCategories } from "@/components/categories/filter-categories"
 
 export default async function CategoriesPage() {
     // Buscar dados no servidor

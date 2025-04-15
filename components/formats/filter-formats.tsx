@@ -1,37 +1,26 @@
 "use client"
 
-import { useFormats, type ActiveFilterOption } from "@/contexts/formats-context"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+import { useFormats } from "@/contexts/formats-context"
+import { FilterEntities } from "../global-entities/filter-entities"
+import type { ActiveFilterOption } from "@/types/types"
+
 
 export function FilterFormats() {
     const { activeFilter, setActiveFilter } = useFormats()
 
-    const handleFilterChange = (value: string) => {
-        setActiveFilter(value as ActiveFilterOption)
-    }
+    const filterOptions = [
+        { value: "all", label: "Todos" },
+        { value: "active", label: "Ativos" },
+        { value: "inactive", label: "Inativos" },
+    ] as const
 
     return (
-        <div className="flex items-center gap-3">
-            <Label htmlFor="status-filter" className="text-sm font-medium">
-                Estado:
-            </Label>
-            <Select value={activeFilter} onValueChange={handleFilterChange}>
-                <SelectTrigger id="status-filter" className="w-[180px]">
-                    <SelectValue placeholder="Filtrar por status" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="active">Ativo</SelectItem>
-                    <SelectItem value="inactive">Inativo</SelectItem>
-                </SelectContent>
-            </Select>
-        </div>
+        <FilterEntities<ActiveFilterOption>
+            value={activeFilter}
+            onValueChange={setActiveFilter}
+            options={filterOptions}
+            label="Estado:"
+            placeholder="Filtrar Formatos"
+        />
     )
 }

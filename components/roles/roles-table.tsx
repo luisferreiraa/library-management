@@ -28,13 +28,13 @@ import { Badge } from "../ui/badge"
 
 export function RolesTable() {
     const {
-        paginatedRoles,
-        filteredRoles,
-        selectedRoleIds,
-        toggleRoleSelection,
-        toggleAllRoles,
+        paginatedEntities,
+        filteredEntities,
+        selectedEntityIds,
+        toggleEntitySelection,
+        toggleAllEntities,
         hasSelection,
-        removeRoles,
+        removeEntities,
         currentPage,
         setCurrentPage,
         pageSize,
@@ -49,10 +49,10 @@ export function RolesTable() {
 
     // Verificar se todas os roles estão selecionados
     const allSelected =
-        paginatedRoles.length > 0 && paginatedRoles.every((role) => selectedRoleIds.includes(role.id))
+        paginatedEntities.length > 0 && paginatedEntities.every((role) => selectedEntityIds.includes(role.id))
 
     // Verificar se alguns roles estão selecionados
-    const someSelected = selectedRoleIds.length > 0 && !allSelected
+    const someSelected = selectedEntityIds.length > 0 && !allSelected
 
     // Função para formatar a data corretamente
     const formatDate = (dateValue: Date | string) => {
@@ -62,20 +62,20 @@ export function RolesTable() {
 
     // Função para excluir as editoras selecionadas
     const handleDeleteSelected = async () => {
-        if (selectedRoleIds.length === 0) return
+        if (selectedEntityIds.length === 0) return
 
         try {
             setIsDeleting(true)
 
             // Chamar a Server Action para excluir os roles
-            await deleteRolesAction(selectedRoleIds)
+            await deleteRolesAction(selectedEntityIds)
 
             // Atualizar o estado local otimisticamente
-            removeRoles(selectedRoleIds)
+            removeEntities(selectedEntityIds)
 
-            const message = selectedRoleIds.length === 1
+            const message = selectedEntityIds.length === 1
                 ? "Perfil excluído com sucesso"
-                : `Perfis excluídos com sucesso (${selectedRoleIds.length})`;
+                : `Perfis excluídos com sucesso (${selectedEntityIds.length})`;
 
             toast.success(message, {
                 position: "top-right",
@@ -89,7 +89,7 @@ export function RolesTable() {
             setIsDialogOpen(false)
         } catch (error) {
 
-            const errorMessage = selectedRoleIds.length === 1
+            const errorMessage = selectedEntityIds.length === 1
                 ? "Erro ao excluir perfil"
                 : "Erro ao excluir perfis";
 
@@ -121,14 +121,14 @@ export function RolesTable() {
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" size="sm" className="flex items-center gap-2">
                                 <Trash2 className="h-4 w-4" />
-                                Excluir Selecionados ({selectedRoleIds.length})
+                                Excluir Selecionados ({selectedEntityIds.length})
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Excluir roles</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja excluir {selectedRoleIds.length} role(s)? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja excluir {selectedEntityIds.length} role(s)? Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -154,7 +154,7 @@ export function RolesTable() {
                                 <IndeterminateCheckbox
                                     checked={allSelected}
                                     indeterminate={someSelected}
-                                    onCheckedChange={toggleAllRoles}
+                                    onCheckedChange={toggleAllEntities}
                                     aria-label="Selecionar todos os roles"
                                 />
                             </TableHead>
@@ -165,19 +165,19 @@ export function RolesTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginatedRoles.length === 0 ? (
+                        {paginatedEntities.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhum role encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedRoles.map((role) => (
-                                <TableRow key={role.id} className={selectedRoleIds.includes(role.id) ? "bg-muted/50" : ""}>
+                            paginatedEntities.map((role) => (
+                                <TableRow key={role.id} className={selectedEntityIds.includes(role.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
-                                            checked={selectedRoleIds.includes(role.id)}
-                                            onCheckedChange={() => toggleRoleSelection(role.id)}
+                                            checked={selectedEntityIds.includes(role.id)}
+                                            onCheckedChange={() => toggleEntitySelection(role.id)}
                                             aria-label={`Selecionar ${role.name}`}
                                         />
                                     </TableCell>
@@ -228,7 +228,7 @@ export function RolesTable() {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
-                totalItems={filteredRoles.length}
+                totalItems={filteredEntities.length}
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
                 className="mt-4"

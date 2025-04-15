@@ -28,13 +28,13 @@ import { Badge } from "../ui/badge"
 
 export function PublishersTable() {
     const {
-        paginatedPublishers,
-        filteredPublishers,
-        selectedPublisherIds,
-        togglePublisherSelection,
-        toggleAllPublishers,
+        paginatedEntities,
+        filteredEntities,
+        selectedEntityIds,
+        toggleEntitySelection,
+        toggleAllEntities,
         hasSelection,
-        removePublishers,
+        removeEntities,
         currentPage,
         setCurrentPage,
         pageSize,
@@ -49,10 +49,10 @@ export function PublishersTable() {
 
     // Verificar se todas as editoras estão selecionadas
     const allSelected =
-        paginatedPublishers.length > 0 && paginatedPublishers.every((publisher) => selectedPublisherIds.includes(publisher.id))
+        paginatedEntities.length > 0 && paginatedEntities.every((publisher) => selectedEntityIds.includes(publisher.id))
 
     // Verificar se algumas editoras estão selecionadas
-    const someSelected = selectedPublisherIds.length > 0 && !allSelected
+    const someSelected = selectedEntityIds.length > 0 && !allSelected
 
     // Função para formatar a data corretamente
     const formatDate = (dateValue: Date | string) => {
@@ -62,20 +62,20 @@ export function PublishersTable() {
 
     // Função para excluir as editoras selecionadas
     const handleDeleteSelected = async () => {
-        if (selectedPublisherIds.length === 0) return
+        if (selectedEntityIds.length === 0) return
 
         try {
             setIsDeleting(true)
 
             // Chamar a Server Action para excluir as editoras
-            await deletePublishersAction(selectedPublisherIds)
+            await deletePublishersAction(selectedEntityIds)
 
             // Atualizar o estado local otimisticamente
-            removePublishers(selectedPublisherIds)
+            removeEntities(selectedEntityIds)
 
-            const message = selectedPublisherIds.length === 1
+            const message = selectedEntityIds.length === 1
                 ? "Editora excluída com sucesso"
-                : `Editoras excluídas com sucesso (${selectedPublisherIds.length})`;
+                : `Editoras excluídas com sucesso (${selectedEntityIds.length})`;
 
             toast.success(message, {
                 position: "top-right",
@@ -89,7 +89,7 @@ export function PublishersTable() {
             setIsDialogOpen(false)
         } catch (error) {
 
-            const errorMessage = selectedPublisherIds.length === 1
+            const errorMessage = selectedEntityIds.length === 1
                 ? "Erro ao excluir editora"
                 : "Erro ao excluir editoras";
 
@@ -121,14 +121,14 @@ export function PublishersTable() {
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" size="sm" className="flex items-center gap-2">
                                 <Trash2 className="h-4 w-4" />
-                                Excluir Selecionados ({selectedPublisherIds.length})
+                                Excluir Selecionados ({selectedEntityIds.length})
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Excluir editoras</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja excluir {selectedPublisherIds.length} categoria(s)? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja excluir {selectedEntityIds.length} categoria(s)? Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -154,7 +154,7 @@ export function PublishersTable() {
                                 <IndeterminateCheckbox
                                     checked={allSelected}
                                     indeterminate={someSelected}
-                                    onCheckedChange={toggleAllPublishers}
+                                    onCheckedChange={toggleAllEntities}
                                     aria-label="Selecionar todos os autores"
                                 />
                             </TableHead>
@@ -165,19 +165,19 @@ export function PublishersTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginatedPublishers.length === 0 ? (
+                        {paginatedEntities.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhuma editora encontrada.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedPublishers.map((publisher) => (
-                                <TableRow key={publisher.id} className={selectedPublisherIds.includes(publisher.id) ? "bg-muted/50" : ""}>
+                            paginatedEntities.map((publisher) => (
+                                <TableRow key={publisher.id} className={selectedEntityIds.includes(publisher.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
-                                            checked={selectedPublisherIds.includes(publisher.id)}
-                                            onCheckedChange={() => togglePublisherSelection(publisher.id)}
+                                            checked={selectedEntityIds.includes(publisher.id)}
+                                            onCheckedChange={() => toggleEntitySelection(publisher.id)}
                                             aria-label={`Selecionar ${publisher.name}`}
                                         />
                                     </TableCell>
@@ -228,7 +228,7 @@ export function PublishersTable() {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
-                totalItems={filteredPublishers.length}
+                totalItems={filteredEntities.length}
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
                 className="mt-4"

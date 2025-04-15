@@ -5,8 +5,7 @@ import { useEntityForm } from "@/hooks/use-entity-form"
 import { createLibraryAction, updateLibraryAction } from "@/app/(super-admin)/libraries/actions"
 import type { Library } from "@/lib/libraries"
 import { useMemo } from "react"
-import { LibraryNetworkProvider, useLibraryNetworks } from "@/contexts/library-networks-context"
-import { getLibraryNetworks } from "@/lib/library-networks"
+import { useLibraryNetworks } from "@/contexts/library-networks-context"
 
 // Schema de validação para role
 const librarySchema = z.object({

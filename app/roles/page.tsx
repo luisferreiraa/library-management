@@ -14,7 +14,7 @@ export default async function RolesPage() {
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
-            <RolesProvider initialRoles={roles}>
+            <RolesProvider initialEntities={roles}>
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Perfis</h1>
                     <CreateRoleButton />

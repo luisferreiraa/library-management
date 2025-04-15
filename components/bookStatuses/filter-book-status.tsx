@@ -1,17 +1,17 @@
 "use client"
 
-import { useLibraryNetworks } from "@/contexts/library-networks-context"
+import { useBookStatuses } from "@/contexts/bookstatus-context"
 import { FilterEntities } from "../global-entities/filter-entities"
 import type { ActiveFilterOption } from "@/types/types"
 
 const filterOptions = [
-    { value: "all", label: "Todas" },
-    { value: "active", label: "Ativas" },
-    { value: "inactive", label: "Inativas" },
+    { value: "all", label: "Todos" },
+    { value: "active", label: "Ativos" },
+    { value: "inactive", label: "Inativos" },
 ] as const
 
-export function FilterLibraryNetworks() {
-    const { activeFilter, setActiveFilter } = useLibraryNetworks()
+export function FilterBookStatus() {
+    const { activeFilter, setActiveFilter } = useBookStatuses()
 
     return (
         <FilterEntities<ActiveFilterOption>
@@ -19,7 +19,7 @@ export function FilterLibraryNetworks() {
             onValueChange={setActiveFilter}
             options={filterOptions}
             label="Estado:"
-            placeholder="Filtrar Redes de Bibliotecas"
+            placeholder="Filtrar Estados"
         />
     )
 }

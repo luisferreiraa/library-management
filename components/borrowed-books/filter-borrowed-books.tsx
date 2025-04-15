@@ -1,37 +1,26 @@
 "use client"
 
-import { useBorrowedBooks, type ActiveFilterOption } from "@/contexts/borrowed-books-context"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+import { useBorrowedBooks } from "@/contexts/borrowed-books-context"
+import { FilterEntities } from "../global-entities/filter-entities"
+import type { ActiveFilterOption } from "@/types/types"
+
+const filterOptions = [
+    { value: "all", label: "Todos" },
+    { value: "active", label: "A decorrer" },
+    { value: "inactive", label: "Devolvidos" },
+] as const
 
 export function FilterBorrowedBooks() {
     const { activeFilter, setActiveFilter } = useBorrowedBooks()
 
-    const handleFilterChange = (value: string) => {
-        setActiveFilter(value as ActiveFilterOption)
-    }
 
     return (
-        <div className="flex items-center gap-3">
-            <Label htmlFor="status-filter" className="text-sm font-medium">
-                Estado:
-            </Label>
-            <Select value={activeFilter} onValueChange={handleFilterChange}>
-                <SelectTrigger id="status-filter" className="w-[180px]">
-                    <SelectValue placeholder="Filtrar por status" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="active">A decorrer</SelectItem>
-                    <SelectItem value="inactive">Devolvidos</SelectItem>
-                </SelectContent>
-            </Select>
-        </div>
+        <FilterEntities<ActiveFilterOption>
+            value={activeFilter}
+            onValueChange={setActiveFilter}
+            options={filterOptions}
+            label="Estado:"
+            placeholder="Filtrar Empréstimos"
+        />
     )
 }
