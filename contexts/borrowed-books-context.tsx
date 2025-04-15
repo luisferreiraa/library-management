@@ -4,8 +4,8 @@ import { createContext, useContext, useState, useMemo, type ReactNode, useOptimi
 import type { BorrowedBookWithRelations } from "@/lib/borrowed-books"
 
 // Definir SortOption type
-export type SortOption = {
-    value: string
+export type SortOption<T = BorrowedBookWithRelations> = {
+    value: keyof T
     direction: "asc" | "desc"
 }
 
@@ -31,8 +31,8 @@ interface BorrowedBooksContextType {
     setPageSize: (size: number) => void
     paginatedBorrowedBooks: BorrowedBookWithRelations[]
     totalPages: number
-    sortOption: SortOption | null
-    setSortOption: (option: SortOption) => void
+    sortOption: SortOption<BorrowedBookWithRelations> | null
+    setSortOption: (option: SortOption<BorrowedBookWithRelations>) => void
     activeFilter: ActiveFilterOption
     setActiveFilter: (filter: ActiveFilterOption) => void
 }
@@ -70,7 +70,7 @@ export function BorrowedBooksProvider({
     const [pageSize, setPageSize] = useState(10)
 
     // Estado para ordenação
-    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+    const [sortOption, setSortOption] = useState<SortOption<BorrowedBookWithRelations> | null>(null)
 
     // Estado para filtro de isActive
     const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")

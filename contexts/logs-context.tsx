@@ -4,8 +4,8 @@ import { createContext, useContext, useState, useMemo, type ReactNode, useOptimi
 import type { AuditLogWithRelations } from "@/lib/auditlogs"
 
 // Definir SortOption type
-export type SortOption = {
-    value: string
+export type SortOption<T = AuditLogWithRelations> = {
+    value: keyof T
     direction: "asc" | "desc"
 }
 
@@ -27,8 +27,8 @@ interface AuditLogsContextType {
     setPageSize: (size: number) => void
     paginatedLogs: AuditLogWithRelations[]
     totalPages: number
-    sortOption: SortOption | null
-    setSortOption: (option: SortOption) => void
+    sortOption: SortOption<AuditLogWithRelations> | null
+    setSortOption: (option: SortOption<AuditLogWithRelations>) => void
 }
 
 const AuditLogsContext = createContext<AuditLogsContextType | undefined>(undefined)
@@ -62,7 +62,7 @@ export function AuditLogsProvider({
     const [pageSize, setPageSize] = useState(10)
 
     // Estado para ordenação
-    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+    const [sortOption, setSortOption] = useState<SortOption<AuditLogWithRelations> | null>(null)
 
     // useMemo é utilizado para evitar recalcular a lista filtrada sempre que o componente renderiza
     // garantindo melhor performance

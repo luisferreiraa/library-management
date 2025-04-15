@@ -4,8 +4,8 @@ import { createContext, useContext, useState, useMemo, type ReactNode, useOptimi
 import type { Format } from "@/lib/formats"
 
 // Definir SortOption type
-export type SortOption = {
-    value: string
+export type SortOption<T = Format> = {
+    value: keyof T
     direction: "asc" | "desc"
 }
 
@@ -31,8 +31,8 @@ interface FormatsContextType {
     setPageSize: (size: number) => void
     paginatedFormats: Format[]
     totalPages: number
-    sortOption: SortOption | null
-    setSortOption: (option: SortOption) => void
+    sortOption: SortOption<Format> | null
+    setSortOption: (option: SortOption<Format>) => void
     activeFilter: ActiveFilterOption
     setActiveFilter: (filter: ActiveFilterOption) => void
 }
@@ -70,7 +70,7 @@ export function FormatsProvider({
     const [pageSize, setPageSize] = useState(10)
 
     // Estado para ordenação
-    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+    const [sortOption, setSortOption] = useState<SortOption<Format> | null>(null)
 
     // Estado para filtro de isActive
     const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")

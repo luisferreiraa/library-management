@@ -1,9 +1,8 @@
 import slugify from "slugify"
 import { prisma } from "./prisma"
-import type { LibraryNetwork as PrismaFormat } from "@prisma/client"
-import { resourceLimits } from "worker_threads"
+import type { LibraryNetwork as PrismaLibraryNetwork } from "@prisma/client"
 
-export type LibraryNetwork = PrismaFormat
+export type LibraryNetwork = PrismaLibraryNetwork
 
 export async function getLibraryNetworks(): Promise<LibraryNetwork[]> {
     return prisma.libraryNetwork.findMany({

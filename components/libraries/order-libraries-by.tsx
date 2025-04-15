@@ -1,8 +1,8 @@
 "use client"
 
-import { useCategories } from "@/contexts/categories-context"
-import { OrderEntityBy } from "../global-entities/order-entity-by"
-import { Category } from "@prisma/client"
+import { OrderEntityBy } from "@/components/global-entities/order-entity-by"
+import { useLibraries } from "@/contexts/libraries-context"
+import type { Library } from "@/lib/libraries"
 
 const sortOptions = [
     { label: "Nome (A-Z)", value: "name", direction: "asc" },
@@ -11,16 +11,15 @@ const sortOptions = [
     { label: "Data de registo (mais antiga)", value: "createdAt", direction: "asc" },
 ] as const
 
-export function OrderCategoriesBy() {
-    const { sortOption, setSortOption } = useCategories()
+export function OrderLibrariesBy() {
+    const { sortOption, setSortOption } = useLibraries()
 
     return (
-        <OrderEntityBy<Category>
+        <OrderEntityBy<Library>
             sortOptions={[...sortOptions]}
             currentSort={sortOption}
             onSortChange={setSortOption}
-            defaultLabel="Ordenar categorias por"
+            defaultLabel="Ordenar bibliotecas por"
         />
     )
 }
-

@@ -4,8 +4,8 @@ import { createContext, useContext, useState, useMemo, type ReactNode, useOptimi
 import type { PenaltyRule } from "@/lib/penaltyrules"
 
 // Definir SortOption type
-export type SortOption = {
-    value: string
+export type SortOption<T = PenaltyRule> = {
+    value: keyof T
     direction: "asc" | "desc"
 }
 
@@ -31,8 +31,8 @@ interface PenaltyRulesContextType {
     setPageSize: (size: number) => void
     paginatedRules: PenaltyRule[]
     totalPages: number
-    sortOption: SortOption | null
-    setSortOption: (option: SortOption) => void
+    sortOption: SortOption<PenaltyRule> | null
+    setSortOption: (option: SortOption<PenaltyRule>) => void
     activeFilter: ActiveFilterOption
     setActiveFilter: (filter: ActiveFilterOption) => void
 }
@@ -70,7 +70,7 @@ export function PenaltyRulesProvider({
     const [pageSize, setPageSize] = useState(10)
 
     // Estado para ordenação
-    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+    const [sortOption, setSortOption] = useState<SortOption<PenaltyRule> | null>(null)
 
     // Estado para filtro de isActive
     const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")

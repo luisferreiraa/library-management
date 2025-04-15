@@ -37,7 +37,9 @@ export async function middleware(request: NextRequest) {
         "/publishers",
         "/roles",
         "/translators",
-        "/users"
+        "/users",
+        "/library-networks",
+        "/libraries",
     ]
     const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route))
 

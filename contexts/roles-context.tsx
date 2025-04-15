@@ -4,8 +4,8 @@ import { createContext, useContext, useState, useMemo, type ReactNode, useOptimi
 import type { Role } from "@/lib/roles"
 
 // Definir SortOption type
-export type SortOption = {
-    value: string
+export type SortOption<T = Role> = {
+    value: keyof T
     direction: "asc" | "desc"
 }
 
@@ -31,8 +31,8 @@ interface RolesContextType {
     setPageSize: (size: number) => void
     paginatedRoles: Role[]
     totalPages: number
-    sortOption: SortOption | null
-    setSortOption: (option: SortOption) => void
+    sortOption: SortOption<Role> | null
+    setSortOption: (option: SortOption<Role>) => void
     activeFilter: ActiveFilterOption
     setActiveFilter: (filter: ActiveFilterOption) => void
 }
@@ -70,7 +70,7 @@ export function RolesProvider({
     const [pageSize, setPageSize] = useState(10)
 
     // Estado para ordenação
-    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+    const [sortOption, setSortOption] = useState<SortOption<Role> | null>(null)
 
     // Estado para filtro de isActive
     const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")

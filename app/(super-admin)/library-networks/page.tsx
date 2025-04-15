@@ -1,6 +1,8 @@
 // app/(super-admin)/library-networks/page.tsx
 import { CreateLibraryNetworkButton } from "@/components/library-networks/create-library-network-button";
+import { FilterLibraryNetworks } from "@/components/library-networks/filter-library-networks";
 import { LibraryNetworksSearch } from "@/components/library-networks/library-networks-search";
+import { LibraryNetworksTable } from "@/components/library-networks/library-networks-table";
 import { OrderLibraryNetworksBy } from "@/components/library-networks/order-library-networks-by";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { LibraryNetworkProvider } from "@/contexts/library-networks-context";
@@ -27,12 +29,12 @@ export default async function LibraryNetworkPage() {
                         <OrderLibraryNetworksBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        {/* <FilterCategories /> */}
+                        <FilterLibraryNetworks />
                     </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>
-                    {/* <CategoriesTable /> */}
+                    <LibraryNetworksTable />
                 </Suspense>
             </LibraryNetworkProvider>
         </div>

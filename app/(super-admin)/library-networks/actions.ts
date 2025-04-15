@@ -37,7 +37,7 @@ export async function updateLibraryNetworkAction(libraryNetworkData: {
         await logAudit("Library Network", libraryNetworkData.id, "UPDATE_LIBRARY_NETWORK")
 
         // Revalidar o caminho para atualizar os dados
-        revalidatePath("/library-network")
+        revalidatePath("/library-networks")
         revalidatePath(`/library-network/${libraryNetworkData.id}`)
 
         return updatedLibraryNetwork
@@ -58,7 +58,7 @@ export async function deleteLibraryNetworksAction(libraryNetworkIds: string[]): 
         await logAudit("Library Network", libraryNetworkIds, "DELETE_LIBRARY_NETWORK");
 
         // Revalidar o caminho para atualizar os dados
-        revalidatePath("/library-network")
+        revalidatePath("/library-networks")
     } catch (error: any) {
         throw new Error("Erro ao excluir library network: " + error.message)
     }

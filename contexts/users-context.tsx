@@ -7,8 +7,8 @@ import type { User } from "@/lib/users"
 import { getTotalFineValueByUserId } from "@/lib/borrowed-books"
 
 // Definir SortOption type
-export type SortOption = {
-    value: string
+export type SortOption<T = User> = {
+    value: keyof T
     direction: "asc" | "desc"
 }
 
@@ -34,8 +34,8 @@ interface UsersContextType {
     setPageSize: (size: number) => void
     paginatedUsers: User[]
     totalPages: number
-    sortOption: SortOption | null
-    setSortOption: (option: SortOption) => void
+    sortOption: SortOption<User> | null
+    setSortOption: (option: SortOption<User>) => void
     activeFilter: ActiveFilterOption
     setActiveFilter: (filter: ActiveFilterOption) => void
     getUserTotalFineValue: (userId: string) => Promise<number>
@@ -74,7 +74,7 @@ export function UsersProvider({
     const [pageSize, setPageSize] = useState(10)
 
     // Estado para ordenação
-    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+    const [sortOption, setSortOption] = useState<SortOption<User> | null>(null)
 
     // Estado para filtro de isActive
     const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")

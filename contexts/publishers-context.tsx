@@ -4,8 +4,8 @@ import { createContext, useContext, useState, useMemo, type ReactNode, useOptimi
 import type { Publisher } from "@/lib/publishers"
 
 // Definir SortOption type
-export type SortOption = {
-    value: string
+export type SortOption<T = Publisher> = {
+    value: keyof T
     direction: "asc" | "desc"
 }
 
@@ -31,8 +31,8 @@ interface PublishersContextType {
     setPageSize: (size: number) => void
     paginatedPublishers: Publisher[]
     totalPages: number
-    sortOption: SortOption | null
-    setSortOption: (option: SortOption) => void
+    sortOption: SortOption<Publisher> | null
+    setSortOption: (option: SortOption<Publisher>) => void
     activeFilter: ActiveFilterOption
     setActiveFilter: (filter: ActiveFilterOption) => void
 }
@@ -70,7 +70,7 @@ export function PublishersProvider({
     const [pageSize, setPageSize] = useState(10)
 
     // Estado para ordenação
-    const [sortOption, setSortOption] = useState<SortOption | null>(null)
+    const [sortOption, setSortOption] = useState<SortOption<Publisher> | null>(null)
 
     // Estado para filtro de isActive
     const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")

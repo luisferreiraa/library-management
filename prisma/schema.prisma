@@ -30,8 +30,9 @@ model LibraryNetwork {
 model Library {
   id               String         @id @default(cuid())
   name             String
+  slug             String         @unique
   location         String
-  libraryNetwork   LibraryNetwork @relation(fields: [libraryNetworkId], references: [id])
+  libraryNetwork   LibraryNetwork @relation(fields: [libraryNetworkId], references: [id], onDelete: Cascade)
   libraryNetworkId String
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
@@ -41,7 +42,9 @@ model Library {
 
 model Catalog {
   id        String        @id @default(cuid())
-  library   Library       @relation(fields: [libraryId], references: [id])
+  name      String
+  slug      String        @unique
+  library   Library       @relation(fields: [libraryId], references: [id], onDelete: Cascade)
   libraryId String
   items     CatalogItem[]
   createdAt DateTime      @default(now())

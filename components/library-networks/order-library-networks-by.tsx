@@ -34,7 +34,7 @@ export function OrderLibraryNetworksBy() {
 
 
     return (
-        <LibraryNetworkProvider initialEntities={[]} > {/* Envolver com o Provider */}
+        <LibraryNetworkProvider initialEntities={[]}>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" className="w-full justify-between">

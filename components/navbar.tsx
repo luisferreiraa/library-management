@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
-import { Book, Users, BookOpenCheck, Tag, Menu, PenTool, LogOut, User, ShieldAlert, BookMarked, BookText, Languages, FileText, Settings, ScrollText, ScrollTextIcon, ChevronDown, BookCheck } from "lucide-react"
+import { Book, Users, BookOpenCheck, Tag, Menu, PenTool, LogOut, User, Library, ShieldAlert, BookMarked, BookText, Languages, FileText, Settings, ScrollText, ScrollTextIcon, ChevronDown, BookCheck, Network } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -61,6 +61,8 @@ const navItems: NavItem[] = [
         icon: Settings,
         adminOnly: true,
         children: [
+            { label: "Redes de Bibliotecas", href: "/library-networks", icon: Network, adminOnly: true },
+            { label: "Bibliotecas", href: "/libraries", icon: Library, adminOnly: true },
             { label: "Regras de Multa", href: "/penalty-rules", icon: ScrollText, adminOnly: true },
         ],
     },
