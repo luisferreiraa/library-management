@@ -7,10 +7,13 @@ import { BookStatusesProvider } from "@/contexts/bookstatus-context"
 import { BookStatusSearch } from "@/components/bookStatuses/bookstatus-search"
 import { OrderBookStatusBy } from "@/components/bookStatuses/order-book-status-by"
 import { FilterBookStatus } from "@/components/bookStatuses/filter-book-status"
+import { getFilterOptions } from "@/lib/filter-options"
+import { filter } from "lodash"
 
 export default async function BookStatusPage() {
     // Buscar dados no servidor
     const bookStatuses = await getBookStatus()
+    const filterOptions = await getFilterOptions("book-status")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -28,7 +31,7 @@ export default async function BookStatusPage() {
                         <OrderBookStatusBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterBookStatus />
+                        <FilterBookStatus filterOptions={filterOptions} />
                     </div>
                 </div>
 

@@ -6,12 +6,14 @@ import { LibraryNetworksTable } from "@/components/library-networks/library-netw
 import { OrderLibraryNetworksBy } from "@/components/library-networks/order-library-networks-by";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { LibraryNetworkProvider } from "@/contexts/library-networks-context";
+import { getFilterOptions } from "@/lib/filter-options";
 import { getLibraryNetworks } from "@/lib/library-networks";
 import { Suspense } from "react";
 
 // LibraryNetworkPage vai buscar os dados do servidor
 export default async function LibraryNetworkPage() {
     const libraryNetworks = await getLibraryNetworks()
+    const filterOptions = await getFilterOptions("library-networks")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -29,7 +31,7 @@ export default async function LibraryNetworkPage() {
                         <OrderLibraryNetworksBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterLibraryNetworks />
+                        <FilterLibraryNetworks filterOptions={filterOptions} />
                     </div>
                 </div>
 

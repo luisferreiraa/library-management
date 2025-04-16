@@ -7,6 +7,7 @@ import { OrderLibrariesBy } from "@/components/libraries/order-libraries-by";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { LibraryProvider } from "@/contexts/libraries-context";
 import { LibraryNetworkProvider } from "@/contexts/library-networks-context";
+import { getFilterOptions } from "@/lib/filter-options";
 import { getLibraries } from "@/lib/libraries";
 import { getLibraryNetworks } from "@/lib/library-networks";
 import { Suspense } from "react";
@@ -15,6 +16,7 @@ export default async function LibraryPage() {
 
     const libraries = await getLibraries()
     const libraryNetworks = await getLibraryNetworks()
+    const filterOptions = await getFilterOptions("libraries")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -33,7 +35,7 @@ export default async function LibraryPage() {
                             <OrderLibrariesBy />
                         </div>
                         <div className="w-full sm:max-w-xs">
-                            <FilterLibraries />
+                            <FilterLibraries filterOptions={filterOptions} />
                         </div>
                     </div>
 

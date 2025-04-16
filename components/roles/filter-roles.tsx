@@ -3,14 +3,13 @@
 import { useRoles } from "@/contexts/roles-context"
 import { FilterEntities } from "../global-entities/filter-entities"
 import type { ActiveFilterOption } from "@/types/types"
+import { FilterOption } from "@/lib/filter-options"
 
-const filterOptions = [
-    { value: "all", label: "Todos" },
-    { value: "active", label: "Ativos" },
-    { value: "inactive", label: "Inativos" },
-] as const
+type Props = {
+    filterOptions: FilterOption<ActiveFilterOption>[]
+}
 
-export function FilterRoles() {
+export function FilterRoles({ filterOptions }: Props) {
     const { activeFilter, setActiveFilter } = useRoles()
 
     return (

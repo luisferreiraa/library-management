@@ -7,10 +7,12 @@ import { RolesProvider } from "@/contexts/roles-context"
 import { RolesSearch } from "@/components/roles/roles-search"
 import { OrderRolesBy } from "@/components/roles/order-roles-by"
 import { FilterRoles } from "@/components/roles/filter-roles"
+import { getFilterOptions } from "@/lib/filter-options"
 
 export default async function RolesPage() {
     // Buscar dados no servidor
     const roles = await getRoles()
+    const filterOptions = await getFilterOptions("roles")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -28,7 +30,7 @@ export default async function RolesPage() {
                         <OrderRolesBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterRoles />
+                        <FilterRoles filterOptions={filterOptions} />
                     </div>
                 </div>
 
