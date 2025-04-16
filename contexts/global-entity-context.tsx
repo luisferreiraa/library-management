@@ -11,6 +11,21 @@ import {
     useEffect,
 } from "react"
 import type { SortOption, ActiveFilterOption } from "../types/types"
+import { FilterOption, getFilterOptions } from "@/lib/filter-options"
+
+type EntityType =
+    | "libraries"
+    | "library-networks"
+    | "roles"
+    | "book-status"
+    | "authors"
+    | "categories"
+    | "formats"
+    | "languages"
+    | "penalty-rules"
+    | "publishers"
+    | "translators"
+    | "users"
 
 interface EntityContextType<T> {
     entities: T[]
@@ -35,6 +50,8 @@ interface EntityContextType<T> {
     setSortOption: (option: SortOption<T>) => void
     activeFilter: ActiveFilterOption
     setActiveFilter: (filter: ActiveFilterOption) => void
+    filterOptions: FilterOption<ActiveFilterOption>[]
+    setFilterOptions: (options: FilterOption<ActiveFilterOption>[]) => void
 }
 
 const createEntityContext = <T extends { id: string; name: string; isActive?: boolean }>() => {
@@ -43,9 +60,11 @@ const createEntityContext = <T extends { id: string; name: string; isActive?: bo
     const Provider = ({
         children,
         initialEntities,
+        entityType,
     }: {
         children: ReactNode
         initialEntities: T[]
+        entityType: EntityType
     }) => {
         const [isPending, startTransition] = useTransition()
         interface Action<T> {
@@ -69,6 +88,16 @@ const createEntityContext = <T extends { id: string; name: string; isActive?: bo
         const [pageSize, setPageSize] = useState(10)
         const [sortOption, setSortOption] = useState<SortOption<T> | null>(null)
         const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")
+        const [filterOptions, setFilterOptions] = useState<FilterOption<ActiveFilterOption>[]>([])
+
+        useEffect(() => {
+            async function fetchFilterOptions() {
+                const options = await getFilterOptions(entityType)
+                setFilterOptions(options)
+            }
+
+            fetchFilterOptions()
+        }, [entityType])
 
         const filteredEntities = useMemo(() => {
             let result = [...optimisticEntities]
@@ -177,6 +206,8 @@ const createEntityContext = <T extends { id: string; name: string; isActive?: bo
                     setSortOption,
                     activeFilter,
                     setActiveFilter,
+                    filterOptions,
+                    setFilterOptions,
                 }}
             >
                 {children}

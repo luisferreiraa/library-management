@@ -7,14 +7,16 @@ import { FormatsProvider } from "@/contexts/formats-context"
 import { FormatsSearch } from "@/components/formats/formats-search"
 import { OrderFormatsBy } from "@/components/formats/order-formats-by"
 import { FilterFormats } from "@/components/formats/filter-formats"
+import { getFilterOptions } from "@/lib/filter-options"
 
 export default async function FormatsPage() {
     // Buscar dados no servidor
     const formats = await getFormats()
+    const filterOptions = await getFilterOptions("formats")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
-            <FormatsProvider initialFormats={formats}>
+            <FormatsProvider initialEntities={formats} entityType="formats">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Formatos</h1>
                     <CreateFormatButton />

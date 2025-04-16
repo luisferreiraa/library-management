@@ -7,10 +7,12 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { UsersProvider } from "@/contexts/users-context"
 import { OrderUsersBy } from "@/components/users/order-users-by"
 import { FilterUsers } from "@/components/users/filter-users"
+import { getFilterOptions } from "@/lib/filter-options"
 
 export default async function UsersPage() {
     // Buscar dados no servidor
     const users = await getUsers()
+    const filterOptions = await getFilterOptions("users")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -28,7 +30,7 @@ export default async function UsersPage() {
                         <OrderUsersBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterUsers />
+                        <FilterUsers filterOptions={filterOptions} />
                     </div>
                 </div>
 

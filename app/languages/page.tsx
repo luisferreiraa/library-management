@@ -7,10 +7,12 @@ import { LanguagesProvider } from "@/contexts/languages-context"
 import { LanguagesSearch } from "@/components/languages/languages-search"
 import { OrderLanguagesBy } from "@/components/languages/order-languages-by"
 import { FilterLanguages } from "@/components/languages/filter-languages"
+import { getFilterOptions } from "@/lib/filter-options"
 
 export default async function LanguagesPage() {
     // Buscar dados no servidor
     const languages = await getLanguages()
+    const filterOptions = await getFilterOptions("languages")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -28,7 +30,7 @@ export default async function LanguagesPage() {
                         <OrderLanguagesBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterLanguages />
+                        <FilterLanguages filterOptions={filterOptions} />
                     </div>
                 </div>
 

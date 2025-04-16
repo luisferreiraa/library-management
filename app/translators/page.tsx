@@ -7,10 +7,12 @@ import { TranslatorsProvider } from "@/contexts/translators-context"
 import { TranslatorsSearch } from "@/components/translators/translators-search"
 import { OrderTranslatorsBy } from "@/components/translators/order-translators-by"
 import { FilterTranslators } from "@/components/translators/filter-translators"
+import { getFilterOptions } from "@/lib/filter-options"
 
 export default async function TranslatorsPage() {
     // Buscar dados no servidor
     const translators = await getTranslators()
+    const filterOptions = await getFilterOptions("translators")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -28,7 +30,7 @@ export default async function TranslatorsPage() {
                         <OrderTranslatorsBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterTranslators />
+                        <FilterTranslators filterOptions={filterOptions} />
                     </div>
                 </div>
 

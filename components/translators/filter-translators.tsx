@@ -3,14 +3,13 @@
 import { useTranslators } from "@/contexts/translators-context"
 import { FilterEntities } from "../global-entities/filter-entities"
 import type { ActiveFilterOption } from "@/types/types"
+import { FilterOption } from "@/lib/filter-options"
 
-const filterOptions = [
-    { value: "all", label: "Todos" },
-    { value: "active", label: "Ativos" },
-    { value: "inactive", label: "Inativos" },
-] as const
+type Props = {
+    filterOptions: FilterOption<ActiveFilterOption>[]
+}
 
-export function FilterTranslators() {
+export function FilterTranslators({ filterOptions }: Props) {
     const { activeFilter, setActiveFilter } = useTranslators()
 
     return (

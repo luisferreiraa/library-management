@@ -7,10 +7,12 @@ import { PublishersProvider } from "@/contexts/publishers-context"
 import { PublishersSearch } from "@/components/publishers/publishers-search"
 import { OrderPublishersBy } from "@/components/publishers/order-publishers-by"
 import { FilterPublishers } from "@/components/publishers/filter-publishers"
+import { getFilterOptions } from "@/lib/filter-options"
 
 export default async function PublishersPage() {
     // Buscar dados no servidor
     const publishers = await getPublishers()
+    const filterOptions = await getFilterOptions("publishers")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -28,7 +30,7 @@ export default async function PublishersPage() {
                         <OrderPublishersBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterPublishers />
+                        <FilterPublishers filterOptions={filterOptions} />
                     </div>
                 </div>
 

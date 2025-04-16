@@ -7,10 +7,12 @@ import { PenaltyRulesProvider } from "@/contexts/penaltyrules-context"
 import { PenaltyRulesSearch } from "@/components/penaltyRules/penaltyrules-search"
 import { OrderPenaltyRulesBy } from "@/components/penaltyRules/order-penalty-rules-by"
 import { FilterPenaltyRules } from "@/components/penaltyRules/filter-penalty-rules"
+import { getFilterOptions } from "@/lib/filter-options"
 
 export default async function PenaltyRulesPage() {
     // Buscar dados no servidor
     const penaltyRules = await getPenaltyRules()
+    const filterOptions = await getFilterOptions("penalty-rules")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -28,7 +30,7 @@ export default async function PenaltyRulesPage() {
                         <OrderPenaltyRulesBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterPenaltyRules />
+                        <FilterPenaltyRules filterOptions={filterOptions} />
                     </div>
                 </div>
 

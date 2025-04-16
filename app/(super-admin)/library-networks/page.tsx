@@ -1,4 +1,3 @@
-// app/(super-admin)/library-networks/page.tsx
 import { CreateLibraryNetworkButton } from "@/components/library-networks/create-library-network-button";
 import { FilterLibraryNetworks } from "@/components/library-networks/filter-library-networks";
 import { LibraryNetworksSearch } from "@/components/library-networks/library-networks-search";
@@ -6,18 +5,16 @@ import { LibraryNetworksTable } from "@/components/library-networks/library-netw
 import { OrderLibraryNetworksBy } from "@/components/library-networks/order-library-networks-by";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { LibraryNetworkProvider } from "@/contexts/library-networks-context";
-import { getFilterOptions } from "@/lib/filter-options";
 import { getLibraryNetworks } from "@/lib/library-networks";
 import { Suspense } from "react";
 
 // LibraryNetworkPage vai buscar os dados do servidor
 export default async function LibraryNetworkPage() {
     const libraryNetworks = await getLibraryNetworks()
-    const filterOptions = await getFilterOptions("library-networks")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
-            <LibraryNetworkProvider initialEntities={libraryNetworks}>
+            <LibraryNetworkProvider initialEntities={libraryNetworks} entityType="library-networks">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Redes de Bibliotecas</h1>
                     <CreateLibraryNetworkButton />
@@ -31,7 +28,7 @@ export default async function LibraryNetworkPage() {
                         <OrderLibraryNetworksBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterLibraryNetworks filterOptions={filterOptions} />
+                        <FilterLibraryNetworks />
                     </div>
                 </div>
 

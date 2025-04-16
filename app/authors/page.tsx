@@ -7,10 +7,12 @@ import { TableSkeleton } from "@/components/ui/table-skeleton"
 import { AuthorsProvider } from "@/contexts/authors-context"
 import { OrderAuthorsBy } from "@/components/authors/order-authors-by"
 import { FilterAuthors } from "@/components/authors/filter-authors"
+import { getFilterOptions } from "@/lib/filter-options"
 
 export default async function AuthorsPage() {
   // Buscar dados no servidor
   const authors = await getAuthors()
+  const filterOptions = await getFilterOptions("authors")
 
   return (
     <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -28,7 +30,7 @@ export default async function AuthorsPage() {
             <OrderAuthorsBy />
           </div>
           <div className="w-full sm:max-w-xs">
-            <FilterAuthors />
+            <FilterAuthors filterOptions={filterOptions} />
           </div>
         </div>
 

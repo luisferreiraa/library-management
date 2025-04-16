@@ -28,13 +28,13 @@ import { Badge } from "../ui/badge"
 
 export function FormatsTable() {
     const {
-        paginatedFormats,
-        filteredFormats,
-        selectedFormatIds,
-        toggleFormatSelection,
-        toggleAllFormats,
+        paginatedEntities,
+        filteredEntities,
+        selectedEntityIds,
+        toggleEntitySelection,
+        toggleAllEntities,
         hasSelection,
-        removeFormats,
+        removeEntities,
         currentPage,
         setCurrentPage,
         pageSize,
@@ -49,10 +49,10 @@ export function FormatsTable() {
 
     // Verificar se todos os formatos estão selecionadas
     const allSelected =
-        paginatedFormats.length > 0 && paginatedFormats.every((format) => selectedFormatIds.includes(format.id))
+        paginatedEntities.length > 0 && paginatedEntities.every((format) => selectedEntityIds.includes(format.id))
 
     // Verificar se alguns formatos estão selecionadas
-    const someSelected = selectedFormatIds.length > 0 && !allSelected
+    const someSelected = selectedEntityIds.length > 0 && !allSelected
 
     // Função para formatar a data corretamente
     const formatDate = (dateValue: Date | string) => {
@@ -62,20 +62,20 @@ export function FormatsTable() {
 
     // Função para excluir os formatos selecionadas
     const handleDeleteSelected = async () => {
-        if (selectedFormatIds.length === 0) return
+        if (selectedEntityIds.length === 0) return
 
         try {
             setIsDeleting(true)
 
             // Chamar a Server Action para excluir os formatos
-            await deleteFormatsAction(selectedFormatIds)
+            await deleteFormatsAction(selectedEntityIds)
 
             // Atualizar o estado local otimisticamente
-            removeFormats(selectedFormatIds)
+            removeEntities(selectedEntityIds)
 
-            const message = selectedFormatIds.length === 1
+            const message = selectedEntityIds.length === 1
                 ? "Formato excluído com sucesso"
-                : `Formatos excluídos com sucesso (${selectedFormatIds.length})`;
+                : `Formatos excluídos com sucesso (${selectedEntityIds.length})`;
 
             toast.success(message, {
                 position: "top-right",
@@ -89,7 +89,7 @@ export function FormatsTable() {
             setIsDialogOpen(false)
         } catch (error) {
 
-            const errorMessage = selectedFormatIds.length === 1
+            const errorMessage = selectedEntityIds.length === 1
                 ? "Erro ao excluir formato"
                 : "Erro ao excluir formatos";
 
@@ -121,14 +121,14 @@ export function FormatsTable() {
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" size="sm" className="flex items-center gap-2">
                                 <Trash2 className="h-4 w-4" />
-                                Excluir Selecionados ({selectedFormatIds.length})
+                                Excluir Selecionados ({selectedEntityIds.length})
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Excluir formatos</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja excluir {selectedFormatIds.length} formato(s)? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja excluir {selectedEntityIds.length} formato(s)? Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -154,7 +154,7 @@ export function FormatsTable() {
                                 <IndeterminateCheckbox
                                     checked={allSelected}
                                     indeterminate={someSelected}
-                                    onCheckedChange={toggleAllFormats}
+                                    onCheckedChange={toggleAllEntities}
                                     aria-label="Selecionar todos os formatos"
                                 />
                             </TableHead>
@@ -165,19 +165,19 @@ export function FormatsTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginatedFormats.length === 0 ? (
+                        {paginatedEntities.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhum formato encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedFormats.map((fmats) => (
-                                <TableRow key={fmats.id} className={selectedFormatIds.includes(fmats.id) ? "bg-muted/50" : ""}>
+                            paginatedEntities.map((fmats) => (
+                                <TableRow key={fmats.id} className={selectedEntityIds.includes(fmats.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
-                                            checked={selectedFormatIds.includes(fmats.id)}
-                                            onCheckedChange={() => toggleFormatSelection(fmats.id)}
+                                            checked={selectedEntityIds.includes(fmats.id)}
+                                            onCheckedChange={() => toggleEntitySelection(fmats.id)}
                                             aria-label={`Selecionar ${fmats.name}`}
                                         />
                                     </TableCell>
@@ -228,7 +228,7 @@ export function FormatsTable() {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
-                totalItems={filteredFormats.length}
+                totalItems={filteredEntities.length}
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
                 className="mt-4"

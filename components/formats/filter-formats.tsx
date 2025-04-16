@@ -4,15 +4,8 @@ import { useFormats } from "@/contexts/formats-context"
 import { FilterEntities } from "../global-entities/filter-entities"
 import type { ActiveFilterOption } from "@/types/types"
 
-
 export function FilterFormats() {
-    const { activeFilter, setActiveFilter } = useFormats()
-
-    const filterOptions = [
-        { value: "all", label: "Todos" },
-        { value: "active", label: "Ativos" },
-        { value: "inactive", label: "Inativos" },
-    ] as const
+    const { filterOptions, activeFilter, setActiveFilter } = useFormats()
 
     return (
         <FilterEntities<ActiveFilterOption>

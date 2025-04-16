@@ -7,10 +7,12 @@ import { CategoryProvider } from "@/contexts/categories-context"
 import { CategoriesSearch } from "@/components/categories/categories-search"
 import { OrderCategoriesBy } from "@/components/categories/order-categories-by"
 import { FilterCategories } from "@/components/categories/filter-categories"
+import { getFilterOptions } from "@/lib/filter-options"
 
 export default async function CategoriesPage() {
     // Buscar dados no servidor
     const categories = await getCategories()
+    const filterOptions = await getFilterOptions("categories")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
@@ -28,7 +30,7 @@ export default async function CategoriesPage() {
                         <OrderCategoriesBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterCategories />
+                        <FilterCategories filterOptions={filterOptions} />
                     </div>
                 </div>
 

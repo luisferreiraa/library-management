@@ -3,14 +3,13 @@
 import { useAuthors } from "@/contexts/authors-context"
 import { FilterEntities } from "../global-entities/filter-entities"
 import type { ActiveFilterOption } from "@/types/types"
+import { FilterOption } from "@/lib/filter-options"
 
-const filterOptions = [
-    { value: "all", label: "Todos" },
-    { value: "active", label: "Ativos" },
-    { value: "inactive", label: "Inativos" },
-] as const
+type Props = {
+    filterOptions: FilterOption<ActiveFilterOption>[]
+}
 
-export function FilterAuthors() {
+export function FilterAuthors({ filterOptions }: Props) {
     const { activeFilter, setActiveFilter } = useAuthors()
 
     return (

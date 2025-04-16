@@ -16,12 +16,11 @@ export default async function LibraryPage() {
 
     const libraries = await getLibraries()
     const libraryNetworks = await getLibraryNetworks()
-    const filterOptions = await getFilterOptions("libraries")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
-            <LibraryProvider initialEntities={libraries}>
-                <LibraryNetworkProvider initialEntities={libraryNetworks}>
+            <LibraryProvider initialEntities={libraries} entityType="libraries">
+                <LibraryNetworkProvider initialEntities={libraryNetworks} entityType="library-networks">
                     <div className="flex justify-between items-center mb-6">
                         <h1 className="text-3xl font-bold tracking-tight">Bibliotecas</h1>
                         <CreateLibraryButton />
@@ -35,7 +34,7 @@ export default async function LibraryPage() {
                             <OrderLibrariesBy />
                         </div>
                         <div className="w-full sm:max-w-xs">
-                            <FilterLibraries filterOptions={filterOptions} />
+                            <FilterLibraries />
                         </div>
                     </div>
 

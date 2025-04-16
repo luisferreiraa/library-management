@@ -3,14 +3,13 @@
 import { useCategories } from "@/contexts/categories-context"
 import { FilterEntities } from "../global-entities/filter-entities"
 import type { ActiveFilterOption } from "@/types/types"
+import { FilterOption } from "@/lib/filter-options"
 
-const filterOptions = [
-    { value: "all", label: "Todos" },
-    { value: "active", label: "Ativas" },
-    { value: "inactive", label: "Inativas" },
-] as const
+type Props = {
+    filterOptions: FilterOption<ActiveFilterOption>[]
+}
 
-export function FilterCategories() {
+export function FilterCategories({ filterOptions }: Props) {
     const { activeFilter, setActiveFilter } = useCategories()
 
     return (

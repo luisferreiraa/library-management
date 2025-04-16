@@ -3,14 +3,9 @@
 import { useLibraryNetworks } from "@/contexts/library-networks-context"
 import { FilterEntities } from "../global-entities/filter-entities"
 import type { ActiveFilterOption } from "@/types/types"
-import { FilterOption } from "@/lib/filter-options"
 
-type Props = {
-    filterOptions: FilterOption<ActiveFilterOption>[]
-}
-
-export function FilterLibraryNetworks({ filterOptions }: Props) {
-    const { activeFilter, setActiveFilter } = useLibraryNetworks()
+export function FilterLibraryNetworks() {
+    const { filterOptions, activeFilter, setActiveFilter } = useLibraryNetworks()
 
     return (
         <FilterEntities<ActiveFilterOption>
