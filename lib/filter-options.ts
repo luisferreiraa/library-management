@@ -28,6 +28,7 @@ export async function getFilterOptions(
         | "publishers"
         | "translators"
         | "users"
+        | "catalogs"
 ): Promise<FilterOption<ActiveFilterOption>[]> {
     switch (entityType) {
         case "libraries":
@@ -42,6 +43,7 @@ export async function getFilterOptions(
         case "publishers":
         case "translators":
         case "users":
+        case "catalogs":
             return createCommonFilterOptions<ActiveFilterOption>()
 
         default:

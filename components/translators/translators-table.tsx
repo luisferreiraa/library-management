@@ -28,13 +28,13 @@ import { Badge } from "../ui/badge"
 
 export function TranslatorsTable() {
     const {
-        paginatedTranslators,
-        filteredTranslators,
-        selectedTranslatorIds,
-        toggleTranslatorSelection,
-        toggleAllTranslators,
+        paginatedEntities,
+        filteredEntities,
+        selectedEntityIds,
+        toggleEntitySelection,
+        toggleAllEntities,
         hasSelection,
-        removeTranslators,
+        removeEntities,
         currentPage,
         setCurrentPage,
         pageSize,
@@ -49,10 +49,10 @@ export function TranslatorsTable() {
 
     // Verificar se todos os editores estão selecionadas
     const allSelected =
-        paginatedTranslators.length > 0 && paginatedTranslators.every((translator) => selectedTranslatorIds.includes(translator.id))
+        paginatedEntities.length > 0 && paginatedEntities.every((translator) => selectedEntityIds.includes(translator.id))
 
     // Verificar se alguns tradutores estão selecionados
-    const someSelected = selectedTranslatorIds.length > 0 && !allSelected
+    const someSelected = selectedEntityIds.length > 0 && !allSelected
 
     // Função para formatar a data corretamente
     const formatDate = (dateValue: Date | string) => {
@@ -62,20 +62,20 @@ export function TranslatorsTable() {
 
     // Função para excluir os tradutores selecionados
     const handleDeleteSelected = async () => {
-        if (selectedTranslatorIds.length === 0) return
+        if (selectedEntityIds.length === 0) return
 
         try {
             setIsDeleting(true)
 
             // Chamar a Server Action para excluir os tradutores
-            await deleteTranslatorsAction(selectedTranslatorIds)
+            await deleteTranslatorsAction(selectedEntityIds)
 
             // Atualizar o estado local otimisticamente
-            removeTranslators(selectedTranslatorIds)
+            removeEntities(selectedEntityIds)
 
-            const message = selectedTranslatorIds.length === 1
+            const message = selectedEntityIds.length === 1
                 ? "Tradutor excluído com sucesso"
-                : `Tradutores excluídos com sucesso (${selectedTranslatorIds.length})`;
+                : `Tradutores excluídos com sucesso (${selectedEntityIds.length})`;
 
             toast.success(message, {
                 position: "top-right",
@@ -89,7 +89,7 @@ export function TranslatorsTable() {
             setIsDialogOpen(false)
         } catch (error) {
 
-            const errorMessage = selectedTranslatorIds.length === 1
+            const errorMessage = selectedEntityIds.length === 1
                 ? "Erro ao excluir tradutor"
                 : "Erro ao excluir tradutores";
 
@@ -121,14 +121,14 @@ export function TranslatorsTable() {
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" size="sm" className="flex items-center gap-2">
                                 <Trash2 className="h-4 w-4" />
-                                Excluir Selecionados ({selectedTranslatorIds.length})
+                                Excluir Selecionados ({selectedEntityIds.length})
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Excluir tradutores</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja excluir {selectedTranslatorIds.length} tradutor(es)? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja excluir {selectedEntityIds.length} tradutor(es)? Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -155,7 +155,7 @@ export function TranslatorsTable() {
                                 <IndeterminateCheckbox
                                     checked={allSelected}
                                     indeterminate={someSelected}
-                                    onCheckedChange={toggleAllTranslators}
+                                    onCheckedChange={toggleAllEntities}
                                     aria-label="Selecionar todos os tradutores"
                                 />
                             </TableHead>
@@ -166,19 +166,19 @@ export function TranslatorsTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginatedTranslators.length === 0 ? (
+                        {paginatedEntities.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhum tradutor encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedTranslators.map((translator) => (
-                                <TableRow key={translator.id} className={selectedTranslatorIds.includes(translator.id) ? "bg-muted/50" : ""}>
+                            paginatedEntities.map((translator) => (
+                                <TableRow key={translator.id} className={selectedEntityIds.includes(translator.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
-                                            checked={selectedTranslatorIds.includes(translator.id)}
-                                            onCheckedChange={() => toggleTranslatorSelection(translator.id)}
+                                            checked={selectedEntityIds.includes(translator.id)}
+                                            onCheckedChange={() => toggleEntitySelection(translator.id)}
                                             aria-label={`Selecionar ${translator.name}`}
                                         />
                                     </TableCell>
@@ -229,7 +229,7 @@ export function TranslatorsTable() {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
-                totalItems={filteredTranslators.length}
+                totalItems={filteredEntities.length}
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
                 className="mt-4"

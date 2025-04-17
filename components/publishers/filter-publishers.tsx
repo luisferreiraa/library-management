@@ -3,14 +3,9 @@
 import { usePublishers } from "@/contexts/publishers-context"
 import { FilterEntities } from "../global-entities/filter-entities"
 import type { ActiveFilterOption } from "@/types/types"
-import { FilterOption } from "@/lib/filter-options"
 
-type Props = {
-    filterOptions: FilterOption<ActiveFilterOption>[]
-}
-
-export function FilterPublishers({ filterOptions }: Props) {
-    const { activeFilter, setActiveFilter } = usePublishers()
+export function FilterPublishers() {
+    const { filterOptions, activeFilter, setActiveFilter } = usePublishers()
 
     return (
         <FilterEntities<ActiveFilterOption>

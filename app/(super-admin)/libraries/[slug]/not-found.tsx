@@ -1,12 +1,12 @@
 import EntityNotFound from "@/components/global-entities/entity-not-found"
 
-export default function PublisherNotFound() {
+export default function LibraryNotFound() {
     return (
         <EntityNotFound
-            entityName="Editora"
+            entityName="Biblioteca"
             entityGender="feminino"
-            backHref="/publishers"
-            listHref="/publishers"
+            backHref="/libraries"
+            listHref="/libraries"
         />
     )
 }

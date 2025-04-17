@@ -3,21 +3,18 @@ import { getBookStatus } from "@/lib/bookstatus"
 import { BookStatusesTable } from "@/components/bookStatuses/bookStatuses-table"
 import { CreateBookStatusButton } from "@/components/bookStatuses/create-bookStatus-button"
 import { TableSkeleton } from "@/components/ui/table-skeleton"
-import { BookStatusesProvider } from "@/contexts/bookstatus-context"
+import { BookStatusProvider } from "@/contexts/bookstatus-context"
 import { BookStatusSearch } from "@/components/bookStatuses/bookstatus-search"
 import { OrderBookStatusBy } from "@/components/bookStatuses/order-book-status-by"
 import { FilterBookStatus } from "@/components/bookStatuses/filter-book-status"
-import { getFilterOptions } from "@/lib/filter-options"
-import { filter } from "lodash"
 
 export default async function BookStatusPage() {
     // Buscar dados no servidor
     const bookStatuses = await getBookStatus()
-    const filterOptions = await getFilterOptions("book-status")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
-            <BookStatusesProvider initialBookStatuses={bookStatuses}>
+            <BookStatusProvider initialEntities={bookStatuses} entityType="book-status">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Book Status</h1>
                     <CreateBookStatusButton />
@@ -31,14 +28,14 @@ export default async function BookStatusPage() {
                         <OrderBookStatusBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterBookStatus filterOptions={filterOptions} />
+                        <FilterBookStatus />
                     </div>
                 </div>
 
                 <Suspense fallback={<TableSkeleton columns={4} rows={5} />}>
                     <BookStatusesTable />
                 </Suspense>
-            </BookStatusesProvider>
+            </BookStatusProvider>
         </div>
     )
 }

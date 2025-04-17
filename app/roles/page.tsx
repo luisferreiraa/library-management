@@ -16,7 +16,7 @@ export default async function RolesPage() {
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
-            <RolesProvider initialEntities={roles}>
+            <RolesProvider initialEntities={roles} entityType="roles">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Perfis</h1>
                     <CreateRoleButton />
@@ -30,7 +30,7 @@ export default async function RolesPage() {
                         <OrderRolesBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterRoles filterOptions={filterOptions} />
+                        <FilterRoles />
                     </div>
                 </div>
 

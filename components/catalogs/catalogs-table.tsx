@@ -3,7 +3,6 @@
 import { format } from "date-fns"
 import Link from "next/link"
 import { Trash2, ExternalLink, Pencil, Check, X } from "lucide-react"
-import { useBookStatus } from "@/contexts/bookstatus-context"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IndeterminateCheckbox } from "@/components/ui/indetermined-checkbox"
 import { Button } from "@/components/ui/button"
@@ -19,14 +18,15 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
-import { deleteBookStatusesAction } from "@/app/book-status/actions"
+import { deleteCatalogsAction } from "@/app/catalogs/actions"
 import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
-import { BookStatus } from "@/lib/bookstatus"
-import { BookStatusModal } from "./book-status-modal"
+import { CatalogModal } from "./catalog-modal"
+import { Catalog } from "@/lib/catalogs"
 import { Badge } from "../ui/badge"
+import { useCatalogs } from "@/contexts/catalogs-context"
 
-export function BookStatusesTable() {
+export function CatalogsTable() {
     const {
         paginatedEntities,
         filteredEntities,
@@ -40,18 +40,18 @@ export function BookStatusesTable() {
         pageSize,
         setPageSize,
         totalPages,
-    } = useBookStatus()
+    } = useCatalogs()
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-    const [selectedBookStatus, setSelectedBookStatus] = useState<BookStatus | null>(null)
+    const [selectedCatalog, setSelectedCatalog] = useState<Catalog | null>(null)
 
-    // Verificar se todos os book status estão selecionados
+    // Verificar se todas os roles estão selecionados
     const allSelected =
-        paginatedEntities.length > 0 && paginatedEntities.every((bookStatus) => selectedEntityIds.includes(bookStatus.id))
+        paginatedEntities.length > 0 && paginatedEntities.every((entity) => selectedEntityIds.includes(entity.id))
 
-    // Verificar se alguns book status estão selecionados
+    // Verificar se alguns roles estão selecionados
     const someSelected = selectedEntityIds.length > 0 && !allSelected
 
     // Função para formatar a data corretamente
@@ -67,15 +67,15 @@ export function BookStatusesTable() {
         try {
             setIsDeleting(true)
 
-            // Chamar a Server Action para excluir os book status
-            await deleteBookStatusesAction(selectedEntityIds)
+            // Chamar a Server Action para excluir
+            await deleteCatalogsAction(selectedEntityIds)
 
             // Atualizar o estado local otimisticamente
             removeEntities(selectedEntityIds)
 
             const message = selectedEntityIds.length === 1
-                ? "Estado excluído com sucesso"
-                : `Estados excluídos com sucesso (${selectedEntityIds.length})`;
+                ? "Catálogo excluído com sucesso"
+                : `Catálogos excluídos com sucesso (${selectedEntityIds.length})`;
 
             toast.success(message, {
                 position: "top-right",
@@ -90,8 +90,8 @@ export function BookStatusesTable() {
         } catch (error) {
 
             const errorMessage = selectedEntityIds.length === 1
-                ? "Erro ao excluir estado"
-                : "Erro ao excluir estados";
+                ? "Erro ao excluir catálogo"
+                : "Erro ao excluir catálogos";
 
             toast.error(errorMessage, {
                 position: "top-right",
@@ -108,8 +108,8 @@ export function BookStatusesTable() {
     }
 
     // Função para abrir o modal de edição
-    const handleEditBookStatus = (bookStatus: BookStatus) => {
-        setSelectedBookStatus(bookStatus)
+    const handleEditCatalog = (entity: Catalog) => {
+        setSelectedCatalog(entity)
         setIsEditModalOpen(true)
     }
 
@@ -126,9 +126,9 @@ export function BookStatusesTable() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
-                                <AlertDialogTitle>Excluir status</AlertDialogTitle>
+                                <AlertDialogTitle>Excluir catálogos</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja excluir {selectedEntityIds.length} status? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja excluir {selectedEntityIds.length} catálogo(s)? Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -155,11 +155,12 @@ export function BookStatusesTable() {
                                     checked={allSelected}
                                     indeterminate={someSelected}
                                     onCheckedChange={toggleAllEntities}
-                                    aria-label="Selecionar todos os status"
+                                    aria-label="Selecionar todas os catálogos"
                                 />
                             </TableHead>
                             <TableHead>Nome</TableHead>
                             <TableHead>Data de Criação</TableHead>
+                            <TableHead>Biblioteca</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Ações</TableHead>
                         </TableRow>
@@ -168,31 +169,40 @@ export function BookStatusesTable() {
                         {paginatedEntities.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
-                                    Nenhum status encontrado.
+                                    Nenhum catálogo encontrado.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedEntities.map((bookStatus) => (
-                                <TableRow key={bookStatus.id} className={selectedEntityIds.includes(bookStatus.id) ? "bg-muted/50" : ""}>
+                            paginatedEntities.map((entity) => (
+                                <TableRow key={entity.id} className={selectedEntityIds.includes(entity.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
-                                            checked={selectedEntityIds.includes(bookStatus.id)}
-                                            onCheckedChange={() => toggleEntitySelection(bookStatus.id)}
-                                            aria-label={`Selecionar ${bookStatus.name}`}
+                                            checked={selectedEntityIds.includes(entity.id)}
+                                            onCheckedChange={() => toggleEntitySelection(entity.id)}
+                                            aria-label={`Selecionar ${entity.name}`}
                                         />
                                     </TableCell>
                                     <TableCell className="font-medium">
-                                        {/* Transformar o nome do status num link */}
+
                                         <Link
-                                            href={`/bookstatus/${bookStatus.slug}`}
+                                            href={`/catalogs/${entity.slug}`}
                                             className="hover:underline hover:text-primary transition-colors"
                                         >
-                                            {bookStatus.name}
+                                            {entity.name}
                                         </Link>
                                     </TableCell>
-                                    <TableCell>{format(new Date(bookStatus.createdAt), "dd/MM/yyyy")}</TableCell>
+                                    <TableCell className="font-medium">
+
+                                        <Link
+                                            href={`/libraries/${entity.library.slug}`}
+                                            className="hover:underline hover:text-primary transition-colors"
+                                        >
+                                            {entity.library.name}
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell>{format(new Date(entity.createdAt), "dd/MM/yyyy")}</TableCell>
                                     <TableCell>
-                                        {bookStatus.isActive ? (
+                                        {entity.isActive ? (
                                             <Badge variant="success" className="flex items-center gap-1 w-fit">
                                                 <Check className="h-3 w-3" />
                                                 Ativo
@@ -206,14 +216,14 @@ export function BookStatusesTable() {
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
-                                            <Button variant="ghost" size="icon" onClick={() => handleEditBookStatus(bookStatus)}>
+                                            <Button variant="ghost" size="icon" onClick={() => handleEditCatalog(entity)}>
                                                 <Pencil className="h-4 w-4" />
-                                                <span className="sr-only">Editar {bookStatus.name}</span>
+                                                <span className="sr-only">Editar {entity.name}</span>
                                             </Button>
                                             <Button variant="ghost" size="icon" asChild>
-                                                <Link href={`/book-status/${bookStatus.slug}`}>
+                                                <Link href={`/catalogs/${entity.slug}`}>
                                                     <ExternalLink className="h-4 w-4" />
-                                                    <span className="sr-only">Ver detalhes de {bookStatus.name}</span>
+                                                    <span className="sr-only">Ver detalhes de {entity.name}</span>
                                                 </Link>
                                             </Button>
                                         </div>
@@ -233,7 +243,7 @@ export function BookStatusesTable() {
                 onPageSizeChange={setPageSize}
                 className="mt-4"
             />
-            <BookStatusModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} bookStatus={selectedBookStatus} />
+            <CatalogModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} catalog={selectedCatalog} />
         </div>
     )
 }

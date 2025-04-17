@@ -1,11 +1,11 @@
 "use client"
 
-import { useLanguages } from "@/contexts/languages-context"
+import { useCatalogs } from "@/contexts/catalogs-context"
 import { FilterEntities } from "../global-entities/filter-entities"
 import type { ActiveFilterOption } from "@/types/types"
 
-export function FilterLanguages() {
-    const { filterOptions, activeFilter, setActiveFilter } = useLanguages()
+export function FilterCatalogs() {
+    const { filterOptions, activeFilter, setActiveFilter } = useCatalogs()
 
     return (
         <FilterEntities<ActiveFilterOption>
@@ -13,7 +13,7 @@ export function FilterLanguages() {
             onValueChange={setActiveFilter}
             options={filterOptions}
             label="Estado:"
-            placeholder="Filtrar Idiomas"
+            placeholder="Filtrar Catálogos"
         />
     )
 }

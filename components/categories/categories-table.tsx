@@ -28,13 +28,13 @@ import { Badge } from "../ui/badge"
 
 export function CategoriesTable() {
     const {
-        paginatedCategories,
-        filteredCategories,
-        selectedCategoryIds,
-        toggleCategorySelection,
-        toggleAllCategories,
+        paginatedEntities,
+        filteredEntities,
+        selectedEntityIds,
+        toggleEntitySelection,
+        toggleAllEntities,
         hasSelection,
-        removeCategories,
+        removeEntities,
         currentPage,
         setCurrentPage,
         pageSize,
@@ -49,10 +49,10 @@ export function CategoriesTable() {
 
     // Verificar se todas as categorias estão selecionadas
     const allSelected =
-        paginatedCategories.length > 0 && paginatedCategories.every((category) => selectedCategoryIds.includes(category.id))
+        paginatedEntities.length > 0 && paginatedEntities.every((category) => selectedEntityIds.includes(category.id))
 
     // Verificar se algumas categorias estão selecionadas
-    const someSelected = selectedCategoryIds.length > 0 && !allSelected
+    const someSelected = selectedEntityIds.length > 0 && !allSelected
 
     // Função para formatar a data corretamente
     const formatDate = (dateValue: Date | string) => {
@@ -62,20 +62,20 @@ export function CategoriesTable() {
 
     // Função para excluir as categorias selecionadas
     const handleDeleteSelected = async () => {
-        if (selectedCategoryIds.length === 0) return
+        if (selectedEntityIds.length === 0) return
 
         try {
             setIsDeleting(true)
 
             // Chamar a Server Action para excluir as categorias
-            await deleteCategoriesAction(selectedCategoryIds)
+            await deleteCategoriesAction(selectedEntityIds)
 
             // Atualizar o estado local otimisticamente
-            removeCategories(selectedCategoryIds)
+            removeEntities(selectedEntityIds)
 
-            const message = selectedCategoryIds.length === 1
+            const message = selectedEntityIds.length === 1
                 ? "Categoria excluída com sucesso"
-                : `Categorias excluídas com sucesso (${selectedCategoryIds.length})`;
+                : `Categorias excluídas com sucesso (${selectedEntityIds.length})`;
 
             toast.success(message, {
                 position: "top-right",
@@ -89,7 +89,7 @@ export function CategoriesTable() {
             setIsDialogOpen(false)
         } catch (error) {
 
-            const errorMessage = selectedCategoryIds.length === 1
+            const errorMessage = selectedEntityIds.length === 1
                 ? "Erro ao excluir categoria"
                 : "Erro ao excluir categorias";
 
@@ -122,14 +122,14 @@ export function CategoriesTable() {
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" size="sm" className="flex items-center gap-2">
                                 <Trash2 className="h-4 w-4" />
-                                Excluir Selecionados ({selectedCategoryIds.length})
+                                Excluir Selecionados ({selectedEntityIds.length})
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Excluir categorias</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja excluir {selectedCategoryIds.length} categoria(s)? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja excluir {selectedEntityIds.length} categoria(s)? Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -155,7 +155,7 @@ export function CategoriesTable() {
                                 <IndeterminateCheckbox
                                     checked={allSelected}
                                     indeterminate={someSelected}
-                                    onCheckedChange={toggleAllCategories}
+                                    onCheckedChange={toggleAllEntities}
                                     aria-label="Selecionar todas as categorias"
                                 />
                             </TableHead>
@@ -166,19 +166,19 @@ export function CategoriesTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginatedCategories.length === 0 ? (
+                        {paginatedEntities.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhuma categoria encontrada.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedCategories.map((category) => (
-                                <TableRow key={category.id} className={selectedCategoryIds.includes(category.id) ? "bg-muted/50" : ""}>
+                            paginatedEntities.map((category) => (
+                                <TableRow key={category.id} className={selectedEntityIds.includes(category.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
-                                            checked={selectedCategoryIds.includes(category.id)}
-                                            onCheckedChange={() => toggleCategorySelection(category.id)}
+                                            checked={selectedEntityIds.includes(category.id)}
+                                            onCheckedChange={() => toggleEntitySelection(category.id)}
                                             aria-label={`Selecionar ${category.name}`}
                                         />
                                     </TableCell>
@@ -229,7 +229,7 @@ export function CategoriesTable() {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
-                totalItems={filteredCategories.length}
+                totalItems={filteredEntities.length}
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
                 className="mt-4"

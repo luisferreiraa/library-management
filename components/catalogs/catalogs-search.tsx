@@ -1,17 +1,16 @@
 "use client"
 
-import { useTranslators } from "@/contexts/translators-context"
+import { useCatalogs } from "@/contexts/catalogs-context"
 import { EntitiesSearch } from "../global-entities/entities-search"
 
-export function TranslatorsSearch() {
-    const { searchTerm, setSearchTerm } = useTranslators()
+export function CatalogsSearch() {
+    const { searchTerm, setSearchTerm } = useCatalogs()
 
     return (
         <EntitiesSearch
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-            placeholder="Pesquisar tradutores..."
+            placeholder="Pesquisar Catálogos..."
         />
     )
 }
-

@@ -26,6 +26,7 @@ type EntityType =
     | "publishers"
     | "translators"
     | "users"
+    | "catalogs"
 
 interface EntityContextType<T> {
     entities: T[]

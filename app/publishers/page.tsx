@@ -12,11 +12,10 @@ import { getFilterOptions } from "@/lib/filter-options"
 export default async function PublishersPage() {
     // Buscar dados no servidor
     const publishers = await getPublishers()
-    const filterOptions = await getFilterOptions("publishers")
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-6xl">
-            <PublishersProvider initialEntities={publishers}>
+            <PublishersProvider initialEntities={publishers} entityType="publishers">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold tracking-tight">Editoras</h1>
                     <CreatePublisherButton />
@@ -30,7 +29,7 @@ export default async function PublishersPage() {
                         <OrderPublishersBy />
                     </div>
                     <div className="w-full sm:max-w-xs">
-                        <FilterPublishers filterOptions={filterOptions} />
+                        <FilterPublishers />
                     </div>
                 </div>
 

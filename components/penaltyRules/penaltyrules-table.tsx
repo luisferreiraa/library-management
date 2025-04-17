@@ -28,13 +28,13 @@ import { Badge } from "../ui/badge"
 
 export function PenaltyRulesTable() {
     const {
-        paginatedRules,
-        filteredPenaltyRules,
-        selectedPenaltyRuleIds,
-        togglePenaltyRuleSelection,
-        toggleAllPenaltyRules,
+        paginatedEntities,
+        filteredEntities,
+        selectedEntityIds,
+        toggleEntitySelection,
+        toggleAllEntities,
         hasSelection,
-        removePenaltyRules,
+        removeEntities,
         currentPage,
         setCurrentPage,
         pageSize,
@@ -49,10 +49,10 @@ export function PenaltyRulesTable() {
 
     // Verificar se todas as penalty rules estão selecionadas
     const allSelected =
-        paginatedRules.length > 0 && paginatedRules.every((penaltyRule) => selectedPenaltyRuleIds.includes(penaltyRule.id))
+        paginatedEntities.length > 0 && paginatedEntities.every((penaltyRule) => selectedEntityIds.includes(penaltyRule.id))
 
     // Verificar se algumas penalty rules estão selecionadas
-    const someSelected = selectedPenaltyRuleIds.length > 0 && !allSelected
+    const someSelected = selectedEntityIds.length > 0 && !allSelected
 
     // Função para formatar a data corretamente
     const formatDate = (dateValue: Date | string) => {
@@ -62,20 +62,20 @@ export function PenaltyRulesTable() {
 
     // Função para excluir as penalty rules selecionadas
     const handleDeleteSelected = async () => {
-        if (selectedPenaltyRuleIds.length === 0) return
+        if (selectedEntityIds.length === 0) return
 
         try {
             setIsDeleting(true)
 
             // Chamar a Server Action para excluir as penalty rules
-            await deletePenaltyRulesAction(selectedPenaltyRuleIds)
+            await deletePenaltyRulesAction(selectedEntityIds)
 
             // Atualizar o estado local otimisticamente
-            removePenaltyRules(selectedPenaltyRuleIds)
+            removeEntities(selectedEntityIds)
 
-            const message = selectedPenaltyRuleIds.length === 1
+            const message = selectedEntityIds.length === 1
                 ? "Regra excluída com sucesso"
-                : `Regras excluídas com sucesso (${selectedPenaltyRuleIds.length})`;
+                : `Regras excluídas com sucesso (${selectedEntityIds.length})`;
 
             toast.success(message, {
                 position: "top-right",
@@ -89,7 +89,7 @@ export function PenaltyRulesTable() {
             setIsDialogOpen(false)
         } catch (error) {
 
-            const errorMessage = selectedPenaltyRuleIds.length === 1
+            const errorMessage = selectedEntityIds.length === 1
                 ? "Erro ao excluir regra"
                 : "Erro ao excluir regras";
 
@@ -121,14 +121,14 @@ export function PenaltyRulesTable() {
                         <AlertDialogTrigger asChild>
                             <Button variant="destructive" size="sm" className="flex items-center gap-2">
                                 <Trash2 className="h-4 w-4" />
-                                Excluir Selecionados ({selectedPenaltyRuleIds.length})
+                                Excluir Selecionados ({selectedEntityIds.length})
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Excluir multas</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Tem certeza que deseja excluir {selectedPenaltyRuleIds.length} multa(s)? Esta ação não pode ser desfeita.
+                                    Tem certeza que deseja excluir {selectedEntityIds.length} multa(s)? Esta ação não pode ser desfeita.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -154,7 +154,7 @@ export function PenaltyRulesTable() {
                                 <IndeterminateCheckbox
                                     checked={allSelected}
                                     indeterminate={someSelected}
-                                    onCheckedChange={toggleAllPenaltyRules}
+                                    onCheckedChange={toggleAllEntities}
                                     aria-label="Selecionar todas as multas"
                                 />
                             </TableHead>
@@ -167,19 +167,19 @@ export function PenaltyRulesTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {paginatedRules.length === 0 ? (
+                        {paginatedEntities.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="h-24 text-center">
                                     Nenhuma regra encontrada.
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            paginatedRules.map((rule) => (
-                                <TableRow key={rule.id} className={selectedPenaltyRuleIds.includes(rule.id) ? "bg-muted/50" : ""}>
+                            paginatedEntities.map((rule) => (
+                                <TableRow key={rule.id} className={selectedEntityIds.includes(rule.id) ? "bg-muted/50" : ""}>
                                     <TableCell>
                                         <IndeterminateCheckbox
-                                            checked={selectedPenaltyRuleIds.includes(rule.id)}
-                                            onCheckedChange={() => togglePenaltyRuleSelection(rule.id)}
+                                            checked={selectedEntityIds.includes(rule.id)}
+                                            onCheckedChange={() => toggleEntitySelection(rule.id)}
                                             aria-label={`Selecionar ${rule.name}`}
                                         />
                                     </TableCell>
@@ -224,7 +224,7 @@ export function PenaltyRulesTable() {
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
-                totalItems={filteredPenaltyRules.length}
+                totalItems={filteredEntities.length}
                 pageSize={pageSize}
                 onPageSizeChange={setPageSize}
                 className="mt-4"

@@ -1,8 +1,8 @@
 "use client"
 
-import { useBookStatus } from "@/contexts/bookstatus-context"
-import { OrderEntityBy } from "../global-entities/order-entity-by"
-import { BookStatus } from "@prisma/client"
+import { OrderEntityBy } from "@/components/global-entities/order-entity-by"
+import { useCatalogs } from "@/contexts/catalogs-context"
+import type { Catalog } from "@/lib/catalogs"
 
 const sortOptions = [
     { label: "Nome (A-Z)", value: "name", direction: "asc" },
@@ -11,16 +11,15 @@ const sortOptions = [
     { label: "Data de registo (mais antiga)", value: "createdAt", direction: "asc" },
 ] as const
 
-export function OrderBookStatusBy() {
-    const { sortOption, setSortOption } = useBookStatus()
+export function OrderCatalogsBy() {
+    const { sortOption, setSortOption } = useCatalogs()
 
     return (
-        <OrderEntityBy<BookStatus>
+        <OrderEntityBy<Catalog>
             sortOptions={[...sortOptions]}
             currentSort={sortOption}
             onSortChange={setSortOption}
-            defaultLabel="Ordenar idiomas por"
+            defaultLabel="Ordenar catálogos por"
         />
     )
 }
-

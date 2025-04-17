@@ -1,13 +1,18 @@
 import slugify from "slugify"
 import { prisma } from "./prisma"
-import type { Library as PrismaLibrary } from "@prisma/client"
+import type { Library as PrismaLibrary, Prisma } from "@prisma/client"
 
 export type Library = PrismaLibrary
+export type LibraryWithCatalogs = Prisma.LibraryGetPayload<{
+    include: {
+        catalog: true
+    }
+}>
 
 export async function getLibraries(): Promise<Library[]> {
     return prisma.library.findMany({
         orderBy: {
-            createdAt: "desc",
+            createdAt: "asc",
         }
     })
 }
@@ -24,6 +29,15 @@ export async function getLibrariesByNetworkId(networkId: string): Promise<Librar
 export async function getLibraryById(id: string): Promise<Library | null> {
     return prisma.library.findUnique({
         where: { id }
+    })
+}
+
+export async function getLibraryBySlug(slug: string): Promise<LibraryWithCatalogs | null> {
+    return prisma.library.findUnique({
+        where: { slug },
+        include: {
+            catalog: true
+        }
     })
 }
 

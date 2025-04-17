@@ -1,10 +1,10 @@
 "use client"
 
-import { useBookStatuses } from "@/contexts/bookstatus-context"
+import { useBookStatus } from "@/contexts/bookstatus-context"
 import { EntitiesSearch } from "../global-entities/entities-search"
 
 export function BookStatusSearch() {
-    const { searchTerm, setSearchTerm } = useBookStatuses()
+    const { searchTerm, setSearchTerm } = useBookStatus()
 
     return (
         <EntitiesSearch

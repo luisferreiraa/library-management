@@ -1,4 +1,3 @@
-// app/(super-admin)/library-networks/page.tsx
 import { CreateLibraryButton } from "@/components/libraries/create-library-button";
 import { FilterLibraries } from "@/components/libraries/filter-libraries";
 import { LibrariesSearch } from "@/components/libraries/libraries-search";
@@ -7,7 +6,6 @@ import { OrderLibrariesBy } from "@/components/libraries/order-libraries-by";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { LibraryProvider } from "@/contexts/libraries-context";
 import { LibraryNetworkProvider } from "@/contexts/library-networks-context";
-import { getFilterOptions } from "@/lib/filter-options";
 import { getLibraries } from "@/lib/libraries";
 import { getLibraryNetworks } from "@/lib/library-networks";
 import { Suspense } from "react";
