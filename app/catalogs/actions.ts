@@ -1,8 +1,11 @@
 "use server"
 
 import { createCatalog, deleteCatalogs, updateCatalog } from "@/lib/catalogs"
+import { getLibraryById } from "@/lib/libraries"
+import prisma from "@/lib/prisma"
 import { logAudit } from "@/lib/session"
 import { revalidatePath } from "next/cache"
+import slugify from "slugify"
 
 export async function createCatalogAction(catalogData: { name: string, libraryId: string, isActive: boolean }): Promise<any> {
     try {
@@ -18,34 +21,53 @@ export async function createCatalogAction(catalogData: { name: string, libraryId
     }
 }
 
-export async function updateCatalogAction(catalogData: {
+export async function updateCatalogAction({
+    id,
+    name,
+    libraryId,
+    isActive
+}: {
     id: string,
     name: string,
     libraryId: string,
     isActive: boolean
-}): Promise<any> {
+}) {
     try {
-        const updatedCatalog = await updateCatalog(
-            catalogData.id,
-            {
-                name: catalogData.name,
-                libraryId: catalogData.id,
-                isActive: catalogData.isActive
+        // 1. Busca o catálogo atual
+        const currentCatalog = await prisma.catalog.findUnique({ where: { id } });
+
+        // 2. Gera novo slug apenas se o nome mudou
+        const slug = (name !== currentCatalog?.name)
+            ? slugify(name, { lower: true })
+            : currentCatalog.slug;
+
+        // 3. Atualiza com o novo slug
+        const updatedCatalog = await prisma.catalog.update({
+            where: { id },
+            data: {
+                name,
+                isActive,
+                slug,
+                libraryId
             }
-        )
+        });
 
-        await logAudit("Catalog", catalogData.id, "UPDATE_CATALOG")
+        await logAudit("Catalog", id, "UPDATE_CATALOG");
+        revalidatePaths(id);
 
-        revalidatePath("/catalogs")
-        revalidatePath(`/catalogs/${catalogData.id}`)
-
-        return updateCatalog
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            throw new Error(`Erro ao atualizar catalog (ID: ${catalogData.id}): ${error.message}`)
-        }
-        throw new Error("Erro desconhecido ao atualizar catalog.")
+        return { success: true };
+    } catch (error) {
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : "Erro na atualização"
+        };
     }
+}
+
+// Função auxiliar para revalidação
+function revalidatePaths(catalogId: string) {
+    revalidatePath("/catalogs");
+    revalidatePath(`/catalogs/${catalogId}`);
 }
 
 export async function deleteCatalogsAction(catalogIds: string[]): Promise<void> {

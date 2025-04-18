@@ -1,5 +1,6 @@
 import { LibraryCatalogs } from "@/components/libraries/library-catalogs"
 import { Button } from "@/components/ui/button"
+import { CatalogsProvider } from "@/contexts/catalogs-context"
 import { getLibraryBySlug } from "@/lib/libraries"
 import { Separator } from "@radix-ui/react-select"
 import { format } from "date-fns"
@@ -70,7 +71,9 @@ export default async function LibraryPage({ params }: LibraryPageProps) {
                 <div className="md:col-span-3">
                     <Separator className="my-6" />
                     <h2 className="text-2xl font-bold tracking-tight mb-6">Catálogos</h2>
-                    <LibraryCatalogs library={library} />
+                    <CatalogsProvider initialEntities={[]} entityType="catalogs">
+                        <LibraryCatalogs library={library} />
+                    </CatalogsProvider>
                 </div>
             </div>
         </div>
