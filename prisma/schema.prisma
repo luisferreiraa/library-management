@@ -55,10 +55,6 @@ model Catalog {
 model CatalogItem {
   id        String   @id @default(cuid())
   type      ItemType
-  title     String
-  author    String?
-  isbn      String?
-  publisher String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean  @default(true)

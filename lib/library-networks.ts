@@ -1,8 +1,13 @@
 import slugify from "slugify"
 import { prisma } from "./prisma"
-import type { LibraryNetwork as PrismaLibraryNetwork } from "@prisma/client"
+import type { LibraryNetwork as PrismaLibraryNetwork, Prisma } from "@prisma/client"
 
 export type LibraryNetwork = PrismaLibraryNetwork
+export type LibraryNetworkWithLibraries = Prisma.LibraryNetworkGetPayload<{
+    include: {
+        libraries: true
+    }
+}>
 
 export async function getLibraryNetworks(): Promise<LibraryNetwork[]> {
     return prisma.libraryNetwork.findMany({
@@ -15,6 +20,15 @@ export async function getLibraryNetworks(): Promise<LibraryNetwork[]> {
 export async function getLibraryNetworksById(id: string): Promise<LibraryNetwork | null> {
     return prisma.libraryNetwork.findUnique({
         where: { id },
+    })
+}
+
+export async function getLibraryNetworkBySlug(slug: string): Promise<LibraryNetworkWithLibraries | null> {
+    return prisma.libraryNetwork.findUnique({
+        where: { slug },
+        include: {
+            libraries: true
+        }
     })
 }
 

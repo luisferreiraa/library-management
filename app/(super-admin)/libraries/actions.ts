@@ -4,17 +4,22 @@ import { createLibrary, deleteLibraries, updateLibrary } from "@/lib/libraries"
 import { logAudit } from "@/lib/session"
 import { revalidatePath } from "next/cache"
 
-export async function createLibraryAction(libraryData: { name: string, location: string, libraryNetworkId: string, isActive: boolean }): Promise<any> {
+export async function createLibraryAction(libraryData: {
+    name: string,
+    location: string,
+    libraryNetworkId: string,
+    isActive: boolean
+}): Promise<{ success: boolean; data?: any; error?: string }> {
     try {
         const newLibrary = await createLibrary(libraryData)
-
         await logAudit("Library", newLibrary.id, "CREATE_LIBRARY")
-
         revalidatePath("/libraries")
-
-        return newLibrary
+        return { success: true, data: newLibrary }
     } catch (error: any) {
-        throw new Error("Erro ao criar library: " + error.message)
+        return {
+            success: false,
+            error: "Erro ao criar biblioteca: " + error.message
+        }
     }
 }
 
@@ -24,7 +29,7 @@ export async function updateLibraryAction(libraryData: {
     location: string,
     libraryNetworkId: string,
     isActive: boolean
-}): Promise<any> {
+}): Promise<{ success: boolean; data?: any; error?: string }> {
     try {
         const updatedLibrary = await updateLibrary(
             libraryData.id,
@@ -37,16 +42,14 @@ export async function updateLibraryAction(libraryData: {
         )
 
         await logAudit("Library", libraryData.id, "UPDATE_LIBRARY")
-
         revalidatePath("/libraries")
         revalidatePath(`/libraries/${libraryData.id}`)
-
-        return updatedLibrary
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            throw new Error(`Erro ao atualizar library (ID: ${libraryData.id}): ${error.message}`)
+        return { success: true, data: updatedLibrary }
+    } catch (error: any) {
+        return {
+            success: false,
+            error: `Erro ao atualizar biblioteca: ${error.message}`
         }
-        throw new Error("Erro desconhecido ao atualizar library.")
     }
 }
 
