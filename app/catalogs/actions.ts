@@ -1,11 +1,21 @@
 "use server"
 
+import { getItemsByCatalog } from "@/lib/catalog-items"
 import { createCatalog, deleteCatalogs, updateCatalog } from "@/lib/catalogs"
 import { getLibraryById } from "@/lib/libraries"
 import prisma from "@/lib/prisma"
 import { logAudit } from "@/lib/session"
 import { revalidatePath } from "next/cache"
 import slugify from "slugify"
+
+export async function getAllCatalogIds() {
+    return prisma.catalog.findMany({
+        select: {
+            id: true,
+            name: true,
+        },
+    });
+}
 
 export async function createCatalogAction(catalogData: { name: string, libraryId: string, isActive: boolean }): Promise<any> {
     try {

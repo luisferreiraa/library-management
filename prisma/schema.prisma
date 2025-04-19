@@ -58,8 +58,14 @@ model CatalogItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive  Boolean  @default(true)
-  Catalog   Catalog? @relation(fields: [catalogId], references: [id])
+  catalog   Catalog? @relation(fields: [catalogId], references: [id])
   catalogId String?
+
+  book       Book?
+  periodical Periodical?
+  dvd        DVD?
+  vhs        VHS?
+  cd         CD?
 }
 
 enum ItemType {
@@ -187,6 +193,47 @@ model Book {
   barcodes        Barcode[]
   reviews         Review[]
   recomendations  Recomendation[]
+  catalogItem     CatalogItem?    @relation(fields: [catalogItemId], references: [id], onDelete: Cascade)
+  catalogItemId   String          @unique
+}
+
+model Periodical {
+  id              String      @id @default(cuid())
+  issn            String      @unique
+  issueNumber     String
+  volume          String?
+  publicationDate DateTime
+  catalogItem     CatalogItem @relation(fields: [catalogItemId], references: [id], onDelete: Cascade)
+  catalogItemId   String      @unique
+}
+
+model DVD {
+  id            String      @id @default(cuid())
+  director      String
+  duration      Int
+  studio        String?
+  releaseYear   Int?
+  rating        String?
+  catalogItem   CatalogItem @relation(fields: [catalogItemId], references: [id], onDelete: Cascade)
+  catalogItemId String      @unique
+}
+
+model VHS {
+  id            String      @id @default(cuid())
+  director      String?
+  duration      Int?
+  catalogItem   CatalogItem @relation(fields: [catalogItemId], references: [id], onDelete: Cascade)
+  catalogItemId String      @unique
+}
+
+model CD {
+  id            String      @id @default(cuid())
+  artist        String
+  trackCount    Int?
+  label         String?
+  releaseYear   Int?
+  catalogItem   CatalogItem @relation(fields: [catalogItemId], references: [id], onDelete: Cascade)
+  catalogItemId String      @unique
 }
 
 model Barcode {
