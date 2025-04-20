@@ -35,6 +35,12 @@ export async function getCatalogById(id: string): Promise<CatalogWithRelations |
     })
 }
 
+export async function getCatalogBySlug(slug: string): Promise<Catalog | null> {
+    return prisma.catalog.findUnique({
+        where: { slug }
+    })
+}
+
 export async function createCatalog(data: { name: string, libraryId: string }): Promise<Catalog> {
     const slug = slugify(data.name, { lower: true })
     return prisma.catalog.create({

@@ -1,11 +1,11 @@
 import { prisma } from "./prisma"
 import type { ItemType, Prisma } from "@prisma/client"
 
-type BookCreateInput = Prisma.BookCreateInput
-type PeriodicalCreateInput = Prisma.PeriodicalCreateInput
-type DVDCreateInput = Prisma.DVDCreateInput
-type VHSCreateInput = Prisma.VHSCreateInput
-type CDCreateInput = Prisma.CDCreateInput
+export type BookCreateInput = Prisma.BookCreateInput
+export type PeriodicalCreateInput = Prisma.PeriodicalCreateInput
+export type DVDCreateInput = Prisma.DVDCreateInput
+export type VHSCreateInput = Prisma.VHSCreateInput
+export type CDCreateInput = Prisma.CDCreateInput
 
 // Buscar item específico com dados relacionados
 export async function getCatalogItem(id: string) {
@@ -48,7 +48,85 @@ export async function getItemsByType(catalogId: string, type: ItemType) {
     })
 }
 
-export async function createCatalogItem<T extends ItemType>(
+export async function createCatalogItem(
+    type: ItemType,
+    catalogId: string,
+    title: string,
+    subTitle: string,
+    data:
+        | BookCreateInput
+        | PeriodicalCreateInput
+        | DVDCreateInput
+        | VHSCreateInput
+        | CDCreateInput
+) {
+    switch (type) {
+        case "BOOK":
+            return prisma.catalogItem.create({
+                data: {
+                    type,
+                    title,
+                    subTitle,
+                    catalog: { connect: { id: catalogId } },
+                    book: { create: data as BookCreateInput },
+                },
+                include: { book: true }
+            })
+
+        case "PERIODICAL":
+            return prisma.catalogItem.create({
+                data: {
+                    type,
+                    title,
+                    subTitle,
+                    catalog: { connect: { id: catalogId } },
+                    periodical: { create: data as PeriodicalCreateInput },
+                },
+                include: { periodical: true }
+            })
+
+        case "DVD":
+            return prisma.catalogItem.create({
+                data: {
+                    type,
+                    title,
+                    subTitle,
+                    catalog: { connect: { id: catalogId } },
+                    dvd: { create: data as DVDCreateInput },
+                },
+                include: { dvd: true }
+            })
+
+        case "VHS":
+            return prisma.catalogItem.create({
+                data: {
+                    type,
+                    title,
+                    subTitle,
+                    catalog: { connect: { id: catalogId } },
+                    vhs: { create: data as VHSCreateInput },
+                },
+                include: { vhs: true }
+            })
+
+        case "CD":
+            return prisma.catalogItem.create({
+                data: {
+                    type,
+                    title,
+                    subTitle,
+                    catalog: { connect: { id: catalogId } },
+                    cd: { create: data as CDCreateInput },
+                },
+                include: { cd: true }
+            })
+
+        default:
+            throw new Error(`Tipo não suportado: ${type}`)
+    }
+}
+
+/* export async function createCatalogItem<T extends ItemType>(
     type: T,
     catalogId: string,
     data: T extends 'BOOK' ? BookCreateInput :
@@ -70,7 +148,7 @@ export async function createCatalogItem<T extends ItemType>(
             [relationKey]: true
         }
     });
-}
+} */
 
 // Atualização genérica
 export async function updateCatalogItem<T extends ItemType>(

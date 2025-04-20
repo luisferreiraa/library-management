@@ -10,6 +10,7 @@ import {
 import { revalidatePath } from "next/cache"
 import { logAudit } from "@/lib/session"
 import { ItemType } from "@prisma/client"
+import { BookCreateInput, PeriodicalCreateInput, DVDCreateInput, VHSCreateInput, CDCreateInput } from '@/lib/catalog-items'
 
 export async function getItemsByCatalogAction(catalogId: string) {
     const catalogItems = await getItemsByCatalog(catalogId)
@@ -19,18 +20,29 @@ export async function getItemsByCatalogAction(catalogId: string) {
 export async function createCatalogItemAction<T extends ItemType>(
     type: T,
     catalogId: string,
-    data: Parameters<typeof createCatalogItem<T>>[2]
+    title: string,
+    subTitle: string,
+    data: T extends 'BOOK' ? BookCreateInput :
+        T extends 'PERIODICAL' ? PeriodicalCreateInput :
+        T extends 'DVD' ? DVDCreateInput :
+        T extends 'VHS' ? VHSCreateInput :
+        T extends 'CD' ? CDCreateInput :
+        never
 ) {
     try {
-        const newItem = await createCatalogItem(type, catalogId, data)
+        const newItem = await createCatalogItem(type, catalogId, title, subTitle, data);
 
-        await logAudit("Catalog Item", newItem.id, "CREATE_ITEM")
+        await logAudit("Catalog Item", newItem.id, "CREATE_ITEM");
 
-        revalidatePath("/catalog-items")
-        return newItem
+        revalidatePath("/catalog-items");
+
+        return newItem;
     } catch (error) {
-        console.error("Erro ao criar item:", error)
-        throw new Error(`Falha ao criar ${type}: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
+        console.error("Erro ao criar item:", error);
+        throw new Error(
+            `Falha ao criar ${type}: ${error instanceof Error ? error.message : "Erro desconhecido"
+            }`
+        );
     }
 }
 
