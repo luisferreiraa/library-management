@@ -7,7 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
@@ -22,7 +22,17 @@ import { CatalogItem } from "@prisma/client"
 import { BookCreateInput, CDCreateInput, DVDCreateInput, PeriodicalCreateInput, VHSCreateInput } from "@/lib/catalog-items"
 import { ItemType } from "@prisma/client"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { DatePicker } from "../ui/date-picker"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { format } from "date-fns"
+import { Calendar } from "../ui/calendar"
+import { cn } from "@/lib/utils"
+import { CalendarIcon, X } from "lucide-react"
+import { getActiveAuthors } from "@/lib/authors"
+import { getBookStatuses, getCategories, getFormats, getLanguages, getPublishers, getTranslators } from "@/lib/books"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
+import { Textarea } from "../ui/textarea"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command"
+import { Badge } from "../ui/badge"
 
 // Tipos específicos para cada categoria de item
 type BookData = BookCreateInput
@@ -48,6 +58,7 @@ const baseSchema = z.object({
 const bookSchema = baseSchema.extend({
     type: z.literal(ItemType.BOOK),
     data: z.object({
+        title: z.string().min(1, "Título é obrigatório"),
         isbn: z.string().min(10, { message: "ISBN inválido" }),
         publishingDate: z.date({ required_error: "Data de publicação é obrigatória" }),
         edition: z.coerce.number().int().positive({ message: "Edição deve ser um número positivo" }),
@@ -60,7 +71,10 @@ const bookSchema = baseSchema.extend({
         authorId: z.string().min(1, { message: "Autor é obrigatório" }),
         translatorId: z.string().optional(),
         bookStatusId: z.string().min(1, { message: "Status é obrigatório" }),
-        categoryIds: z.array(z.string()).min(1, { message: "Selecione pelo menos uma categoria" }),
+        categories: z.object({
+            connect: z.array(z.object({ id: z.string() }))
+        }),
+        isActive: z.boolean(),
     })
 })
 
@@ -86,10 +100,9 @@ const periodicalSchema = baseSchema.extend({
         issn: z.string().min(1, "ISSN deve ter 8 dígitos"),
         issueNumber: z.string().min(1, "Número da edição é obrigatório"),
         volume: z.string().min(1, "Volume é obrigatório"),
-        publicationDate: z.coerce.date({
+        publicationDate: z.date({
             required_error: "Data de publicação é obrigatória",
-            invalid_type_error: "Formato de data inválido"
-        })
+        }),
     })
 })
 
@@ -159,6 +172,90 @@ export function CreateCatalogItemModal({
     // Observa mudanças no tipo para resetar os dados específicos
     const currentType = form.watch("type")
 
+    // Const para os dados relacionados
+    const [authors, setAuthors] = useState<{ id: string; name: string }[]>([])
+    const [formats, setFormats] = useState<{ id: string; name: string }[]>([])
+    const [languages, setLanguages] = useState<{ id: string; name: string }[]>([])
+    const [publishers, setPublishers] = useState<{ id: string; name: string }[]>([])
+    const [categories, setCategories] = useState<{ id: string; name: string }[]>([])
+    const [translators, setTranslators] = useState<{ id: string; name: string }[]>([])
+    const [bookStatuses, setBookStatuses] = useState<{ id: string; name: string }[]>([])
+
+    // Estado para o comando de categorias
+    const [commandOpen, setCommandOpen] = useState(false)
+    const [selectedCategories, setSelectedCategories] = useState<{ id: string; name: string }[]>([])
+
+    // Carregar dados relacionados quando o modal abrir 
+    useEffect(() => {
+        if (open) {
+            const loadRelatedData = async () => {
+                try {
+                    const [
+                        authorsData,
+                        formatsData,
+                        languagesData,
+                        publishersData,
+                        categoriesData,
+                        translatorsData,
+                        bookStatusesData,
+                    ] = await Promise.all([
+                        getActiveAuthors(),
+                        getFormats(),
+                        getLanguages(),
+                        getPublishers(),
+                        getCategories(),
+                        getTranslators(),
+                        getBookStatuses(),
+                    ])
+
+                    setAuthors(authorsData)
+                    setFormats(formatsData)
+                    setLanguages(languagesData)
+                    setPublishers(publishersData)
+                    setCategories(categoriesData)
+                    setTranslators(translatorsData)
+                    setBookStatuses(bookStatusesData)
+                } catch (error) {
+                    console.error("Erro ao carregar dados relacionados:", error)
+
+                    toast.error("Erro ao carregar dados", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                    })
+                }
+            }
+            loadRelatedData()
+        }
+    }, [open])
+
+    // Função para adicionar uma categoria
+    const addCategory = (category: { id: string; name: string }) => {
+        if (!selectedCategories.some((c) => c.id === category.id)) {
+            const newSelectedCategories = [...selectedCategories, category];
+            setSelectedCategories(newSelectedCategories);
+
+            // Formato correto para o Prisma
+            form.setValue("data.categories", {
+                connect: newSelectedCategories.map((c) => ({ id: c.id }))
+            });
+        }
+    }
+
+    // Função para remover uma categoria
+    const removeCategory = (categoryId: string) => {
+        const newSelectedCategories = selectedCategories.filter((c) => c.id !== categoryId);
+        setSelectedCategories(newSelectedCategories);
+
+        // Formato correto para o Prisma
+        form.setValue("data.categories", {
+            connect: newSelectedCategories.map((c) => ({ id: c.id }))
+        });
+    }
+
     // Reset do formulário quando o item ou o modal muda
     useEffect(() => {
         if (catalogItem) {
@@ -188,8 +285,18 @@ export function CreateCatalogItemModal({
     }
 
     const onSubmit = async (values: FormValues) => {
+        console.log("Submitting form with values:", JSON.stringify(values, null, 2));
+
         setError(null)
         try {
+            // Verificação adicional para PERIODICAL
+            if (values.type === ItemType.PERIODICAL) {
+                console.log("Periodical data:", values.data);
+                if (!values.data.issn || !values.data.issueNumber || !values.data.publicationDate) {
+                    throw new Error("Todos os campos do periódico são obrigatórios");
+                }
+            }
+
             if (isEditMode && catalogItem) {
                 await updateCatalogItemAction(
                     catalogItem.id,
@@ -224,7 +331,8 @@ export function CreateCatalogItemModal({
             onSuccess?.()
         } catch (error: any) {
             const errorMessage = error.message ||
-                (isEditMode ? "Erro ao atualizar item" : "Erro ao criar item")
+                console.error("Submission error:", error);
+            (isEditMode ? "Erro ao atualizar item" : "Erro ao criar item")
 
             setError(errorMessage)
             toast.error(errorMessage, {
@@ -315,19 +423,372 @@ export function CreateCatalogItemModal({
 
                         {/* Campos condicionais */}
                         {currentType === ItemType.BOOK && (
-                            <FormField
-                                control={form.control}
-                                name="data.author"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Autor</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Autor do livro" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <>
+                                <Tabs defaultValue="basic" className="w-full">
+                                    <TabsList className="grid w-full grid-cols-3">
+                                        <TabsTrigger value="basic">Informações Básicas</TabsTrigger>
+                                        <TabsTrigger value="details">Detalhes</TabsTrigger>
+                                        <TabsTrigger value="categories">Categorias</TabsTrigger>
+                                    </TabsList>
+
+                                    <TabsContent value="basic" className="space-y-4 mt-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                            <div className="md:col-span-1 flex flex-col items-center justify-start">
+                                                {/* Upload de imagem de capa */}
+                                            </div>
+
+                                            <div className="md:col-span-2 space-y-4">
+                                                <FormField
+                                                    control={form.control}
+                                                    name="data.title"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel>Título</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="Título do livro" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={form.control}
+                                                    name="data.isbn"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel>ISBN</FormLabel>
+                                                            <FormControl>
+                                                                <Input placeholder="9780123456789" {...field} />
+                                                            </FormControl>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="data.edition"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel>Edição</FormLabel>
+                                                                <FormControl>
+                                                                    <Input type="number" min="1" {...field} />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+
+                                                    <FormField
+                                                        control={form.control}
+                                                        name="data.pageCount"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel>Número de Páginas</FormLabel>
+                                                                <FormControl>
+                                                                    <Input type="number" min="1" {...field} />
+                                                                </FormControl>
+                                                                <FormMessage />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                </div>
+
+                                                <FormField
+                                                    control={form.control}
+                                                    name="data.publishingDate"
+                                                    render={({ field }) => (
+                                                        <FormItem className="flex flex-col">
+                                                            <FormLabel>Data de Publicação</FormLabel>
+                                                            <Popover>
+                                                                <PopoverTrigger asChild>
+                                                                    <FormControl>
+                                                                        <Button
+                                                                            variant={"outline"}
+                                                                            className={cn(
+                                                                                "w-full pl-3 text-left font-normal",
+                                                                                !field.value && "text-muted-foreground",
+                                                                            )}
+                                                                        >
+                                                                            {field.value ? format(field.value, "dd/MM/yyyy") : <span>Selecione uma data</span>}
+                                                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                                        </Button>
+                                                                    </FormControl>
+                                                                </PopoverTrigger>
+                                                                <PopoverContent className="w-auto p-0" align="start">
+                                                                    <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                                                                </PopoverContent>
+                                                            </Popover>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+
+                                                <FormField
+                                                    control={form.control}
+                                                    name="data.isActive"
+                                                    render={({ field }) => (
+                                                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                                            <div className="space-y-0.5">
+                                                                <FormLabel>Status do Livro</FormLabel>
+                                                                <FormDescription>{field.value ? "Livro ativo" : "Livro inativo"}</FormDescription>
+                                                            </div>
+                                                            <FormControl>
+                                                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                                                            </FormControl>
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                            </div>
+                                        </div>
+                                    </TabsContent>
+
+                                    <TabsContent value="details" className="space-y-4 mt-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <FormField
+                                                control={form.control}
+                                                name="data.authorId"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Autor</FormLabel>
+                                                        <Select onValueChange={field.onChange} value={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Selecione um autor" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                {authors.map((author) => (
+                                                                    <SelectItem key={author.id} value={author.id}>
+                                                                        {author.name}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="data.publisherId"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Editora</FormLabel>
+                                                        <Select onValueChange={field.onChange} value={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Selecione uma editora" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                {publishers.map((publisher) => (
+                                                                    <SelectItem key={publisher.id} value={publisher.id}>
+                                                                        {publisher.name}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="data.formatId"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Formato</FormLabel>
+                                                        <Select onValueChange={field.onChange} value={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Selecione um formato" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                {formats.map((format) => (
+                                                                    <SelectItem key={format.id} value={format.id}>
+                                                                        {format.name}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="data.languageId"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Idioma</FormLabel>
+                                                        <Select onValueChange={field.onChange} value={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Selecione um idioma" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                {languages.map((language) => (
+                                                                    <SelectItem key={language.id} value={language.id}>
+                                                                        {language.name}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="data.translatorId"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Tradutor (opcional)</FormLabel>
+                                                        <Select onValueChange={field.onChange} value={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Selecione um tradutor" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                <SelectItem value="none">Nenhum</SelectItem>
+                                                                {translators.map((translator) => (
+                                                                    <SelectItem key={translator.id} value={translator.id}>
+                                                                        {translator.name}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="data.bookStatusId"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>Status</FormLabel>
+                                                        <Select onValueChange={field.onChange} value={field.value}>
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue placeholder="Selecione um status" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                {bookStatuses.map((status) => (
+                                                                    <SelectItem key={status.id} value={status.id}>
+                                                                        {status.name}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+
+                                        <FormField
+                                            control={form.control}
+                                            name="data.summary"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Resumo</FormLabel>
+                                                    <FormControl>
+                                                        <Textarea placeholder="Resumo do livro" className="resize-none" rows={6} {...field} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </TabsContent>
+
+                                    <TabsContent value="categories" className="space-y-4 mt-4">
+                                        <FormField
+                                            control={form.control}
+                                            name="data.categories"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Categorias</FormLabel>
+                                                    <FormControl>
+                                                        <div className="space-y-4">
+                                                            <Popover open={commandOpen} onOpenChange={setCommandOpen}>
+                                                                <PopoverTrigger asChild>
+                                                                    <Button
+                                                                        variant="outline"
+                                                                        role="combobox"
+                                                                        aria-expanded={commandOpen}
+                                                                        className="w-full justify-between"
+                                                                    >
+                                                                        Selecionar categorias
+                                                                    </Button>
+                                                                </PopoverTrigger>
+                                                                <PopoverContent className="w-full p-0">
+                                                                    <Command>
+                                                                        <CommandInput placeholder="Buscar categoria..." />
+                                                                        <CommandEmpty>Nenhuma categoria encontrada.</CommandEmpty>
+                                                                        <CommandGroup>
+                                                                            <CommandList>
+                                                                                {categories.map((category) => (
+                                                                                    <CommandItem
+                                                                                        key={category.id}
+                                                                                        onSelect={() => {
+                                                                                            addCategory(category)
+                                                                                            setCommandOpen(false)
+                                                                                        }}
+                                                                                    >
+                                                                                        {category.name}
+                                                                                    </CommandItem>
+                                                                                ))}
+                                                                            </CommandList>
+                                                                        </CommandGroup>
+                                                                    </Command>
+                                                                </PopoverContent>
+                                                            </Popover>
+
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {selectedCategories.length === 0 ? (
+                                                                    <div className="text-sm text-muted-foreground">Nenhuma categoria selecionada</div>
+                                                                ) : (
+                                                                    selectedCategories.map((category) => (
+                                                                        <Badge key={category.id} variant="secondary" className="flex items-center gap-1">
+                                                                            {category.name}
+                                                                            <Button
+                                                                                type="button"
+                                                                                variant="ghost"
+                                                                                size="icon"
+                                                                                className="h-4 w-4 p-0 ml-1"
+                                                                                onClick={() => removeCategory(category.id)}
+                                                                            >
+                                                                                <X className="h-3 w-3" />
+                                                                                <span className="sr-only">Remover {category.name}</span>
+                                                                            </Button>
+                                                                        </Badge>
+                                                                    ))
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </TabsContent>
+                                </Tabs>
+                            </>
                         )}
 
                         {currentType === ItemType.DVD && (
@@ -560,19 +1021,49 @@ export function CreateCatalogItemModal({
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="data.publicationDate"
+                                    name="data.volume"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Data da Publicação</FormLabel>
+                                            <FormLabel>Volume</FormLabel>
                                             <FormControl>
-                                                <DatePicker
-                                                    value={field.value}
-                                                    onChange={(date) => {
-                                                        field.onChange(date)
-                                                        field.onBlur()
-                                                    }}
-                                                />
+                                                <Input placeholder="Volume do períódico" {...field} />
                                             </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="data.publicationDate"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-col">
+                                            <FormLabel>Data da Publicação</FormLabel>
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <FormControl>
+                                                        <Button
+                                                            variant={"outline"}
+                                                            className={cn(
+                                                                "w-full pl-3 text-left font-normal",
+                                                                !field.value && "text-muted-foreground"
+                                                            )}
+                                                        >
+                                                            {field.value ? format(field.value, "dd/MM/yyyy") : "Selecionar data"}
+                                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                        </Button>
+                                                    </FormControl>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-auto p-0" align="start">
+                                                    <Calendar
+                                                        mode="single"
+                                                        selected={field.value}
+                                                        onSelect={(date) => {
+                                                            field.onChange(date || undefined); // Alteração aqui
+                                                        }}
+                                                        initialFocus
+                                                    />
+                                                </PopoverContent>
+                                            </Popover>
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -610,7 +1101,7 @@ export function CreateCatalogItemModal({
                             </Button>
                             <Button type="submit" disabled={form.formState.isSubmitting}>
                                 {form.formState.isSubmitting
-                                    ? "Salvando..."
+                                    ? "A salvar..."
                                     : isEditMode ? "Atualizar" : "Criar"}
                             </Button>
                         </div>
