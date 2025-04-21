@@ -22,6 +22,7 @@ import { CatalogItem } from "@prisma/client"
 import { BookCreateInput, CDCreateInput, DVDCreateInput, PeriodicalCreateInput, VHSCreateInput } from "@/lib/catalog-items"
 import { ItemType } from "@prisma/client"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { DatePicker } from "../ui/date-picker"
 
 // Tipos específicos para cada categoria de item
 type BookData = BookCreateInput
@@ -69,18 +70,26 @@ const dvdSchema = baseSchema.extend({
         director: z.string().min(1, "Realizador é obrigatório"),
         duration: z.number().min(1, "Duração deve ser maior do que 0"),
         studio: z.string().min(1, "Estúdio é obrigatório"),
-        releaseYear: z.date({ required_error: "Data de edição é obrigatória" }),
-        rating: z.number()
+        releaseYear: z.number()
+            .int("Deve ser um ano válido")
+            .min(1900, "Ano deve ser após 1900")
+            .max(new Date().getFullYear() + 1, "Ano não pode ser no futuro distante"),
+        rating: z.string() // Agora definido como string
+            .min(1, "Avaliação não pode ser vazia")
+            .regex(/^[1-5]$/, "Avaliação deve ser entre 1 e 5")
     })
 })
 
 const periodicalSchema = baseSchema.extend({
     type: z.literal(ItemType.PERIODICAL),
     data: z.object({
-        issn: z.string().min(1, "ISSN é obrigatório"),
+        issn: z.string().min(1, "ISSN deve ter 8 dígitos"),
         issueNumber: z.string().min(1, "Número da edição é obrigatório"),
         volume: z.string().min(1, "Volume é obrigatório"),
-        publicationDate: z.date({ required_error: "Data de publicação é obrigatória" }),
+        publicationDate: z.coerce.date({
+            required_error: "Data de publicação é obrigatória",
+            invalid_type_error: "Formato de data inválido"
+        })
     })
 })
 
@@ -88,7 +97,7 @@ const vhsSchema = baseSchema.extend({
     type: z.literal(ItemType.VHS),
     data: z.object({
         director: z.string().min(1, "Realizador é obrigatório"),
-        duration: z.string().min(1, "Duração deve ser maior do que 0"),
+        duration: z.number().min(1, "Duração deve ser maior do que 0"),
     })
 })
 
@@ -96,9 +105,12 @@ const cdSchema = baseSchema.extend({
     type: z.literal(ItemType.CD),
     data: z.object({
         artist: z.string().min(1, "Artista é obrigatório"),
-        trackCount: z.string().min(1, "Número de faixas deve ser maior do que 0"),
+        trackCount: z.number().min(1, "Número de faixas deve ser maior do que 0"),
         label: z.string().min(1, "Editora é obrigatório"),
-        releaseYear: z.date({ required_error: "Data de lançamento é obrigatória" }),
+        releaseYear: z.number()
+            .int("Deve ser um ano válido")
+            .min(1900, "Ano deve ser após 1900")
+            .max(new Date().getFullYear() + 1, "Ano não pode ser no futuro distante"),
     })
 })
 
@@ -155,7 +167,7 @@ export function CreateCatalogItemModal({
                 title: catalogItem.title,
                 subTitle: catalogItem.subTitle,
                 isActive: catalogItem.isActive,
-                data: catalogItem.data as any
+                data: (catalogItem as any)?.data || {}
             })
         } else if (!open) {
             form.reset({
@@ -182,7 +194,7 @@ export function CreateCatalogItemModal({
                 await updateCatalogItemAction(
                     catalogItem.id,
                     values.type,
-                    values.data
+                    values.data as DVDCreateInput | CDCreateInput | PeriodicalCreateInput | VHSCreateInput
                 )
             } else {
                 await createCatalogItemAction(
@@ -190,7 +202,7 @@ export function CreateCatalogItemModal({
                     catalogId,
                     values.title,
                     values.subTitle,
-                    values.data
+                    values.data as DVDCreateInput | CDCreateInput | PeriodicalCreateInput | VHSCreateInput
                 )
             }
 
@@ -372,13 +384,13 @@ export function CreateCatalogItemModal({
                                             <FormLabel>Ano de Lançamento</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    type="date"
-                                                    placeholder="Ano de Lançamento do DVD"
-                                                    value={field.value ? field.value.toISOString().split('T')[0] : ''}
-                                                    onChange={e => field.onChange(new Date(e.target.value))}
+                                                    type="number"
+                                                    min={1900}
+                                                    max={new Date().getFullYear() + 1}
+                                                    placeholder={`Entre 1900 e ${new Date().getFullYear() + 1}`}
+                                                    value={typeof field.value === "number" ? field.value : ""}
+                                                    onChange={e => field.onChange(Number(e.target.value))}
                                                     onBlur={field.onBlur}
-                                                    name={field.name}
-                                                    ref={field.ref}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -390,13 +402,175 @@ export function CreateCatalogItemModal({
                                     name="data.rating"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Avaliação</FormLabel>
+                                            <FormLabel>Avaliação (1-5)</FormLabel>
+                                            <FormControl>
+                                                <Select onValueChange={field.onChange} value={field.value}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Selecione a avaliação" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="1">1</SelectItem>
+                                                        <SelectItem value="2">2</SelectItem>
+                                                        <SelectItem value="3">3</SelectItem>
+                                                        <SelectItem value="4">4</SelectItem>
+                                                        <SelectItem value="5">5</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </>
+                        )}
+
+                        {currentType === ItemType.CD && (
+                            <>
+                                <FormField
+                                    control={form.control}
+                                    name="data.artist"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Artista</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Artista do CD" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="data.trackCount"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Número de Faixas</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="number"
-                                                    placeholder="Avaliação (de 1 a 5)"
+                                                    placeholder="Número de faixas"
                                                     {...field}
                                                     onChange={e => field.onChange(Number(e.target.value))}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="data.label"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Editora</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Editora do CD" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="data.releaseYear"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Ano de Lançamento</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    min={1900}
+                                                    max={new Date().getFullYear() + 1}
+                                                    placeholder={`Entre 1900 e ${new Date().getFullYear() + 1}`}
+                                                    value={typeof field.value === "number" ? field.value : ""}
+                                                    onChange={e => field.onChange(Number(e.target.value))}
+                                                    onBlur={field.onBlur}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </>
+                        )}
+
+                        {currentType === ItemType.VHS && (
+                            <>
+                                <FormField
+                                    control={form.control}
+                                    name="data.director"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Realizador</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Realizador do VHS" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="data.duration"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Duração</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="Duração do VHS"
+                                                    {...field}
+                                                    onChange={e => field.onChange(Number(e.target.value))}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </>
+                        )}
+
+                        {currentType === ItemType.PERIODICAL && (
+                            <>
+                                <FormField
+                                    control={form.control}
+                                    name="data.issn"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>ISSN</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="ISSN" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="data.issueNumber"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Número da Edição</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Número da edição" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="data.publicationDate"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Data da Publicação</FormLabel>
+                                            <FormControl>
+                                                <DatePicker
+                                                    value={field.value}
+                                                    onChange={(date) => {
+                                                        field.onChange(date)
+                                                        field.onBlur()
+                                                    }}
                                                 />
                                             </FormControl>
                                             <FormMessage />

@@ -116,12 +116,23 @@ export default function CatalogItems({ catalog, catalogItems }: CatalogItemsProp
 
     return (
         <div>
+            <Button onClick={() => setIsAddingItem(true)}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Adicionar Item
+            </Button>
+
             <h2>{catalog.name}</h2>
             <ul>
                 {catalogItems.map((item) => (
                     <li key={item.id}>{item.title}</li>
                 ))}
             </ul>
+            <CreateCatalogItemModal
+                open={isAddingItem}
+                onOpenChange={setIsAddingItem}
+                catalogId={catalog.id}
+                catalogName={catalog.name}
+            />
         </div>
     )
 }
