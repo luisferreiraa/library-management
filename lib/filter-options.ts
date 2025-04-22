@@ -15,6 +15,17 @@ function createCommonFilterOptions<T extends string = string>(): FilterOption<T>
     ]
 }
 
+function createItemTypeFilterOptions<T extends string = string>(): FilterOption<T>[] {
+    return [
+        { value: "all" as T, label: "Todos" },
+        { value: "BOOK" as T, label: "Livros" },
+        { value: "PERIODICAL" as T, label: "Periódicos" },
+        { value: "DVD" as T, label: "DVD" },
+        { value: "VHS" as T, label: "VHS" },
+        { value: "CD" as T, label: "CD" },
+    ]
+}
+
 export async function getFilterOptions(
     entityType: "libraries"
         | "library-networks"
@@ -29,6 +40,7 @@ export async function getFilterOptions(
         | "translators"
         | "users"
         | "catalogs"
+        | "items"
 ): Promise<FilterOption<ActiveFilterOption>[]> {
     switch (entityType) {
         case "libraries":
@@ -45,6 +57,8 @@ export async function getFilterOptions(
         case "users":
         case "catalogs":
             return createCommonFilterOptions<ActiveFilterOption>()
+        case "items":
+            return createItemTypeFilterOptions<ActiveFilterOption>()
 
         default:
             return []

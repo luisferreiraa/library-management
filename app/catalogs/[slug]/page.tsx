@@ -67,7 +67,6 @@ export default async function CatalogPage({ params }: CatalogPageProps) {
 
                 <div className="md:col-span-3">
                     <Separator className="my-6" />
-                    <h2 className="text-2xl font-bold tracking-tight mb-6">Itens</h2>
                     <CatalogItems catalog={catalog} catalogItems={catalogItems} />
                 </div>
             </div>
