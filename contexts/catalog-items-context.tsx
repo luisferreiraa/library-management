@@ -2,16 +2,7 @@
 
 import { createContext, useContext, useState, useMemo, type ReactNode, useOptimistic, useTransition, useEffect } from "react"
 import type { CatalogItem } from "@prisma/client"
-import { SortOption } from "@/types/types"
-
-// Definir SortOptions type
-/* export type SortOption = {
-    value: string
-    direction: "asc" | "desc"
-} */
-
-// Definir FilterOption type para isActive
-export type ActiveFilterOption = "all" | "BOOK" | "PERIODICAL" | "DVD" | "VHS" | "CD"
+import { ActiveFilterItemOption, SortOption } from "@/types/types"
 
 interface CatalogItemsContextType {
     items: CatalogItem[]
@@ -32,8 +23,8 @@ interface CatalogItemsContextType {
     totalPages: number
     sortOption: SortOption<CatalogItem> | null
     setSortOption: (option: SortOption<CatalogItem>) => void
-    activeFilter: ActiveFilterOption
-    setActiveFilter: (filter: ActiveFilterOption) => void
+    activeFilter: ActiveFilterItemOption
+    setActiveFilter: (filter: ActiveFilterItemOption) => void
 }
 
 const CatalogItemsContext = createContext<CatalogItemsContextType | undefined>(undefined)
@@ -61,7 +52,7 @@ export function ItemsProvider({
     const [sortOption, setSortOption] = useState<SortOption<CatalogItem> | null>(null)
 
     // Estado para filtro de isActive
-    const [activeFilter, setActiveFilter] = useState<ActiveFilterOption>("all")
+    const [activeFilter, setActiveFilter] = useState<ActiveFilterItemOption>("all")
 
     // Use useMemo para filtrar e ordenar livros
     const filteredItems = useMemo(() => {

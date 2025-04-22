@@ -7,3 +7,5 @@ export type SortOption<T> = {
 };
 
 export type ActiveFilterOption = "all" | "active" | "inactive"
+
+export type ActiveFilterItemOption = "all" | "BOOK" | "PERIODICAL" | "DVD" | "VHS" | "CD"

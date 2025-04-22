@@ -19,7 +19,7 @@ import { useEffect, useState } from "react"
 import { createCatalogItemAction, updateCatalogItemAction } from "@/app/catalog-items/actions"
 import { toast } from "react-toastify"
 import { CatalogItem } from "@prisma/client"
-import { BookCreateInput, CDCreateInput, DVDCreateInput, PeriodicalCreateInput, VHSCreateInput } from "@/lib/catalog-items"
+import { BookCreateInput, CatalogItemWithTypes, CDCreateInput, DVDCreateInput, PeriodicalCreateInput, VHSCreateInput } from "@/lib/catalog-items"
 import { ItemType } from "@prisma/client"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
@@ -143,7 +143,8 @@ interface CreateCatalogItemProps {
     onOpenChange: (open: boolean) => void
     catalogId: string
     catalogName: string
-    catalogItem?: CatalogItem | null
+    catalogItem?: CatalogItemWithTypes | null
+    typeToEdit?: ItemType | null
     onSuccess?: () => void
 }
 
@@ -153,6 +154,7 @@ export function CreateCatalogItemModal({
     catalogId,
     catalogName,
     catalogItem,
+    typeToEdit,
     onSuccess,
 }: CreateCatalogItemProps) {
     const [error, setError] = useState<string | null>(null)
@@ -259,14 +261,81 @@ export function CreateCatalogItemModal({
     // Reset do formulário quando o item ou o modal muda
     useEffect(() => {
         if (catalogItem) {
-            form.reset({
+
+            // Dados base comuns a todos os tipos
+            const baseData = {
                 type: catalogItem.type as ItemType,
-                title: catalogItem.title,
-                subTitle: catalogItem.subTitle,
-                isActive: catalogItem.isActive,
-                data: (catalogItem as any)?.data || {}
-            })
+                title: catalogItem.title || '',
+                subTitle: catalogItem.subTitle || '',
+                isActive: catalogItem.isActive ?? true,
+                data: {}
+            }
+
+            // Dados específicos por tipo
+            switch (catalogItem.type) {
+                case ItemType.BOOK:
+                    baseData.data = {
+                        title: catalogItem.book?.title || '',
+                        isbn: catalogItem.book?.isbn || '',
+                        publishingDate: catalogItem.book?.publishingDate ? new Date(catalogItem.book.publishingDate) : undefined,
+                        edition: catalogItem.book?.edition || 1,
+                        pageCount: catalogItem.book?.pageCount || 0,
+                        summary: catalogItem.book?.summary || '',
+                        coverImage: catalogItem.book?.coverImage || '',
+                        formatId: catalogItem.book?.formatId || '',
+                        languageId: catalogItem.book?.languageId || '',
+                        publisherId: catalogItem.book?.publisherId || '',
+                        authorId: catalogItem.book?.authorId || '',
+                        translatorId: catalogItem.book?.translatorId || 'none',
+                        bookStatusId: catalogItem.book?.bookStatusId || '',
+                        categories: {
+                            connect: catalogItem.book?.categories?.map(c => ({ id: c.id })) || []
+                        },
+                        isActive: catalogItem.book?.isActive ?? true
+                    };
+                    setSelectedCategories(catalogItem.book?.categories || []);
+                    break;
+
+                case ItemType.DVD:
+                    baseData.data = {
+                        director: catalogItem.dvd?.director || '',
+                        duration: catalogItem.dvd?.duration || 0,
+                        studio: catalogItem.dvd?.studio || '',
+                        releaseYear: catalogItem.dvd?.releaseYear || new Date().getFullYear(),
+                        rating: catalogItem.dvd?.rating?.toString() || '3'
+                    };
+                    break;
+
+                case ItemType.CD:
+                    baseData.data = {
+                        artist: catalogItem.cd?.artist || '',
+                        trackCount: catalogItem.cd?.trackCount || 0,
+                        label: catalogItem.cd?.label || '',
+                        releaseYear: catalogItem.cd?.releaseYear || new Date().getFullYear()
+                    };
+                    break;
+
+                case ItemType.VHS:
+                    baseData.data = {
+                        director: catalogItem.vhs?.director || '',
+                        duration: catalogItem.vhs?.duration || 0
+                    };
+                    break;
+
+                case ItemType.PERIODICAL:
+                    baseData.data = {
+                        issn: catalogItem.periodical?.issn || '',
+                        issueNumber: catalogItem.periodical?.issueNumber || '',
+                        volume: catalogItem.periodical?.volume || '',
+                        publicationDate: catalogItem.periodical?.publicationDate ? new Date(catalogItem.periodical.publicationDate) : undefined
+                    };
+                    break;
+            }
+
+            form.reset(baseData as any)
+
         } else if (!open) {
+            // Reset para valores padrão quando o modal fecha ou não há item
             form.reset({
                 type: ItemType.BOOK,
                 title: "",
@@ -274,6 +343,7 @@ export function CreateCatalogItemModal({
                 isActive: true,
                 data: {}
             })
+            setSelectedCategories([])
         }
     }, [catalogItem, open, form])
 
@@ -791,7 +861,7 @@ export function CreateCatalogItemModal({
                             </>
                         )}
 
-                        {currentType === ItemType.DVD && (
+                        {currentType === ItemType.DVD && typeToEdit === ItemType.DVD && (
                             <>
                                 <FormField
                                     control={form.control}

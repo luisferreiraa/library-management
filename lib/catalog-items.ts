@@ -1,11 +1,27 @@
 import { prisma } from "./prisma"
-import type { ItemType, Prisma } from "@prisma/client"
+import type { ItemType, CatalogItem as PrismaCatalogItem, Prisma } from "@prisma/client"
 
 export type BookCreateInput = Prisma.BookCreateInput
 export type PeriodicalCreateInput = Prisma.PeriodicalCreateInput
 export type DVDCreateInput = Prisma.DVDCreateInput
 export type VHSCreateInput = Prisma.VHSCreateInput
 export type CDCreateInput = Prisma.CDCreateInput
+
+export type CatalogItem = PrismaCatalogItem
+
+export type CatalogItemWithTypes = Prisma.CatalogItemGetPayload<{
+    include: {
+        book: {
+            include: {
+                categories: true
+            }
+        },
+        periodical: true,
+        dvd: true,
+        vhs: true,
+        cd: true,
+    }
+}>
 
 // Buscar item específico com dados relacionados
 export async function getCatalogItem(id: string) {
@@ -125,30 +141,6 @@ export async function createCatalogItem(
             throw new Error(`Tipo não suportado: ${type}`)
     }
 }
-
-/* export async function createCatalogItem<T extends ItemType>(
-    type: T,
-    catalogId: string,
-    data: T extends 'BOOK' ? BookCreateInput :
-        T extends 'PERIODICAL' ? PeriodicalCreateInput :
-        T extends 'DVD' ? DVDCreateInput :
-        T extends 'VHS' ? VHSCreateInput :
-        T extends 'CD' ? CDCreateInput :
-        never
-) {
-    const relationKey = type.toLocaleLowerCase() as keyof typeof prisma
-
-    return prisma.catalogItem.create({
-        data: {
-            type,
-            catalog: { connect: { id: catalogId } },
-            [relationKey]: { create: data }
-        },
-        include: {
-            [relationKey]: true
-        }
-    });
-} */
 
 // Atualização genérica
 export async function updateCatalogItem<T extends ItemType>(

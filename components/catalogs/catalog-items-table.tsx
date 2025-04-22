@@ -25,7 +25,7 @@ import { deleteCatalogItemsAction } from "@/app/catalog-items/actions"
 import { toast } from "react-toastify"
 import { Pagination } from "../ui/pagination"
 import { CreateCatalogItemModal } from "./create-catalog-item-modal"
-import type { CatalogItem } from "@prisma/client"
+import type { CatalogItem, ItemType } from "@prisma/client"
 
 export function ItemsTable() {
     const {
@@ -46,6 +46,7 @@ export function ItemsTable() {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [selectedItem, setSelectedItem] = useState<CatalogItem | null>(null)
+    const [typeToEdit, setTypeToEdit] = useState<ItemType | null>(null)
 
     // Verificar se todos os itens estão selecionados
     const allSelected = paginatedItems.length > 0 && paginatedItems.every((item) => selectedItemIds.includes(item.id))
@@ -107,6 +108,7 @@ export function ItemsTable() {
     // Função para abrir o modal de edição
     const handleEditItem = (item: CatalogItem) => {
         setSelectedItem(item)
+        setTypeToEdit(item.type)
         setIsEditModalOpen(true)
     }
 
@@ -232,7 +234,7 @@ export function ItemsTable() {
                 className="mt-4"
             />
 
-            <CreateCatalogItemModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} item={selectedItem} mode="edit" />
+            <CreateCatalogItemModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} catalogItem={selectedItem} typeToEdit={typeToEdit} />
         </div>
     )
 }

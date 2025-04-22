@@ -1,4 +1,4 @@
-import { ActiveFilterOption } from "@/types/types"
+import { ActiveFilterItemOption, ActiveFilterOption } from "@/types/types"
 import { prisma } from "./prisma"
 
 // Tipo para as opções de filtro
@@ -41,7 +41,7 @@ export async function getFilterOptions(
         | "users"
         | "catalogs"
         | "items"
-): Promise<FilterOption<ActiveFilterOption>[]> {
+): Promise<FilterOption<any>[]> {
     switch (entityType) {
         case "libraries":
         case "library-networks":
@@ -58,7 +58,7 @@ export async function getFilterOptions(
         case "catalogs":
             return createCommonFilterOptions<ActiveFilterOption>()
         case "items":
-            return createItemTypeFilterOptions<ActiveFilterOption>()
+            return createItemTypeFilterOptions<ActiveFilterItemOption>()
 
         default:
             return []
