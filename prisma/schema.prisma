@@ -52,6 +52,178 @@ model Catalog {
   isActive  Boolean       @default(true)
 }
 
+/// UNIMARC-Compatible Database Schema
+/// --- CORE BIBLIOGRAPHIC STRUCTURE ---
+/// Modelo principal que representa um registo UNIMARC completo
+model Record {
+  id            String         @id @default(cuid())
+  metadata      Json
+  controlFields ControlField[] /// Campos de controlo (como 001, 005, ...)
+  holdings      Holding[]
+  dataFields    DataField[] /// Campos de dados (como 100, 245, ...)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model ControlFieldDefinition {
+  id           String         @id @default(cuid())
+  tag          String
+  name         String
+  tips         String[]
+  ControlField ControlField[]
+}
+
+/// Modelo que representa um campo de controlo UNIMARC
+model ControlField {
+  id           String                 @id @default(cuid())
+  value        String
+  record       Record                 @relation(fields: [recordId], references: [id])
+  recordId     String
+  definition   ControlFieldDefinition @relation(fields: [definitionId], references: [id])
+  definitionId String
+}
+
+model DataFieldDefinition {
+  id          String               @id @default(cuid())
+  tag         String
+  name        String
+  ind1Tips    String[]
+  ind2Tips    String[]
+  tips        String[]
+  subFieldDef SubfieldDefinition[]
+  DataField   DataField[]
+}
+
+/// Modelo que representa um campo de dados UNIMARC (ex: 100, 245)
+model DataField {
+  id           String              @id @default(cuid())
+  ind1         String /// Primeiro indicador
+  ind2         String // Segundo indicador
+  record       Record              @relation(fields: [recordId], references: [id])
+  recordId     String
+  definition   DataFieldDefinition @relation(fields: [definitionId], references: [id])
+  definitionId String
+  subFields    Subfield[]
+}
+
+model SubfieldDefinition {
+  id                    String              @id @default(cuid())
+  code                  String
+  label                 String
+  repeatable            Boolean             @default(false)
+  mandatory             Boolean             @default(false)
+  tips                  String[]
+  dataFieldDefinition   DataFieldDefinition @relation(fields: [dataFieldDefinitionId], references: [id])
+  dataFieldDefinitionId String
+}
+
+/// Modelo que representa um subcampo de um campo de dados UNIMARC
+/// Exemplo: No campo 200, podemos ter subcampos como $a (título), $b (subtítulo), etc
+model Subfield {
+  id          String    @id @default(cuid())
+  value       String /// Valor associado ao campo
+  dataField   DataField @relation(fields: [dataFieldId], references: [id])
+  dataFieldId String
+}
+
+/// --- HOLDINGS STRUCTURE ---
+model Holding {
+  id         String  @id @default(cuid())
+  record     Record  @relation(fields: [recordId], references: [id])
+  recordId   String
+  callNumber String?
+  location   String?
+  shelf      String?
+  items      Item[]
+}
+
+model Item {
+  id              String    @id @default(cuid())
+  holding         Holding   @relation(fields: [holdingId], references: [id])
+  holdingId       String
+  barcode         String    @unique
+  status          String /// Ex: "Available", "Loaned", "Reserved"
+  condition       String?
+  acquisitionDate DateTime?
+  loanType        String? /// Ex: "Standard", "Short loan"
+}
+
+/// --- AUTHORITY STRUCTURE ---
+/// Modelo que representa names, subjects, etc
+model AuthorityRecord {
+  id           String   @id @default(cuid())
+  type         String /// Ex: "PersonalName", "CorporateName"
+  heading      String /// Main heading or name (ex: José Saramago, Universidade do Porto)
+  mainEntry    String? /// Main entry of authority (Saramago, José)
+  otherForms   String? /// Other forms of name or heading (ex: synonyms, alternate names)
+  code         String? /// Authority code (ex: MARC code or internal identifier)
+  authorityRef String? /// Reference or link to the authority record (if available)
+  description  String? /// Description or biographical note for the authority (ex: Portuguese author)
+  relatedTerms Json? /// Additional related terms (ex: variants, other relationships)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// Authority Record para heading de Assunto ou Classificação
+model SubjectHeading {
+  id           String   @id @default(cuid())
+  heading      String /// Ex: Literature, History, Art
+  code         String /// Subject classification code (ex: CDU)
+  relatedTerms Json? /// Additional terms related to the subject
+  description  String? /// Description of the subject heading
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// Authority Record for Controlled Vocabularies (ex: Genre/ Form)
+model GenreFormHeading {
+  id          String   @id @default(cuid())
+  heading     String /// Ex: Fiction, Poetry, Non-fiction
+  code        String /// Genre/Form classification code
+  description String? /// Description or notes about the genre/form
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Authority Record for Geographic Names
+model GeographicName {
+  id           String   @id @default(cuid())
+  name         String /// Geographic place name (ex: Lisbon, New York)
+  country      String /// Country or region (ex: Portugal, USA)
+  region       String? /// Specific region or area (ex: Alentejo, Manhattan)
+  latitude     Float? /// Latitude coordinate
+  longitude    Float? /// Longitude coordinate
+  relatedTerms Json? /// Other terms related to this place
+  description  String? /// Description about the geographic location
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// Additional Authority Records for other categories
+
+/// Authority Record for Corporate Names
+model CorporateName {
+  id           String   @id @default(cuid())
+  name         String /// Corporate name (ex: University of Porto, United Nations)
+  abbreviation String? /// Abbreviation or short form (ex: UP, UN)
+  relatedTerms Json?
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// Authority Record for Uniform Titles
+model UniformTitle {
+  id           String   @id @default(cuid())
+  title        String /// Title of the work (ex: Don Quixote)
+  creator      String? /// Creator of the work (ex: Cervantes)
+  edition      String?
+  date         String?
+  relatedTerms Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model CatalogItem {
   id        String   @id @default(cuid())
   type      ItemType
