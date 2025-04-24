@@ -656,6 +656,860 @@ async function main() {
                 },
             ]
         },
+        {
+            tag: "033",
+            name: "Other System Persistent Record Identifier",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém o identificador persistente dos registos obtidos de outras fontes. O identificador persistente é atribuído pela agência que cria, utiliza ou emite o registo.",
+                "Este é o identificador persistente para o registo bibliográfico, não para o recurso em si."
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Persistent Record Identifier",
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$z",
+                    label: "Cancelled or Invalid Persistent Record Identifier",
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "035",
+            name: "Other System Identifiers",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém o identificador dos registos obtidos a partir de outras fontes",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "System Identifier",
+                    tips: [
+                        "Um código para a organização entre parênteses, seguido do identificador de sistema para o registo na base de dados dessa organização",
+                        "Uma vez que não existem códigos internacionalmente aceites, recomenda-se a utilização dos códigos da Lista de Códigos MARC para Organizações.",
+                        "Caso contrário, pode ser utilizado o nome completo da agência ou um código nacional.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$z",
+                    label: "Cancelled or Invalid Identifier",
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "036",
+            name: "Music Incipit",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados que descrevem o incipit musical para música em forma parcialmente codificada.",
+                "Este campo é amplamente utilizado para identificar manuscritos de música, mas também pode ser aplicado à música impressa ou a outros recursos musicais (registos sonoros, etc.).",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Number of Work",
+                    tips: [
+                        "Um código de dois dígitos indica a obra a que o incipit se refere, se um conjunto de composições (por exemplo, seis sonatas) for inteiramente descrito num único registo, sem a utilização de registos de nível peça-analítico. Se o registo descrever apenas uma obra, utilizar '01'.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$b",
+                    label: "Number of Movement",
+                    tips: [
+                        "Um código de dois dígitos indica o andamento dentro de uma obra a que o incipit se refere. Se a obra tiver apenas um andamento, utilizar '01'.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$c",
+                    label: "Number of Incipit",
+                    tips: [
+                        "Um código de dois dígitos distingue os diferentes incipits referentes ao mesmo movimento. Se existir apenas um incipit para um movimento, utilizar '01'.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$d",
+                    label: "Voice/ Instrument",
+                    tips: [
+                        "A voz ou o instrumento codificado em 036 $p. Obrigatório se 036 $p estiver presente.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$e",
+                    label: "Role",
+                    tips: [
+                        "O nome do carácter que canta o incipit codificado em 036 $p.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$f",
+                    label: "Movement Caption/ Heading",
+                    tips: [
+                        "Legenda ou título do movimento, tal como aparece na fonte.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$g",
+                    label: "Key or Mode",
+                    tips: [
+                        "A tonalidade ou modo do movimento, se aplicável. Utilizar letras maiúsculas A-G para indicar as tonalidades maiores, minúsculas a-g para indicar as tonalidades menores, “x” para sustenidos e “b” para bemóis, números 1-12 para os modos gregorianos.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$m",
+                    label: "Clef",
+                    tips: [
+                        "Código de três caracteres. Use “F” ou “C” ou ‘G’ maiúsculo para indicar a forma da clave, depois “-” como separador, depois números 1-5 para indicar a posição da clave na pauta, começando na linha de baixo. Usar “+” como separador para indicar a notação mensural.",
+                        "Obrigatório se 036 $p estiver presente, caso contrário não é válido.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$n",
+                    label: "Key Signature",
+                    tips: [
+                        "Utilize “x” para indicar sustenidos e “b” para indicar bemóis, seguidos de F,C,G,D,A,E,B maiúsculos ou B,E,A,D,G,C,F respetivamente para indicar notas sustenidas ou bemóis.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$o",
+                    label: "Time Signature",
+                    tips: [
+                        "O valor do tempo ou o sinal de mensuração indicado na pauta é transcrito com um símbolo (c, c/, c., o, etc.) e/ou um número (3, 2, c3, etc.) ou uma fração (4/4, 12/8, etc.).",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$p",
+                    label: "Musical Notation",
+                    tips: [
+                        "Use os símbolos de notação do código Plaine & Easie ou do código DARMS para transcrever as primeiras notas da pauta selecionada.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$q",
+                    label: "Comments (free text)",
+                    tips: [
+                        "Nota de texto livre.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$r",
+                    label: "Codified Note",
+                    tips: [
+                        "Um código de um carácter indica uma nota de comentário. Utilizar “?” para indicar um erro no incipit, não corrigido, “+” para indicar um erro no incipit, corrigido, “t” para indicar que o incipit foi transcrito (por exemplo, da notação mensural).",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$t",
+                    label: "Text Incipit",
+                    tips: [
+                        "O texto literário (se existir) tal como aparece na fonte. Se a fonte tiver vários textos, cada um deles é transcrito numa ocorrência separada de 036$t",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$u",
+                    label: "Uniform Resource Identifier (URI)",
+                    tips: [
+                        "Um Identificador Uniforme de Recursos (URI), tal como um URL (Uniform Resource Locator) ou URN (Uniform Resource Name), serve como uma cadeia normalizada que identifica um recurso e fornece acesso eletrónico através de protocolos da Internet. ",
+                        "Isto permite a recuperação automática ou a interação com o recurso de uma forma consistente.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$z",
+                    label: "Language of Text",
+                    tips: [
+                        "Identificação codificada da língua do incipit. Utilizar se o texto for diferente ou puder ser mal interpretado a partir de 101 Língua do recurso.",
+                        "Quando o subcampo é repetido, a ordem dos códigos linguísticos deve refletir a extensão e importância das línguas na obra.",
+                        "Se tal não for possível, introduzir os códigos da língua por ordem alfabética. O código “mul” pode ser introduzido quando se aplica um grande número de línguas no subcampo.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$2",
+                    label: "Source",
+                    tips: [
+                        "Um código que especifica o sistema utilizado para codificar a notação musical.",
+                        "Um código de dois caracteres indica o código utilizado para transcrever em $p. Obrigatório se 036 $p estiver presente.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "040",
+            name: "CODEN",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém um código único e inequívoco anteriormente atribuído aos títulos dos recursos contínuos pelo serviço internacional CODEN.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "CODEN",
+                    tips: [
+                        "O código de seis caracteres em que o último carácter é um dígito alfanumérico.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$z",
+                    label: "Erroneous CODEN",
+                    tips: [
+                        "Um CODEN que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido.",
+                        "Pode ter sido atribuído a duas publicações diferentes e, neste caso, cancelado, ou pode ter sido incorretamente impresso.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "071",
+            name: "Publisher's Number",
+            ind1Name: "Type of Publisher's Number",
+            ind1Tips: [
+                "0: Sound recording: Issue number",
+                "1: Sound recording: Matrix number",
+                "2: Printed music: Plate number",
+                "3: Printed music: Other publisher's number",
+                "4: Video recording number",
+                "5: Other type of publisher's number",
+                "6: Eletronic resource number (ex: CD-ROM)"
+            ],
+            ind2Name: "Note Indicator",
+            ind2Tips: [
+                "0: Do not make a note",
+                "1: Make a note"
+            ],
+            tips: [
+                "Este campo contém um número de editor não regido por uma norma internacional. Trata-se geralmente de utilizado para gravações de som, publicações de música, gravações de vídeo e recursos electrónicos.",
+                "The field corresponds to the ISBD Resource Identifier and Terms of Availability Area. The field may contain the terms of availability and/or price, even if it does not contain a publisher's number.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Publisher's Number",
+                    tips: [
+                        "Este código especifica o tipo de número de editor contido no campo. Pode ser utilizado para gerar o texto introdutório se for necessário apresentar uma nota a partir deste campo.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$b",
+                    label: "Source",
+                    tips: [
+                        "O editor que atribuiu o número.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$c",
+                    label: "Qualification",
+                    tips: [
+                        "Utilizado para distinguir entre números se um registo contiver mais do que um número de editor.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$d",
+                    label: "Terms of Availability and/ or Price",
+                    tips: [
+                        "O preço do recurso e qualquer comentário sobre a sua disponibilidade.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$z",
+                    label: "Erroneous Publisher's Number",
+                    tips: [
+                        "Um número de editor que foi identificado como tendo sido erroneamente aplicado ao recurso ou de outra forma inválido. ",
+                        "Por exemplo, pode ter sido aplicado a duas publicações e, neste caso, cancelado ou pode ter sido incorretamente impresso.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "072",
+            name: "Universal Product Code (UPC)",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Name: "Differenfe Indicator",
+            ind2Tips: [
+                "0: No information provided",
+                "1: No difference",
+                "2: Difference"
+            ],
+            tips: [
+                "Este campo contém o Código Universal do Produto.",
+                "O campo corresponde ao identificador de recurso ISBD e à área das condições de disponibilidade. O campo pode conter as condições de disponibilidade e/ou o preço, mesmo que não contenha um número.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Standard Number",
+                    tips: [
+                        "Um número ou código normalizado corretamente formatado. O número ou código está formatado de acordo com o tipo.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$b",
+                    label: "Qualification",
+                    tips: [
+                        "Uma indicação do âmbito do número ou código no subcampo $a, normalmente o nome de um editor, uma indicação da encadernação do recurso, ou uma indicação da relação de um número ou código com um conjunto ou com um volume específico.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$c",
+                    label: "Additional Codes Following Standard Number or Codes",
+                    tips: [
+                        "Contém qualquer sufixo codificado para o identificador.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$d",
+                    label: "Terms of Availability and/ or Price",
+                    tips: [
+                        "O preço do recurso e qualquer comentário sobre a sua disponibilidade.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$z",
+                    label: "Erroneous Number or Code",
+                    tips: [
+                        "Um número ou código que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido.",
+                        "Pode ter sido atribuído a duas publicações ou produtos diferentes e, neste caso, cancelado ou pode ter sido incorretamente impresso.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "073",
+            name: "International Article Number (EAN)",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Name: "Differenfe Indicator",
+            ind2Tips: [
+                "0: No information provided",
+                "1: No difference",
+                "2: Difference"
+            ],
+            tips: [
+                "Este campo contém o número internacional do artigo. O campo corresponde ao identificador do recurso da ISBD e à área das condições de disponibilidade.",
+                "O campo pode conter as condições de disponibilidade e/ou preço, mesmo que não contenha um número.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Standard Number",
+                    tips: [
+                        "Um número ou código normalizado corretamente formatado.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$b",
+                    label: "Qualification",
+                    tips: [
+                        "Uma indicação do âmbito do número ou código no subcampo $a, normalmente o nome de um editor, uma indicação da encadernação do recurso, ou uma indicação da relação de um número ou código com um conjunto ou com um volume específico.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$c",
+                    label: "Additional Codes Following Standard Number or Codes",
+                    tips: [
+                        "Contém qualquer sufixo codificado para o identificador.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$d",
+                    label: "Terms of Availability and/ or Price",
+                    tips: [
+                        "O preço do recurso e qualquer comentário sobre a sua disponibilidade.",
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$z",
+                    label: "Erroneous Number or Code",
+                    tips: [
+                        "Um número ou código que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido.",
+                        "Pode ter sido atribuído a duas publicações ou produtos diferentes e, neste caso, cancelado ou pode ter sido incorretamente impresso.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "100",
+            name: "International Article Number (EAN)",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados de comprimento fixo aplicáveis aos registos de materiais em qualquer suporte.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "General Processing Data",
+                    tips: [
+                        "Os códigos indicam os aspectos do tratamento geral.",
+                        "O subcampo tem um comprimento de 36 caracteres.",
+                        "Date Entered on File (Mandatory): 8 char/ pos: 0-7",
+                        "Type of Date: 1 char/ Pos: 8",
+                        "Date 1: 4 char/ Pos: 9-12",
+                        "Date 2: 4 char/ Pos: 13-16",
+                        "Target Audience Code: 3 char/ pos: 17-19",
+                        "Government Publication Code: 1 char/ pos: 20",
+                        "Modified Record Code: 1 char/ pos: 21",
+                        "Language of Cataloguing (Mandatory): 3 char/ pos:22-24",
+                        "Transliteration Code: 1 char/ pos: 25",
+                        "Character Set (Mandatory): 4 char/ pos: 26-29",
+                        "Additional Character Set: 4 char/ pos: 30-33",
+                        "Script of Title: 2 char/ pos: 34/35"
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+            ]
+        },
+        {
+            tag: "101",
+            name: "Language of the Resource",
+            ind1Name: "Translation Indicator",
+            ind1Tips: [
+                "0: O recurso está na(s) língua(s) original(ais) da obra",
+                "1: O recurso é uma tradução da obra original ou uma obra intermédia",
+                "2: O recurso contém traduções para além dos resumos traduzidos",
+                "8: Os dados relativos à expressão da obra são codificados num registo separado da autoridade que descreve essa expressão."
+            ],
+            ind2Name: "Source of Code",
+            ind2Tips: [
+                "#: ISO 639-2 language code",
+                "7: Fonte especificada no subcampo $2",
+            ],
+            tips: [
+                "Este campo contém informação codificada relativa à língua ou línguas utilizadas na manifestação que está a ser descrita.",
+                "Foi concebido antes do lançamento do FRBR e do IFLA LRM, bem como das regras de catalogação que estão em conformidade com eles.",
+                "De acordo com o FRBR/IFLA LRM, algumas das informações contidas neste campo pertencem a entidades FRBR/IFLA LRM que não a manifestação. Esses dados devem, de preferência, ser transportados em registos de autoridade ligados que descrevam a entidade relacionada relevante e não no registo que descreve a Manifestação.",
+                "No entanto, esses dados podem ainda ser incluídos em registos bibliográficos que descrevam manifestações em determinadas condições, especialmente quando os registos são/foram criados num contexto LRM pré-FRBR/IFLA ou num contexto LRM não-FRBR/IFLA."
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Language of Text, Soundtrack, etc",
+                    tips: [
+                        "O idioma do texto, da banda sonora, etc. Repetível quando o texto está em mais do que um idioma.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$b",
+                    label: "Language of Intermediate Text when Resource is not Translated from Original",
+                    tips: [
+                        "O idioma de qualquer tradução intermédia (EX 2, 4, 6). Repetível quando o texto é traduzido de mais do que um idioma intermédio (EX 6), ou quando a tradução ocorreu através de mais do que um idioma intermédio (por exemplo, grego - latim - francês - inglês).",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$c",
+                    label: "Language of Original Work",
+                    tips: [
+                        "O idioma da obra original quando o recurso a registar é uma tradução (EX 1, 2, 4, 6, 8).",
+                        "Repetível quando o original está em mais de um idioma.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$d",
+                    label: "Language of Summary",
+                    tips: [
+                        "O idioma de quaisquer resumos ou abstracts do recurso ou de obras, artigos, etc. contidos no mesmo.",
+                        "Repetível quando o recurso contém resumos em mais de um idioma.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$e",
+                    label: "Language of Contents Page",
+                    tips: [
+                        "O idioma do índice quando este difere da idioma do texto (EX 3).",
+                        "Repetível para cada idioma da(s) página(s) de índice.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$f",
+                    label: "Language of Preferred Source of Information for the Title Page when it Differs from the Language or Languages of the Text",
+                    tips: [
+                        "Repetível para cada idioma da página de rosto.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$g",
+                    label: "Language of Title Proper if not First Language of Text, Soundtrack, etc.",
+                    tips: [
+                        "O idioma do título propriamente dito quando difere do idioma da primeira ou única ocorrência do subcampo $a (EX 1).",
+                        "Não é repetível, uma vez que o título próprio é, por definição, num único idioma.",
+                        "Quaisquer repetições do título propriamente dito noutros idiomas são títulos paralelos e o seu idioma é indicado num subcampo $z no campo 200."
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$h",
+                    label: "Language of Libretto, etc.",
+                    tips: [
+                        "O idioma ou idiomas do texto quando o recurso que está a ser catalogado inclui o conteúdo vocal/textual da(s) obra(s) impressa(s) como texto, quer como material de acompanhamento ou impresso com o recurso.",
+                        "Note-se que este subcampo não se limita aos libretos propriamente ditos.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$i",
+                    label: "Language of Accompanying Material (Other than Summaries, Abstracts or Librettos)",
+                    tips: [
+                        "O idioma ou idiomas  do material de acompanhamento, como notas de programa, prefácios, comentários, instruções do sítio , etc.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$j",
+                    label: "Language of Subtitles",
+                    tips: [
+                        "O(s) idioma(s) das legendas (títulos sobrepostos) de filmes, quando diferente(s) do idioma da banda sonora.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$2",
+                    label: "Source",
+                    tips: [
+                        "Uma identificação em forma codificada para o esquema de códigos linguísticos a partir do qual o código é derivado. Utilizar apenas quando o segundo código contiver o valor 7 (Fonte especificada no subcampo $2).",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "102",
+            name: "Country of Publication or Production",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém códigos para um ou mais países de publicação ou produção do recurso.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Country of Publication",
+                    tips: [
+                        "Contém um código que representa o país em que o recurso foi publicado ou produzido.",
+                        "Para os códigos do país, utilizar a norma ISO 3166-1.",
+                        "Repetível se o recurso for publicado em mais de um país ou em mais de uma localidade do mesmo país"
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$b",
+                    label: "Locality (non-ISO)",
+                    tips: [
+                        "Um código que representa a localidade, quando é necessário um código mais específico.",
+                        "Repetível se houver mais de um código de país. Os códigos são retirados de outras listas de códigos para além da ISO 3166-2.",
+                        "Os pormenores da lista de códigos são indicados no subcampo $2"
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$c",
+                    label: "Locality (ISO)",
+                    tips: [
+                        "Um código que representa a localidade, quando é necessário um código mais específico.",
+                        "Repetível se houver mais de um código de país. Os códigos devem ser retirados da norma ISO 3166-2."
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$2",
+                    label: "Source of non-ISO Code",
+                    tips: [
+                        "A fonte do código utilizado no subcampo $b. Para uma lista de fontes de códigos, ver apêndice A.",
+                        "Repetível se houver mais de um código de país"
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "105",
+            name: "Coded Data Field: Textual Language Material, Monographic",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados relativos a material linguístico monográfico.",
+                "Recomenda-se que esteja sempre presente nos registos de materiais linguísticos monográficos impressos."
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Monograph Coded Data",
+                    tips: [
+                        "Os códigos indicam aspectos do material linguístico monográfico.",
+                        "O subcampo tem um comprimento de 13 caracteres. Não repetível.",
+                        "Illustration Codes 4 0-3",
+                        "Form of Contents Codes 4 4-7",
+                        "Conference or Meeting Code 1 8",
+                        "Festschrift Indicator 1 9",
+                        "Index Indicator 1 10",
+                        "Literature Code 1 11",
+                        "Biography Code 1 12"
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+            ]
+        },
+        {
+            tag: "106",
+            name: "Coded Data Field: Textual Language Material, Monographic",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados relativos à forma dos recursos textuais não mediados (ou seja, não é necessário qualquer dispositivo de mediação para utilizar ou percecionar o conteúdo textual do recurso).",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Form of Resource: Coded Data: Medium Designator",
+                    tips: [
+                        "d: large print",
+                        "e: newspaper format",
+                        "f: braille or moon script",
+                        "g: micropoint",
+                        "h: hand-written",
+                        "i: multimedia",
+                        "j: mini-print",
+                        "r: regular print",
+                        "z: other form of material"
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+            ]
+        },
+        {
+            tag: "110",
+            name: "Coded Data Field: Continuing Resources",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados relativos a recursos contínuos, incluindo séries monográficas catalogadas como séries e não como monografias individuais.",
+                "Recomenda-se que esteja sempre presente nos registos de recursos contínuos.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Continuing Resource Coded Data",
+                    tips: [
+                        "Os códigos indicam aspetos de recursos contínuos.",
+                        "O subcampo tem 11 caracteres de comprimento. Não repetível.",
+                        "Type of Continuing Resource Designator 1 0",
+                        "Frequency of Issue 1 1",
+                        "Regularity 1 2",
+                        "Type of Material Code 1 3",
+                        "Nature of Contents Code 3 4-6",
+                        "Conference Publication Indicator 1 7",
+                        "Title Page Availability Codes 1 8",
+                        "Index Availability Code 1 9",
+                        "Cumulative Index Availability Code 1 l0"
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+            ]
+        },
+        {
+            tag: "111",
+            name: "Coded Data Field: Visual Projections, Video Recordings and Motion Pictures",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados de comprimento fixo aplicáveis a projeções visuais, gravações de vídeo e movimento fotos.",
+                "Este campo foi projetado antes do lançamento do FRBR e do IFLA LRM, pelo que todos os dados deste campo são relevantes para o contexto LRM pré-FRBR/IFLA ou não-FRBR/IFLA.",
+                "De acordo com o FRBR/IFLA LRM, alguns dados neste campo são preferencialmente transportados na autoridade vinculada dados que descrevem a entidade relacionada relevante (ver Campos Relacionados), a menos que a informação pertença à entidade manifestação."
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Coded Data - General",
+                    tips: [
+                        "Os códigos indicam aspetos de projeção visual, gravação de vídeo ou filme.",
+                        "O subcampo tem 20 caracteres de comprimento. Não repetível.",
+                        "Type of Material 1 0",
+                        "Length 3 1-3",
+                        "Colour Indicator 1 4",
+                        "Sound Indicator 1 5",
+                        "Media for Sound 1 6",
+                        "Width or Dimensions 1 7",
+                        "Form of Release – Visual Projection, Motion Picture 1 8",
+                        "Technique – Video recording, Motion Picture 1 9",
+                        "Presentation Format – Motion Picture 1 10",
+                        "Accompanying Material 4 11-14",
+                        "Form of Release – Video recording 1 15",
+                        "Presentation Format – Video recording 1 16",
+                        "Base of Emulsion Material – Visual Projection 1 17",
+                        "Secondary Support Material – Visual Projection 1 18",
+                        "Broadcast Standard – Video recording 1 19"
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$b",
+                    label: "Motion Picture Coded Data Archival",
+                    tips: [
+                        "Os códigos indicam aspetos de filmes.",
+                        "O subcampo tem 15 caracteres de comprimento. Não repetível.",
+                        "Generation 1 0",
+                        "Production Elements 1 1",
+                        "Refined Categories of Colour for Moving Pictures 1 2",
+                        "Film Emulsion (Polarity) 1 3",
+                        "Film Base 1 4",
+                        "Kind of Sound for Moving Images 1 5",
+                        "Kind of Film Stock or Print 1 6",
+                        "Deterioration Stage 1 7",
+                        "Completeness 1 8",
+                        "Film Inspection Date 6 9-14",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+            ]
+        },
     ]
 
     console.log({ adminRole, userRole, adminUser })
