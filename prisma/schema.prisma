@@ -87,7 +87,9 @@ model DataFieldDefinition {
   id          String               @id @default(cuid())
   tag         String
   name        String
+  ind1Name    String
   ind1Tips    String[]
+  ind2Name    String
   ind2Tips    String[]
   tips        String[]
   subFieldDef SubfieldDefinition[]
