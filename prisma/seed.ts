@@ -1164,221 +1164,63 @@ async function main() {
         },
         {
             tag: "101",
-            name: "Language of the Resource",
-            ind1Name: "Translation Indicator",
-            ind1Tips: [
-                "0: O recurso está na(s) língua(s) original(ais) da obra",
-                "1: O recurso é uma tradução da obra original ou uma obra intermédia",
-                "2: O recurso contém traduções para além dos resumos traduzidos",
-                "8: Os dados relativos à expressão da obra são codificados num registo separado da autoridade que descreve essa expressão."
-            ],
-            ind2Name: "Source of Code",
-            ind2Tips: [
-                "#: ISO 639-2 language code",
-                "7: Fonte especificada no subcampo $2",
-            ],
+            name: "LANGUAGE OF THE RESOURCE",
+            ind1Tips: ["Translation indicator"],
+            ind2Tips: ["Source of code"],
             tips: [
-                "Este campo contém informação codificada relativa à língua ou línguas utilizadas na manifestação que está a ser descrita.",
-                "Foi concebido antes do lançamento do FRBR e do IFLA LRM, bem como das regras de catalogação que estão em conformidade com eles.",
-                "De acordo com o FRBR/IFLA LRM, algumas das informações contidas neste campo pertencem a entidades FRBR/IFLA LRM que não a manifestação. Esses dados devem, de preferência, ser transportados em registos de autoridade ligados que descrevam a entidade relacionada relevante e não no registo que descreve a Manifestação.",
-                "No entanto, esses dados podem ainda ser incluídos em registos bibliográficos que descrevam manifestações em determinadas condições, especialmente quando os registos são/foram criados num contexto LRM pré-FRBR/IFLA ou num contexto LRM não-FRBR/IFLA."
+                "Contém códigos relacionados com a linguagem utilizada no recurso.",
+                "Pode conter o idioma original, tradução, legendas, sumários, etc."
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Language of Text, Soundtrack, etc",
-                    tips: [
-                        "O idioma do texto, da banda sonora, etc. Repetível quando o texto está em mais do que um idioma.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$b",
-                    label: "Language of Intermediate Text when Resource is not Translated from Original",
-                    tips: [
-                        "O idioma de qualquer tradução intermédia (EX 2, 4, 6). Repetível quando o texto é traduzido de mais do que um idioma intermédio (EX 6), ou quando a tradução ocorreu através de mais do que um idioma intermédio (por exemplo, grego - latim - francês - inglês).",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$c",
-                    label: "Language of Original Work",
-                    tips: [
-                        "O idioma da obra original quando o recurso a registar é uma tradução (EX 1, 2, 4, 6, 8).",
-                        "Repetível quando o original está em mais de um idioma.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$d",
-                    label: "Language of Summary",
-                    tips: [
-                        "O idioma de quaisquer resumos ou abstracts do recurso ou de obras, artigos, etc. contidos no mesmo.",
-                        "Repetível quando o recurso contém resumos em mais de um idioma.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$e",
-                    label: "Language of Contents Page",
-                    tips: [
-                        "O idioma do índice quando este difere da idioma do texto (EX 3).",
-                        "Repetível para cada idioma da(s) página(s) de índice.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$f",
-                    label: "Language of Preferred Source of Information for the Title Page when it Differs from the Language or Languages of the Text",
-                    tips: [
-                        "Repetível para cada idioma da página de rosto.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$g",
-                    label: "Language of Title Proper if not First Language of Text, Soundtrack, etc.",
-                    tips: [
-                        "O idioma do título propriamente dito quando difere do idioma da primeira ou única ocorrência do subcampo $a (EX 1).",
-                        "Não é repetível, uma vez que o título próprio é, por definição, num único idioma.",
-                        "Quaisquer repetições do título propriamente dito noutros idiomas são títulos paralelos e o seu idioma é indicado num subcampo $z no campo 200."
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$h",
-                    label: "Language of Libretto, etc.",
-                    tips: [
-                        "O idioma ou idiomas do texto quando o recurso que está a ser catalogado inclui o conteúdo vocal/textual da(s) obra(s) impressa(s) como texto, quer como material de acompanhamento ou impresso com o recurso.",
-                        "Note-se que este subcampo não se limita aos libretos propriamente ditos.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$i",
-                    label: "Language of Accompanying Material (Other than Summaries, Abstracts or Librettos)",
-                    tips: [
-                        "O idioma ou idiomas  do material de acompanhamento, como notas de programa, prefácios, comentários, instruções do sítio , etc.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$j",
-                    label: "Language of Subtitles",
-                    tips: [
-                        "O(s) idioma(s) das legendas (títulos sobrepostos) de filmes, quando diferente(s) do idioma da banda sonora.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$2",
-                    label: "Source",
-                    tips: [
-                        "Uma identificação em forma codificada para o esquema de códigos linguísticos a partir do qual o código é derivado. Utilizar apenas quando o segundo código contiver o valor 7 (Fonte especificada no subcampo $2).",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
+                { code: "a", label: "Idioma do texto, banda sonora, etc.", repeatable: true, mandatory: true, tips: ["Código ISO da principal língua do conteúdo."] },
+                { code: "b", label: "Idioma intermediário", repeatable: true, mandatory: false, tips: ["Idioma de tradução intermediária, se aplicável."] },
+                { code: "c", label: "Idioma original", repeatable: true, mandatory: false, tips: ["Idioma da obra original."] },
+                { code: "d", label: "Idioma do sumário", repeatable: true, mandatory: false, tips: ["Idioma de resumo ou abstracts."] },
+                { code: "e", label: "Idioma da página de conteúdo", repeatable: true, mandatory: false, tips: ["Idioma das listas de conteúdo."] },
+                { code: "f", label: "Idioma da fonte preferencial", repeatable: true, mandatory: false, tips: ["Idioma da página de rosto (se diferente)."] },
+                { code: "g", label: "Idioma do título principal", repeatable: true, mandatory: false, tips: ["Idioma do título principal se não for o primeiro idioma textual."] },
+                { code: "h", label: "Idioma do libreto", repeatable: true, mandatory: false, tips: ["Idioma do libreto ou equivalente."] },
+                { code: "i", label: "Idioma do material acompanhante", repeatable: true, mandatory: false, tips: ["Exclui resumos, abstracts ou librettos."] },
+                { code: "j", label: "Idioma das legendas", repeatable: true, mandatory: false, tips: ["Idioma das legendas no recurso."] },
+                { code: "2", label: "Fonte do código", repeatable: false, mandatory: false, tips: ["Fonte dos códigos de idioma (ex: iso639-2, iso639-3)."] }
             ]
         },
         {
             tag: "102",
-            name: "Country of Publication or Production",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            name: "COUNTRY OF PUBLICATION OR PRODUCTION",
+            ind1Tips: ["Não definido"],
+            ind2Tips: ["Não definido"],
             tips: [
-                "Este campo contém códigos para um ou mais países de publicação ou produção do recurso.",
+                "Código do país onde o recurso foi publicado ou produzido.",
+                "Usa códigos ISO 3166-1 e ISO 3166-2."
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Country of Publication",
-                    tips: [
-                        "Contém um código que representa o país em que o recurso foi publicado ou produzido.",
-                        "Para os códigos do país, utilizar a norma ISO 3166-1.",
-                        "Repetível se o recurso for publicado em mais de um país ou em mais de uma localidade do mesmo país"
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$b",
-                    label: "Locality (non-ISO)",
-                    tips: [
-                        "Um código que representa a localidade, quando é necessário um código mais específico.",
-                        "Repetível se houver mais de um código de país. Os códigos são retirados de outras listas de códigos para além da ISO 3166-2.",
-                        "Os pormenores da lista de códigos são indicados no subcampo $2"
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$c",
-                    label: "Locality (ISO)",
-                    tips: [
-                        "Um código que representa a localidade, quando é necessário um código mais específico.",
-                        "Repetível se houver mais de um código de país. Os códigos devem ser retirados da norma ISO 3166-2."
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$2",
-                    label: "Source of non-ISO Code",
-                    tips: [
-                        "A fonte do código utilizado no subcampo $b. Para uma lista de fontes de códigos, ver apêndice A.",
-                        "Repetível se houver mais de um código de país"
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
+                { code: "a", label: "País de publicação", repeatable: true, mandatory: true, tips: ["Código ISO 3166-1."] },
+                { code: "b", label: "Localidade (não ISO)", repeatable: true, mandatory: false, tips: ["Localidade detalhada, código não ISO."] },
+                { code: "c", label: "Localidade (ISO)", repeatable: true, mandatory: false, tips: ["Localidade detalhada, código ISO 3166-2."] },
+                { code: "2", label: "Fonte do código não ISO", repeatable: true, mandatory: false, tips: ["Nome da lista usada para o código $b."] }
             ]
         },
         {
             tag: "105",
-            name: "Coded Data Field: Textual Language Material, Monographic",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            name: "TEXTUAL LANGUAGE MATERIAL, MONOGRAPHIC",
+            ind1Tips: ["Não definido"],
+            ind2Tips: ["Não definido"],
             tips: [
-                "Este campo contém dados codificados relativos a material linguístico monográfico.",
-                "Recomenda-se que esteja sempre presente nos registos de materiais linguísticos monográficos impressos."
+                "Codifica características físicas e de conteúdo de materiais textuais monográficos.",
+                "Inclui presença de índice, bibliografia, tipo de ilustração, etc."
             ],
             subFieldDef: [
                 {
-                    code: "$a",
-                    label: "Monograph Coded Data",
-                    tips: [
-                        "Os códigos indicam aspectos do material linguístico monográfico.",
-                        "O subcampo tem um comprimento de 13 caracteres. Não repetível.",
-                        "Illustration Codes 4 0-3",
-                        "Form of Contents Codes 4 4-7",
-                        "Conference or Meeting Code 1 8",
-                        "Festschrift Indicator 1 9",
-                        "Index Indicator 1 10",
-                        "Literature Code 1 11",
-                        "Biography Code 1 12"
-                    ],
+                    code: "a",
+                    label: "Dados codificados da monografia",
                     repeatable: false,
                     mandatory: true,
-                },
+                    tips: [
+                        "Campo fixo de 13 caracteres.",
+                        "Inclui: Ilustração (0-3), Conteúdo (4-7), Conferência (8), Festschrift (9), Índice (10), Literatura (11), Biografia (12)"
+                    ]
+                }
             ]
         },
         {
@@ -1415,33 +1257,236 @@ async function main() {
         },
         {
             tag: "110",
-            name: "Coded Data Field: Continuing Resources",
+            name: "CONTINUING RESOURCES",
+            ind1Tips: ["Não definido"],
+            ind2Tips: ["Não definido"],
+            tips: [
+                "Codifica dados sobre recursos continuados como periódicos, anuários, etc.",
+                "Inclui periodicidade, tipo de publicação, status, etc."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Bloco de dados codificados", repeatable: false, mandatory: true, tips: ["Bloco de dados fixos definidos pela norma UNIMARC."] }
+            ]
+        },
+        {
+            tag: "115",
+            name: "VISUAL PROJECTIONS, VIDEO RECORDINGS AND MOTION PICTURES",
+            ind1Tips: ["Não definido"],
+            ind2Tips: ["Não definido"],
+            tips: [
+                "Codifica informações sobre filmes, vídeos e projeções.",
+                "Inclui cor, som, formato de reprodução, tipo de imagem, etc."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Bloco de dados codificados", repeatable: false, mandatory: true, tips: ["Bloco de dados fixos definidos pela norma UNIMARC."] },
+                { code: "b", label: "Arquivo de dados codificados de imagem em movimento", repeatable: false, mandatory: false, tips: ["Bloco de dados fixos definidos pela norma UNIMARC."] }
+            ]
+        },
+        {
+            tag: "116",
+            name: "GRAPHICS",
+            ind1Tips: ["Não definido"],
+            ind2Tips: ["Não definido"],
+            tips: [
+                "Codifica características de materiais gráficos (imagens fixas).",
+                "Inclui técnica, cor, tipo de suporte, etc."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Bloco de dados codificados", repeatable: false, mandatory: true, tips: ["Bloco de dados fixos definidos pela norma UNIMARC."] }
+            ]
+        },
+        {
+            tag: "117",
+            name: "THREE-DIMENSIONAL ARTEFACTS AND REALIA",
+            ind1Tips: ["Não definido"],
+            ind2Tips: ["Não definido"],
+            tips: [
+                "Codifica atributos de objetos reais e artefactos tridimensionais.",
+                "Inclui tipo, função, origem, suporte, etc."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Bloco de dados codificados para artefactos tridimensionais e realia", repeatable: false, mandatory: true, tips: ["Bloco de dados fixos definidos pela norma UNIMARC."] },
+                { code: "b", label: "Bloco de dados codificados para recursos numistmáticos", repeatable: false, mandatory: true, tips: ["Bloco de dados definidos pela norma UNIMARC."] }
+            ]
+        },
+        {
+            tag: "120",
+            name: "CARTOGRAPHIC RESOURCES - GENERAL",
+            ind1Tips: ["Não definido"],
+            ind2Tips: ["Não definido"],
+            tips: [
+                "Codifica atributos gerais de mapas e recursos cartográficos.",
+                "Inclui tipo de mapa, técnica de produção, etc."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Bloco de dados codificados para recursos cartográficos (Geral)", repeatable: false, mandatory: true, tips: ["Bloco de dados fixos definidos pela norma UNIMARC."] },
+            ]
+        },
+        {
+            tag: "121",
+            name: "CARTOGRAPHIC RESOURCES - PHYSICAL ATTRIBUTES",
+            ind1Tips: ["Não definido"],
+            ind2Tips: ["Não definido"],
+            tips: [
+                "Contém dados codificados relativos aos atributos físicos dos recursos cartográficos."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Cartographic Resource Coded Data: Physical Attributes (General)", repeatable: false, mandatory: false, tips: ["Codifica dimensões físicas, técnica de criação, forma de publicação, etc.", "9 caracteres fixos: Physical Dimension, Primary Image, Medium, Technique, Reproduction, Adjustment, Form"] },
+                { code: "b", label: "Aerial Photography and Remote Sensing Coded Data: Physical Attributes", repeatable: false, mandatory: false, tips: ["8 caracteres fixos: Altitude, Sensor Attitude, Spectral Bands, Image Quality, Cloud Cover, Ground Resolution"] }
+            ]
+        },
+        {
+            tag: "122",
+            name: "TIME PERIOD OF RESOURCE CONTENT",
+            ind1Name: "Number of Dates Indicator",
+            ind1Tips: ["0 - Single dated resource", "1 - Multiple single dates", "2 - Range of dates"],
+            ind2Tips: ["Não definido"],
+            tips: [
+                "Indicação estruturada do período de tempo coberto pelo conteúdo do recurso.",
+                "Datas codificadas desde 9999 A.C. até ao presente, com precisão até hora."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Time Period, 9999 B.C. to Present", repeatable: true, mandatory: false, tips: ["Campo de 5 a 11 caracteres com elementos: Era, Ano, Mês, Dia, Hora.", "Exemplo: d1976080214 (2 ago. 1976, 14h).", "Subelementos: Era (c/d), Ano (4d), Mês (2d), Dia (2d), Hora (2d)."] }
+            ]
+        },
+        {
+            tag: "123",
+            name: "Coded Data Field: Cartographic Resources - Scale and Co-ordinates",
+            ind1Name: "Type of Scale Code Indicator",
             ind1Tips: [
-                "#: Em branco (não definido)",
+                "0: Scale indeterminable",
+                "1: Single scale",
+                "2: Multiple scales",
+                "3: Range of scales",
+                "4: Approximate scale"
             ],
             ind2Tips: [
                 "#: Em branco (não definido)",
             ],
             tips: [
-                "Este campo contém dados codificados relativos a recursos contínuos, incluindo séries monográficas catalogadas como séries e não como monografias individuais.",
-                "Recomenda-se que esteja sempre presente nos registos de recursos contínuos.",
+                "Este campo contém os dados de escala e coordenadas tal como são introduzidos no campo 206, mas de forma codificada. Foi concebido antes do lançamento do FRBR e do IFLA LRM, bem como das regras de catalogação que conformar-se com elas.",
+                "De acordo com o FRBR/IFLA LRM, algumas das informações transportadas neste campo refere-se a entidades FRBR/IFLA LRM que não a Manifestação.",
+                "Tais dados devem ser preferencialmente carregado em registos de autoridade vinculados que descrevem a entidade relacionada relevante, em vez de no registo descrevendo a Manifestação. No entanto, estes dados podem ainda ser encontrados em registos bibliográficos que descrevem manifestações sob determinadas condições, especialmente quando os registos são/foram criados num contexto LRM pré-FRBR/IFLA ou não-FRBR/IFLA.",
+                "Repetível quando o recurso contém material em diferentes escalas e com diferentes coordenadas."
             ],
             subFieldDef: [
                 {
                     code: "$a",
-                    label: "Continuing Resource Coded Data",
+                    label: "Type of Scale",
                     tips: [
-                        "Os códigos indicam aspetos de recursos contínuos.",
-                        "O subcampo tem 11 caracteres de comprimento. Não repetível.",
-                        "Type of Continuing Resource Designator 1 0",
-                        "Frequency of Issue 1 1",
-                        "Regularity 1 2",
-                        "Type of Material Code 1 3",
-                        "Nature of Contents Code 3 4-6",
-                        "Conference Publication Indicator 1 7",
-                        "Title Page Availability Codes 1 8",
-                        "Index Availability Code 1 9",
-                        "Cumulative Index Availability Code 1 l0"
+                        "Obrigatório. Não repetível. Um código de um caractere que indica o tipo de escala com os seguintes valores:",
+                        "a linear scale",
+                        "b angular scale",
+                        "z other type of scale (e.g., time scale, quantitative statistical scale)"
+                    ],
+                    repeatable: false,
+                    mandatory: true,
+                },
+                {
+                    code: "$b",
+                    label: "Constant Ratio Linear Horizontal Scale",
+                    tips: [
+                        "A escala horizontal sob a forma do denominador de uma fracção representativa. Usado para planetário como bem como recursos cartográficos terrestres. Repetível."
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$c",
+                    label: "Constant Ratio Linear Vertical Scale",
+                    tips: [
+                        "A escala vertical sob a forma do denominador de uma fracção representativa. Usado também para planetários como recursos terrestres. Repetível."
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$d",
+                    label: "Co-ordinates - Westernmost Longitude",
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$e",
+                    label: "Co-ordinates - Easternmost Longitude",
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$f",
+                    label: "Co-ordinates - Northernmost Longitude",
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$g",
+                    label: "Co-ordinates - Southernmost Longitude",
+                    tips: [
+                        "Coordenadas para recursos planetários ou terrestres. Cada subcampo está fixado em 8 caracteres e não é repetível.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$h",
+                    label: "Angular Scale",
+                    tips: [
+                        "A escala angular dos mapas celestes sob a forma de um número de 4 caracteres justificado à direita e preenchido com zeros, dando a escala em termos de milímetros para um grau. Repetível.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$i",
+                    label: "Declination - Northern Limit",
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$j",
+                    label: "Declination - Southern Limit",
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$k",
+                    label: "Right Ascension - Eastern Limits",
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$m",
+                    label: "Right Ascension - Western Limits",
+                    tips: [
+                        "Coordenadas para recursos cartográficos celestes. Os subcampos não são repetíveis. Os subcampos $i e $j são cada um 8 caracteres de comprimento e contém as mesmas componentes dos subcampos $f e $g (ver acima), excepto que a posição do caractere 0 contém um sinal de mais (para o hemisfério celeste norte) ou um sinal de menos (para o hemisfério hemisfério celeste sul).",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$n",
+                    label: "Equinox",
+                    tips: [
+                        "O equinócio para os recursos cartográficos celestes com o ano inserido de acordo com o calendário gregoriano como uma data de quatro caracteres justificada à direita com zeros. Não repetível.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$o",
+                    label: "Epoch",
+                    tips: [
+                        "A época dos recursos cartográficos celestes com o ano inserido de acordo com o calendário gregoriano como uma data de quatro caracteres justificada à direita com zeros. Não repetível.",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$p",
+                    label: "Planet to which the Field Applies",
+                    tips: [
+                        "Este subcampo indica se as coordenadas registadas nos subcampos $d-$g se aplicam à Terra ou a outro planeta, ou para um satélite desses corpos. Obrigatório, exceto para os recursos cartográficos relacionados com os mapas terrestres e celestes.",
+                        "O planeta é expresso na posição 0-1, enquanto a posição 2 indica se o corpo é um satélite do planeta codificado em pos. 0-1."
                     ],
                     repeatable: false,
                     mandatory: true,
@@ -1449,8 +1494,8 @@ async function main() {
             ]
         },
         {
-            tag: "111",
-            name: "Coded Data Field: Visual Projections, Video Recordings and Motion Pictures",
+            tag: "124",
+            name: "Coded Data Field: Cartographic Resources - Specific Material Designation Analysis",
             ind1Tips: [
                 "#: Em branco (não definido)",
             ],
@@ -1458,59 +1503,553 @@ async function main() {
                 "#: Em branco (não definido)",
             ],
             tips: [
-                "Este campo contém dados codificados de comprimento fixo aplicáveis a projeções visuais, gravações de vídeo e movimento fotos.",
-                "Este campo foi projetado antes do lançamento do FRBR e do IFLA LRM, pelo que todos os dados deste campo são relevantes para o contexto LRM pré-FRBR/IFLA ou não-FRBR/IFLA.",
-                "De acordo com o FRBR/IFLA LRM, alguns dados neste campo são preferencialmente transportados na autoridade vinculada dados que descrevem a entidade relacionada relevante (ver Campos Relacionados), a menos que a informação pertença à entidade manifestação."
+                "Este campo contém dados codificados de comprimento fixo relacionados com as características de tipos de imagens fotográficas, não fotográficas e de deteção remota de características cartográficas."
             ],
             subFieldDef: [
                 {
                     code: "$a",
-                    label: "Coded Data - General",
+                    label: "Character of Image",
                     tips: [
-                        "Os códigos indicam aspetos de projeção visual, gravação de vídeo ou filme.",
-                        "O subcampo tem 20 caracteres de comprimento. Não repetível.",
-                        "Type of Material 1 0",
-                        "Length 3 1-3",
-                        "Colour Indicator 1 4",
-                        "Sound Indicator 1 5",
-                        "Media for Sound 1 6",
-                        "Width or Dimensions 1 7",
-                        "Form of Release – Visual Projection, Motion Picture 1 8",
-                        "Technique – Video recording, Motion Picture 1 9",
-                        "Presentation Format – Motion Picture 1 10",
-                        "Accompanying Material 4 11-14",
-                        "Form of Release – Video recording 1 15",
-                        "Presentation Format – Video recording 1 16",
-                        "Base of Emulsion Material – Visual Projection 1 17",
-                        "Secondary Support Material – Visual Projection 1 18",
-                        "Broadcast Standard – Video recording 1 19"
+                        "Código de 1 caractere. Não repetível."
                     ],
                     repeatable: false,
                     mandatory: false,
                 },
                 {
                     code: "$b",
-                    label: "Motion Picture Coded Data Archival",
+                    label: "Form of Cartographic Resource",
                     tips: [
-                        "Os códigos indicam aspetos de filmes.",
-                        "O subcampo tem 15 caracteres de comprimento. Não repetível.",
-                        "Generation 1 0",
-                        "Production Elements 1 1",
-                        "Refined Categories of Colour for Moving Pictures 1 2",
-                        "Film Emulsion (Polarity) 1 3",
-                        "Film Base 1 4",
-                        "Kind of Sound for Moving Images 1 5",
-                        "Kind of Film Stock or Print 1 6",
-                        "Deterioration Stage 1 7",
-                        "Completeness 1 8",
-                        "Film Inspection Date 6 9-14",
+                        "Código de 1 caractere. Repetível."
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$c",
+                    label: "Presentation Technique for Photographic or Non-Photographic Image",
+                    tips: [
+                        "Código de 2 caracteres. Repetível."
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$d",
+                    label: "Position of Platform for Photographic or Remote Sensing Image",
+                    tips: [
+                        "Código de 1 caractere. Repetível."
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$e",
+                    label: "Category of Satellite for Remote Sensing Image",
+                    tips: [
+                        "Código de 1 caractere. Repetível."
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$f",
+                    label: "Name of Satellite for Remote Sensing Image",
+                    tips: [
+                        "Código de 2 caracteres. Repetível."
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "125",
+            name: "Coded Data Field: Sound Recordings and Music",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo descreve o formato da música, observa se existem partes e codifica o tipo de texto literário para atuações não musicais."
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Format of Notated Music",
+                    tips: [
+                        "Os códigos indicam os aspetos do formato da música notada. O subcampo tem 2 caracteres de comprimento. Não repetível.",
+                        "Subcampo $a elementos de dados de comprimento fixo:",
+                        "Type of Score: 1 char/ Pos: 0",
+                        "Parts Indicator: 1 char/ Pos: 1",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$b",
+                    label: "Literary Text Indicator (Non-Music Performance)",
+                    tips: [
+                        "Código de 2 caracteres. Não repetível."
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$c",
+                    label: "Multiple Musical Formats",
+                    tips: [
+                        "Comprimento variável. Não repetível."
                     ],
                     repeatable: false,
                     mandatory: false,
                 },
             ]
         },
+        {
+            tag: "126",
+            name: "Coded Data Field: Sound Recordings - Physical Attributes",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados relacionados com os atributos físicos das gravações sonoras.",
+                "Este campo foi projetado antes do lançamento do FRBR e do IFLA LRM, pelo que todos os dados deste campo são relevantes para o contexto LRM pré-FRBR/IFLA ou não-FRBR/IFLA.",
+                "De acordo com o FRBR/IFLA LRM, alguns dados neste campo são preferencialmente transportados na autoridade vinculada dados (ver Campos Relacionados) que descrevem a entidade relacionada relevante, a menos que a informação pertença à entidade manifestação.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Sound Recording Coded Data (General)",
+                    tips: [
+                        "Os códigos indicam os aspetos gerais da gravação sonora.",
+                        "O subcampo tem 15 caracteres de comprimento. Não repetível.",
+                        "Subcampo $a elementos de dados de comprimento fixo:",
+                        "Form of Release 1 0",
+                        "Speed 1 1",
+                        "Kind of Sound 1 2",
+                        "Groove Width 1 3",
+                        "Dimensions (Sound Recordings) 1 4",
+                        "Tape Width 1 5",
+                        "Tape Configuration 1 6",
+                        "Accompanying Textual Material 6 7-12",
+                        "Recording Technique 1 13",
+                        "Special Reproduction Characteristics 1 14"
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$b",
+                    label: "Sound Recording Coded Data (Detail)",
+                    tips: [
+                        "Os códigos indicam os aspetos detalhados da gravação sonora.",
+                        "O subcampo tem 3 caracteres de comprimento. Não repetível.",
+                        "Este subcampo é apenas utilizado para o contexto LRM pré-FRBR/IFLA. Não utilize este subcampo se estiver a catalogar o código é baseado no FRBR/IFLA LRM.",
+                        "Elementos de dados de comprimento fixo do subcampo $b:",
+                        "Kind of Disc or Cylinder 1 1",
+                        "Kind of Material 1 1",
+                        "Kind of Cutting 1 2"
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "127",
+            name: "Coded Data Field: Duration of Sound Recordings and Notated Music",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "O campo contém um ou mais números de seis caracteres correspondentes à duração de uma manifestação consistindo ou contendo gravações sonoras ou uma parte de uma gravação sonora, ou ao valor estimado duração de uma composição conforme consta na partitura que está a ser descrita.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Duration",
+                    tips: [
+                        "Este subcampo contém uma sequência numérica de seis caracteres que representa a duração de uma manifestação consistindo ou contendo gravações sonoras ou uma secção de uma gravação sonora, ou a duração estimada de qualquer composição musical contida na manifestação.",
+                        "O tempo está dividido em três subelementos, cada um com dois caracteres, representando o número de horas, minutos e segundos.",
+                        "Cada subelemento é justificado à direita; posições não utilizadas contêm espaços em branco ou zeros. Repetível.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "128",
+            name: "Coded Data Field: Form of Musical Work and Key or Mode",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo descreve a forma e a tonalidade ou modo de uma obra musical.",
+                "Foi concebido antes do lançamento do FRBR e do IFLA LRM, bem como das regras de catalogação que conformar-se com elas.",
+                "De acordo com o FRBR/IFLA LRM, algumas das informações transportadas neste campo refere-se a entidades FRBR/IFLA LRM que não a Manifestação.",
+                "Tais dados devem ser preferencialmente carregado em registos de autoridade vinculados que descrevem a entidade relacionada relevante, em vez de no registo descrevendo a Manifestação.",
+                "No entanto, estes dados podem ainda ser encontrados em registos bibliográficos que descrevem manifestações sob determinadas condições, especialmente quando os registos são/foram criados num contexto LRM pré-FRBR/IFLA ou não-FRBR/IFLA.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Form of Musical Work",
+                    tips: [
+                        "Contém um código que indica a forma de uma obra musical.",
+                        "Se existir mais do que um formulário, o subcampo é repetido.",
+                        "Utilize os códigos mantidos e atualizados pela IAML (Associação Internacional de Bibliotecas e Arquivos Musicais) e Centros de Documentação Musical).",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$d",
+                    label: "Key or Mode of Musical Work",
+                    tips: [
+                        "Contém um código que indica a tonalidade ou o modo eclesiástico da obra musical, se significativo.",
+                        "As tonalidades maiores são indicado com uma letra “a”-“g”, tons menores com uma letra “a”-“g” seguida de “m”; sustenidos com “x”, bemóis com “b” a seguir o código da chave.",
+                        "Os modos eclesiásticos “gregorianos” são indicados com um número “01”-“13” (EX 4). Não repetível.",
+                        "Utilize os códigos mantidos e atualizados pela IAML (Associação Internacional de Bibliotecas e Arquivos Musicais) e Centros de Documentação Musical).",
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "130",
+            name: "Coded Data Field: Microforms - Physical Attributes",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados relacionados com microformas.",
+                "Repetível quando mais do que uma microforma é descrita num único registo bibliográfico.",
+                "Este campo foi projetado antes do lançamento do FRBR e do IFLA LRM, pelo que todos os dados deste campo são relevantes para o contexto LRM pré-FRBR/IFLA ou não-FRBR/IFLA.",
+                "De acordo com o FRBR/IFLA LRM, alguns dados neste campo são preferencialmente transportados na autoridade vinculada dados (ver Campos Relacionados) que descrevem a entidade relacionada relevante, a menos que a informação pertença à entidade manifestação.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Mircroform Coded Data - Physical Attributes",
+                    tips: [
+                        "Os códigos indicam os atributos físicos da microforma.",
+                        "O subcampo tem 11 caracteres de comprimento. Não repetível.",
+                        "Subcampo $a elementos de dados de comprimento fixo:",
+                        "Specific Material Designation 1 0",
+                        "Polarity 1 1",
+                        "Dimensions 1 2",
+                        "Reduction Ratio 1 3",
+                        "Specific Reduction Ratio 3 4-6",
+                        "Colour 1 7",
+                        "Emulsion on Film 1 8",
+                        "Generation 1 9",
+                        "Base of Film 1 10"
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "131",
+            name: "Coded Data Field: Cartographic Resources - Geodetic, Gridand Vertical Measurement",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados relativos aos detalhes geodésicos, de grelha e de medição vertical de recursos cartográficos.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Spheroid",
+                    tips: [
+                        "Um código de dois caracteres indica o esferóide utilizado para construir o mapa. Repetível.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$b",
+                    label: "Horizontal Datum",
+                    tips: [
+                        "Um código de três caracteres utilizado para indicar o(s) datum(s) horizontal(ais) nomeado(s) no recurso cartográfico. Repetível para cada dado.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$c",
+                    label: "Grid and Referencing System",
+                    tips: [
+                        "A two-character code indicating the main grid or referencing system. This code (and those in subfields $d and $e) includes the spheroid of construction of the grid (as opposed to the spheroid of construction of the map given in subfield $a). Repeatable.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$d",
+                    label: "Overlapping and Referencing System",
+                    tips: [
+                        "Um código de dois caracteres que indica uma grelha subsidiária ou sistema de referência que se estende pela face de o recurso cartográfico. Repetível.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$e",
+                    label: "Secondary Grid and Referencing System",
+                    tips: [
+                        "Um código de dois caracteres que indica uma grelha subsidiária ou sistema de referência que aparece sob a forma de carraças marginais. Repetível.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$f",
+                    label: "Vertical Datum",
+                    tips: [
+                        "Um código de dois caracteres utilizado para indicar o(s) datum(s) vertical(ais) nomeado(s) no recurso cartográfico. Repetível para cada dado.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$g",
+                    label: "Unit of Measurement of Heighting",
+                    tips: [
+                        "Um código de dois caracteres que indica a unidade de medida de altura. Repetível.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$h",
+                    label: "Contour Interval",
+                    tips: [
+                        "Até quatro caracteres indicando o valor do intervalo dos contornos principais (ou seja, aqueles contornos que aparecem sempre quando aplicável) na unidade de medida fornecida no subcampo $g.",
+                        "Até uma casa decimal podem ser registados, os valores com mais de uma casa decimal devem ser arredondados para um.",
+                        "Repetível para cada valor quando, por exemplo, o valor varia com a altura.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$i",
+                    label: "Supplementary Contour Interval",
+                    tips: [
+                        "Até quatro caracteres indicando o valor do intervalo de contornos suplementares, ou seja, contornos utilizados entre as curvas de nível principais para aumentar a expressão topográfica da área (por exemplo, em áreas de baixo relevo) ou contornos cujo valor não se repete na superfície do mapa.",
+                        "A unidade de medida é aquela que é dada em subcampo $g.",
+                        "Podem ser registados até uma casa decimal, os valores com mais de uma casa decimal devem ser arredondado para um. Repetível.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$j",
+                    label: "Unit of Measurement of Bathymetry",
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$k",
+                    label: "Bathymetric Interval",
+                    repeatable: true,
+                    mandatory: false,
+                },
+                {
+                    code: "$l",
+                    label: " Supplementary Bathymetric Interval",
+                    tips: [
+                        "O equivalente oceanográfico dos subcampos $g a $i. As regras para estes subcampos aplicam-se aos subcampos $j a $l. Repetível.",
+                    ],
+                    repeatable: true,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "135",
+            name: "Coded Data Field: Electronic Resources",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados relacionados com recursos eletrónicos.",
+                "Repetível quando mais do que um tipo de ficheiro/programa de software é descrito no mesmo registo.",
+                "Este campo foi projetado antes do lançamento do FRBR e do IFLA LRM, pelo que todos os dados deste campo são relevantes para o contexto LRM pré-FRBR/IFLA ou não-FRBR/IFLA.",
+                "De acordo com o FRBR/IFLA LRM, alguns dados neste campo são preferencialmente transportados na autoridade vinculada dados (ver Campos Relacionados) que descrevem a entidade relacionada relevante, a menos que a informação pertença à entidade manifestação."
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Coded Data for Electronic Resource",
+                    tips: [
+                        "Os códigos indicam os aspetos do recurso eletrónico.",
+                        "O subcampo tem 13 caracteres de comprimento. Não repetível.",
+                        "Subcampo $a elementos de dados de comprimento fixo:",
+                        "Type of Electronic Resource 1 0",
+                        "Special Material Designation 1 1",
+                        "Colour 1 2",
+                        "Dimensions 1 3",
+                        "Sound 1 4",
+                        "Image Bit Depth 3 5-7",
+                        "Number of File Formats 1 8",
+                        "Quality Assurance Target(s) 1 9",
+                        "Antecedent/Source 1 10",
+                        "Level of Compression 1 11",
+                        "Reformatting Quality 1 12"
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "140",
+            name: "Coded Data Field: Antoquarian - General",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados codificados de comprimento fixo relacionados com a forma física de publicações monográficas mais antigas (antiquárias) e também materiais posteriores descritos em detalhes bibliográficos semelhantes.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Antiquarian Coded Data – General",
+                    tips: [
+                        "Os códigos indicam os aspetos do recurso antiquário.",
+                        "O subcampo tem 28 caracteres de comprimento. Não repetível.",
+                        "Subcampo $a elementos de dados de comprimento fixo:",
+                        "Illustration Codes – Book 4 0-3",
+                        "Illustration Codes – Full Page Plates 4 4-7",
+                        "Illustration Code – Technique 1 8",
+                        "Form of Contents Code 8 9-16",
+                        "Literature Code 2 17-18",
+                        "Biography Code 1 19",
+                        "Support Material – Book 1 20",
+                        "Support Material – Plates 1 21",
+                        "Watermark Code 1 22",
+                        "Printer’s Device Code 1 23",
+                        "Publisher’s Device Code 1 24",
+                        "Ornamental Device Code 1 25",
+                        "Unassigned 2 26-27"
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+            ]
+        },
+        {
+            tag: "141",
+            name: "Coded Data Field: Item Specific Attributes",
+            ind1Tips: [
+                "#: Em branco (não definido)",
+            ],
+            ind2Tips: [
+                "#: Em branco (não definido)",
+            ],
+            tips: [
+                "Este campo contém dados de comprimento fixo relacionados com os atributos específicos da encadernação e do corpo de um item de um livro.",
+                "Repetível se o registo contiver detalhes de mais do que uma cópia.",
+            ],
+            subFieldDef: [
+                {
+                    code: "$a",
+                    label: "Coded Data - Item Specific Attributes",
+                    tips: [
+                        "Os códigos indicam os atributos do artigo.",
+                        "O subcampo tem 8 caracteres de comprimento. Não repetível.",
+                        "Subcampo $a elementos de dados de comprimento fixo:",
+                        "Binding Material Code – General 3 0-2",
+                        "Types of Binding Code 1 3",
+                        "'Bound with' Code 1 4",
+                        "State of Preservation Code – Binding –",
+                        "General 1 5",
+                        "State of Preservation Code – Body of the Book – General 2 6-7"
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$b",
+                    label: "Binding Specific Characteristics",
+                    tips: [
+                        "Os códigos indicam características específicas de encadernação do artigo do Código de Material de Encadernação – Geral ($a/0-2).",
+                        "O subcampo tem 8 caracteres de comprimento. Não repetível.",
+                        "Elementos de dados de comprimento fixo do subcampo $b:",
+                        "Primary Binding Material 2 0 - 1",
+                        "Secondary Binding Material 2 2 - 3",
+                        "Binding Decoration 1 4",
+                        "Decoration Motifs 1 5",
+                        "Binding Pieces 1 6",
+                        "Boards 1 7"
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+                {
+                    code: "$c",
+                    label: "Age",
+                    tips: [
+                        "O século relativo à encadernação da cópia. Não repetível."
+                    ],
+                    repeatable: false,
+                    mandatory: false,
+                },
+
+            ]
+        },
     ]
+
+    await Promise.all(
+        dataFieldDefinitionsData.map(def =>
+            prisma.dataFieldDefinition.create({
+                data: {
+                    tag: def.tag,
+                    name: def.name,
+                    ind1Tips: def.ind1Tips,
+                    ind2Tips: def.ind2Tips,
+                    tips: def.tips,
+                    subFieldDef: {
+                        create: def.subFieldDef.map(sub => ({
+                            code: sub.code,
+                            label: sub.label,
+                            repeatable: sub.repeatable,
+                            mandatory: sub.mandatory,
+                            tips: sub.tips
+                        }))
+                    }
+                }
+            })
+        )
+    )
 
     console.log({ adminRole, userRole, adminUser })
 }
