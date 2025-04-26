@@ -1633,8 +1633,8 @@ async function main() {
         {
             tag: "203",
             name: "CONTENT FORM AND MEDIA TYPE",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
             tips: [
                 "Este campo corresponde à Área 0 do ISBD, Formulário de Conteúdo e Área de Tipo de Suporte, cuja finalidade é indicar logo no início da descrição, tanto a forma ou formas fundamentais em que o conteúdo de um o recurso é expresso e o tipo ou tipos de suporte utilizados para transmitir esse conteúdo de modo a auxiliar o catálogo utilizadores na identificação e seleção de recursos adequados às suas necessidades."
             ],
@@ -1647,8 +1647,8 @@ async function main() {
         {
             tag: "205",
             name: "EDITION STATEMENT",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
             tips: [
                 "Contém a declaração de edição e informações relacionadas, como emissão e responsabilidades associadas.",
                 "Corresponde à Área de Edição da ISBD."
@@ -1696,8 +1696,8 @@ async function main() {
         {
             tag: "208",
             name: "MATERIAL SPECIFIC AREA: MUSIC FORMAT STATEMENT",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
             tips: [
                 "Contém uma declaração relativa ao formato de uma obra de música impressa ou manuscrita.",
                 "Utilizado para recursos de partituras e manuscritos musicais."
@@ -1733,8 +1733,8 @@ async function main() {
         {
             tag: "211",
             name: "PROJECTED PUBLICATION DATE",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
             tips: [
                 "Contém a data projetada de publicação, usada para pré-registos (ex: CIP - Catalogação na Publicação)."
             ],
@@ -1764,8 +1764,8 @@ async function main() {
         {
             tag: "215",
             name: "PHYSICAL DESCRIPTION",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
             tips: [
                 "Contém informações sobre as características físicas do recurso, de acordo com a ISBD Material Description Area."
             ],
@@ -1783,7 +1783,7 @@ async function main() {
             name: "SERIES",
             ind1Name: ["Form of Series Title Indicator"],
             ind1Tips: ["# - Not applicable, 0 - Not the same as the established form, 1 - Same as established form"],
-            ind2Tips: ["Não definido"],
+            ind2Tips: ["# - Não definido"],
             tips: [
                 "Contém informações relacionadas à série ou coleção à qual o recurso pertence (Título da série, responsabilidade, numeração, etc.)."
             ],
@@ -1805,14 +1805,628 @@ async function main() {
         {
             tag: "230",
             name: "MATERIAL SPECIFIC AREA: ELECTRONICS RESOURCE CHARACTERISTICS",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
             tips: [
                 "Contém informações sobre o tipo e extensão dos recursos eletrónicos, de acordo com a ISBD(ER).",
                 "Usado para designar o tipo de ficheiro e número de ficheiros de um recurso digital."
             ],
             subFieldDef: [
                 { code: "a", label: "Designation and Extent of File", repeatable: false, mandatory: true, tips: ["Designação do tipo de ficheiro e extensão (ex: número de ficheiros, bytes, registros)."] }
+            ]
+        },
+        {
+            tag: "251",
+            name: "ORGANIZATION AND ARRANGEMENT OF MATERIALS",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém informações sobre como os materiais foram organizados e dispostos dentro da coleção.",
+                "Inclui subdivisões hierárquicas como séries e sub-séries, e o nível de descrição arquivística (fundo, série, ficheiro, item)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Organization", repeatable: true, mandatory: false, tips: ["Modo como os materiais foram subdivididos em unidades menores, como séries e sub-séries."] },
+                { code: "b", label: "Arrangement", repeatable: true, mandatory: false, tips: ["Termos usados para descrever o padrão de disposição dos materiais, como alfabético, cronológico, etc."] },
+                { code: "c", label: "Level", repeatable: false, mandatory: false, tips: ["Nível hierárquico dos materiais descritos (ex: fundo, série, dossier)."] }
+            ]
+        },
+        {
+            tag: "260",
+            name: "MATERIAL SPECIFIC: NUMISMATIC RESOURCES",
+            ind1Name: ["Description Level"],
+            ind1Tips: ["# - Not specified, 0 - Numismatic Type, 1 - Numismatic Item"],
+            ind2Name: ["Part of the Numismatic Resource"],
+            ind2Tips: ["# - Not specified/ other, 1 - Observe, 2 - Reverse, 3 - Edge"],
+            tips: [
+                "Contém dados textuais relativos à identificação e descrição de recursos numismáticos.",
+                "Baseado no esquema de descrição numismática (NUDS) e na ontologia nomisma.org."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Denomination", repeatable: false, mandatory: false, tips: ["Termo que indica o valor do recurso numismático."] },
+                { code: "b", label: "Weight Standard or Theoretical Weight", repeatable: false, mandatory: false, tips: ["Peso convencional ou teórico para o recurso numismático."] },
+                { code: "c", label: "Issue", repeatable: false, mandatory: false, tips: ["Nome ou número convencional que identifica a emissão."] },
+                { code: "d", label: "Other Appellation", repeatable: true, mandatory: false, tips: ["Outro nome comummente utilizado para identificar a moeda ou recurso numismático."] },
+                { code: "e", label: "Type Name or Reference", repeatable: true, mandatory: false, tips: ["Nome comum ou referência dentro de uma tipologia publicada."] },
+                { code: "f", label: "Legend", repeatable: false, mandatory: false, tips: ["Inscrição principal ou única no recurso numismático."] },
+                { code: "g", label: "Other Inscription", repeatable: true, mandatory: false, tips: ["Qualquer outra inscrição presente no recurso numismático."] },
+                { code: "h", label: "Type Description", repeatable: false, mandatory: false, tips: ["Descrição iconográfica geral do tipo de recurso numismático."] },
+                { code: "i", label: "Shape", repeatable: false, mandatory: false, tips: ["Forma geral do recurso numismático (ex: redondo, poligonal)."] },
+                { code: "j", label: "Axis", repeatable: false, mandatory: false, tips: ["Orientação entre o anverso e o reverso do recurso numismático."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: false, mandatory: false, tips: ["URI para acesso normalizado à descrição online."] }
+            ]
+        },
+        {
+            tag: "283",
+            name: "CARRIER TYPE",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém dados textuais especificando o tipo de suporte (carrier) do recurso descrito.",
+                "Permite identificar a forma física do recurso, como volume, videodisc, microfilme, etc.",
+                "Usa vocabulário controlado; fonte de designação deve ser indicada em $2."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Carrier Type Designation", repeatable: true, mandatory: true, tips: ["Designação do tipo de suporte físico utilizado para o recurso (ex: volume, videodisc, microfilme)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: true, tips: ["Fonte do vocabulário controlado utilizado para o tipo de suporte (ex: rdacarrier)."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: true, mandatory: false, tips: ["Dados que permitem o processamento de ligações entre campos no registo."] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Parte específica dos materiais descritos a que o campo se aplica."] }
+            ]
+        },
+        {
+            tag: "300",
+            name: "GENERAL NOTES",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Nota sobre qualquer aspeto do recurso bibliográfico ou do registo associado.",
+                "Utilizado quando não existe campo específico para a nota desejada."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto livre da nota."] }
+            ]
+        },
+        {
+            tag: "301",
+            name: "NOTES PERTAINING TO IDENTIFICATION NUMBERS",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Notas sobre números de identificação presentes no recurso ou no registo.",
+                "Utilizado quando o número não se encaixa nos campos 010 a 040 ou para comentários sobre esses números."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Nota textual sobre número de identificação."] }
+            ]
+        },
+        {
+            tag: "302",
+            name: "NOTES PERTAINING TO CODED INFORMATION",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Notas relativas a elementos de dados codificados nos campos 1--.",
+                "Pode ser utilizado para expandir, explicar ou apresentar informações codificadas em formato textual."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Nota textual sobre informação codificada."] }
+            ]
+        },
+        {
+            tag: "303",
+            name: "NOTES PERTAINING TO DESCRIPTIVE INFORMATION",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Nota relacionada com a descrição do recurso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Nota textual sobre informação descritiva-"] }
+            ]
+        },
+        {
+            tag: "304",
+            name: "NOTES PERTAINING TO TITLE AND STATEMENT OF RESPONSABILITY",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Notas sobre o título ou a declaração de responsabilidade como registados no campo 200.",
+                "Obrigatório para recursos eletrónicos; opcional para outros materiais."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Nota textual sobre título ou responsabilidade."] }
+            ]
+        },
+        {
+            tag: "305",
+            name: "NOTES PERTAINING TO EDITION AND BIBLIOGRAPHIC HISTORY",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Notas sobre a edição do recurso ou sobre a história bibliográfica.",
+                "Inclui títulos anteriores, edições anteriores ou substituições."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Nota textual sobre edição ou história bibliográfica."] }
+            ]
+        },
+        {
+            tag: "306",
+            name: "NOTES PERTAINING TO PUBLICATION, DISTRIBUTION, ETC.",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Notas sobre publicação, distribuição, fabricação ou produção do recurso.",
+                "Usado para informação não registrada no campo 210."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Nota textual sobre publicação, distribuição ou fabricação."] }
+            ]
+        },
+        {
+            tag: "308",
+            name: "NOTES PERTAINING TO SERIES",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém notas relativas a uma série à qual o recurso pertence ou em que foi previamente publicado.",
+                "Utilizar para anotar a inclusão ou origem do recurso em séries."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto livre da nota sobre a série."] }
+            ]
+        },
+        {
+            tag: "310",
+            name: "NOTES PERTAINING TO BINDING AND AVAILABILITY",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém notas sobre a encadernação ou disponibilidade do recurso.",
+                "Inclui informações sobre edições especiais, cópias limitadas, condições de compra, etc."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto livre da nota sobre encadernação ou disponibilidade."] }
+            ]
+        },
+        {
+            tag: "311",
+            name: "NOTES PERTAINING TO LINKING FIELDS",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Notas que expandem ou explicam ligações feitas nos campos de ligação (4--).",
+                "Utilizado para clarificar relações bibliográficas não suficientemente descritas automaticamente."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto livre da nota sobre campos de ligação."] }
+            ]
+        },
+        {
+            tag: "312",
+            name: "NOTES PERTAINING TO RELATED TITLES",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Notas relativas a títulos relacionados, como subtítulos, títulos paralelos não principais, títulos alternativos.",
+                "Utilizado para explicar variantes do título não registradas no campo 200."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto livre da nota sobre títulos relacionados."] }
+            ]
+        },
+        {
+            tag: "313",
+            name: "NOTES PERTAINING TO RELATED SUBJECT ACCESS",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém uma nota relativa ao acesso por assunto ao recurso descrito.",
+                "Pode incluir informação sobre índices de assunto ou classificações incluídas no recurso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto da nota relativa ao acesso por assunto."] }
+            ]
+        },
+        {
+            tag: "314",
+            name: "NOTES PERTAINING TO RESPONSABILITY",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém uma nota relativa à responsabilidade do recurso.",
+                "Inclui notas sobre pessoas ou entidades responsáveis que não foram mencionadas noutros campos."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto da nota sobre responsabilidade."] }
+            ]
+        },
+        {
+            tag: "315",
+            name: "NOTES PERTAINING TO MATERIAL (OR TYPE OF PUBLICATION) SPECIFIC INFORMATION",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém uma nota relativa a informações específicas do tipo de material ou publicação.",
+                "Usado para notas como escala de mapas, suspensão de periódicos, etc."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto da nota específica sobre tipo de material ou publicação."] }
+            ]
+        },
+        {
+            tag: "316",
+            name: "NOTES PERTAINING TO THE ITEM",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém uma nota relativa às características específicas de um exemplar do recurso.",
+                "Inclui notas sobre encadernações, cópias numeradas, falhas, entre outros."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: true, mandatory: false, tips: ["Nota textual sobre características específicas do exemplar."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["URI para aceder eletronicamente à informação do exemplar."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Código da instituição a que o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: true, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "317",
+            name: "PROVENANCE NOTE",
+            ind1Name: ["Type of Provenance Information"],
+            ind1Tips: ["# - Não especificado, 0 -  Archeological provenance"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém uma nota relativa à proveniência do exemplar.",
+                "Pode incluir inscrições, ex-libris, históricos de propriedade, etc."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto da nota sobre proveniência."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["URI para imagens ou documentos de proveniência."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Código da instituição a que o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: true, mandatory: false, tips: ["Dados para ligar campos relacionados no registo."] },
+                { code: "8", label: "Materials Specified", repeatable: false, mandatory: false, tips: ["Parte específica dos materiais descritos a que a nota de proveniência se aplica."] }
+            ]
+        },
+        {
+            tag: "318",
+            name: "ACTION NOTE",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Campo utilizado para registar informações sobre preservação e tratamento de materiais.",
+                "Descreve ações realizadas no recurso ou necessárias, como conservação, reparação ou descarte."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Action", repeatable: false, mandatory: false, tips: ["Descrição da ação tomada ou prevista."] },
+                { code: "b", label: "Action Identification", repeatable: true, mandatory: false, tips: ["Código ou designação para identificar a ação."] },
+                { code: "c", label: "Time of Action", repeatable: true, mandatory: false, tips: ["Código para o tempo da ação (formato ISO)."] },
+                { code: "d", label: "Action Interval", repeatable: true, mandatory: false, tips: ["Intervalo de tempo se a data exata não puder ser especificada."] },
+                { code: "e", label: "Contingency for Action", repeatable: true, mandatory: false, tips: ["Evento imprevisível ligado à execução da ação."] },
+                { code: "f", label: "Authorisation", repeatable: true, mandatory: false, tips: ["Texto ou referência à autorização para a ação."] },
+                { code: "h", label: "Jurisdiction", repeatable: true, mandatory: false, tips: ["Entidade ou pessoa responsável pela ação."] },
+                { code: "i", label: "Method of Action", repeatable: true, mandatory: false, tips: ["Técnica utilizada para realizar a ação."] },
+                { code: "j", label: "Site of Action", repeatable: true, mandatory: false, tips: ["Local onde a ação ocorre."] },
+                { code: "k", label: "Action Agent", repeatable: true, mandatory: false, tips: ["Pessoa ou organização que executa a ação."] },
+                { code: "l", label: "Status", repeatable: true, mandatory: false, tips: ["Estado dos materiais descritos após a ação."] },
+                { code: "n", label: "Extent", repeatable: true, mandatory: false, tips: ["Parte do item afetada pela ação."] },
+                { code: "o", label: "Type of Unit", repeatable: true, mandatory: false, tips: ["Tipo de unidade afetada pela ação."] },
+                { code: "p", label: "Non-public Note", repeatable: true, mandatory: false, tips: ["Notas não exibidas ao público sobre a ação."] },
+                { code: "r", label: "Public Note", repeatable: true, mandatory: false, tips: ["Notas públicas relativas à ação."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["Link ou referência eletrónica relacionada à ação."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: true, tips: ["Instituição a que a ação se aplica."] }
+            ]
+        },
+        {
+            tag: "320",
+            name: "INTERNAL BIBLIOGRAPHIES/ INDEXES NOTE",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém uma nota indicando que o recurso inclui uma bibliografia ou índice.",
+                "Pode mencionar paginação, localização ou disponibilização de extratos eletrónicos do índice ou da bibliografia."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto da nota interna sobre bibliografias ou índices."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["Identificador uniforme para acesso eletrónico ao índice ou bibliografia interna."] }
+            ]
+        },
+        {
+            tag: "321",
+            name: "EXTERNAL INDEXES/ABSTRACTS/REFERENCES NOTE",
+            ind1Name: ["Type of Coverage"],
+            ind1Tips: ["# - Nenhuma informação disponível, 0 - Indexing, abstracting coverage, 1 - Bibliography, catalogue citation"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém uma nota indicando a disponibilidade em outros documentos de índices, resumos ou referências do recurso descrito.",
+                "Pode incluir citações em catálogos, bibliografias, ou serviços de indexação e resumo externos."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Name of Source", repeatable: false, mandatory: false, tips: ["Nome da fonte externa onde o recurso é indexado ou citado."] },
+                { code: "b", label: "Dates of Coverage", repeatable: false, mandatory: false, tips: ["Datas de cobertura do índice ou resumo."] },
+                { code: "c", label: "Location within Source", repeatable: false, mandatory: false, tips: ["Localização ou referência interna no documento externo."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: false, mandatory: false, tips: ["URI de acesso eletrónico ao índice, resumo ou referência."] },
+                { code: "x", label: "International Standard Number", repeatable: false, mandatory: false, tips: ["Número normalizado internacional (ISBN, ISSN, etc.) da fonte externa."] },
+                { code: "5", label: "Institution to which Field Applies", repeatable: false, mandatory: false, tips: ["Instituição a que a nota se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: true, mandatory: false, tips: ["Dados de ligação entre campos no registo."] }
+            ]
+        },
+        {
+            tag: "322",
+            name: "CREDITS NOTES (PROJECTED AND VIDEO MATERIAL AND SOUND RECORDINDS)",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém os nomes de pessoas ou organizações, excluindo o elenco, que participaram na produção artística ou técnica do recurso.",
+                "Não se deve incluir o termo 'Credits' no campo, pois pode ser gerado automaticamente.",
+                "Quando a distinção entre notas de elenco e de créditos não é feita, este campo pode ser usado para ambos."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto com a informação de créditos do recurso."] }
+            ]
+        },
+        {
+            tag: "323",
+            name: "CAST NOTES (PROJECTED AND VIDEO MATERIAL AND SOUND RECORDINDS)",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém os nomes dos atores, narradores, apresentadores, intérpretes ou grupos de intérpretes de materiais projetados, vídeo ou gravações sonoras.",
+                "Este campo é repetível para cada categoria diferente de participantes (por exemplo, narradores e elenco).",
+                "Se o nome dos performers já estiver no campo 200, este campo não é necessário.",
+                "Quando fontes externas não distinguem entre créditos e elenco, pode-se usar o campo 322 em vez do 323."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto da nota sobre elenco, narradores, intérpretes, etc."] }
+            ]
+        },
+        {
+            tag: "324",
+            name: "ORIGINAL VERSION NAME",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém uma nota sobre a versão original da publicação."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto da nota sobre a versão original."] }
+            ]
+        },
+        {
+            tag: "325",
+            name: "REPRODUCTION NOTE",
+            ind1Name: ["Original/ Reproduction Indicator"],
+            ind1Tips: ["# - This resource is a reproduction; the note describes that reproduction, 1 - The resource is an original; the note describes an available reproduction"],
+            indName: ["Structure Indicator"],
+            ind2Tips: ["# - Unstructured note, 1 - Structured note"],
+            tips: [
+                "Contém uma nota que indica que o recurso ou é uma reprodução ou é o original."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Unstructured Note", repeatable: false, mandatory: false, tips: ["Utilizado apenas para o texto completo de uma nota não estruturada."] },
+                { code: "b", label: "Type of Reproduction", repeatable: false, mandatory: false, tips: ["O modo de reprodução (ex: digitalização) ou o tipo de carrier da reprodução."] },
+                { code: "c", label: "Place of Reproduction", repeatable: true, mandatory: false, tips: ["Local onde a reprodução está publicada ou distribuída."] },
+                { code: "d", label: "Agency Responsible for the reproduction", repeatable: true, mandatory: false, tips: ["O nome da agência que disponibiliza a reprodução."] },
+                { code: "e", label: "Date of Publication for the Reproduction", repeatable: false, mandatory: false, tips: ["A data em que a reprodução foi publicada ou distribuída."] },
+                { code: "f", label: "Physical Description of the Reproduction", repeatable: false, mandatory: false, tips: ["Outros detalhes físicos e dimensões da reprodução."] },
+                { code: "g", label: "Series Statement for the Reproduction", repeatable: false, mandatory: false, tips: ["Informação descritiva sobre a série na qual foi publicada a reprodução."] },
+                { code: "h", label: "Completeness of the Reproduction Code", repeatable: false, mandatory: false, tips: ["Este subcampo aplica-se à reprodução do recurso."] },
+                { code: "i", label: "Coverage of the Reproduction", repeatable: false, mandatory: false, tips: ["Este subcampo aplica-se à reprodução do recurso."] },
+                { code: "j", label: "Terms of Access of the Reproduction", repeatable: true, mandatory: false, tips: ["Subcampo de dados codificados que identifica os problemas do recurso que tem termos de acesso específicos."] },
+                { code: "n", label: "Note About Reproduction", repeatable: true, mandatory: false, tips: ["Para uma nota sobre a completude utilize o subcampo $i."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: false, mandatory: false, tips: ["Uniform Resource Identifier (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet."] },
+                { code: "v", label: "Date of Consultation", repeatable: false, mandatory: false, tips: ["Hora a que a reprodução foi acedida para a descrever no campo 325."] },
+                { code: "x", label: "ISSN of the Reproduction", repeatable: false, mandatory: false, tips: ["Corresponde ao conteúdo do subcampo 011$a do registo que seria estabelecido para descrever o reprodução."] },
+                { code: "y", label: "ISBN of the Reproduction", repeatable: true, mandatory: false, tips: ["ISBN atribuído à reprodução. Repetível quando é atribuído mais do que um ISBN ao reprodução (por exemplo, mais do que uma editora, recursos multiparte, etc.)"] },
+                { code: "z", label: "Date when the URL in $u was Found to be Invalid", repeatable: false, mandatory: false, tips: ["O momento em que o acesso à reprodução foi negado, devido a um URL quebrado ou inválido em $u."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Introduza a data completa no formato standard AAAAMMDD, de acordo com a norma ISO 8601-1."] },
+            ]
+        },
+        {
+            tag: "326",
+            name: "FREQUENCY STATEMENT NOTE (CONTINUING RESOURCES)",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Contém uma nota que indica a frequência com que o recurso é publicado."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Frequency", repeatable: false, mandatory: false, tips: ["Uma declaração que indica a frequência com que um recurso contínuo é emitido."] },
+                { code: "b", label: "Dates of Frequency", repeatable: false, mandatory: false, tips: ["O período em que se aplica a frequência mencionada no subcampo $a."] }
+            ]
+        },
+        {
+            tag: "327",
+            name: "CONTENT NOTE",
+            ind1Name: ["Completeness Indicator"],
+            ind1Tips: ["# - Undeterminated, 0 - Incomplete contents, 1 - Complete contents, 2 - Partial contents"],
+            ind2Name: ["Structure Indicator"],
+            ind2Tips: ["# - Unstructured, 1 - Structured Note"],
+            tips: [
+                "Contém uma nota que indica a frequência com que o recurso é publicado."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: true, mandatory: false, tips: ["Repetível"] },
+                { code: "b", label: "Tipe of Level 1 Submission", repeatable: true, mandatory: false, tips: ["Repetível."] },
+                { code: "c", label: "Tipe of Level 2 Submission", repeatable: true, mandatory: false, tips: ["Repetível."] },
+                { code: "d", label: "Tipe of Level 3 Submission", repeatable: true, mandatory: false, tips: ["Repetível."] },
+                { code: "e", label: "Tipe of Level 4 Submission", repeatable: true, mandatory: false, tips: ["Repetível."] },
+                { code: "f", label: "Tipe of Level 5 Submission", repeatable: true, mandatory: false, tips: ["Repetível."] },
+                { code: "g", label: "Tipe of Level 6 Submission", repeatable: true, mandatory: false, tips: ["Repetível."] },
+                { code: "h", label: "Tipe of Level 7 Submission", repeatable: true, mandatory: false, tips: ["Repetível."] },
+                { code: "i", label: "Tipe of Level 8 Submission", repeatable: true, mandatory: false, tips: ["Repetível."] },
+                { code: "p", label: "Sequence of Pages or First Pages of a Subdivision", repeatable: true, mandatory: false, tips: ["Repetível."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["Um Identificador Uniforme de Recursos (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet. Isto permite a recuperação automatizada ou a interação com o recurso de forma consistente maneiras."] },
+                { code: "z", label: "Other Information Concerning a Subdivision", repeatable: true, mandatory: false, tips: ["Repetível."] },
+            ]
+        },
+        {
+            tag: "328",
+            name: "DISSERTATION (THESIS) NOTE",
+            ind1Tips: ["# - Não definido"],
+            ind2Name: ["Structure Indicator"],
+            ind2Tips: ["# - No information available, 0 - Structured, 1 - Not structured"],
+            tips: [
+                "Este campo contém uma nota indicando que o recurso é uma tese ou dissertação e, opcionalmente, incluindo o grau para que foi apresentado, a instituição académica que concedeu o grau e o ano da grau."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+                { code: "b", label: "Dissertation or Thesis Details and Type of Degree", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+                { code: "c", label: "Discipline of Degree", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+                { code: "d", label: "Date of Degree", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+                { code: "e", label: "Body Grantng the Degree", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+                { code: "t", label: "Title of Other Edition of Dissertation or Thesis", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+                { code: "z", label: "Text Preceding or Following the Note", repeatable: true, mandatory: false, tips: ["Repetível."] }
+            ]
+        },
+        {
+            tag: "330",
+            name: "SUMMARY OR ABSTRACT",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Este campo contém um resumo ou abstract do recurso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: false, mandatory: false, tips: ["Um Identificador Uniforme de Recursos (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet. Isto permite a recuperação automatizada ou a interação com o recurso de forma consistente maneiras."] }
+            ]
+        },
+        {
+            tag: "332",
+            name: "PREFERRED CITATION OF DESCRIBED MATERIALS",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Este campo contém a citação dos materiais descritos no registo na forma preferida pelo custodiante ou originador."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Preferred Citation", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+            ]
+        },
+        {
+            tag: "333",
+            name: "USERS/ INTENDED AUDIENCE NOTE",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Este campo contém informação sobre os utilizadores ou público-alvo do material descrito."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Nome da instituição à qual o campo se aplica no formulário codificado, se for considerado necessário pela agência que cria o registo para identificar atributos específicos de um item."] }
+            ]
+        },
+        {
+            tag: "334",
+            name: "AWARDS NOTE",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Este campo contém informações sobre os prémios ou recompensas associados ao recurso descrito. O campo pode ou não pode ser dividido em subcampos separados."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Awards Note", repeatable: false, mandatory: false, tips: ["Este subcampo contém uma nota de texto livre, descrevendo o prémio ou distinção."] },
+                { code: "b", label: "Name of Award", repeatable: false, mandatory: false, tips: ["Este subcampo contém o nome do prémio."] },
+                { code: "c", label: "Year of Award", repeatable: false, mandatory: false, tips: ["Este subcampo contém o ano em que o prémio foi atribuído."] },
+                { code: "d", label: "Country of Award", repeatable: false, mandatory: false, tips: ["Este subcampo contém o código do país que atribui o prémio."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["Um Identificador Uniforme de Recursos (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Nome da instituição à qual o campo se aplica no formulário codificado, se for considerado necessário pela agência que cria o registo para identificar atributos específicos de um item."] }
+            ]
+        },
+        {
+            tag: "335",
+            name: "LOCATION OF ORIGINALS/ REPRODUCTIONS",
+            ind1Name: ["Role of Holding Institution"],
+            ind1Tips: ["0 - Holder originals, 1 - Holder of reproductions"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Este campo contém informação sobre a localização e disponibilidade de cópias dos materiais descritos ou informações sobre a localização e disponibilidade dos originais se a unidade de descrição consistir em cópias ou incluir cópias."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Identification of the Holder", repeatable: false, mandatory: false, tips: ["Nome do repositório ou indivíduo que detém o item. Não repetível."] },
+                { code: "b", label: "Address", repeatable: false, mandatory: false, tips: ["Endereço postal do titular. Repetível."] },
+                { code: "c", label: "Country", repeatable: false, mandatory: false, tips: ["Código do país para o local identificado no subcampo $a. Os códigos devem ser retirados do conjunto de dois caracteres códigos da norma ISO 3166-1. Repetível."] },
+                { code: "g", label: "Control Number", repeatable: false, mandatory: false, tips: ["Qualquer número de controlo significativo para os materiais descritos; por exemplo número de chamada, número de inventário, aquisição números, etc. Repetível."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["Um Identificador Uniforme de Recursos (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet."] },
+                { code: "8", label: "Materials Specified", repeatable: false, mandatory: false, tips: ["Parte dos materiais descritos aos quais o campo se aplica. Repetível."] }
+            ]
+        },
+        {
+            tag: "336",
+            name: "TYPE OF ELECTRONIC RESOURCE NOTE",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Este campo contém uma nota sobre o tipo de recurso eletrónico. Além de um descritor geral (por ex. texto, programa de computador, numérico), informações mais específicas, como a forma ou o género do texto material (por exemplo, biografia, dicionários, índices) pode ser registado neste campo."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+            ]
+        },
+        {
+            tag: "337",
+            name: "SYSTEM REQUIREMENTS NOTE (ELECTRONIC RESOURCES)",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Este campo é utilizado para registar informações técnicas sobre um recurso eletrónico."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Não repetível."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: false, mandatory: false, tips: ["Um Identificador Uniforme de Recursos (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet."] }
+            ]
+        },
+        {
+            tag: "338",
+            name: "FUNDING INFORMATION NOTE",
+            ind1Tips: ["# - Não definido"],
+            ind2Name: ["Structure Indicator"],
+            ind2Tips: ["# - Unstructured note, 1 - Structured note"],
+            tips: [
+                "Este campo contém informações sobre os números do contrato, da subvenção e do projeto quando os resultados do trabalho de um projeto financiado. As informações sobre o patrocinador ou agência financiadora também podem ser incluídas."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Unstructured Note", repeatable: false, mandatory: false, tips: ["Utilize apenas para o texto completo de uma nota não estruturada."] },
+                { code: "b", label: "Funding Organization", repeatable: true, mandatory: false, tips: ["Informação sobre os patrocinadores ou agências financiadoras. Repetível."] },
+                { code: "c", label: "Program", repeatable: true, mandatory: false, tips: ["O nome refere-se a um programa específico. Repetível."] },
+                { code: "d", label: "Project Number", repeatable: false, mandatory: false, tips: ["Um identificador único no âmbito da organização financiadora (por exemplo, um número de contrato de subvenção). Não repetível."] },
+                { code: "e", label: "Jurisdiction", repeatable: true, mandatory: false, tips: ["O nome do governo ou de outro organismo jurídico formalmente constituído (por exemplo, UE para União Europeia). Repetível."] },
+                { code: "f", label: "Project Name", repeatable: false, mandatory: false, tips: ["A forma completa do nome do projeto. Não repetível."] },
+                { code: "g", label: "Project Acronym", repeatable: false, mandatory: false, tips: ["A sigla do projeto. Não repetível."] },
+            ]
+        },
+        {
+            tag: "345",
+            name: "ACQUISITION INFORMATION NOTE",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Este campo pode conter o nome e o endereço do editor, distribuidor ou outra fonte de aquisição."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Source for Acquisition/ Subscription Address", repeatable: false, mandatory: false, tips: ["O nome e/ou endereço de uma fonte para aquisição, incluindo o endereço de assinatura, do recurso."] },
+                { code: "b", label: "Stock Number", repeatable: true, mandatory: false, tips: ["O número associado ao artigo pelo fornecedor para facilitar a distribuição do artigo."] },
+                { code: "c", label: "Medium", repeatable: true, mandatory: false, tips: ["O(s) meio(s) em que o artigo está disponível."] },
+                { code: "d", label: "Terms of Availability", repeatable: true, mandatory: false, tips: ["O preço do artigo em unidades monetárias ou outras unidades."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["Um Identificador Uniforme de Recursos (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Nome da instituição à qual o campo se aplica no formulário codificado, se for considerado necessário pela agência que cria o registo para identificar atributos específicos de um item."] }
+            ]
+        },
+        {
+            tag: "346",
+            name: "ACQUISITION INFORMATION NOTE",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Este campo pode conter o nome e o endereço do editor, distribuidor ou outra fonte de aquisição."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Source for Acquisition/ Subscription Address", repeatable: false, mandatory: false, tips: ["O nome e/ou endereço de uma fonte para aquisição, incluindo o endereço de assinatura, do recurso."] },
+                { code: "b", label: "Stock Number", repeatable: true, mandatory: false, tips: ["O número associado ao artigo pelo fornecedor para facilitar a distribuição do artigo."] },
+                { code: "c", label: "Medium", repeatable: true, mandatory: false, tips: ["O(s) meio(s) em que o artigo está disponível."] },
+                { code: "d", label: "Terms of Availability", repeatable: true, mandatory: false, tips: ["O preço do artigo em unidades monetárias ou outras unidades."] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["Um Identificador Uniforme de Recursos (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Nome da instituição à qual o campo se aplica no formulário codificado, se for considerado necessário pela agência que cria o registo para identificar atributos específicos de um item."] }
             ]
         },
 
