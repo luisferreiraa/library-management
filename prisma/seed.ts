@@ -91,77 +91,27 @@ async function main() {
                 "Área de Identificação de Recursos e Termos de Disponibilidade. O campo pode conter os termos de disponibilidade e ou preço, mesmo que não contenha ISBN."
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Number (ISBN)",
-                    repeatable: false,
-                    mandatory: true,
-                    tips: [
-                        "Um ISBN definido corretamente, incluindo hífens.",
-                        "O ISBN é definido pela entidade designada em cada país."
-                    ]
-                },
-                {
-                    code: "$b",
-                    label: "Qualification",
-                    repeatable: true,
-                    mandatory: false,
-                    tips: [
-                        "Uma indicação do âmbito do ISBN no subcampo $a (se presente), geralmente o nome de um editor, uma indicação da encadernação do recurso, ou uma indicação da relação de um ISBN com um conjunto ou com um volume em particular.",
-                    ]
-                },
-                {
-                    code: "$d",
-                    label: "Terms of Availability and/ or Price",
-                    repeatable: false,
-                    mandatory: false,
-                    tips: [
-                        "O preço do recurso e qualquer comentário sobre a sua disponibilidade.",
-                    ]
-                },
-                {
-                    code: "$z",
-                    label: "Erroneous ISBN",
-                    repeatable: true,
-                    mandatory: false,
-                    tips: [
-                        "Um ISBN que foi identificado como tendo sido incorretamente aplicado ao recurso ou que não é válido.",
-                        "Pode ter sido atribuído a duas publicações diferentes e, neste caso, cancelado ou pode ter sido incorretamente impresso."
-                    ]
-                },
-                {
-                    code: "$6",
-                    label: "Interfield Linking Data",
-                    repeatable: true,
-                    mandatory: false,
-                    tips: [
-                        "Este subcampo contém informações que permitem que o campo seja ligado, para efeitos de processamento, a outros campos no registo.",
-                    ]
-                },
+                { code: "a", label: "Number (ISBN)", repeatable: false, mandatory: true, tips: ["Um ISBN definido corretamente, incluindo hífens.", "O ISBN é definido pela entidade designada em cada país."] },
+                { code: "b", label: "Qualification", repeatable: true, mandatory: false, tips: ["Uma indicação do âmbito do ISBN no subcampo $a (se presente), geralmente o nome de um editor, uma indicação da encadernação do recurso, ou uma indicação da relação de um ISBN com um conjunto ou com um volume em particular."] },
+                { code: "d", label: "Terms of Availability and/ or Price", repeatable: false, mandatory: false, tips: ["O preço do recurso e qualquer comentário sobre a sua disponibilidade."] },
+                { code: "z", label: "Erroneous ISBN", repeatable: true, mandatory: false, tips: ["Um ISBN que foi identificado como tendo sido incorretamente aplicado ao recurso ou que não é válido.", "Pode ter sido atribuído a duas publicações diferentes e, neste caso, cancelado ou pode ter sido incorretamente impresso."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: true, mandatory: false, tips: ["Este subcampo contém informações que permitem que o campo seja ligado, para efeitos de processamento, a outros campos no registo."] }
             ]
         },
         {
             tag: "011",
             name: "International Standard Serial Number (ISSN)",
             ind1Name: "Level of Interest Indicator",
-            ind1Tips: [
-                "#: Não especificado/ Não aplicável",
-                "0: Continuing resource of international or national interest",
-                "1: Continuing resource of local interest",
-            ],
+            ind1Tips: ["#: Não especificado/ Não aplicável, 0: Continuing resource of international or national interest, 1: Continuing resource of local interest"],
             ind2Name: "Cluster Identifier Indicator",
-            ind2Tips: [
-                "#: Não especificado/ Não aplicável",
-                "0: ISSN-L",
-                "1: ISSN-H"
-            ],
+            ind2Tips: ["#: Não especificado/ Não aplicável, 0: ISSN-L, 1: ISSN-H"],
             tips: [
                 "Este campo contém um ISBN e uma qualificação que o distingue quando mais do que um está contido num registo.",
                 "Área de Identificação de Recursos e Termos de Disponibilidade. O campo pode conter os termos de disponibilidade e ou preço, mesmo que não contenha ISBN."
             ],
             subFieldDef: [
                 {
-                    code: "$a",
+                    code: "a",
                     label: "Number (ISSN)",
                     repeatable: false,
                     mandatory: true,
@@ -170,7 +120,7 @@ async function main() {
                     ]
                 },
                 {
-                    code: "$b",
+                    code: "b",
                     label: "Qualification",
                     repeatable: false,
                     mandatory: false,
@@ -180,7 +130,7 @@ async function main() {
                     ]
                 },
                 {
-                    code: "$d",
+                    code: "d",
                     label: "Terms of Availability and/ or Price",
                     repeatable: true,
                     mandatory: false,
@@ -189,7 +139,7 @@ async function main() {
                     ]
                 },
                 {
-                    code: "$f",
+                    code: "f",
                     label: "Cluster ISSN Identifier",
                     repeatable: false,
                     mandatory: false,
@@ -199,7 +149,7 @@ async function main() {
                     ]
                 },
                 {
-                    code: "$g",
+                    code: "g",
                     label: "Cancelled Cluster ISSN",
                     repeatable: true,
                     mandatory: false,
@@ -209,7 +159,7 @@ async function main() {
                     ]
                 },
                 {
-                    code: "$y",
+                    code: "y",
                     label: "Cancelled ISSN",
                     repeatable: true,
                     mandatory: false,
@@ -218,7 +168,7 @@ async function main() {
                     ]
                 },
                 {
-                    code: "$z",
+                    code: "z",
                     label: "Erroneous ISSN or Cluster ISSN",
                     repeatable: true,
                     mandatory: false,
@@ -228,7 +178,7 @@ async function main() {
                     ]
                 },
                 {
-                    code: "$2",
+                    code: "2",
                     label: "Source",
                     repeatable: false,
                     mandatory: false,
@@ -238,7 +188,7 @@ async function main() {
                     ]
                 },
                 {
-                    code: "$3",
+                    code: "3",
                     label: "Authority Record Identifier or Standard Number",
                     repeatable: false,
                     mandatory: false,
@@ -251,7 +201,7 @@ async function main() {
                     ]
                 },
                 {
-                    code: "$R",
+                    code: "r",
                     label: "Real World Object URI",
                     repeatable: true,
                     mandatory: false,
@@ -2418,17 +2368,675 @@ async function main() {
             ind1Tips: ["# - Não definido"],
             ind2Tips: ["# - Não definido"],
             tips: [
-                "Este campo pode conter o nome e o endereço do editor, distribuidor ou outra fonte de aquisição."
+                "Informação sobre as adições previstas e/ou a taxa de utilização de referência do material descrito. A nota pode referir-se às coleções da biblioteca ou do arquivo."
             ],
             subFieldDef: [
-                { code: "a", label: "Source for Acquisition/ Subscription Address", repeatable: false, mandatory: false, tips: ["O nome e/ou endereço de uma fonte para aquisição, incluindo o endereço de assinatura, do recurso."] },
-                { code: "b", label: "Stock Number", repeatable: true, mandatory: false, tips: ["O número associado ao artigo pelo fornecedor para facilitar a distribuição do artigo."] },
-                { code: "c", label: "Medium", repeatable: true, mandatory: false, tips: ["O(s) meio(s) em que o artigo está disponível."] },
-                { code: "d", label: "Terms of Availability", repeatable: true, mandatory: false, tips: ["O preço do artigo em unidades monetárias ou outras unidades."] },
-                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: false, tips: ["Um Identificador Uniforme de Recursos (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet."] },
-                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Nome da instituição à qual o campo se aplica no formulário codificado, se for considerado necessário pela agência que cria o registo para identificar atributos específicos de um item."] }
+                { code: "a", label: "Accruals", repeatable: true, mandatory: false, tips: ["A taxa a que os materiais descritos estão a acumular é expressa como uma proporção de volume num período de tempo."] },
+                { code: "b", label: "Frequency of Use", repeatable: true, mandatory: false, tips: ["Uma medida de atividade de referência geralmente expressa como uma proporção de um número de recuperações em relação ao período de tempo."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Nome da instituição à qual o campo se aplica no formulário codificado, se for considerado necessário pela agência que cria o registo para identificar atributos específicos de um item."] },
+                { code: "8", label: "Materials Specified", repeatable: false, mandatory: false, tips: ["Parte dos materiais descritos aos quais o campo se aplica."] },
             ]
         },
+        {
+            tag: "360",
+            name: "NOTE ON SPECIFIC ELEMENTS OF NUMISMATIC DESCRIPTION",
+            ind1Name: ["Text of Note"],
+            ind1Tips: ["# - Not specified/ other, 0 - Monogram, 1 - Die, 2 - Punch, 3 - Control mark"],
+            ind2Name: ["Part of Numismatic Resource Described"],
+            ind2Tips: ["# - Unspecified/ other, 1 - Observe, 2 - Reverse, 3 - Edge"],
+            tips: [
+                "Uma nota relativa à descrição do recurso numismático."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Uma nota de texto."] },
+                { code: "b", label: "Citation", repeatable: true, mandatory: false, tips: ["Uma citação para um trabalho publicado que fornece informações ou uma descrição do elemento em subcampo $a."] },
+                { code: "u", label: "Uniform Resource Identifier", repeatable: false, mandatory: false, tips: ["Um Identificador Uniforme de Recursos (URI), como um URL (Uniform Resource Locator) ou URN (Uniform Nome do Recurso), serve como uma sequência padronizada que identifica um recurso e fornece acesso eletrónico através de protocolos de internet."] },
+            ]
+        },
+        {
+            tag: "371",
+            name: "NOTE ON INFORMATION SERVICE POLICY",
+            ind1Name: ["Type of Note"],
+            ind1Tips: ["0 - Access Note, 1 - Use and reproduction note, # - Information not provided"],
+            ind2Tips: ["# - Não definido"],
+            tips: [
+                "Uma nota relativa à descrição do recurso numismático."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Terms Governing Access, Use and Reproduction", repeatable: false, mandatory: true, tips: ["O texto de uma declaração legal ou oficial de restrições."] },
+                { code: "b", label: "Jurisdiction", repeatable: false, mandatory: false, tips: ["O nome de uma pessoa, de uma organização ou de um cargo ou função dentro da organização, por quem ou aos quais são impostos e aplicados os termos que regem o acesso, a utilização e a reprodução e a quem os a restrição pode ser objecto de recurso."] },
+                { code: "c", label: "Authorization", repeatable: false, mandatory: false, tips: ["Uma citação da fonte específica que é a autoridade para a restrição."] },
+                { code: "d", label: "Authorized Users", repeatable: false, mandatory: false, tips: ["A classe de utilizadores ou indivíduos específicos aos quais as restrições no subcampo $a não se aplicam."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Nome da instituição à qual o campo se aplica no formulário codificado, se for considerado necessário pela agência que cria o registo para identificar atributos específicos de um item."] },
+                { code: "8", label: "Materials Specified", repeatable: false, mandatory: false, tips: ["Parte dos materiais descritos aos quais o campo se aplica."] },
+            ]
+        },
+        {
+            tag: "410",
+            name: "SERIES",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 — Do not make a note", "1 — Make a note"],
+            tips: [
+                "O campo 410 é utilizado para criar uma ligação para uma série que contém o recurso catalogado.",
+                "Se o recurso pertence a uma série e a uma sub-série, podem ser utilizados dois campos 410 (primeiro a série, depois a sub-série).",
+                "Alternativamente, pode ser usada a estrutura hierárquica 461 (SET) e 462 (SUBSET).",
+                "O indicador 2 especifica se uma nota deve ser gerada a partir do conteúdo do campo."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Title", repeatable: false, mandatory: true, tips: ["Título da série ou recurso de monografia."] },
+                { code: "d", label: "Parallel Title", repeatable: true, mandatory: false, tips: ["Título da série em outra língua ou escrita."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações subordinadas ao título."] },
+                { code: "f", label: "Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declaração de responsabilidade pelo título ou parte."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações de responsabilidade subsequentes."] },
+                { code: "h", label: "Number of a Part", repeatable: true, mandatory: false, tips: ["Número da secção ou parte."] },
+                { code: "i", label: "Name of a Part", repeatable: true, mandatory: false, tips: ["Nome da secção ou parte."] },
+                { code: "v", label: "Volume Designation", repeatable: true, mandatory: false, tips: ["Designação do volume."] },
+                { code: "x", label: "ISSN of Series", repeatable: true, mandatory: false, tips: ["ISSN associado à série."] },
+                { code: "y", label: "Standard Number of Multipart Monographic Resource", repeatable: true, mandatory: false, tips: ["Número padrão (ex.: ISBN, ISMN) da série."] },
+                { code: "z", label: "Language of Parallel Title", repeatable: true, mandatory: false, tips: ["Código de língua do título paralelo."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte codificada da língua se não ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "411",
+            name: "SUBSERIES",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 — Do not make a note", "1 — Make a note"],
+            tips: [
+                "O campo 411 é utilizado para criar uma ligação descendente de uma série para uma sub-série.",
+                "Usado em registros de recursos contínuos (como séries) para indicar uma sub-série contida no título do recurso.",
+                "Se o recurso que está sendo catalogado é uma sub-série e se deseja criar um link para a série principal, utiliza-se o campo 410.",
+                "O segundo indicador especifica se uma nota deve ser gerada a partir do conteúdo deste campo."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Title", repeatable: false, mandatory: true, tips: ["Título da sub-série."] },
+                { code: "d", label: "Parallel Title", repeatable: true, mandatory: false, tips: ["Título paralelo da sub-série em outra língua ou escrita."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título da sub-série."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade associada à sub-série."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade."] },
+                { code: "h", label: "Number of Section or Part", repeatable: true, mandatory: false, tips: ["Número da secção ou parte da sub-série."] },
+                { code: "i", label: "Name of Section or Part", repeatable: true, mandatory: false, tips: ["Nome da secção ou parte da sub-série."] },
+                { code: "v", label: "Volume Designation", repeatable: true, mandatory: false, tips: ["Designação do volume na sub-série."] },
+                { code: "x", label: "ISSN of Series", repeatable: true, mandatory: false, tips: ["ISSN da sub-série."] },
+                { code: "y", label: "Standard Number of Multipart Monographic Resource", repeatable: true, mandatory: false, tips: ["Número padrão (ex.: ISBN) relacionado à sub-série."] },
+                { code: "z", label: "Language of Parallel Title", repeatable: true, mandatory: false, tips: ["Código de idioma do título paralelo."] },
+                { code: "2", label: "Source of Language Code", repeatable: false, mandatory: false, tips: ["Fonte do código de língua se não ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "412",
+            name: "SOURCE OF EXCERPT OR OFFPRINT",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 — Do not make a note", "1 — Make a note"],
+            tips: [
+                "O campo 412 é utilizado para identificar o recurso de onde foi extraído um excerto ou offprint.",
+                "Este campo estabelece uma ligação descendente, apontando para o recurso original que foi fonte de conteúdo do recurso catalogado.",
+                "O segundo indicador especifica se uma nota automática deve ser gerada a partir da informação fornecida."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo associado à fonte."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso original que foi fonte do excerto ou offprint."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso fonte."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso fonte."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade associada ao recurso fonte."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade associadas ao recurso fonte."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso fonte."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso fonte."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso fonte."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso fonte."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume ou designação da parte no recurso fonte."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso fonte, se aplicável."] }
+            ]
+        },
+        {
+            tag: "413",
+            name: "EXCERPT OR OFFPRINT",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 — Do not make a note", "1 — Make a note"],
+            tips: [
+                "O campo 413 é usado para identificar um recurso associado que é um excerto ou offprint.",
+                "Este campo estabelece uma ligação para o recurso do qual o item catalogado é extraído.",
+                "O segundo indicador controla se uma nota deve ser gerada automaticamente a partir dos dados do campo."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo da fonte original."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do excerto ou offprint."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material (ex.: Texto impresso, manuscrito, etc.)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Informações adicionais relacionadas ao título do excerto."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do excerto ou offprint."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor, distribuidor ou entidade responsável pela publicação."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do excerto ou offprint."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física (ex.: número de páginas, ilustrações)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do excerto, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["ISSN da publicação original, se existente."] }
+            ]
+        },
+        {
+            tag: "421",
+            name: "SUPPLEMENT",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 — Do not make a note", "1 — Make a note"],
+            tips: [
+                "O campo 421 é usado para criar uma ligação do recurso catalogado a um suplemento relacionado.",
+                "É utilizado em registos de recursos contínuos e em monografias para indicar um suplemento associado.",
+                "Se necessário criar a relação inversa (do suplemento para o recurso principal), deve-se usar o campo 422."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico relacionado."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do suplemento."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material (ex.: texto impresso, gravação sonora)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações sobre o título do suplemento."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do suplemento."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do suplemento."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física (ex.: número de páginas, ilustrações)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume associado."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do suplemento, se aplicável."] }
+            ]
+        },
+        {
+            tag: "422",
+            name: "PARENT OF SUPPLEMENT",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 — Do not make a note", "1 — Make a note"],
+            tips: [
+                "O campo 422 é usado para criar uma ligação de um suplemento para o seu recurso principal (pai).",
+                "Este campo é o inverso do campo 421 (SUPPLEMENT).",
+                "O segundo indicador determina se uma nota deve ser gerada automaticamente a partir dos dados do campo."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso principal."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso principal ao qual este suplemento está ligado."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material (ex.: Texto impresso, gravação sonora)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso principal."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso principal."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso principal."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso principal."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso principal."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso principal."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso principal, se aplicável."] }
+            ]
+        },
+        {
+            tag: "423",
+            name: "ISSUED WITH",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 423 é usado para criar uma ligação entre recursos publicados fisicamente juntos (ex.: um volume com múltiplas obras).",
+                "Este campo estabelece uma relação de 'publicado com' entre registos.",
+                "O segundo indicador controla se uma nota deve ser gerada automaticamente a partir dos dados do campo."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso relacionado."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso publicado em conjunto."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material (ex.: Texto impresso, gravação sonora)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] }
+            ]
+        },
+        {
+            tag: "424",
+            name: "IS UPDATED BY",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 424 é usado para indicar que um recurso contínuo (ex.: uma base de dados ou publicação online) é atualizado por outro recurso.",
+                "Este campo estabelece uma relação de atualização dinâmica (o recurso atual é mantido ou substituído por uma versão mais recente).",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso que atualiza este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso que atualiza o recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material (ex.: Recurso eletrônico, publicação contínua)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso atualizador."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso atualizador."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso atualizador."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso atualizador."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso atualizador."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso atualizador (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso atualizador, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] }
+            ]
+        },
+        {
+            tag: "425",
+            name: "UPDATES",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 425 é usado para indicar que um recurso atualiza outro recurso existente (relação inversa do campo 424).",
+                "Este campo estabelece uma relação de atualização, onde o recurso descrito no registro atualiza outro recurso.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo é o inverso do campo 424 (IS UPDATED BY)."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso que é atualizado por este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso que é atualizado pelo recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso atualizado (ex.: Recurso eletrônico, publicação contínua)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso atualizado."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso atualizado."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso atualizado."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso atualizado."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso atualizado."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso atualizado."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso atualizado (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso atualizado, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso atualizado, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] }
+            ]
+        },
+        {
+            tag: "430",
+            name: "CONTINUES",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 430 é usado para indicar que um recurso continua (em parte ou no todo) outro recurso anterior.",
+                "Este campo estabelece uma relação de continuidade bibliográfica, onde o recurso descrito no registro é a continuação direta de outro recurso.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo tem como inverso o campo 440 (CONTINUED BY)."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso anterior que é continuado por este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso anterior que é continuado pelo recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso anterior (ex.: Texto impresso, publicação seriada)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso anterior."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso anterior."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso anterior."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso anterior."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso anterior."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso anterior."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso anterior (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso anterior, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso anterior, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso anterior, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso anterior, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "431",
+            name: "CONTINUES IN PART",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 431 é usado para indicar que um recurso continua parcialmente outro recurso anterior.",
+                "Este campo estabelece uma relação de continuidade parcial, onde o recurso descrito no registro é a continuação de apenas uma parte de outro recurso.",
+                "Diferente do campo 430 (CONTINUES) que indica continuidade total, este campo especifica que apenas uma parte do recurso anterior foi continuada.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo tem como inverso o campo 441 (CONTINUED IN PART BY)."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso anterior que é parcialmente continuado por este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso anterior que é parcialmente continuado pelo recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso anterior (ex.: Texto impresso, publicação seriada)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso anterior."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso anterior."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso anterior."] },
+                { code: "h", label: "Number of Part/Section", repeatable: true, mandatory: false, tips: ["Número ou identificação da parte/seção específica que está sendo continuada."] },
+                { code: "i", label: "Name of Part/Section", repeatable: true, mandatory: false, tips: ["Nome da parte/seção específica que está sendo continuada."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso anterior."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso anterior."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso anterior."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso anterior (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso anterior, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso anterior, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso anterior, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso anterior, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "432",
+            name: "SUPERSEDES",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 432 é usado para indicar que um recurso substitui (completamente) outro recurso anterior.",
+                "Este campo estabelece uma relação de substituição total, onde o recurso descrito no registro toma o lugar de outro recurso, que é descontinuado.",
+                "Diferente de campos de continuidade (430, 431), este indica uma substituição completa que pode envolver mudanças significativas no conteúdo ou formato.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo tem como inverso o campo 442 (SUPERSEDED BY)."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso substituído por este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso substituído pelo recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso substituído (ex.: Texto impresso, recurso eletrônico)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso substituído."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso substituído."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso substituído."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso substituído."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso substituído."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso substituído."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso substituído (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso substituído, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso substituído, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso substituído, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso substituído, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "433",
+            name: "SUPERSEDES IN PART",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 433 é usado para indicar que um recurso substitui parcialmente outro recurso anterior.",
+                "Este campo estabelece uma relação de substituição parcial, onde o recurso descrito no registro toma o lugar de apenas uma parte de outro recurso, que pode continuar a existir para outras partes.",
+                "Diferente do campo 432 (SUPERSEDES) que indica substituição total, este campo especifica que apenas uma parte do recurso anterior foi substituída.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo tem como inverso o campo 443 (SUPERSEDED IN PART BY).",
+                "Usado frequentemente para publicações seriadas ou recursos integrados onde apenas um componente é substituído."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso parcialmente substituído por este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso parcialmente substituído pelo recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso substituído (ex.: Texto impresso, recurso eletrônico)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso substituído."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso substituído."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso substituído."] },
+                { code: "h", label: "Number of Part/Section", repeatable: true, mandatory: false, tips: ["Número ou identificação da parte/seção específica que está sendo substituída."] },
+                { code: "i", label: "Name of Part/Section", repeatable: true, mandatory: false, tips: ["Nome da parte/seção específica que está sendo substituída."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso substituído."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso substituído."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso substituído."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso substituído (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso substituído, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso substituído, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso substituído, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso substituído, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "434",
+            name: "ABSORBED",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 434 é usado para indicar que um recurso absorveu (incorporou) outro recurso anterior, que deixou de ser publicado separadamente.",
+                "Este campo estabelece uma relação de absorção, onde o recurso descrito no registro incorpora o conteúdo de outro recurso que é descontinuado.",
+                "Diferente de substituição (432), aqui o recurso original é incorporado/integrado no novo recurso.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo tem como inverso o campo 444 (ABSORBED BY).",
+                "Usado frequentemente para publicações seriadas que são fundidas/incorporadas."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso absorvido por este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso absorvido pelo recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso absorvido (ex.: Texto impresso, publicação seriada)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso absorvido."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso absorvido."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso absorvido."] },
+                { code: "h", label: "Number of Part/Section", repeatable: true, mandatory: false, tips: ["Número da parte/seção absorvida, se aplicável."] },
+                { code: "i", label: "Name of Part/Section", repeatable: true, mandatory: false, tips: ["Nome da parte/seção absorvida, se aplicável."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso absorvido."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso absorvido."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso absorvido."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso absorvido (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso absorvido, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso absorvido, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso absorvido, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso absorvido, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "435",
+            name: "ABSORBED IN PART",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 435 é usado para indicar que um recurso absorveu parcialmente (incorporou em parte) outro recurso anterior.",
+                "Este campo estabelece uma relação de absorção parcial, onde o recurso descrito no registro incorpora apenas parte do conteúdo de outro recurso, que pode continuar a existir para outras partes.",
+                "Diferente do campo 434 (ABSORBED) que indica absorção total, este especifica que apenas uma parte do recurso anterior foi absorvida.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo tem como inverso o campo 445 (ABSORBED IN PART BY).",
+                "Usado quando apenas seções ou partes específicas de uma publicação são incorporadas em outro recurso."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso parcialmente absorvido por este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso parcialmente absorvido pelo recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso absorvido (ex.: Texto impresso, publicação seriada)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso absorvido."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso absorvido."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso absorvido."] },
+                { code: "h", label: "Number of Part/Section", repeatable: true, mandatory: true, tips: ["Número ou identificação da parte/seção específica que foi absorvida."] },
+                { code: "i", label: "Name of Part/Section", repeatable: true, mandatory: true, tips: ["Nome da parte/seção específica que foi absorvida."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso absorvido."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso absorvido."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso absorvido."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso absorvido (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso absorvido, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso absorvido, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso absorvido, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso absorvido, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "437",
+            name: "SEPARATED FROM",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 437 é usado para indicar que um recurso foi separado/desmembrado de outro recurso anterior.",
+                "Este campo estabelece uma relação de separação, onde o recurso descrito no registro era originalmente parte de outro recurso.",
+                "Diferente dos campos de absorção (434-435), aqui o foco é no desmembramento de parte de um recurso para formar um novo recurso independente.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo tem como inverso o campo 447 (HAS SEPARATED PART).",
+                "Usado quando partes de publicações se tornam independentes, mantendo relação com a publicação original."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso original do qual este foi separado."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso original do qual este recurso foi separado."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso original (ex.: Texto impresso, publicação seriada)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso original."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso original."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso original."] },
+                { code: "h", label: "Number of Part/Section", repeatable: true, mandatory: true, tips: ["Número ou identificação da parte/seção que foi separada para formar este recurso."] },
+                { code: "i", label: "Name of Part/Section", repeatable: true, mandatory: true, tips: ["Nome da parte/seção que foi separada para formar este recurso."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso original."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso original."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso original."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso original (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso original, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso original, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso original, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso original, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "436",
+            name: "FORMED BY MERGER OF ..., ..., AND ...",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 436 é usado para indicar que um recurso foi formado pela fusão de dois ou mais recursos anteriores.",
+                "Este campo estabelece uma relação de fusão bibliográfica, onde o recurso descrito no registro resulta da combinação de múltiplos recursos que deixaram de ser publicados separadamente.",
+                "Diferente dos campos de absorção (434-435), aqui todos os recursos originais são descontinuados para formar um novo recurso.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo tem como inverso o campo 446 (MERGER TO FORM ...).",
+                "Usado quando várias publicações são combinadas para formar uma nova publicação com identidade própria."
+            ],
+            "subFieldDef": [
+                { code: "0", label: "Record Control Number", repeatable: true, mandatory: false, tips: ["Números de controlo dos registos bibliográficos dos recursos fundidos para formar este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Títulos dos recursos que foram fundidos para formar este recurso."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material dos recursos fundidos (ex.: Texto impresso, publicação seriada)."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas aos títulos dos recursos fundidos."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeiras declarações de responsabilidade dos recursos fundidos."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade dos recursos fundidos."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Locais de publicação dos recursos fundidos."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nomes dos editores ou distribuidores dos recursos fundidos."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Datas de publicação dos recursos fundidos."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrições físicas dos recursos fundidos (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Números de volume dos recursos fundidos, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Números ISSN dos recursos fundidos, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Códigos CODEN dos recursos fundidos, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Números ISBN dos recursos fundidos, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "440",
+            name: "CONTINUED BY",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 440 é usado para indicar que um recurso é continuado por outro recurso posterior.",
+                "Este campo estabelece uma relação de continuidade bibliográfica, onde o recurso descrito no registro é sucedido por outro recurso.",
+                "Diferente dos campos de absorção ou fusão, aqui há uma sucessão direta entre recursos.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo é o inverso do campo 430 (CONTINUES).",
+                "Usado quando uma publicação é substituída por outra com novo título, mas mantendo continuidade lógica."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso que continua este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso que continua o recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso subsequente."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso subsequente."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso subsequente."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso subsequente."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso subsequente."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso subsequente."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso subsequente."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso subsequente (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso subsequente, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso subsequente, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso subsequente, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso subsequente, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "441",
+            name: "CONTINUED IN PART BY",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 441 é usado para indicar que parte do conteúdo de um recurso é continuado por outro recurso posterior.",
+                "Este campo estabelece uma relação de continuidade parcial, onde apenas uma seção ou parte do recurso descrito no registro é continuada por outro recurso.",
+                "Diferente do campo 440 (CONTINUED BY) que indica continuidade total, este especifica que apenas parte do conteúdo foi continuada.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo é o inverso do campo 431 (CONTINUES IN PART).",
+                "Usado quando apenas uma seção ou parte específica de uma publicação é continuada como publicação independente."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso que continua parte deste registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso que continua parte do conteúdo descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso continuador."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso continuador."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso continuador."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso continuador."] },
+                { code: "h", label: "Number of Part/Section", repeatable: true, mandatory: true, tips: ["Número ou identificação da parte/seção que foi continuada pelo novo recurso."] },
+                { code: "i", label: "Name of Part/Section", repeatable: true, mandatory: true, tips: ["Nome da parte/seção que foi continuada pelo novo recurso."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso continuador."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso continuador."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso continuador."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso continuador (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso continuador, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso continuador, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso continuador, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso continuador, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "442",
+            name: "SUPERSEDED BY",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 442 é usado para indicar que um recurso foi substituído (completamente) por outro recurso posterior.",
+                "Este campo estabelece uma relação de substituição total, onde o recurso descrito no registro foi descontinuado e substituído por outro recurso.",
+                "Diferente dos campos de continuidade, aqui há uma substituição completa que geralmente implica no fim da publicação original.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo é o inverso do campo 432 (SUPERSEDES).",
+                "Usado quando uma publicação é completamente substituída por outra, geralmente com mudança de título ou formato."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso que substitui este registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso que substitui o recurso descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso substituto."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso substituto."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso substituto."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso substituto."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso substituto."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso substituto."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso substituto."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso substituto (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso substituto, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso substituto, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso substituto, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso substituto, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        },
+        {
+            tag: "443",
+            name: "SUPERSEDED IN PART BY",
+            ind1Tips: ["# - Não definido"],
+            ind2Tips: ["0 - Do not make a note", "1 - Make a note"],
+            tips: [
+                "O campo 443 é usado para indicar que parte do conteúdo de um recurso foi substituída por outro recurso posterior.",
+                "Este campo estabelece uma relação de substituição parcial, onde apenas uma seção ou parte específica do recurso descrito no registro foi substituída por outro recurso.",
+                "Diferente do campo 442 (SUPERSEDED BY) que indica substituição total, este especifica que apenas parte do conteúdo foi substituída.",
+                "O segundo indicador controla se uma nota explicativa deve ser gerada automaticamente a partir dos dados do campo.",
+                "Este campo é o inverso do campo 433 (SUPERSEDES IN PART).",
+                "Usado quando apenas uma seção, suplemento ou parte específica de uma publicação é substituída por uma nova publicação independente."
+            ],
+            subFieldDef: [
+                { code: "0", label: "Record Control Number", repeatable: false, mandatory: false, tips: ["Número de controlo do registo bibliográfico do recurso que substitui parte deste registro."] },
+                { code: "t", label: "Title", repeatable: true, mandatory: true, tips: ["Título do recurso que substitui parte do conteúdo descrito neste registro."] },
+                { code: "a", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material do recurso substituto."] },
+                { code: "b", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Outras informações relacionadas ao título do recurso substituto."] },
+                { code: "f", label: "First Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Primeira declaração de responsabilidade do recurso substituto."] },
+                { code: "g", label: "Subsequent Statement of Responsibility", repeatable: true, mandatory: false, tips: ["Declarações subsequentes de responsabilidade do recurso substituto."] },
+                { code: "h", label: "Number of Part/Section", repeatable: true, mandatory: true, tips: ["Número ou identificação da parte/seção que foi substituída pelo novo recurso."] },
+                { code: "i", label: "Name of Part/Section", repeatable: true, mandatory: true, tips: ["Nome da parte/seção que foi substituída pelo novo recurso."] },
+                { code: "c", label: "Place of Publication", repeatable: true, mandatory: false, tips: ["Local de publicação do recurso substituto."] },
+                { code: "n", label: "Name of Publisher, Distributor, etc.", repeatable: true, mandatory: false, tips: ["Nome do editor ou distribuidor do recurso substituto."] },
+                { code: "d", label: "Date of Publication", repeatable: true, mandatory: false, tips: ["Data de publicação do recurso substituto."] },
+                { code: "p", label: "Physical Description", repeatable: true, mandatory: false, tips: ["Descrição física do recurso substituto (se aplicável)."] },
+                { code: "v", label: "Volume Number", repeatable: true, mandatory: false, tips: ["Número de volume do recurso substituto, se aplicável."] },
+                { code: "x", label: "ISSN", repeatable: true, mandatory: false, tips: ["Número ISSN do recurso substituto, se aplicável."] },
+                { code: "y", label: "CODEN", repeatable: true, mandatory: false, tips: ["Código CODEN do recurso substituto, se aplicável."] },
+                { code: "z", label: "ISBN", repeatable: true, mandatory: false, tips: ["Número ISBN do recurso substituto, se aplicável."] },
+                { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
+            ]
+        }
+
 
     ]
 
