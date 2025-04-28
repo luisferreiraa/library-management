@@ -136,12 +136,8 @@ async function main() {
         {
             tag: "012",
             name: "Fingerprint Identifier",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Este campo contém o Fingerprint Identifier para publicações monográficas mais antigas (antiquários) e um código para a instituição a que o campo se aplica, que distingue entre Fingerprint Identifiers quando mais do que um está contido num registo.",
                 "O campo corresponde ao identificador de recurso ISBD e aos termos da área de disponibilidade."
@@ -163,12 +159,8 @@ async function main() {
         {
             tag: "013",
             name: "International Standard Music Number (ISMN)",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Este campo contém um Número Internacional Normalizado para a Música e uma qualificação que disting entre ISMN quando mais do que um está contido num registo.",
                 "O campo corresponde ao identificador do recurso ISBD e à área das condições de disponibilidade. O campo pode conter as condições de disponibilidade e/ ou preço, mesmo que não contenha um ISMN.",
@@ -185,15 +177,9 @@ async function main() {
         {
             tag: "014",
             name: "Article Identifier",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
-            tips: [
-                "Este campo contém um código único e não ambíguo atribuído aos artigos de periódicos.",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
+            tips: ["Este campo contém um código único e não ambíguo atribuído aos artigos de periódicos."],
             subFieldDef: [
                 { code: "a", label: "Article Identifier", repeatable: false, mandatory: true },
                 { code: "z", label: "Erroneous Article Identifier", repeatable: true, mandatory: false },
@@ -203,283 +189,102 @@ async function main() {
         {
             tag: "015",
             name: "International Standard Technical Report Number (ISRN)",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
-            tips: [
-                "Este campo contém o número internacional normalizado de relatório técnico atribuído por um centro nacional ISRN",
-                "Corresponde ao identificador de recurso ISBD e aos termos da área de disponibilidade",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
+            tips: ["Este campo contém o número internacional normalizado de relatório técnico atribuído por um centro nacional ISRN", "Corresponde ao identificador de recurso ISBD e aos termos da área de disponibilidade"],
             subFieldDef: [
                 { code: "a", label: "Number (ISRN)", repeatable: false, mandatory: true, tips: ["Um ISRN corretamente aplicado, incluindo hífenes.", "Os ISRN são atribuídos pela agência designada de cada país."] },
-                {
-                    code: "b",
-                    label: "Qualification",
-                    repeatable: false,
-                    mandatory: false,
-                    tips: [
-                        "Uma indicação do âmbito do ISRN no subcampo $a (se presente), normalmente o nome de um editor, uma indicação da ligação do recurso ou uma indicação da relação de um ISRN com um conjunto ou com um volume específico.",
-                    ]
-                },
-                {
-                    code: "d",
-                    label: "Terms of Availability and/ or Price",
-                    repeatable: false,
-                    mandatory: false,
-                    tips: [
-                        "O preço do recurso e qualquer comentário sobre a sua disponibilidade.",
-                    ]
-                },
-                {
-                    code: "z",
-                    label: "Cancelled/ Invalid/ Erroneous ISRN",
-                    repeatable: true,
-                    mandatory: false,
-                    tips: [
-                        "Um ISRN que foi identificado como tendo sido incorretamente aplicado a um recurso ou que é inválido.",
-                        "Pode ter sido atribuído a duas publicações diferentes e, neste caso, cancelado, ou pode ter sido incorretamente impresso.",
-                    ]
-                },
+                { code: "b", label: "Qualification", repeatable: false, mandatory: false, tips: ["Uma indicação do âmbito do ISRN no subcampo $a (se presente), normalmente o nome de um editor, uma indicação da ligação do recurso ou uma indicação da relação de um ISRN com um conjunto ou com um volume específico."] },
+                { code: "d", label: "Terms of Availability and/ or Price", repeatable: false, mandatory: false, tips: ["O preço do recurso e qualquer comentário sobre a sua disponibilidade."] },
+                { code: "z", label: "Cancelled/ Invalid/ Erroneous ISRN", repeatable: true, mandatory: false, tips: ["Um ISRN que foi identificado como tendo sido incorretamente aplicado a um recurso ou que é inválido.", "Pode ter sido atribuído a duas publicações diferentes e, neste caso, cancelado, ou pode ter sido incorretamente impresso."] }
             ]
         },
         {
             tag: "017",
             name: "Other Identifier",
             ind1Name: "Type of Identifier",
-            ind1Tips: [
-                "7: System specified in subfield $2",
-                "8: Unspecified type of identifier"
-            ],
+            ind1Tips: ["7: System specified in subfield $2, 8: Unspecified type of identifier"],
             ind2Name: "Difference Indicator",
-            ind2Tips: [
-                "1: No difference",
-                "2: Difference"
-            ],
+            ind2Tips: ["1: No difference, 2: Difference"],
             tips: [
                 "Este campo contém um identificador, publicado no recurso que não pode ser acomodado noutro campo e uma qualificação que distingue entre identificadores quando mais do que um identificador do mesmo tipo está contido num registo.",
                 "O campo corresponde ao identificador de recurso da ISBD e à área das condições de disponibilidade. O campo pode conter as condições de disponibilidade e/ou o preço, mesmo que não contenha um identificador.",
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Identifier",
-                    repeatable: false,
-                    mandatory: true,
-                    tips: [
-                        "Um identificador corretamente formatado. Os números ou códigos são formulados de acordo com o tipo",
-                    ]
-                },
-                {
-                    code: "$b",
-                    label: "Qualification",
-                    repeatable: false,
-                    mandatory: false,
-                    tips: [
-                        "Uma indicação do âmbito do identificador nos subcampos $a (se presente), normalmente o nome do editor, uma identificação da ligação do recurso, ou uma indicação da relação de um identificador com um conjunto ou com um volume específico.",
-                    ]
-                },
-                {
-                    code: "$d",
-                    label: "Terms of Availability and/ or Price",
-                    repeatable: false,
-                    mandatory: false,
-                    tips: [
-                        "O preço do recurso e qualquer comentário sobre a sua disponibilidade.",
-                    ]
-                },
-                {
-                    code: "$z",
-                    label: "Erroneous Identifier",
-                    repeatable: true,
-                    mandatory: false,
-                    tips: [
-                        "Um identificador que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido. Pode ter sido atribuído a duas publicações ou produtos diferentes e, neste caso, cancelado, ou pode ter sido incorretamente impresso. Se não for conhecido um identificador válido do mesmo tipo, o subcampo $z pode aparecer sozinho no campo 017",
-                    ]
-                },
-                {
-                    code: "$2",
-                    label: "Source",
-                    repeatable: true,
-                    mandatory: false,
-                    tips: [
-                        "Uma identificação em forma codificada para o sistema do qual o identificador é derivado. Utilizar apenas quando o primeiro código do sítio contiver o valor 7 (sistema especificado no subcampo $2).",
-                    ]
-                },
+                { code: "a", label: "Identifier", repeatable: false, mandatory: true, tips: ["Um identificador corretamente formatado. Os números ou códigos são formulados de acordo com o tipo"] },
+                { code: "b", label: "Qualification", repeatable: false, mandatory: false, tips: ["Uma indicação do âmbito do identificador nos subcampos $a (se presente), normalmente o nome do editor, uma identificação da ligação do recurso, ou uma indicação da relação de um identificador com um conjunto ou com um volume específico."] },
+                { code: "d", label: "Terms of Availability and/ or Price", repeatable: false, mandatory: false, tips: ["O preço do recurso e qualquer comentário sobre a sua disponibilidade."] },
+                { code: "z", label: "Erroneous Identifier", repeatable: true, mandatory: false, tips: ["Um identificador que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido. Pode ter sido atribuído a duas publicações ou produtos diferentes e, neste caso, cancelado, ou pode ter sido incorretamente impresso. Se não for conhecido um identificador válido do mesmo tipo, o subcampo $z pode aparecer sozinho no campo 017"] },
+                { code: "2", label: "Source", repeatable: true, mandatory: false, tips: ["Uma identificação em forma codificada para o sistema do qual o identificador é derivado. Utilizar apenas quando o primeiro código do sítio contiver o valor 7 (sistema especificado no subcampo $2)."] },
             ]
         },
         {
             tag: "020",
             name: "National Bibliography Number",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Uma identificação em forma codificada para o sistema do qual o identificador é derivado. Utilizar apenas quando o primeiro código do sítio contém o valor 7 (sistema especificado no subcampo d $2).",
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Country Code",
-                    repeatable: false,
-                    mandatory: true,
-                    tips: [
-                        "Uma identificação do país da bibliografia nacional (EX 1-4). Dois caracteres. Para os códigos de país , utilizar a norma ISO 3166-1.d $2).",
-                    ]
-                },
-                {
-                    code: "$b",
-                    label: "Number",
-                    repeatable: false,
-                    mandatory: false,
-                    tips: [
-                        "O número como designado pela agência.",
-                    ]
-                },
-                {
-                    code: "$z",
-                    label: "Erroneous Number",
-                    repeatable: true,
-                    mandatory: false,
-                    tips: [
-                        "Um identificador que foi identificado como tendo sido incorretamente aplicado ao recurso.",
-                    ]
-                },
+                { code: "a", label: "Country Code", repeatable: false, mandatory: true, tips: ["Uma identificação do país da bibliografia nacional (EX 1-4). Dois caracteres. Para os códigos de país , utilizar a norma ISO 3166-1.d $2)."] },
+                { code: "b", label: "Number", repeatable: false, mandatory: false, tips: ["O número como designado pela agência."] },
+                { code: "z", label: "Erroneous Number", repeatable: true, mandatory: false, tips: ["Um identificador que foi identificado como tendo sido incorretamente aplicado ao recurso."] },
             ]
         },
         {
             tag: "021",
             name: "Legal Deposit Number",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Este campo contém o número atribuído ao recurso que está a ser registado pelo gabinete de depósito legal ou de direitos de autor em cada país.d $2).",
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Country Code",
-                    repeatable: false,
-                    mandatory: true,
-                    tips: [
-                        "Uma identificação do país da agência de depósito legal que atribui o número. Para os códigos de país, utilizar ISO 3166-1. Dois caracteres.d $2). ",
-                    ]
-                },
-                {
-                    code: "$b",
-                    label: "Number",
-                    repeatable: false,
-                    mandatory: false,
-                    tips: [
-                        "O número como designado pela agência.",
-                    ]
-                },
-                {
-                    code: "$z",
-                    label: "Erroneous Number",
-                    repeatable: true,
-                    mandatory: false,
-                    tips: [
-                        "Um número erradamente atribuído ao recurso $2).",
-                    ]
-                },
+                { code: "a", label: "Country Code", repeatable: false, mandatory: true, tips: ["Uma identificação do país da agência de depósito legal que atribui o número. Para os códigos de país, utilizar ISO 3166-1. Dois caracteres.d $2). "] },
+                { code: "b", label: "Number", repeatable: false, mandatory: false, tips: ["O número como designado pela agência."] },
+                { code: "z", label: "Erroneous Number", repeatable: true, mandatory: false, tips: ["Um número erradamente atribuído ao recurso $2)."] },
             ]
         },
         {
             tag: "022",
             name: "Government Publication Number",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Este campo contém o número atribuído a uma das suas próprias publicações ou a um recurso publicado em seu nome por um organismo governamental.d $2).",
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Country Code",
-                    repeatable: false,
-                    mandatory: true,
-                    tips: [
-                        "Uma identificação do país em que o recurso é publicado (EX 1-3). Dois caracteres. Para os códigos do país , utilizar a norma ISO 3166-1.",
-                    ]
-                },
-                {
-                    code: "$b",
-                    label: "Number",
-                    repeatable: false,
-                    mandatory: false,
-                    tips: [
-                        "O número como designado pelo organismo governamental.",
-                    ]
-                },
-                {
-                    code: "$z",
-                    label: "Erroneous Number",
-                    repeatable: true,
-                    mandatory: false,
-                    tips: [
-                        "Um número erradamente atribuído a uma publicação governamental.",
-                    ]
-                },
+                { code: "a", label: "Country Code", repeatable: false, mandatory: true, tips: ["Uma identificação do país em que o recurso é publicado (EX 1-3). Dois caracteres. Para os códigos do país , utilizar a norma ISO 3166-1."] },
+                { code: "b", label: "Number", repeatable: false, mandatory: false, tips: ["O número como designado pelo organismo governamental."] },
+                { code: "z", label: "Erroneous Number", repeatable: true, mandatory: false, tips: ["Um número erradamente atribuído a uma publicação governamental."] },
             ]
         },
         {
             tag: "033",
             name: "Other System Persistent Record Identifier",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Este campo contém o identificador persistente dos registos obtidos de outras fontes. O identificador persistente é atribuído pela agência que cria, utiliza ou emite o registo.",
                 "Este é o identificador persistente para o registo bibliográfico, não para o recurso em si."
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Persistent Record Identifier",
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$z",
-                    label: "Cancelled or Invalid Persistent Record Identifier",
-                    repeatable: true,
-                    mandatory: false,
-                },
+                { code: "a", label: "Persistent Record Identifier", repeatable: false, mandatory: true },
+                { code: "z", label: "Cancelled or Invalid Persistent Record Identifier", repeatable: true, mandatory: false },
             ]
         },
         {
             tag: "035",
             name: "Other System Identifiers",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Este campo contém o identificador dos registos obtidos a partir de outras fontes",
             ],
             subFieldDef: [
                 {
-                    code: "$a",
-                    label: "System Identifier",
+                    code: "a", label: "System Identifier",
                     tips: [
                         "Um código para a organização entre parênteses, seguido do identificador de sistema para o registo na base de dados dessa organização",
                         "Uma vez que não existem códigos internacionalmente aceites, recomenda-se a utilização dos códigos da Lista de Códigos MARC para Organizações.",
@@ -488,169 +293,36 @@ async function main() {
                     repeatable: false,
                     mandatory: true,
                 },
-                {
-                    code: "$z",
-                    label: "Cancelled or Invalid Identifier",
-                    repeatable: true,
-                    mandatory: false,
-                },
+                { code: "z", label: "Cancelled or Invalid Identifier", repeatable: true, mandatory: false },
             ]
         },
         {
             tag: "036",
             name: "Music Incipit",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Este campo contém dados que descrevem o incipit musical para música em forma parcialmente codificada.",
                 "Este campo é amplamente utilizado para identificar manuscritos de música, mas também pode ser aplicado à música impressa ou a outros recursos musicais (registos sonoros, etc.).",
             ],
             subFieldDef: [
+                { code: "a", label: "Number of Work", tips: ["Um código de dois dígitos indica a obra a que o incipit se refere, se um conjunto de composições (por exemplo, seis sonatas) for inteiramente descrito num único registo, sem a utilização de registos de nível peça-analítico. Se o registo descrever apenas uma obra, utilizar '01'."], repeatable: false, mandatory: true },
+                { code: "b", label: "Number of Movement", tips: ["Um código de dois dígitos indica o andamento dentro de uma obra a que o incipit se refere. Se a obra tiver apenas um andamento, utilizar '01'."], repeatable: false, mandatory: true },
+                { code: "c", label: "Number of Incipit", tips: ["Um código de dois dígitos distingue os diferentes incipits referentes ao mesmo movimento. Se existir apenas um incipit para um movimento, utilizar '01'."], repeatable: false, mandatory: true },
+                { code: "d", label: "Voice/ Instrument", tips: ["A voz ou o instrumento codificado em 036 $p. Obrigatório se 036 $p estiver presente."], repeatable: false, mandatory: false },
+                { code: "e", label: "Role", tips: ["O nome do carácter que canta o incipit codificado em 036 $p."], repeatable: false, mandatory: false },
+                { code: "f", label: "Movement Caption/ Heading", tips: ["Legenda ou título do movimento, tal como aparece na fonte."], repeatable: true, mandatory: false },
+                { code: "g", label: "Key or Mode", tips: ["A tonalidade ou modo do movimento, se aplicável. Utilizar letras maiúsculas A-G para indicar as tonalidades maiores, minúsculas a-g para indicar as tonalidades menores, “x” para sustenidos e “b” para bemóis, números 1-12 para os modos gregorianos."], repeatable: false, mandatory: false },
+                { code: "m", label: "Clef", tips: ["Código de três caracteres. Use “F” ou “C” ou 'G' maiúsculo para indicar a forma da clave, depois “-” como separador, depois números 1-5 para indicar a posição da clave na pauta, começando na linha de baixo. Usar “+” como separador para indicar a notação mensural.", "Obrigatório se 036 $p estiver presente, caso contrário não é válido."], repeatable: false, mandatory: false },
+                { code: "n", label: "Key Signature", tips: ["Utilize “x” para indicar sustenidos e “b” para indicar bemóis, seguidos de F,C,G,D,A,E,B maiúsculos ou B,E,A,D,G,C,F respetivamente para indicar notas sustenidas ou bemóis."], repeatable: false, mandatory: false },
+                { code: "o", label: "Time Signature", tips: ["O valor do tempo ou o sinal de mensuração indicado na pauta é transcrito com um símbolo (c, c/, c., o, etc.) e/ou um número (3, 2, c3, etc.) ou uma fração (4/4, 12/8, etc.)."], repeatable: false, mandatory: false },
+                { code: "p", label: "Musical Notation", tips: ["Use os símbolos de notação do código Plaine & Easie ou do código DARMS para transcrever as primeiras notas da pauta selecionada."], repeatable: false, mandatory: false },
+                { code: "q", label: "Comments (free text)", tips: ["Nota de texto livre."], repeatable: true, mandatory: false },
+                { code: "r", label: "Codified Note", tips: ["Um código de um carácter indica uma nota de comentário. Utilizar “?” para indicar um erro no incipit, não corrigido, “+” para indicar um erro no incipit, corrigido, “t” para indicar que o incipit foi transcrito (por exemplo, da notação mensural)."], repeatable: true, mandatory: false },
+                { code: "t", label: "Text Incipit", tips: ["O texto literário (se existir) tal como aparece na fonte. Se a fonte tiver vários textos, cada um deles é transcrito numa ocorrência separada de 036$t"], repeatable: true, mandatory: false },
+                { code: "u", label: "Uniform Resource Identifier (URI)", tips: ["Um Identificador Uniforme de Recursos (URI), tal como um URL (Uniform Resource Locator) ou URN (Uniform Resource Name), serve como uma cadeia normalizada que identifica um recurso e fornece acesso eletrónico através de protocolos da Internet. ", "Isto permite a recuperação automática ou a interação com o recurso de uma forma consistente."], repeatable: false, mandatory: false },
                 {
-                    code: "$a",
-                    label: "Number of Work",
-                    tips: [
-                        "Um código de dois dígitos indica a obra a que o incipit se refere, se um conjunto de composições (por exemplo, seis sonatas) for inteiramente descrito num único registo, sem a utilização de registos de nível peça-analítico. Se o registo descrever apenas uma obra, utilizar '01'.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$b",
-                    label: "Number of Movement",
-                    tips: [
-                        "Um código de dois dígitos indica o andamento dentro de uma obra a que o incipit se refere. Se a obra tiver apenas um andamento, utilizar '01'.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$c",
-                    label: "Number of Incipit",
-                    tips: [
-                        "Um código de dois dígitos distingue os diferentes incipits referentes ao mesmo movimento. Se existir apenas um incipit para um movimento, utilizar '01'.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$d",
-                    label: "Voice/ Instrument",
-                    tips: [
-                        "A voz ou o instrumento codificado em 036 $p. Obrigatório se 036 $p estiver presente.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$e",
-                    label: "Role",
-                    tips: [
-                        "O nome do carácter que canta o incipit codificado em 036 $p.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$f",
-                    label: "Movement Caption/ Heading",
-                    tips: [
-                        "Legenda ou título do movimento, tal como aparece na fonte.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$g",
-                    label: "Key or Mode",
-                    tips: [
-                        "A tonalidade ou modo do movimento, se aplicável. Utilizar letras maiúsculas A-G para indicar as tonalidades maiores, minúsculas a-g para indicar as tonalidades menores, “x” para sustenidos e “b” para bemóis, números 1-12 para os modos gregorianos.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$m",
-                    label: "Clef",
-                    tips: [
-                        "Código de três caracteres. Use “F” ou “C” ou ‘G’ maiúsculo para indicar a forma da clave, depois “-” como separador, depois números 1-5 para indicar a posição da clave na pauta, começando na linha de baixo. Usar “+” como separador para indicar a notação mensural.",
-                        "Obrigatório se 036 $p estiver presente, caso contrário não é válido.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$n",
-                    label: "Key Signature",
-                    tips: [
-                        "Utilize “x” para indicar sustenidos e “b” para indicar bemóis, seguidos de F,C,G,D,A,E,B maiúsculos ou B,E,A,D,G,C,F respetivamente para indicar notas sustenidas ou bemóis.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$o",
-                    label: "Time Signature",
-                    tips: [
-                        "O valor do tempo ou o sinal de mensuração indicado na pauta é transcrito com um símbolo (c, c/, c., o, etc.) e/ou um número (3, 2, c3, etc.) ou uma fração (4/4, 12/8, etc.).",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$p",
-                    label: "Musical Notation",
-                    tips: [
-                        "Use os símbolos de notação do código Plaine & Easie ou do código DARMS para transcrever as primeiras notas da pauta selecionada.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$q",
-                    label: "Comments (free text)",
-                    tips: [
-                        "Nota de texto livre.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$r",
-                    label: "Codified Note",
-                    tips: [
-                        "Um código de um carácter indica uma nota de comentário. Utilizar “?” para indicar um erro no incipit, não corrigido, “+” para indicar um erro no incipit, corrigido, “t” para indicar que o incipit foi transcrito (por exemplo, da notação mensural).",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$t",
-                    label: "Text Incipit",
-                    tips: [
-                        "O texto literário (se existir) tal como aparece na fonte. Se a fonte tiver vários textos, cada um deles é transcrito numa ocorrência separada de 036$t",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
-                {
-                    code: "$u",
-                    label: "Uniform Resource Identifier (URI)",
-                    tips: [
-                        "Um Identificador Uniforme de Recursos (URI), tal como um URL (Uniform Resource Locator) ou URN (Uniform Resource Name), serve como uma cadeia normalizada que identifica um recurso e fornece acesso eletrónico através de protocolos da Internet. ",
-                        "Isto permite a recuperação automática ou a interação com o recurso de uma forma consistente.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
-                {
-                    code: "$z",
-                    label: "Language of Text",
-                    tips: [
+                    code: "z", label: "Language of Text", tips: [
                         "Identificação codificada da língua do incipit. Utilizar se o texto for diferente ou puder ser mal interpretado a partir de 101 Língua do recurso.",
                         "Quando o subcampo é repetido, a ordem dos códigos linguísticos deve refletir a extensão e importância das línguas na obra.",
                         "Se tal não for possível, introduzir os códigos da língua por ordem alfabética. O código “mul” pode ser introduzido quando se aplica um grande número de línguas no subcampo.",
@@ -658,288 +330,85 @@ async function main() {
                     repeatable: true,
                     mandatory: false,
                 },
-                {
-                    code: "$2",
-                    label: "Source",
-                    tips: [
-                        "Um código que especifica o sistema utilizado para codificar a notação musical.",
-                        "Um código de dois caracteres indica o código utilizado para transcrever em $p. Obrigatório se 036 $p estiver presente.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
+                { code: "2", label: "Source", tips: ["Um código que especifica o sistema utilizado para codificar a notação musical.", "Um código de dois caracteres indica o código utilizado para transcrever em $p. Obrigatório se 036 $p estiver presente."], repeatable: false, mandatory: false },
             ]
         },
         {
             tag: "040",
             name: "CODEN",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
-            tips: [
-                "Este campo contém um código único e inequívoco anteriormente atribuído aos títulos dos recursos contínuos pelo serviço internacional CODEN.",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
+            tips: ["Este campo contém um código único e inequívoco anteriormente atribuído aos títulos dos recursos contínuos pelo serviço internacional CODEN."],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "CODEN",
-                    tips: [
-                        "O código de seis caracteres em que o último carácter é um dígito alfanumérico.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$z",
-                    label: "Erroneous CODEN",
-                    tips: [
-                        "Um CODEN que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido.",
-                        "Pode ter sido atribuído a duas publicações diferentes e, neste caso, cancelado, ou pode ter sido incorretamente impresso.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
+                { code: "a", label: "CODEN", tips: ["O código de seis caracteres em que o último carácter é um dígito alfanumérico."], repeatable: false, mandatory: true },
+                { code: "z", label: "Erroneous CODEN", tips: ["Um CODEN que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido.", "Pode ter sido atribuído a duas publicações diferentes e, neste caso, cancelado, ou pode ter sido incorretamente impresso."], repeatable: true, mandatory: false },
             ]
         },
         {
             tag: "071",
             name: "Publisher's Number",
             ind1Name: "Type of Publisher's Number",
-            ind1Tips: [
-                "0: Sound recording: Issue number",
-                "1: Sound recording: Matrix number",
-                "2: Printed music: Plate number",
-                "3: Printed music: Other publisher's number",
-                "4: Video recording number",
-                "5: Other type of publisher's number",
-                "6: Eletronic resource number (ex: CD-ROM)"
-            ],
+            ind1Tips: ["0 - Sound recording: Issue number, 1 - Sound recording: Matrix number, 2 - Printed music: Plate number, 3 - Printed music: Other publisher's number, 4 - Video recording number, 5 - Other type of publisher's number, 6 - Eletronic resource number (ex: CD-ROM)"],
             ind2Name: "Note Indicator",
-            ind2Tips: [
-                "0: Do not make a note",
-                "1: Make a note"
-            ],
+            ind2Tips: ["0 - Do not make a note, 1 - Make a note"],
             tips: [
                 "Este campo contém um número de editor não regido por uma norma internacional. Trata-se geralmente de utilizado para gravações de som, publicações de música, gravações de vídeo e recursos electrónicos.",
                 "The field corresponds to the ISBD Resource Identifier and Terms of Availability Area. The field may contain the terms of availability and/or price, even if it does not contain a publisher's number.",
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Publisher's Number",
-                    tips: [
-                        "Este código especifica o tipo de número de editor contido no campo. Pode ser utilizado para gerar o texto introdutório se for necessário apresentar uma nota a partir deste campo.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$b",
-                    label: "Source",
-                    tips: [
-                        "O editor que atribuiu o número.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$c",
-                    label: "Qualification",
-                    tips: [
-                        "Utilizado para distinguir entre números se um registo contiver mais do que um número de editor.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$d",
-                    label: "Terms of Availability and/ or Price",
-                    tips: [
-                        "O preço do recurso e qualquer comentário sobre a sua disponibilidade.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$z",
-                    label: "Erroneous Publisher's Number",
-                    tips: [
-                        "Um número de editor que foi identificado como tendo sido erroneamente aplicado ao recurso ou de outra forma inválido. ",
-                        "Por exemplo, pode ter sido aplicado a duas publicações e, neste caso, cancelado ou pode ter sido incorretamente impresso.",
-                    ],
-                    repeatable: false,
-                    mandatory: false,
-                },
+                { code: "a", label: "Publisher's Number", tips: ["Este código especifica o tipo de número de editor contido no campo. Pode ser utilizado para gerar o texto introdutório se for necessário apresentar uma nota a partir deste campo."], repeatable: false, mandatory: true },
+                { code: "b", label: "Source", tips: ["O editor que atribuiu o número."], repeatable: false, mandatory: true },
+                { code: "c", label: "Qualification", tips: ["Utilizado para distinguir entre números se um registo contiver mais do que um número de editor."], repeatable: false, mandatory: true },
+                { code: "d", label: "Terms of Availability and/ or Price", tips: ["O preço do recurso e qualquer comentário sobre a sua disponibilidade."], repeatable: false, mandatory: true },
+                { code: "z", label: "Erroneous Publisher's Number", tips: ["Um número de editor que foi identificado como tendo sido erroneamente aplicado ao recurso ou de outra forma inválido.", "Por exemplo, pode ter sido aplicado a duas publicações e, neste caso, cancelado ou pode ter sido incorretamente impresso."], repeatable: false, mandatory: false },
             ]
         },
         {
             tag: "072",
             name: "Universal Product Code (UPC)",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
             ind2Name: "Differenfe Indicator",
-            ind2Tips: [
-                "0: No information provided",
-                "1: No difference",
-                "2: Difference"
-            ],
+            ind2Tips: ["0 - No information provided, 1 - No difference, 2 - Difference"],
             tips: [
                 "Este campo contém o Código Universal do Produto.",
                 "O campo corresponde ao identificador de recurso ISBD e à área das condições de disponibilidade. O campo pode conter as condições de disponibilidade e/ou o preço, mesmo que não contenha um número.",
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Standard Number",
-                    tips: [
-                        "Um número ou código normalizado corretamente formatado. O número ou código está formatado de acordo com o tipo.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$b",
-                    label: "Qualification",
-                    tips: [
-                        "Uma indicação do âmbito do número ou código no subcampo $a, normalmente o nome de um editor, uma indicação da encadernação do recurso, ou uma indicação da relação de um número ou código com um conjunto ou com um volume específico.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$c",
-                    label: "Additional Codes Following Standard Number or Codes",
-                    tips: [
-                        "Contém qualquer sufixo codificado para o identificador.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$d",
-                    label: "Terms of Availability and/ or Price",
-                    tips: [
-                        "O preço do recurso e qualquer comentário sobre a sua disponibilidade.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$z",
-                    label: "Erroneous Number or Code",
-                    tips: [
-                        "Um número ou código que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido.",
-                        "Pode ter sido atribuído a duas publicações ou produtos diferentes e, neste caso, cancelado ou pode ter sido incorretamente impresso.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
+                { code: "a", label: "Standard Number", tips: ["Um número ou código normalizado corretamente formatado. O número ou código está formatado de acordo com o tipo."], repeatable: false, mandatory: true },
+                { code: "b", label: "Qualification", tips: ["Uma indicação do âmbito do número ou código no subcampo $a, normalmente o nome de um editor, uma indicação da encadernação do recurso, ou uma indicação da relação de um número ou código com um conjunto ou com um volume específico."], repeatable: false, mandatory: true },
+                { code: "c", label: "Additional Codes Following Standard Number or Codes", tips: ["Contém qualquer sufixo codificado para o identificador."], repeatable: false, mandatory: true },
+                { code: "d", label: "Terms of Availability and/ or Price", tips: ["O preço do recurso e qualquer comentário sobre a sua disponibilidade."], repeatable: false, mandatory: true },
+                { code: "z", label: "Erroneous Number or Code", tips: ["Um número ou código que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido.", "Pode ter sido atribuído a duas publicações ou produtos diferentes e, neste caso, cancelado ou pode ter sido incorretamente impresso."], repeatable: true, mandatory: false },
             ]
         },
         {
             tag: "073",
             name: "International Article Number (EAN)",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
             ind2Name: "Differenfe Indicator",
-            ind2Tips: [
-                "0: No information provided",
-                "1: No difference",
-                "2: Difference"
-            ],
+            ind2Tips: ["0 - No information provided, 1 - No difference, 2 - Difference"],
             tips: [
                 "Este campo contém o número internacional do artigo. O campo corresponde ao identificador do recurso da ISBD e à área das condições de disponibilidade.",
                 "O campo pode conter as condições de disponibilidade e/ou preço, mesmo que não contenha um número.",
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Standard Number",
-                    tips: [
-                        "Um número ou código normalizado corretamente formatado.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$b",
-                    label: "Qualification",
-                    tips: [
-                        "Uma indicação do âmbito do número ou código no subcampo $a, normalmente o nome de um editor, uma indicação da encadernação do recurso, ou uma indicação da relação de um número ou código com um conjunto ou com um volume específico.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$c",
-                    label: "Additional Codes Following Standard Number or Codes",
-                    tips: [
-                        "Contém qualquer sufixo codificado para o identificador.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$d",
-                    label: "Terms of Availability and/ or Price",
-                    tips: [
-                        "O preço do recurso e qualquer comentário sobre a sua disponibilidade.",
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
-                {
-                    code: "$z",
-                    label: "Erroneous Number or Code",
-                    tips: [
-                        "Um número ou código que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido.",
-                        "Pode ter sido atribuído a duas publicações ou produtos diferentes e, neste caso, cancelado ou pode ter sido incorretamente impresso.",
-                    ],
-                    repeatable: true,
-                    mandatory: false,
-                },
+                { code: "a", label: "Standard Number", tips: ["Um número ou código normalizado corretamente formatado."], repeatable: false, mandatory: true },
+                { code: "b", label: "Qualification", tips: ["Uma indicação do âmbito do número ou código no subcampo $a, normalmente o nome de um editor, uma indicação da encadernação do recurso, ou uma indicação da relação de um número ou código com um conjunto ou com um volume específico."], repeatable: false, mandatory: true },
+                { code: "c", label: "Additional Codes Following Standard Number or Codes", tips: ["Contém qualquer sufixo codificado para o identificador."], repeatable: false, mandatory: true },
+                { code: "d", label: "Terms of Availability and/ or Price", tips: ["O preço do recurso e qualquer comentário sobre a sua disponibilidade."], repeatable: false, mandatory: true },
+                { code: "z", label: "Erroneous Number or Code", tips: ["Um número ou código que foi identificado como tendo sido incorretamente aplicado ao recurso ou que é inválido.", "Pode ter sido atribuído a duas publicações ou produtos diferentes e, neste caso, cancelado ou pode ter sido incorretamente impresso."], repeatable: true, mandatory: false },
             ]
         },
         {
             tag: "100",
             name: "International Article Number (EAN)",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Este campo contém dados codificados de comprimento fixo aplicáveis aos registos de materiais em qualquer suporte.",
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "General Processing Data",
-                    tips: [
-                        "Os códigos indicam os aspectos do tratamento geral.",
-                        "O subcampo tem um comprimento de 36 caracteres.",
-                        "Date Entered on File (Mandatory): 8 char/ pos: 0-7",
-                        "Type of Date: 1 char/ Pos: 8",
-                        "Date 1: 4 char/ Pos: 9-12",
-                        "Date 2: 4 char/ Pos: 13-16",
-                        "Target Audience Code: 3 char/ pos: 17-19",
-                        "Government Publication Code: 1 char/ pos: 20",
-                        "Modified Record Code: 1 char/ pos: 21",
-                        "Language of Cataloguing (Mandatory): 3 char/ pos:22-24",
-                        "Transliteration Code: 1 char/ pos: 25",
-                        "Character Set (Mandatory): 4 char/ pos: 26-29",
-                        "Additional Character Set: 4 char/ pos: 30-33",
-                        "Script of Title: 2 char/ pos: 34/35"
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
+                { code: "a", label: "General Processing Data", tips: ["Os códigos indicam os aspectos do tratamento geral.", "O subcampo tem um comprimento de 36 caracteres."], repeatable: false, mandatory: true },
             ]
         },
         {
@@ -991,55 +460,26 @@ async function main() {
                 "Inclui presença de índice, bibliografia, tipo de ilustração, etc."
             ],
             subFieldDef: [
-                {
-                    code: "a",
-                    label: "Dados codificados da monografia",
-                    repeatable: false,
-                    mandatory: true,
-                    tips: [
-                        "Campo fixo de 13 caracteres.",
-                        "Inclui: Ilustração (0-3), Conteúdo (4-7), Conferência (8), Festschrift (9), Índice (10), Literatura (11), Biografia (12)"
-                    ]
-                }
+                { code: "a", label: "Dados codificados da monografia", repeatable: false, mandatory: true, tips: ["Campo fixo de 13 caracteres.", "Inclui: Ilustração (0-3), Conteúdo (4-7), Conferência (8), Festschrift (9), Índice (10), Literatura (11), Biografia (12)"] }
             ]
         },
         {
             tag: "106",
             name: "Coded Data Field: Textual Language Material, Monographic",
-            ind1Tips: [
-                "#: Em branco (não definido)",
-            ],
-            ind2Tips: [
-                "#: Em branco (não definido)",
-            ],
+            ind1Tips: ["#: Em branco (não definido)"],
+            ind2Tips: ["#: Em branco (não definido)"],
             tips: [
                 "Este campo contém dados codificados relativos à forma dos recursos textuais não mediados (ou seja, não é necessário qualquer dispositivo de mediação para utilizar ou percecionar o conteúdo textual do recurso).",
             ],
             subFieldDef: [
-                {
-                    code: "$a",
-                    label: "Form of Resource: Coded Data: Medium Designator",
-                    tips: [
-                        "d: large print",
-                        "e: newspaper format",
-                        "f: braille or moon script",
-                        "g: micropoint",
-                        "h: hand-written",
-                        "i: multimedia",
-                        "j: mini-print",
-                        "r: regular print",
-                        "z: other form of material"
-                    ],
-                    repeatable: false,
-                    mandatory: true,
-                },
+                { code: "a", label: "Form of Resource: Coded Data: Medium Designator", tips: ["d - large print, e - newspaper format, f - braille or moon script, g: micropoint, h: hand-written, i: multimedia, j: mini-print, r: regular print, z: other form of material"], repeatable: false, mandatory: true },
             ]
         },
         {
             tag: "110",
             name: "CONTINUING RESOURCES",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Codifica dados sobre recursos continuados como periódicos, anuários, etc.",
                 "Inclui periodicidade, tipo de publicação, status, etc."
@@ -1051,8 +491,8 @@ async function main() {
         {
             tag: "115",
             name: "VISUAL PROJECTIONS, VIDEO RECORDINGS AND MOTION PICTURES",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Codifica informações sobre filmes, vídeos e projeções.",
                 "Inclui cor, som, formato de reprodução, tipo de imagem, etc."
@@ -1065,8 +505,8 @@ async function main() {
         {
             tag: "116",
             name: "GRAPHICS",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Codifica características de materiais gráficos (imagens fixas).",
                 "Inclui técnica, cor, tipo de suporte, etc."
@@ -1078,8 +518,8 @@ async function main() {
         {
             tag: "117",
             name: "THREE-DIMENSIONAL ARTEFACTS AND REALIA",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Codifica atributos de objetos reais e artefactos tridimensionais.",
                 "Inclui tipo, função, origem, suporte, etc."
@@ -1092,8 +532,8 @@ async function main() {
         {
             tag: "120",
             name: "CARTOGRAPHIC RESOURCES - GENERAL",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Codifica atributos gerais de mapas e recursos cartográficos.",
                 "Inclui tipo de mapa, técnica de produção, etc."
@@ -1105,8 +545,8 @@ async function main() {
         {
             tag: "121",
             name: "CARTOGRAPHIC RESOURCES - PHYSICAL ATTRIBUTES",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém dados codificados relativos aos atributos físicos dos recursos cartográficos."
             ],
@@ -1119,8 +559,8 @@ async function main() {
             tag: "122",
             name: "TIME PERIOD OF RESOURCE CONTENT",
             ind1Name: "Number of Dates Indicator",
-            ind1Tips: ["0 - Single dated resource", "1 - Multiple single dates", "2 - Range of dates"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["0 - Single dated resource, 1 - Multiple single dates, 2 - Range of dates"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Indicação estruturada do período de tempo coberto pelo conteúdo do recurso.",
                 "Datas codificadas desde 9999 A.C. até ao presente, com precisão até hora."
@@ -1133,8 +573,8 @@ async function main() {
             tag: "123",
             name: "CARTOGRAPHIC RESOURCES - SCALE AND CO-ORDINATES",
             ind1Name: "Type of Scale Code Indicator",
-            ind1Tips: ["0 - Scale indeterminable", "1 - Single scale", "2 - Multiple scales"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["0 - Scale indeterminable, 1 - Single scale, 2 - Multiple scales"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém escala e coordenadas cartográficas em forma codificada.",
                 "Permite indicar escalas horizontais, verticais, coordenadas geográficas, escalas angulares, equinócios e épocas."
@@ -1160,8 +600,8 @@ async function main() {
         {
             tag: "124",
             name: "CARTOGRAPHIC RESOURCES - SPECIFIC MATERIAL DESIGNATION ANALYSIS",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: ["Este campo contém dados codificados relativos à designação material específica de recursos cartográficos, incluindo imagens fotográficas, não fotográficas e de deteção remota."],
             subFieldDef: [
                 { code: "a", label: "Character of Image", repeatable: false, mandatory: false, tips: ["Código de 1 carácter. Ex: a = não fotográfico, b = fotográfico, c = deteção remota"] },
@@ -1176,8 +616,8 @@ async function main() {
         {
             tag: "125",
             name: "SOUND RECORDINGS AND MUSIC",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: ["Descreve o formato da música notada, partes existentes, e tipo de texto literário para performances não musicais."],
             subFieldDef: [
                 { code: "a", label: "Format of Notated Music", repeatable: false, mandatory: false, tips: ["2 posições: tipo de partitura e indicação de partes. Ex: m = múltiplos formatos"] },
@@ -1188,8 +628,8 @@ async function main() {
         {
             tag: "126",
             name: "SOUND RECORDINGS - PHYSICAL ATTRIBUTES",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém dados codificados relativos aos atributos físicos de gravações sonoras.",
                 "Inclui forma de lançamento, velocidade, tipo de som, técnica de gravação e material."
@@ -1202,8 +642,8 @@ async function main() {
         {
             tag: "127",
             name: "DURATION OF SOUND RECORDINGS AND NOTATED MUSIC",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém duração codificada de gravações sonoras ou obras musicais notadas.",
                 "Valor em horas, minutos e segundos (6 dígitos por entrada)."
@@ -1215,8 +655,8 @@ async function main() {
         {
             tag: "128",
             name: "FORM OF MUSICAL WORK AND KEY OR MODE",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém códigos relativos à forma e tonalidade de uma obra musical.",
                 "Subcampo $d é obrigatório se houver tonalidade especificada."
@@ -1229,8 +669,8 @@ async function main() {
         {
             tag: "130",
             name: "MICROFORMS - PHYSICAL ATTRIBUTES",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém dados codificados sobre atributos físicos de microformas.",
                 "Inclui suporte, polaridade, redução, cor, emulsão, geração e base do filme."
@@ -1242,8 +682,8 @@ async function main() {
         {
             tag: "131",
             name: "CARTOGRAPHIC RESOURCES - GEODETIC, GRID AND VERTICAL MEASUREMENT",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém dados codificados relacionados ao sistema de medidas geodésicas, grades e altitudes de recursos cartográficos."
             ],
@@ -1265,8 +705,8 @@ async function main() {
         {
             tag: "135",
             name: "ELECTRONIC RESOURCES",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém dados codificados relativos a recursos eletrônicos.",
                 "Cada posição do subcampo $a descreve um atributo técnico do recurso."
@@ -1278,8 +718,8 @@ async function main() {
         {
             tag: "140",
             name: "ANTIQUARIAN - GENERAL",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Dados codificados relacionados à forma física de publicações monográficas antigas (antiquarian) ou materiais posteriores com descrição similar."
             ],
@@ -1290,8 +730,8 @@ async function main() {
         {
             tag: "141",
             name: "ITEM SPECIFIC ATTRIBUTES",
-            ind1Tips: ["Não definido"],
-            ind2Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Dados codificados sobre características específicas de encadernação e corpo do exemplar físico de um livro.",
                 "Repetível para diferentes exemplares no mesmo registo."
@@ -1332,7 +772,7 @@ async function main() {
         {
             tag: "181",
             name: "CONTENT FORM",
-            ind1Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
             ind2Name: ["ISBD Display Indicator"],
             ind2Tips: ["0 Not used to generate displays", "1 Used to generate displays", "# Information not provided (use if only $c is present)"],
             tips: [
@@ -1350,7 +790,7 @@ async function main() {
         {
             tag: "182",
             name: "MEDIA TYPE",
-            ind1Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
             ind2Name: ["ISBD Display Indicator"],
             ind2Tips: ["0 Not used to generate displays", "1 Used to generate displays", "# Information not provided (use if only $c is present)"],
             tips: [
@@ -1367,7 +807,7 @@ async function main() {
         {
             tag: "183",
             name: "TYPE OF CARRIER",
-            ind1Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
             ind2Name: ["Display Indicator"],
             ind2Tips: ["0 Not used to generate displays", "1 Used to generate displays", "# Information not provided (use if only $c is present)"],
             tips: [
@@ -1386,7 +826,7 @@ async function main() {
             name: "TITLE AND STATEMENT OF RESPONSABILITY",
             ind1Name: ["Title Significance Indicator"],
             ind1Tips: ["0 - Title is not significant, 1 - Title is significant"],
-            ind2Tips: ["Não definido"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém o título, outras informações do título e declarações de responsabilidade conforme aparecem no recurso.",
                 "Corresponde à Área 1 da ISBD (Título e menção de responsabilidade)."
@@ -1413,8 +853,8 @@ async function main() {
         {
             tag: "203",
             name: "CONTENT FORM AND MEDIA TYPE",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Este campo corresponde à Área 0 do ISBD, Formulário de Conteúdo e Área de Tipo de Suporte, cuja finalidade é indicar logo no início da descrição, tanto a forma ou formas fundamentais em que o conteúdo de um o recurso é expresso e o tipo ou tipos de suporte utilizados para transmitir esse conteúdo de modo a auxiliar o catálogo utilizadores na identificação e seleção de recursos adequados às suas necessidades."
             ],
@@ -1427,8 +867,8 @@ async function main() {
         {
             tag: "205",
             name: "EDITION STATEMENT",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Contém a declaração de edição e informações relacionadas, como emissão e responsabilidades associadas.",
                 "Corresponde à Área de Edição da ISBD."
@@ -1446,7 +886,7 @@ async function main() {
             name: "CARTOGRAPHIC RESOURCES - MATHEMATICAL DATA",
             ind1Name: ["Formatting Indicator"],
             ind1Tips: ["# - Unstructured, 0 - Structured"],
-            ind2Tips: ["Não definido"],
+            ind2Tips: ["Em branco (não definido)"],
             tips: [
                 "Contém dados matemáticos relacionados com materiais cartográficos, incluindo escalas, projeções, coordenadas e equinócio."
             ],
@@ -1462,7 +902,7 @@ async function main() {
         {
             tag: "207",
             name: "MATERIAL SPECIFIC AREA: NUMBERING OF CONTINUING RESOURCES",
-            ind1Tips: ["Não definido"],
+            ind1Tips: ["Em branco (não definido)"],
             ind2Name: ["Formatted Numbering Indicator"],
             ind2Tips: ["0 - Formatted, 1 - Not formatted"],
             tips: [
@@ -1476,8 +916,8 @@ async function main() {
         {
             tag: "208",
             name: "MATERIAL SPECIFIC AREA: MUSIC FORMAT STATEMENT",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Contém uma declaração relativa ao formato de uma obra de música impressa ou manuscrita.",
                 "Utilizado para recursos de partituras e manuscritos musicais."
@@ -1513,8 +953,8 @@ async function main() {
         {
             tag: "211",
             name: "PROJECTED PUBLICATION DATE",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Contém a data projetada de publicação, usada para pré-registos (ex: CIP - Catalogação na Publicação)."
             ],
@@ -1544,8 +984,8 @@ async function main() {
         {
             tag: "215",
             name: "PHYSICAL DESCRIPTION",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Contém informações sobre as características físicas do recurso, de acordo com a ISBD Material Description Area."
             ],
@@ -1563,7 +1003,7 @@ async function main() {
             name: "SERIES",
             ind1Name: ["Form of Series Title Indicator"],
             ind1Tips: ["# - Not applicable, 0 - Not the same as the established form, 1 - Same as established form"],
-            ind2Tips: ["# - Não definido"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Contém informações relacionadas à série ou coleção à qual o recurso pertence (Título da série, responsabilidade, numeração, etc.)."
             ],
@@ -1585,8 +1025,8 @@ async function main() {
         {
             tag: "230",
             name: "MATERIAL SPECIFIC AREA: ELECTRONICS RESOURCE CHARACTERISTICS",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Contém informações sobre o tipo e extensão dos recursos eletrónicos, de acordo com a ISBD(ER).",
                 "Usado para designar o tipo de ficheiro e número de ficheiros de um recurso digital."
@@ -1598,8 +1038,8 @@ async function main() {
         {
             tag: "251",
             name: "ORGANIZATION AND ARRANGEMENT OF MATERIALS",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Contém informações sobre como os materiais foram organizados e dispostos dentro da coleção.",
                 "Inclui subdivisões hierárquicas como séries e sub-séries, e o nível de descrição arquivística (fundo, série, ficheiro, item)."
@@ -1638,8 +1078,8 @@ async function main() {
         {
             tag: "283",
             name: "CARRIER TYPE",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Contém dados textuais especificando o tipo de suporte (carrier) do recurso descrito.",
                 "Permite identificar a forma física do recurso, como volume, videodisc, microfilme, etc.",
@@ -1655,8 +1095,8 @@ async function main() {
         {
             tag: "300",
             name: "GENERAL NOTES",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Nota sobre qualquer aspeto do recurso bibliográfico ou do registo associado.",
                 "Utilizado quando não existe campo específico para a nota desejada."
@@ -1668,8 +1108,8 @@ async function main() {
         {
             tag: "301",
             name: "NOTES PERTAINING TO IDENTIFICATION NUMBERS",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Notas sobre números de identificação presentes no recurso ou no registo.",
                 "Utilizado quando o número não se encaixa nos campos 010 a 040 ou para comentários sobre esses números."
@@ -1681,8 +1121,8 @@ async function main() {
         {
             tag: "302",
             name: "NOTES PERTAINING TO CODED INFORMATION",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Notas relativas a elementos de dados codificados nos campos 1--.",
                 "Pode ser utilizado para expandir, explicar ou apresentar informações codificadas em formato textual."
@@ -1694,8 +1134,8 @@ async function main() {
         {
             tag: "303",
             name: "NOTES PERTAINING TO DESCRIPTIVE INFORMATION",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Nota relacionada com a descrição do recurso."
             ],
@@ -1706,8 +1146,8 @@ async function main() {
         {
             tag: "304",
             name: "NOTES PERTAINING TO TITLE AND STATEMENT OF RESPONSABILITY",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Notas sobre o título ou a declaração de responsabilidade como registados no campo 200.",
                 "Obrigatório para recursos eletrónicos; opcional para outros materiais."
@@ -1719,8 +1159,8 @@ async function main() {
         {
             tag: "305",
             name: "NOTES PERTAINING TO EDITION AND BIBLIOGRAPHIC HISTORY",
-            ind1Tips: ["# - Não definido"],
-            ind2Tips: ["# - Não definido"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Notas sobre a edição do recurso ou sobre a história bibliográfica.",
                 "Inclui títulos anteriores, edições anteriores ou substituições."
@@ -3521,25 +2961,287 @@ async function main() {
                 { code: "5", label: "Institution to Which Field Applies", repeatable: true, mandatory: false, tips: ["Código da instituição à qual o campo se aplica."] },
                 { code: "6", label: "Interfield Linking Data", repeatable: false, mandatory: false, tips: ["Dados de ligação entre campos."] }
             ]
-        }
+        },
+        {
+            tag: "500",
+            name: "Preferred Title Access Point",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Access point is not significant, 1 — Access point is significant"],
+            ind2Name: "Primary Entry Indicator",
+            ind2Tips: ["0 — Title is not primary entry, 1 — Title is primary entry"],
+            tips: [
+                "Este campo contém o título preferido escolhido pela agência bibliográfica para identificar uma obra que apareceu sob diferentes títulos.",
+                "Pode incluir elementos adicionais para tornar o título único.",
+                "Pode ser utilizado como ponto de acesso principal ou como ponto de acesso adicional."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Preferred Title", repeatable: false, mandatory: true, tips: ["Título pelo qual a obra é conhecida, sem qualificações."] },
+                { code: "b", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material."] },
+                { code: "h", label: "Number of Section or Part", repeatable: true, mandatory: false, tips: ["Número da parte ou seção da obra."] },
+                { code: "i", label: "Name of Section or Part", repeatable: true, mandatory: false, tips: ["Nome da parte ou seção da obra."] },
+                { code: "g", label: "Form Subdivision for Title", repeatable: true, mandatory: false, tips: ["Subdivisão de forma associada ao título."] },
+                { code: "k", label: "Date of Publication", repeatable: false, mandatory: false, tips: ["Data de publicação associada ao título."] },
+                { code: "l", label: "Form Subheading", repeatable: true, mandatory: false, tips: ["Subcabeçalho padrão que especifica o título."] },
+                { code: "m", label: "Language (when Part of a Access Point)", repeatable: false, mandatory: false, tips: ["Língua associada ao título como parte do ponto de acesso."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: true, mandatory: false, tips: ["Informações diversas sobre o título."] },
+                { code: "q", label: "Version (or Date of Version)", repeatable: false, mandatory: false, tips: ["Versão ou data da versão da obra."] },
+                { code: "r", label: "Medium of Performance (for Music)", repeatable: true, mandatory: false, tips: ["Instrumentação ou meios de execução da obra musical."] },
+                { code: "s", label: "Numeric Designation (for Music)", repeatable: true, mandatory: false, tips: ["Designação numérica da obra musical, como número de opus."] },
+                { code: "u", label: "Key (for Music)", repeatable: false, mandatory: false, tips: ["Tom musical da obra."] },
+                { code: "v", label: "Volume Designation", repeatable: false, mandatory: false, tips: ["Designação de volume (quando usado num campo 4--)."] },
+                { code: "w", label: "Additional Elements (for Music)", repeatable: false, mandatory: false, tips: ["Elementos adicionais como arranjos ou destaques."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão por forma (autoridade)."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temática (quando embutido em 604)."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão geográfica (quando embutido em 604)."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão cronológica (quando embutido em 604)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte codificada do ponto de acesso (em 604)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade."] }
+            ]
+        },
+        {
+            tag: "501",
+            name: "Collective Preferred Title",
+            ind1Name: "Type of Collective Title Indicator",
+            ind1Tips: ["0 — Complete collected works, 1 — Selected works, 2 — Other (not exactly defined by cataloguing code)"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "O campo 501 contém um ou mais termos usados para reunir obras de um autor prolífico sob um título coletivo.",
+                "É utilizado para coleções completas ou selecionadas de obras.",
+                "O conteúdo e formato deste campo pode variar de acordo com o código de catalogação da agência responsável.",
+                "Quando embutido num campo 604, permite subdivisões adicionais como forma, tópico, tempo e localização."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Collective Preferred Title", repeatable: false, mandatory: true, tips: ["Título coletivo principal utilizado para reunir obras semelhantes."] },
+                { code: "b", label: "General Material Designation", repeatable: true, mandatory: false, tips: ["Designação geral do material (ex.: Texto impresso, gravação sonora)."] },
+                { code: "e", label: "Collective Preferred Subtitle", repeatable: false, mandatory: false, tips: ["Subtítulo coletivo para especificar mais a natureza da coleção."] },
+                { code: "g", label: "Form Subdivision for Title", repeatable: true, mandatory: false, tips: ["Subdivisão de forma associada ao título coletivo."] },
+                { code: "k", label: "Date of Publication, etc.", repeatable: false, mandatory: false, tips: ["Data da obra para distinguir edições ou volumes."] },
+                { code: "m", label: "Language (when Part of Access Point)", repeatable: false, mandatory: false, tips: ["Língua da obra quando usada como parte do ponto de acesso."] },
+                { code: "r", label: "Medium of Performance (for Music)", repeatable: true, mandatory: false, tips: ["Meio de execução musical (instrumentos, vozes)."] },
+                { code: "s", label: "Numeric Designation (for Music)", repeatable: true, mandatory: false, tips: ["Designação numérica da obra musical, como número de opus."] },
+                { code: "u", label: "Key (for Music)", repeatable: false, mandatory: false, tips: ["Tom musical da obra."] },
+                { code: "w", label: "Arranged Statement (for Music)", repeatable: false, mandatory: false, tips: ["Indicação de que a obra musical é um arranjo."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Usado em 604 para subdivisão por forma."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Usado em 604 para subdivisão temática."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Usado em 604 para subdivisão geográfica."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Usado em 604 para subdivisão cronológica."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte codificada do ponto de acesso (em 604)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade para o ponto de acesso."] }
+            ]
+        },
+        {
+            tag: "503",
+            name: "Conventional Preferred Title",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Access point is not significant, 1 — Access point is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Campo usado para pontos de acesso convencionais preferidos, conforme definidos por certos códigos de catalogação.",
+                "Agrupa obras de forma similar (ex: exposições, catálogos de leilão, coletâneas legislativas), especialmente quando não há autor individual.",
+                "Corresponde ao parágrafo 11.6 do Statement of Principles da Conferência de Paris, 1961."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Form Heading Proper", repeatable: false, mandatory: true, tips: ["Cabeçalho principal da forma (ex: Exposition, Vente, Loi, Mélanges)."] },
+                { code: "b", label: "Form Subheading", repeatable: false, mandatory: false, tips: ["Subdivisão do cabeçalho principal (ex: Recueil, Livres)."] },
+                { code: "d", label: "Month and Day", repeatable: true, mandatory: false, tips: ["Mês e dia do evento (formato: MMDD)."] },
+                { code: "e", label: "Personal Name - Entry Element", repeatable: false, mandatory: false, tips: ["Elemento de entrada de nome pessoal (ex: Menéndez-Pidal)."] },
+                { code: "f", label: "Personal Name - Forename", repeatable: false, mandatory: false, tips: ["Nome próprio (usado em conjunto com $e, ex: Henri)."] },
+                { code: "g", label: "Personal Names - Dates", repeatable: false, mandatory: false, tips: ["Datas associadas ao nome da pessoa (ex: 1906-....)."] },
+                { code: "h", label: "Personal Name Qualifier", repeatable: false, mandatory: false, tips: ["Título, cargo ou epíteto do nome pessoal."] },
+                { code: "i", label: "Title of Part", repeatable: false, mandatory: false, tips: ["Título de uma parte da obra."] },
+                { code: "j", label: "Year", repeatable: true, mandatory: false, tips: ["Ano(s) do evento (ex: 1985, 1991)."] },
+                { code: "k", label: "Numeration (Arabic)", repeatable: false, mandatory: false, tips: ["Numeração árabe (ex: 1re, 2e)."] },
+                { code: "l", label: "Numeration (Roman)", repeatable: false, mandatory: false, tips: ["Numeração romana (ex: III)."] },
+                { code: "m", label: "Locality", repeatable: false, mandatory: false, tips: ["Cidade/local do evento (ex: Paris, Brest)."] },
+                { code: "n", label: "Institution in Locality", repeatable: false, mandatory: false, tips: ["Instituição no local (ex: Musée du Luxembourg)."] },
+                { code: "o", label: "Place in Locality", repeatable: false, mandatory: false, tips: ["Lugar público no local (ex: Jardin du Luxembourg, Avenue des Champs-Élysées)."] }
+            ]
+        },
+        {
+            tag: "506",
+            name: "Preferred Access Point - Identification of a Work",
+            ind1Name: "Primary Entry Indicator",
+            ind1Tips: ["0 — Title is not primary entry or value is not specified, 1 — Title is primary entry"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém o título preferido que identifica uma obra anónima incorporada na manifestação descrita no registo.",
+                "Utilizado em registos compatíveis com o modelo FRBR/LRM, substitui o campo 500 quando não há nome associado à obra.",
+                "É possível associar este campo a um registo de autoridade (via subcampo $3)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Title", repeatable: true, mandatory: true, tips: ["Título pelo qual a obra é conhecida, sem qualificações."] },
+                { code: "h", label: "Number of Section or Part", repeatable: true, mandatory: false, tips: ["Número de uma parte da obra, quando aplicável."] },
+                { code: "i", label: "Name of Section or Part", repeatable: true, mandatory: false, tips: ["Nome de uma parte da obra, quando aplicável."] },
+                { code: "c", label: "Form of Work", repeatable: false, mandatory: false, tips: ["Indicação padrão do tipo ou género da obra."] },
+                { code: "d", label: "Date of Work", repeatable: false, mandatory: false, tips: ["Data associada à obra para a diferenciar de outras semelhantes."] },
+                { code: "e", label: "Place of Origin of Work", repeatable: false, mandatory: false, tips: ["País ou jurisdição territorial de origem da obra."] },
+                { code: "f", label: "Original Language of the Work", repeatable: false, mandatory: false, tips: ["Língua original da obra."] },
+                { code: "k", label: "Other Distinguishing Characteristics of a Work", repeatable: true, mandatory: false, tips: ["Qualquer outra característica usada para distinguir a obra."] },
+                { code: "r", label: "Medium of Performance (for Music)", repeatable: true, mandatory: false, tips: ["Instrumentação ou vozes para obras musicais."] },
+                { code: "s", label: "Numeric Designation (for Music)", repeatable: true, mandatory: false, tips: ["Número de opus, serial, etc. para obras musicais."] },
+                { code: "u", label: "Key (for Music)", repeatable: false, mandatory: false, tips: ["Tom musical da obra."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade associado à obra."] }
+            ]
+        },
+        {
+            tag: "507",
+            name: "Preferred Access Point - Identification of an Expression",
+            ind1Name: "Primary Entry Indicator",
+            ind1Tips: ["0 — Title is not primary entry or value is not specified, 1 — Title is primary entry"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém o título preferido que identifica uma expressão específica de uma obra anónima.",
+                "É usado em catálogos que seguem o modelo FRBR/IFLA LRM e aparece num registo que descreve uma manifestação.",
+                "Se existir um nome associado à expressão, deve-se usar o campo 577 em vez do 507.",
+                "O campo pode estar vinculado a um registo de autoridade através do subcampo $3."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Title [Work]", repeatable: true, mandatory: true, tips: ["Título da obra, sem qualificações."] },
+                { code: "h", label: "Number of Section or Part [Work]", repeatable: true, mandatory: false, tips: ["Número da parte da obra, se aplicável."] },
+                { code: "i", label: "Name of Section or Part [Work]", repeatable: true, mandatory: false, tips: ["Nome da parte da obra, se aplicável."] },
+                { code: "c", label: "Form of Work [Work]", repeatable: false, mandatory: false, tips: ["Forma, classe ou género da obra."] },
+                { code: "d", label: "Date of Work [Work]", repeatable: false, mandatory: false, tips: ["Data associada à criação da obra."] },
+                { code: "e", label: "Place of Origin of Work [Work]", repeatable: false, mandatory: false, tips: ["Local de origem territorial da obra."] },
+                { code: "f", label: "Original Language of the Work [Work]", repeatable: false, mandatory: false, tips: ["Língua original da obra."] },
+                { code: "k", label: "Other Distinguishing Characteristics of a Work [Work]", repeatable: true, mandatory: false, tips: ["Características adicionais que distinguem a obra."] },
+                { code: "r", label: "Medium of Performance (for Music) [Work]", repeatable: true, mandatory: false, tips: ["Instrumentação ou vozes para obras musicais."] },
+                { code: "s", label: "Numeric Designation (for Music) [Work]", repeatable: true, mandatory: false, tips: ["Designação numérica como opus, serial, etc."] },
+                { code: "u", label: "Key (for Music) [Work]", repeatable: false, mandatory: false, tips: ["Tom musical da obra."] },
+                { code: "l", label: "Form of the Expression [Expression]", repeatable: false, mandatory: false, tips: ["Forma ou tipo da expressão."] },
+                { code: "m", label: "Language of the Expression [Expression]", repeatable: false, mandatory: false, tips: ["Língua da expressão."] },
+                { code: "n", label: "Content Type [Expression]", repeatable: false, mandatory: false, tips: ["Tipo de conteúdo da expressão (ex.: texto, áudio)."] },
+                { code: "o", label: "Date of Expression [Expression]", repeatable: false, mandatory: false, tips: ["Data original da expressão."] },
+                { code: "v", label: "Medium of Performance (for Music) [Expression]", repeatable: true, mandatory: false, tips: ["Instrumentação na expressão musical."] },
+                { code: "w", label: "Other Characteristics of Expression [Expression]", repeatable: true, mandatory: false, tips: ["Outras características distintivas da expressão."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade da expressão."] }
+            ]
 
-
-
+        },
+        {
+            tag: "510",
+            name: "Parallel Title Proper",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Parallel title is not significant, 1 — Parallel title is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém o título paralelo (título principal noutra língua ou escrita) para o qual se deseja criar uma nota ou um ponto de acesso.",
+                "Usado para criar acesso alternativo ou nota para títulos paralelos importantes ou pertinentes.",
+                "Se o título paralelo não for encontrado diretamente no item, ou se for traduzido pelo catalogador, deve ser registrado no campo 541, não no 510."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Parallel Title", repeatable: false, mandatory: true, tips: ["Título principal em outra língua ou escrita."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos ou outras informações associadas ao título paralelo."] },
+                { code: "h", label: "Number of Part", repeatable: true, mandatory: false, tips: ["Número de uma parte identificada relacionada ao título paralelo."] },
+                { code: "i", label: "Name of Part", repeatable: true, mandatory: false, tips: ["Nome de uma parte relacionada ao título paralelo."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao título paralelo."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informação variada ou nota relacionada ao título paralelo."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código de língua do título paralelo (ISO 639-2 ou especificado em $2)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte do esquema de código de língua utilizado em $z, se não ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "511",
+            name: "Half Title",
+            ind1Name: "Significance of Title",
+            ind1Tips: ["0 — Title is not significant, 1 — Title is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém um título variante que aparece na página de ante-rosto (half-title page), quando difere suficientemente do título principal (campo 200) para justificar a criação de uma nota ou ponto de acesso.",
+                "Utilizado apenas se o título de ante-rosto diferir substancialmente do título principal.",
+                "O título de ante-rosto é normalmente uma forma abreviada do título principal."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Half Title", repeatable: false, mandatory: true, tips: ["Título variante conforme aparece na página de ante-rosto."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos e outras informações subordinadas ao half title."] },
+                { code: "h", label: "Number of Part", repeatable: true, mandatory: false, tips: ["Número de parte para recursos com títulos principais e secundários."] },
+                { code: "i", label: "Name of Part", repeatable: true, mandatory: false, tips: ["Nome da parte para recursos identificados por título principal e subseção."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao half title."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informação adicional para exibição, como 'varies slightly'."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código de língua do half title, conforme ISO 639-2 ou indicado em $2."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte do esquema de codificação de língua usado em $z, se diferente de ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "512",
+            name: "Cover Title",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Cover title is not significant, 1 — Cover title is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém o título que aparece na capa do item, quando difere suficientemente do título principal (campo 200) para justificar a criação de uma nota ou um ponto de acesso.",
+                "O título de capa é usado apenas se houver uma diferença significativa em relação ao título principal.",
+                "Se necessário, pode ser feito um ponto de acesso adicional ou uma nota baseada no título de capa."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Cover Title", repeatable: false, mandatory: true, tips: ["Título conforme aparece na capa do item, sem outras informações de título ou responsabilidade."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos e outras informações associadas ao título de capa."] },
+                { code: "h", label: "Number of Part", repeatable: true, mandatory: false, tips: ["Número de parte relacionado ao título de capa."] },
+                { code: "i", label: "Name of Part", repeatable: true, mandatory: false, tips: ["Nome da parte relacionada ao título de capa."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao título de capa."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informações adicionais, como 'varia ligeiramente', 'edição paperback'."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código da língua do título de capa (ISO 639-2 ou outro indicado no $2)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte do esquema de codificação de língua usado em $z, se não for ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "513",
+            name: "Added Title-Page Title",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Added title-page title is not significant, 1 — Added title-page title is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém o título que aparece numa página de título adicional, quando justifica registo como nota ou ponto de acesso.",
+                "Utilizado apenas se o título da página de título adicional diferir significativamente do título principal.",
+                "Um ponto de acesso pode ser criado a partir deste título, dependendo do valor do primeiro indicador."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Added Title-Page Title", repeatable: false, mandatory: true, tips: ["Título como aparece na página de título adicional, sem informações adicionais de responsabilidade."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos e outras informações subordinadas ao título da página de título adicional."] },
+                { code: "h", label: "Number of Part", repeatable: true, mandatory: false, tips: ["Número de uma parte relacionada ao título adicional."] },
+                { code: "i", label: "Name of Part", repeatable: true, mandatory: false, tips: ["Nome de uma parte relacionada ao título adicional."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao título da página de título adicional."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informações adicionais, como 'varia ligeiramente', 'edição paperback'."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código de língua do título da página adicional (ISO 639-2 ou outra fonte indicada em $2)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de codificação usada para o código de língua indicado em $z."] }
+            ]
+        },
+        {
+            tag: "514",
+            name: "Caption Title",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Caption title is not significant, 1 — Caption title is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém o título dado no início da primeira página do texto quando este difere suficientemente do título principal no campo 200 para justificar a criação de uma nota ou um ponto de acesso.",
+                "Utilizar este campo apenas se o título de início de texto tiver relevância ou diferença significativa em relação ao título principal.",
+                "Se necessário, um ponto de acesso ou nota pode ser gerado a partir deste título."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Caption Title", repeatable: false, mandatory: true, tips: ["Título conforme aparece no início da primeira página do texto, sem outras informações de título ou responsabilidade."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos e outras informações subordinadas ao título de cabeçalho."] },
+                { code: "h", label: "Number of Part", repeatable: true, mandatory: false, tips: ["Número da parte relacionada ao título de cabeçalho."] },
+                { code: "i", label: "Name of Part", repeatable: true, mandatory: false, tips: ["Nome da parte relacionada ao título de cabeçalho."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao título de cabeçalho."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informações adicionais como 'varia ligeiramente' ou 'edição em brochura'."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código da língua do título, usando ISO 639-2 ou outro indicado em $2."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de codificação usada para a língua indicada em $z, se não for ISO 639-2."] }
+            ]
+        },
     ]
 
     await Promise.all(
         dataFieldDefinitionsData.map(def =>
             prisma.dataFieldDefinition.create({
                 data: {
-                    tag: def.tag,
-                    name: def.name,
+                    tag: def.tag ?? "",
+                    name: def.name ?? "",
                     ind1Name: Array.isArray(def.ind1Name) ? def.ind1Name.join(", ") : def.ind1Name ?? "",
                     ind2Name: Array.isArray(def.ind2Name) ? def.ind2Name.join(", ") : def.ind2Name ?? "",
                     ind1Tips: def.ind1Tips,
                     ind2Tips: def.ind2Tips,
                     tips: def.tips,
                     subFieldDef: {
-                        create: def.subFieldDef.map(sub => ({
+                        create: (def.subFieldDef ?? []).map(sub => ({
                             code: sub.code,
                             label: sub.label,
                             repeatable: sub.repeatable,
