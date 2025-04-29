@@ -3163,7 +3163,7 @@ async function main() {
         },
         {
             tag: "512",
-            name: "Cover Title",
+            name: "COVER TITLE",
             ind1Name: "Title Significance Indicator",
             ind1Tips: ["0 — Cover title is not significant, 1 — Cover title is significant"],
             ind2Tips: ["# — Em branco (não definido)"],
@@ -3185,7 +3185,7 @@ async function main() {
         },
         {
             tag: "513",
-            name: "Added Title-Page Title",
+            name: "ADDED TITLE-PAGE TITLE",
             ind1Name: "Title Significance Indicator",
             ind1Tips: ["0 — Added title-page title is not significant, 1 — Added title-page title is significant"],
             ind2Tips: ["# — Em branco (não definido)"],
@@ -3207,7 +3207,7 @@ async function main() {
         },
         {
             tag: "514",
-            name: "Caption Title",
+            name: "CAPTION TITLE",
             ind1Name: "Title Significance Indicator",
             ind1Tips: ["0 — Caption title is not significant, 1 — Caption title is significant"],
             ind2Tips: ["# — Em branco (não definido)"],
@@ -3225,6 +3225,438 @@ async function main() {
                 { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informações adicionais como 'varia ligeiramente' ou 'edição em brochura'."] },
                 { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código da língua do título, usando ISO 639-2 ou outro indicado em $2."] },
                 { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de codificação usada para a língua indicada em $z, se não for ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "515",
+            name: "RUNNING TITLE",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Running title is not significant, 1 — Running title is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "O campo contém o título que aparece no cabeçalho ou rodapé da página do recurso quando este difere suficientemente do título apropriado no campo 200 para garantir o registo como nota ou como ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Running Title", repeatable: false, mandatory: true, tips: ["O título é retirado do cabeçalho ou rodapé da página do item. Não repetível."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos e outras informações subordinadas ao título de cabeçalho."] },
+                { code: "h", label: "Number of Part", repeatable: true, mandatory: false, tips: ["Número da parte relacionada ao título de cabeçalho."] },
+                { code: "i", label: "Name of Part", repeatable: true, mandatory: false, tips: ["Nome da parte relacionada ao título de cabeçalho."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao título de cabeçalho."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informações adicionais como 'varia ligeiramente' ou 'edição em brochura'."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código da língua do título, usando ISO 639-2 ou outro indicado em $2."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de codificação usada para a língua indicada em $z, se não for ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "516",
+            name: "SPINE TITLE",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Spine title is not significant, 1 — Spine title is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém o título impresso na lombada do item quando difere significativamente do título principal (campo 200).",
+                "Utiliza-se este campo apenas quando a diferença justifica a criação de uma nota ou de um ponto de acesso.",
+                "Pode ser feita uma nota (campo 312) em vez de se usar este campo, se preferido."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Spine Title", repeatable: false, mandatory: true, tips: ["Título tal como aparece na lombada do item."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Informações adicionais subordinadas ao título da lombada."] },
+                { code: "h", label: "Number of Part", repeatable: true, mandatory: false, tips: ["Número da parte relacionada ao título da lombada."] },
+                { code: "i", label: "Name of Part", repeatable: true, mandatory: false, tips: ["Nome da parte relacionada ao título da lombada."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao título."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informações adicionais como 'varia ligeiramente', 'edição brochada', etc."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código de língua (ISO 639-2 ou outro, conforme $2)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte da codificação da língua em $z, se não for ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "517",
+            name: "OTHER VARIANT TITLES",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Variant title is not significant, 1 — Variant title is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém qualquer outro título variante que não esteja definido nos campos 510-516 ou 518.",
+                "É usado, por exemplo, para títulos de encadernação, caixa, slipcase, títulos parciais, títulos subordinados, etc.",
+                "Use este campo quando a fonte não permite identificar o tipo específico de título variante para os campos 510–516 ou 518.",
+                "Se necessário, crie uma nota no campo 312 para contextualizar o uso do título variante."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Variant Title", repeatable: false, mandatory: true, tips: ["Título variante sem outras informações de título ou responsabilidade."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos e outras informações subordinadas ao título variante."] },
+                { code: "h", label: "Number of Part", repeatable: true, mandatory: false, tips: ["Numeração da parte correspondente ao título variante."] },
+                { code: "i", label: "Name of Part", repeatable: true, mandatory: false, tips: ["Nome da parte correspondente ao título variante."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao título variante."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Texto adicional, como 'varia ligeiramente', 'edição brochada'."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código da língua (ISO 639-2 ou outra indicada em $2)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte do código de língua usada em $z, se não for ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "518",
+            name: "TITLE IN STANDARD MODERN SPELLING",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Title in standard modern spelling is not significant, 1 — Title in standard modern spelling is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém o título, ou palavras individuais do título, repetido em ortografia moderna normalizada quando a forma no item é suficientemente arcaica para justificar a criação de uma nota ou ponto de acesso.",
+                "Usado principalmente para publicações monográficas antigas (antiquarian).",
+                "Se o conteúdo do campo 518 for idêntico ao do subcampo 500$a, não se deve criar o campo 518.",
+                "É possível usar palavras selecionadas do título apenas para efeitos de recuperação online, com o indicador 1 = 0.",
+                "Subcampos disponíveis são semelhantes aos do campo 510, embora normalmente apenas $a seja usado."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Title Proper, Variant Title or Preferred Title in Standard Modern Spelling", repeatable: false, mandatory: true, tips: ["Título principal ou variante repetido em ortografia moderna normalizada."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos ou informações subordinadas ao título em ortografia moderna."] },
+                { code: "h", label: "Number of Part", repeatable: true, mandatory: false, tips: ["Numeração da parte correspondente ao título."] },
+                { code: "i", label: "Name of Part", repeatable: true, mandatory: false, tips: ["Nome da parte correspondente ao título."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao título."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informações adicionais como 'varia ligeiramente', 'edição brochada', etc."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código de língua (ISO 639-2 ou outro indicado em $2)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte da codificação da língua em $z, se não for ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "520",
+            name: "FORMER TITLE (CONTINUING RESOURCES)",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 — Former title is not significant, 1 — Former title is significant"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém um título anterior de um recurso contínuo catalogado sob um título posterior.",
+                "Utiliza-se quando o recurso contínuo é tratado como uma única entidade bibliográfica apesar de ter tido vários títulos ao longo do tempo.",
+                "Permite manter um único registo com o título corrente no campo 200, e os títulos anteriores como variantes ou acessos alternativos.",
+                "Evita a criação de registos bibliográficos separados para cada título sucessivo."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Former Title Proper", repeatable: false, mandatory: true, tips: ["Título principal anterior do recurso contínuo."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Informações complementares ao título anterior."] },
+                { code: "h", label: "Number of Part", repeatable: false, mandatory: false, tips: ["Número de parte do recurso anterior, se subdividido."] },
+                { code: "i", label: "Name of Part", repeatable: false, mandatory: false, tips: ["Nome da parte do recurso anterior, se subdividido."] },
+                { code: "j", label: "Volumes or Dates of Former Title", repeatable: false, mandatory: false, tips: ["Numeração de volumes ou datas que cobrem o período do título anterior."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Texto adicional, normalmente usado em notas visíveis ao utilizador."] },
+                { code: "x", label: "ISSN of Former Title", repeatable: false, mandatory: false, tips: ["ISSN atribuído ao título anterior, quando disponível."] }
+            ]
+        },
+        {
+            tag: "530",
+            name: "KEY TITLE",
+            ind1Name: "Title Proper Indicator",
+            ind1Tips: ["0 — Key title is the same as the title proper, 1 — Key title differs from the title proper"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Contém o título-chave — o nome único para um recurso contínuo estabelecido pela Rede ISSN.",
+                "O título-chave pode coincidir com o título principal (campo 200 $a), ou conter elementos adicionais (entidade editora, lugar, data, etc.) para garantir unicidade.",
+                "Apenas centros da rede ISSN podem estabelecer títulos-chave. Agências externas devem inseri-lo somente se constar no recurso ou após confirmação com o centro ISSN.",
+                "Está intimamente ligado ao campo 011 (ISSN). Se disponível, ambos devem constar no registo."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Key Title", repeatable: false, mandatory: true, tips: ["Título-chave sem qualificação adicional."] },
+                { code: "b", label: "Qualifier", repeatable: false, mandatory: false, tips: ["Qualificação adicional (entidade, local, data, etc.) para distinguir títulos idênticos."] },
+                { code: "j", label: "Volume or Dates Associated with Key Title", repeatable: false, mandatory: false, tips: ["Indica os volumes ou datas aos quais o título-chave se aplica."] },
+                { code: "v", label: "Volume Designation", repeatable: false, mandatory: false, tips: ["Indica a parte (volume, número, página, etc.) a que o campo se refere, usado apenas quando embutido num campo 4--."] }
+            ]
+        },
+        {
+            tag: "531",
+            name: "ABBREVIATED KEY TITLE (CONTINUING RESOURCES)",
+            ind1Tips: ["# — Em branco (não definido)"],
+            ind2Tips: ["# — Em branco (não definido)"],
+            tips: [
+                "Este campo contém a forma abreviada do título-chave estabelecida pela Rede ISSN.",
+                "A forma abreviada é construída de acordo com o manual do ISSN, com base na norma ISO 4.",
+                "A abreviação pode incluir um qualificador entre parênteses, quando necessário, para distinguir títulos semelhantes.",
+                "Este campo é usado principalmente por centros do ISSN e é ligado logicamente ao campo 530."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Abbreviated Title", repeatable: false, mandatory: true, tips: ["Título-chave abreviado, sem qualificação adicional. Baseado em ISSN + ISO 4."] },
+                { code: "b", label: "Qualifier", repeatable: false, mandatory: false, tips: ["Informação qualificada (entidade, local, ano) entre parênteses, para distinguir títulos idênticos."] },
+                { code: "v", label: "Volume Designation", repeatable: false, mandatory: false, tips: ["Designação de volume associada ao título (usado apenas quando o campo está embutido em 4--)."] }
+            ]
+        },
+        {
+            tag: "532",
+            name: "EXPANDED TITLE",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 - Expanded title is not significant, 1 - Expanded title is significant"],
+            ind2Name: "Type of Expansion Indicator",
+            ind2Tips: ["0 - Initialism, 1 - Numeral, 2 - Abbreviation, 3 - Other, non-roman symbol, etc"],
+            tips: [
+                "Este campo contém uma forma expandida do título quando a forma original usa abreviaturas, siglas, números ou símbolos que podem causar dificuldades de pesquisa, visualização ou compreensão.",
+                "Utilizado para criar pontos de acesso adicionais ou notas, especialmente quando o título principal (campo 200) ou o título-chave (campo 530) não são suficientemente informativos ou legíveis.",
+                "O indicador 2 define o tipo de expansão: sigla, número, abreviação ou símbolo não romano.",
+                "Se a expansão estiver em outro idioma, pode-se usar $z com código de língua e $2 com o esquema da codificação linguística."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Expanded Title", repeatable: false, mandatory: true, tips: ["Texto completo do título expandido."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código da língua da expansão (ex: 'fre' para francês). Usar ISO 639-2 ou esquema indicado em $2."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte da codificação do código de língua no $z (ex: iso639-3)."] }
+            ]
+        },
+        {
+            tag: "540",
+            name: "ADDITIONAL TITLE SUPPLIED BY CATALOGUE",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 - Additional title is not significant, 1 - Additional title is significant"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém títulos adicionais fornecidos pelo catalogador, como títulos populares ou de referência, que não aparecem na publicação.",
+                "Pode ser também utilizado para criar pontos de acesso derivados do título principal, especialmente quando não se deseja considerar esse título como o título preferido.",
+                "Tais títulos são, em alguns contextos, usados apenas como referências na estrutura de autoridade, em vez de pontos de acesso no registo bibliográfico."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Additional Title", repeatable: false, mandatory: true, tips: ["Texto do título adicional fornecido pelo catalogador."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos ou outras informações associadas ao título adicional."] },
+                { code: "h", label: "Number of Part", repeatable: false, mandatory: false, tips: ["Numeração da parte correspondente ao título adicional."] },
+                { code: "i", label: "Name of Part", repeatable: false, mandatory: false, tips: ["Nome da parte correspondente ao título adicional."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas associadas ao título adicional."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informações variadas como 'varia ligeiramente', 'edição brochada', etc."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código de língua da forma do título adicional (ISO 639-2 ou esquema definido em $2)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Identificação da fonte do código de língua se diferente de ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "541",
+            name: "TRANSLATED TITLE SUPPLIED BY CATALOGUER",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 - Translated title is not significant, 1 - Translated title is significant"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém a tradução de um dos títulos da publicação, fornecida pelo catalogador.",
+                "É utilizado quando a tradução não aparece no recurso original, sendo inferida ou traduzida por decisão do catalogador.",
+                "Se a tradução constar da própria publicação, deve ser usada em campos como 200 $d ou 510.",
+                "Não se deve usar para títulos preferidos prescritos por códigos de catalogação (usar 500 nesses casos)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Translated Title", repeatable: false, mandatory: true, tips: ["Tradução do título principal, sem informações complementares."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos ou outras informações associadas à tradução do título."] },
+                { code: "h", label: "Number of Part", repeatable: false, mandatory: false, tips: ["Numeração da parte, se a obra estiver subdividida."] },
+                { code: "i", label: "Name of Part", repeatable: false, mandatory: false, tips: ["Nome da parte, se aplicável."] },
+                { code: "z", label: "Language of Translated Title", repeatable: false, mandatory: false, tips: ["Código da língua da tradução, de acordo com ISO 639-2 ou outro esquema indicado em $2."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Identificação do esquema de codificação linguística usado em $z (ex: iso639-3)."] }
+            ]
+        },
+        {
+            tag: "545",
+            name: "SECTION TITLE",
+            ind1Name: "Section Title Significance Indicator",
+            ind1Tips: ["0 - Section title is not significant, 1 - Section title is significant"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém o título de uma secção geral onde uma parte da obra (como um artigo em volume coletivo) está contida.",
+                "Utilizado tipicamente em registos de análises de partes (piece-analytics).",
+                "Serve para indicar que o item faz parte de uma secção nomeada, mas que não constitui o título principal.",
+                "Quando relevante, pode ser usado como ponto de acesso bibliográfico ou apenas como nota contextual."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Section Title", repeatable: false, mandatory: true, tips: ["Título da secção geral onde o recurso está contido."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Subtítulos ou outras informações subordinadas ao título da secção."] },
+                { code: "h", label: "Number of Part", repeatable: false, mandatory: false, tips: ["Numeração da parte associada ao título da secção."] },
+                { code: "i", label: "Name of Part", repeatable: false, mandatory: false, tips: ["Nome da parte associada ao título da secção."] },
+                { code: "j", label: "Volume or Dates Associated with Title", repeatable: false, mandatory: false, tips: ["Volume ou datas a que o título da secção se refere."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: false, mandatory: false, tips: ["Informações variadas, como 'varia ligeiramente', 'edição brochada', etc."] },
+                { code: "z", label: "Language of Title", repeatable: false, mandatory: false, tips: ["Código da língua do título da secção (ISO 639-2 ou conforme definido em $2)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Esquema de codificação utilizado em $z, caso não seja ISO 639-2."] }
+            ]
+        },
+        {
+            tag: "560",
+            name: "ARTIFICIAL TITLE",
+            ind1Name: "Title Significance Indicator",
+            ind1Tips: ["0 - Title is not significant, 1 - Title is significant"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo é usado para registar um título atribuído ao recurso após a sua publicação.",
+                "Exemplos incluem títulos de encadernação ou rótulos posteriores ao fabrico.",
+                "É utilizado apenas quando o item tem, por exemplo na capa ou contracapa, um título artificial que difere do título principal.",
+                "Pode incluir indicação da instituição a que esse campo se aplica (subcampo $5)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Artificial Title", repeatable: false, mandatory: true, tips: ["Título artificial atribuído ao item, normalmente não impresso originalmente."] },
+                { code: "e", label: "Other Title Information", repeatable: true, mandatory: false, tips: ["Informações complementares ao título artificial, como subtítulo."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Código ou nome da instituição à qual este campo se aplica.", "Pode seguir o padrão ISIL (ISO 15511), MARC Code List ou nome completo da instituição.", "Se houver várias cópias, pode incluir o shelfmark após dois pontos (ex: TO0741 MOS: R 105)."] }
+            ]
+        },
+        {
+            tag: "576",
+            name: "NAME/ ACCESS POINT - IDENTIFICATION OF A WORK",
+            ind1Name: "Primary Entry Indicator",
+            ind1Tips: ["0 - Title is not primary entry or value is not specified, 1 - Title is primary entry"],
+            ind2Name: "Structure Indicator",
+            ind2Tips: ["# - Not applicable (embedded fields technique) or No information available (standard subfields technique), 0 - Unstructured title (standard subfields technique), 1 - Structured title (standard subfields technique)"],
+            tips: [
+                "Este campo contém o ponto de acesso nome/título que identifica uma obra, conforme descrita na manifestação do registo.",
+                "É utilizado quando há uma associação entre o nome (pessoa, entidade) e o título da obra.",
+                "Segue os princípios do modelo FRBR/IFLA LRM e pode substituir o campo 500.",
+                "Utilizar o campo 506 quando não existir um nome associado ao título da obra."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Name", repeatable: false, mandatory: true, tips: ["Nome da pessoa, entidade ou família com responsabilidade principal pela obra."] },
+                { code: "t", label: "Title", repeatable: false, mandatory: true, tips: ["Título pelo qual a obra é conhecida."] },
+                { code: "h", label: "Number of Section or Part", repeatable: true, mandatory: false, tips: ["Número da parte da obra, se aplicável."] },
+                { code: "i", label: "Name of Section or Part", repeatable: true, mandatory: false, tips: ["Nome da parte da obra, se aplicável."] },
+                { code: "c", label: "Form of Work", repeatable: false, mandatory: false, tips: ["Forma da obra — categoria ou género (ex: romance, sinfonia)."] },
+                { code: "d", label: "Date of Work", repeatable: false, mandatory: false, tips: ["Data da criação ou publicação da obra, para fins de distinção."] },
+                { code: "e", label: "Place of Origin of Work", repeatable: false, mandatory: false, tips: ["País ou jurisdição de origem da obra."] },
+                { code: "f", label: "Original Language of the Work", repeatable: false, mandatory: false, tips: ["Língua original da obra."] },
+                { code: "k", label: "Other Distinguishing Characteristics of a Work", repeatable: true, mandatory: false, tips: ["Outros atributos que distinguem a obra (ex: versão, editor responsável)."] },
+                { code: "r", label: "Medium of Performance (for Music)", repeatable: true, mandatory: false, tips: ["Instrumentação ou desempenho da obra musical."] },
+                { code: "s", label: "Numeric Designation (for Music)", repeatable: true, mandatory: false, tips: ["Número designado pelo compositor (opus, catálogo, série, etc)."] },
+                { code: "u", label: "Key (for Music)", repeatable: false, mandatory: false, tips: ["Tonalidade musical da obra."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão de forma para pontos de acesso de assunto."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temática para pontos de acesso de assunto."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão geográfica para pontos de acesso de assunto."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão cronológica para pontos de acesso de assunto."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador de registo de autoridade ou número normalizado."] }
+            ]
+        },
+        {
+            tag: "577",
+            name: "NAME/ACCESS POINT - IDENTIFICATION OF AN EXPRESSION",
+            ind1Name: "Primary Entry Indicator",
+            ind1Tips: ["0 - Title is not primary, 1 - Title is primary entry"],
+            ind2Name: "Structure Indicator",
+            ind2Tips: ["# — Not applicable (embedded fields technique) or No information available (standard subfields technique), 0 — Unstructured title (standard subfields technique), 1 — Structured title (standard subfields technique)"],
+            tips: [
+                "Contém o nome/título preferido que identifica uma expressão específica de uma obra.",
+                "Utiliza-se em registos de manifestações, especialmente quando é necessário ligar a expressão ao nome de autor.",
+                "Substitui o campo 500 em catálogos que seguem o modelo IFLA LRM.",
+                "Quando não há nome associado ao título da expressão, deve-se usar o campo 507."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Name", repeatable: false, mandatory: true, tips: ["Nome da pessoa ou entidade responsável pela obra."] },
+                { code: "t", label: "Title", repeatable: false, mandatory: true, tips: ["Título da obra à qual a expressão pertence."] },
+                { code: "h", label: "Number of Section or Part", repeatable: true, mandatory: false, tips: ["Número da parte da obra."] },
+                { code: "i", label: "Name of Section or Part", repeatable: true, mandatory: false, tips: ["Nome da parte da obra."] },
+                { code: "c", label: "Form of Work", repeatable: false, mandatory: false, tips: ["Género ou forma da obra."] },
+                { code: "d", label: "Date of Work", repeatable: false, mandatory: false, tips: ["Data associada à obra."] },
+                { code: "e", label: "Place of Origin of Work", repeatable: false, mandatory: false, tips: ["Local de origem da obra."] },
+                { code: "f", label: "Original Language of the Work", repeatable: false, mandatory: false, tips: ["Língua original da obra."] },
+                { code: "k", label: "Other Distinguishing Characteristics of a Work", repeatable: true, mandatory: false, tips: ["Outras características distintivas da obra."] },
+                { code: "r", label: "Medium of Performance (for Music)", repeatable: true, mandatory: false, tips: ["Instrumentação ou desempenho (música)."] },
+                { code: "s", label: "Numeric Designation (for Music)", repeatable: false, mandatory: false, tips: ["Designação numérica como opus, catálogo."] },
+                { code: "u", label: "Key (for Music)", repeatable: false, mandatory: false, tips: ["Tonalidade musical."] },
+                { code: "l", label: "Form of the Expression", repeatable: false, mandatory: false, tips: ["Forma da expressão, como versão, extrato, etc."] },
+                { code: "m", label: "Language of the Expression", repeatable: false, mandatory: false, tips: ["Língua da expressão."] },
+                { code: "n", label: "Content Type", repeatable: false, mandatory: false, tips: ["Tipo de conteúdo expresso."] },
+                { code: "o", label: "Date of Expression", repeatable: false, mandatory: false, tips: ["Data da expressão da obra."] },
+                { code: "v", label: "Medium of Performance (for Music) [Expression]", repeatable: true, mandatory: false, tips: ["Instrumentação específica da expressão."] },
+                { code: "w", label: "Other Characteristics of Expression", repeatable: true, mandatory: false, tips: ["Versão, intérpretes ou outras características únicas da expressão."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão de forma (acesso por assunto)."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temática."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão geográfica."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão cronológica."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade (campo 242)."] }
+            ]
+        },
+        {
+            tag: "600",
+            name: "PERSONAL NAME USED AS SUBJECT",
+            ind1Name: "Primary Entry Indicator",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Name: "Form of Name Indicator",
+            ind2Tips: ["0 — Name entered under forename or in direct order, 1 — Name entered under surname (family name, patronymic etc.)"],
+            tips: [
+                "Este campo contém o nome de uma pessoa que é assunto do recurso, em forma de ponto de acesso.",
+                "Pode incluir subdivisões por forma, tema, localização ou tempo.",
+                "Segue a estrutura semelhante à dos campos 7-- (responsabilidade), com complementos de assunto.",
+                "Usa-se para associar pessoas ao conteúdo como tema, não como autor.",
+                "É altamente recomendado indicar a fonte de autoridade ($2)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal de entrada do nome. Deve sempre estar presente."] },
+                { code: "b", label: "Part of Name Other than Entry Element", repeatable: false, mandatory: false, tips: ["Parte restante do nome, como nomes próprios ou apelidos, quando o elemento de entrada é um sobrenome."] },
+                { code: "c", label: "Additions to Name Other than Dates", repeatable: true, mandatory: false, tips: ["Títulos ou epítetos como 'Dr.', 'Rei de Inglaterra', etc."] },
+                { code: "d", label: "Roman Numerals", repeatable: false, mandatory: false, tips: ["Numerais romanos associados a nomes (ex: João Paulo II)."] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas associadas à pessoa (ex: 1870–1945)."] },
+                { code: "g", label: "Expansion of Initials of Forename", repeatable: false, mandatory: false, tips: ["Forma completa dos nomes próprios quando abreviados em $b."] },
+                { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação institucional da pessoa na época da criação do recurso."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão por tipo de material (ex: biografias, discursos)."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temática (ex: 'contribuições', 'ideias políticas')."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão por local (ex: Alemanha, Lisboa)."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão por período (ex: século XIX, anos 1930)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte ou sistema de autoridade usado (ex: 'rameau', 'lc')."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador do registo de autoridade correspondente."] }
+            ]
+        },
+        {
+            tag: "601",
+            name: "CORPORATE BODY NAME USED AS SUBJECT",
+            ind1Name: "Meeting Indicator",
+            ind1Tips: ["0 - Name in inverted order, 1 - Name entered under place or jurisdiction, 2 - Name entered under name in direct order"],
+            ind2Name: "Form of Name Indicator",
+            ind2Tips: ["0 — Name entered under place or jurisdiction, 1 — Name entered under name in direct order"],
+            tips: [
+                "Este campo contém o nome de uma entidade coletiva que é assunto do recurso.",
+                "Pode incluir subdivisões por forma, tema, localização ou tempo.",
+                "Subfields seguem a mesma estrutura do campo 710 (responsabilidade), mas com contexto de assunto.",
+                "É fortemente recomendado indicar a fonte do ponto de acesso ($2)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome principal da entidade coletiva."] },
+                { code: "b", label: "Subdivision (or Name if Entered Under Place)", repeatable: true, mandatory: false, tips: ["Subdivisão hierárquica ou nome quando inserido sob localidade."] },
+                { code: "c", label: "Addition to Name or Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores adicionados ao nome (ex: ramo, localização, etc.)."] },
+                { code: "d", label: "Number of Meeting / Part of Meeting", repeatable: false, mandatory: false, tips: ["Número da reunião ou parte da mesma."] },
+                { code: "e", label: "Location of Meeting", repeatable: false, mandatory: false, tips: ["Local onde decorreu a reunião."] },
+                { code: "f", label: "Date of Meeting", repeatable: false, mandatory: false, tips: ["Data da reunião."] },
+                { code: "g", label: "Inverted Element", repeatable: false, mandatory: false, tips: ["Elemento invertido do nome."] },
+                { code: "h", label: "Part of Name other than Entry Element and Inverted Element", repeatable: false, mandatory: false, tips: ["Parte do nome não incluída em $a ou $g."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Termo que especifica o tipo ou género de material (ex: relatórios, manuais)."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temática (ex: história, legislação)."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão geográfica."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão cronológica (ex: século XIX)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte de autoridade (ex: rameau, lc)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador do registo de autoridade correspondente."] }
+            ]
+        },
+        {
+            tag: "602",
+            name: "FAMILY NAME USED AS SUBJECT",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém o nome de uma família que é assunto do recurso.",
+                "A estrutura segue o formato dos pontos de acesso usados em responsabilidades (campo 720).",
+                "Podem ser adicionadas subdivisões por forma, assunto, local ou tempo.",
+                "A fonte do ponto de acesso ($2) é recomendada.",
+                "Dados de qualificação são gravados em $c, $d e $f."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome da família em forma de ponto de acesso."] },
+                { code: "c", label: "Type of Family", repeatable: false, mandatory: false, tips: ["Categoria ou tipo da família (ex: clã, dinastia, patriarcado)."] },
+                { code: "d", label: "Places Associated with the Family", repeatable: true, mandatory: false, tips: ["Locais com os quais a família está/esteve associada."] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas associadas à família (ex: dinastias históricas)."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Especifica o tipo ou género de material."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Especifica o tópico representado pelo ponto de acesso."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão por localidade associada à família."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temporal relacionada à família."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte do ponto de acesso (ex: rameau)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador de autoridade correspondente."] }
+            ]
+        },
+        {
+            tag: "604",
+            name: "NAME AND TITLE USED AS SUBJECT ",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém o nome de uma família que é assunto do recurso.",
+                "A estrutura segue o formato dos pontos de acesso usados em responsabilidades (campo 720).",
+                "Podem ser adicionadas subdivisões por forma, assunto, local ou tempo.",
+                "A fonte do ponto de acesso ($2) é recomendada.",
+                "Dados de qualificação são gravados em $c, $d e $f."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome da família em forma de ponto de acesso."] },
+                { code: "c", label: "Type of Family", repeatable: false, mandatory: false, tips: ["Categoria ou tipo da família (ex: clã, dinastia, patriarcado)."] },
+                { code: "d", label: "Places Associated with the Family", repeatable: true, mandatory: false, tips: ["Locais com os quais a família está/esteve associada."] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas associadas à família (ex: dinastias históricas)."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Especifica o tipo ou género de material."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Especifica o tópico representado pelo ponto de acesso."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão por localidade associada à família."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temporal relacionada à família."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte do ponto de acesso (ex: rameau)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador de autoridade correspondente."] }
             ]
         },
     ]
