@@ -44,7 +44,7 @@ async function main() {
         data: [
             {
                 tag: "001",
-                name: "Record Identifier",
+                name: "RECORD IDENTIFIER",
                 tips: [
                     "Este campo contém caracteres associados exclusivamente ao registo, ou seja, o identificador do registo da agência que o preparou.",
                     "Em conformidade com a norma ISO 2709, este campo não contém subcampos.",
@@ -54,7 +54,7 @@ async function main() {
             },
             {
                 tag: "003",
-                name: "Persistent Record Identifier",
+                name: "PERSISTENT RECORD IDENTIFIER",
                 tips: [
                     "Este campo contém contém o identificador persistente do registo atribuído pela agência que cria, utiliza ou emite o registo.",
                     "É o identificador persistente para o registo bibliográfico, e não o recurso em si.",
@@ -66,7 +66,7 @@ async function main() {
             },
             {
                 tag: "005",
-                name: "Version Identifier",
+                name: "VERSION IDENTIFIER",
                 tips: [
                     "O campo contém a data e a hora da útlima transação de registo.",
                     "Permite que os sistemas de máquina determinem se a versão do registo que está a ser processado é posterior, anterior ou igual a uma processada anteriormente.",
@@ -75,15 +75,13 @@ async function main() {
                     "Introduzir no formato standard (ISO 8601-1): AAAAMMDD. O tempo é introduzido no formato HHMMSS. Em todos os casos, é adicionado um 0 inicial, se necessário."
                 ]
             },
-
-
         ]
     })
 
     const dataFieldDefinitionsData = [
         {
             tag: "010",
-            name: "International Standard Book Number (ISBN)",
+            name: "INTERNATIONAL STANDARD BOOK NUMBER (ISBN)",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -100,7 +98,7 @@ async function main() {
         },
         {
             tag: "011",
-            name: "International Standard Serial Number (ISSN)",
+            name: "INTERNATIONAL STANDARD SERIAL NUMBER (ISSN)",
             ind1Name: "Level of Interest Indicator",
             ind1Tips: ["#: Não especificado/ Não aplicável, 0: Continuing resource of international or national interest, 1: Continuing resource of local interest"],
             ind2Name: "Cluster Identifier Indicator",
@@ -119,8 +117,7 @@ async function main() {
                 { code: "z", label: "Erroneous ISSN or Cluster ISSN", repeatable: true, mandatory: false, tips: ["Inclui qualquer ISSN ou Cluster ISSN incorreto, não registado em $g ou $y.", "Normalmente resultado de um erro de impressão."] },
                 { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Uma identificação sob a forma codificada para o sistema de onde provém o identificador", "O ISSN Center responsável pela atribuição e manutenção dos ISSN e/ ou Cluster ISSN."] },
                 {
-                    code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false,
-                    tips: [
+                    code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: [
                         "O identificador ou o número normalizado do registo de autoridade ou do registo de classificação correspondente, ou o identificador normalizado.",
                         "O identificador pode ter a forma de texto ou de um identificador Uniforme de Recursos (URI).",
                         "Se o identificador for texto, o número de controlo ou identificador é precedido pelo código de organização adequado do Identificador Internacional Normalizado para Bibliotecas e Organizações Relacionadas (ISIL) ou da Lista de Códigos MARC para Organizações.",
@@ -135,7 +132,7 @@ async function main() {
         },
         {
             tag: "012",
-            name: "Fingerprint Identifier",
+            name: "FINGERPRINT IDENTIFIER",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -146,8 +143,7 @@ async function main() {
                 { code: "a", label: "Fingerprint", repeatable: false, mandatory: true, tips: ["Calculated Fingerprint Identifier. O Fingerprint é designado pela agência que cria o registo."] },
                 { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Uma identificação em forma de código com origem no sistema de onde o fingerprint identifier é originário."] },
                 {
-                    code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false,
-                    tips: [
+                    code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: [
                         "Nome da instituição a que o campo se aplica na forma codificada, se for considerado necessário pela agência que cria o registo para identificar atributos específicos de um item.",
                         "Se o subcampo for utilizado, os códigos devem ser introduzidos em conformidade com as disposições da norma internacional ISIL, ISO 15511 ou podem conter códigos da lista de códigos MARC - Code List for Organizations.",
                         "Caso contrário, pode ser utilizado o nome completo da agência ou um código nacional.",
@@ -158,7 +154,7 @@ async function main() {
         },
         {
             tag: "013",
-            name: "International Standard Music Number (ISMN)",
+            name: "INTERNATIONAL STANDARD MUSIC NUMBER (ISMN)",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -176,7 +172,7 @@ async function main() {
         },
         {
             tag: "014",
-            name: "Article Identifier",
+            name: "ARTICLE IDENTIFIER",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: ["Este campo contém um código único e não ambíguo atribuído aos artigos de periódicos."],
@@ -188,7 +184,7 @@ async function main() {
         },
         {
             tag: "015",
-            name: "International Standard Technical Report Number (ISRN)",
+            name: "INTERNATIONAL STANDARD TECHNICAL REPORT NUMBER (ISRN)",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: ["Este campo contém o número internacional normalizado de relatório técnico atribuído por um centro nacional ISRN", "Corresponde ao identificador de recurso ISBD e aos termos da área de disponibilidade"],
@@ -201,7 +197,7 @@ async function main() {
         },
         {
             tag: "017",
-            name: "Other Identifier",
+            name: "OTHER IDENTIFIER",
             ind1Name: "Type of Identifier",
             ind1Tips: ["7: System specified in subfield $2, 8: Unspecified type of identifier"],
             ind2Name: "Difference Indicator",
@@ -220,7 +216,7 @@ async function main() {
         },
         {
             tag: "020",
-            name: "National Bibliography Number",
+            name: "NATIONAL BIBLIOGRAPHY NUMBER",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -234,7 +230,7 @@ async function main() {
         },
         {
             tag: "021",
-            name: "Legal Deposit Number",
+            name: "LEGAL DEPOSIT NUMBER",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -248,7 +244,7 @@ async function main() {
         },
         {
             tag: "022",
-            name: "Government Publication Number",
+            name: "GOVERNMENT PUBLICATION NUMBER",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -262,7 +258,7 @@ async function main() {
         },
         {
             tag: "033",
-            name: "Other System Persistent Record Identifier",
+            name: "OTHER SYSTEM PERSISTENT RECORD IDENTIFIER",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -276,7 +272,7 @@ async function main() {
         },
         {
             tag: "035",
-            name: "Other System Identifiers",
+            name: "OTHER SYSTEM IDENTIFIERS",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -298,7 +294,7 @@ async function main() {
         },
         {
             tag: "036",
-            name: "Music Incipit",
+            name: "MUSIC INCIPIT",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -346,7 +342,7 @@ async function main() {
         },
         {
             tag: "071",
-            name: "Publisher's Number",
+            name: "PUBLISHER'S NUMBER",
             ind1Name: "Type of Publisher's Number",
             ind1Tips: ["0 - Sound recording: Issue number, 1 - Sound recording: Matrix number, 2 - Printed music: Plate number, 3 - Printed music: Other publisher's number, 4 - Video recording number, 5 - Other type of publisher's number, 6 - Eletronic resource number (ex: CD-ROM)"],
             ind2Name: "Note Indicator",
@@ -365,7 +361,7 @@ async function main() {
         },
         {
             tag: "072",
-            name: "Universal Product Code (UPC)",
+            name: "UNIVERSAL PRODUCT CODE (UPC)",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Name: "Differenfe Indicator",
             ind2Tips: ["0 - No information provided, 1 - No difference, 2 - Difference"],
@@ -383,7 +379,7 @@ async function main() {
         },
         {
             tag: "073",
-            name: "International Article Number (EAN)",
+            name: "INTERNATIONAL ARTICLE NUMBER (EAN)",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Name: "Differenfe Indicator",
             ind2Tips: ["0 - No information provided, 1 - No difference, 2 - Difference"],
@@ -401,7 +397,7 @@ async function main() {
         },
         {
             tag: "100",
-            name: "International Article Number (EAN)",
+            name: "INTERNATIONAL ARTIVLE NUMBER (EAN)",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -465,7 +461,7 @@ async function main() {
         },
         {
             tag: "106",
-            name: "Coded Data Field: Textual Language Material, Monographic",
+            name: "CODED DATA FIELD: TEXTUAL LANGUAGE MATERIAL, MONOGRAPHIC",
             ind1Tips: ["#: Em branco (não definido)"],
             ind2Tips: ["#: Em branco (não definido)"],
             tips: [
@@ -2964,7 +2960,7 @@ async function main() {
         },
         {
             tag: "500",
-            name: "Preferred Title Access Point",
+            name: "PREFERRED TITLE ACCESS POINT",
             ind1Name: "Title Significance Indicator",
             ind1Tips: ["0 — Access point is not significant, 1 — Access point is significant"],
             ind2Name: "Primary Entry Indicator",
@@ -3000,7 +2996,7 @@ async function main() {
         },
         {
             tag: "501",
-            name: "Collective Preferred Title",
+            name: "COLLECTIVE PREFERRED TITLE",
             ind1Name: "Type of Collective Title Indicator",
             ind1Tips: ["0 — Complete collected works, 1 — Selected works, 2 — Other (not exactly defined by cataloguing code)"],
             ind2Tips: ["# — Em branco (não definido)"],
@@ -3031,7 +3027,7 @@ async function main() {
         },
         {
             tag: "503",
-            name: "Conventional Preferred Title",
+            name: "CONVENTIONAL PREFERRED TITLE",
             ind1Name: "Title Significance Indicator",
             ind1Tips: ["0 — Access point is not significant, 1 — Access point is significant"],
             ind2Tips: ["# — Em branco (não definido)"],
@@ -3059,7 +3055,7 @@ async function main() {
         },
         {
             tag: "506",
-            name: "Preferred Access Point - Identification of a Work",
+            name: "PREFERRED ACCESS POINT - IDENTIFICATION OF A WORK",
             ind1Name: "Primary Entry Indicator",
             ind1Tips: ["0 — Title is not primary entry or value is not specified, 1 — Title is primary entry"],
             ind2Tips: ["# — Em branco (não definido)"],
@@ -3085,7 +3081,7 @@ async function main() {
         },
         {
             tag: "507",
-            name: "Preferred Access Point - Identification of an Expression",
+            name: "PREFERRED ACCESS POINT - IDENTIFICATION OF AN EXPRESSION",
             ind1Name: "Primary Entry Indicator",
             ind1Tips: ["0 — Title is not primary entry or value is not specified, 1 — Title is primary entry"],
             ind2Tips: ["# — Em branco (não definido)"],
@@ -3119,7 +3115,7 @@ async function main() {
         },
         {
             tag: "510",
-            name: "Parallel Title Proper",
+            name: "PARALLEL TITLE PROPER",
             ind1Name: "Title Significance Indicator",
             ind1Tips: ["0 — Parallel title is not significant, 1 — Parallel title is significant"],
             ind2Tips: ["# — Em branco (não definido)"],
@@ -3141,7 +3137,7 @@ async function main() {
         },
         {
             tag: "511",
-            name: "Half Title",
+            name: "HALF TITLE",
             ind1Name: "Significance of Title",
             ind1Tips: ["0 — Title is not significant, 1 — Title is significant"],
             ind2Tips: ["# — Em branco (não definido)"],
@@ -3636,27 +3632,270 @@ async function main() {
         },
         {
             tag: "604",
-            name: "NAME AND TITLE USED AS SUBJECT ",
+            name: "NAME AND TITLE USED AS SUBJECT",
             ind1Tips: ["# - Em branco (não definido)"],
             ind2Tips: ["# - Em branco (não definido)"],
             tips: [
-                "Este campo contém o nome de uma família que é assunto do recurso.",
-                "A estrutura segue o formato dos pontos de acesso usados em responsabilidades (campo 720).",
-                "Podem ser adicionadas subdivisões por forma, assunto, local ou tempo.",
-                "A fonte do ponto de acesso ($2) é recomendada.",
-                "Dados de qualificação são gravados em $c, $d e $f."
+                "Este campo contém o nome de um autor (pessoa, entidade coletiva ou família) e o título de uma obra que é assunto do recurso.",
+                "É usado para expressar o título da obra como sujeito, com o nome do responsável incluído.",
+                "O título da obra é registado no subcampo $t, e o nome do autor em $a.",
+                "Podem ser usadas subdivisões por forma, tema, localização ou tempo.",
+                "O uso da fonte de autoridade ($2) e identificadores ($3) é recomendado."
             ],
             subFieldDef: [
-                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome da família em forma de ponto de acesso."] },
-                { code: "c", label: "Type of Family", repeatable: false, mandatory: false, tips: ["Categoria ou tipo da família (ex: clã, dinastia, patriarcado)."] },
-                { code: "d", label: "Places Associated with the Family", repeatable: true, mandatory: false, tips: ["Locais com os quais a família está/esteve associada."] },
-                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas associadas à família (ex: dinastias históricas)."] },
+                { code: "1", label: "Linking Data (Embedded Field Technique)", repeatable: true, mandatory: false, tips: ["Contém etiqueta e indicadores de campos embutidos, sem pontuação ou espaços."] },
+                { code: "a", label: "Name", repeatable: false, mandatory: true, tips: ["Nome da pessoa, entidade ou família com responsabilidade pela obra."] },
+                { code: "t", label: "Title", repeatable: false, mandatory: true, tips: ["Título pelo qual a obra é conhecida."] },
                 { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Especifica o tipo ou género de material."] },
-                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Especifica o tópico representado pelo ponto de acesso."] },
-                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão por localidade associada à família."] },
-                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temporal relacionada à família."] },
-                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte do ponto de acesso (ex: rameau)."] },
-                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador de autoridade correspondente."] }
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temática associada à obra."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão geográfica associada à obra."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão cronológica associada à obra."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Sistema de autoridade ou thesaurus usado (ex: rameau, lc)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador do registo de autoridade do ponto de acesso."] }
+            ]
+        },
+        {
+            tag: "605",
+            name: "TITLE USED AS SUBJECT",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém um título que é assunto do recurso descrito.",
+                "Utilizado para obras anónimas ou títulos não associados diretamente a autores.",
+                "Quando o assunto for uma combinação de nome e título, deve-se utilizar o campo 604.",
+                "É possível incluir subdivisões por forma, tema, localização ou tempo.",
+                "Títulos de obras em qualquer meio (literatura, teatro, cinema, música, etc.) são registados aqui."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Título curto ou título principal da obra."] },
+                { code: "h", label: "Number of Section or Part", repeatable: true, mandatory: false, tips: ["Número da secção ou parte da obra."] },
+                { code: "i", label: "Name of Section or Part", repeatable: true, mandatory: false, tips: ["Nome da secção ou parte da obra."] },
+                { code: "k", label: "Date of Publication", repeatable: false, mandatory: false, tips: ["Data de publicação da obra referida como assunto."] },
+                { code: "l", label: "Form Subheading", repeatable: false, mandatory: false, tips: ["Frase padrão que especifica melhor o título."] },
+                { code: "m", label: "Language (when Part of Access Point)", repeatable: false, mandatory: false, tips: ["Língua da obra quando necessário na formulação do ponto de acesso."] },
+                { code: "n", label: "Miscellaneous Information", repeatable: true, mandatory: false, tips: ["Informação diversa, como designações materiais genéricas."] },
+                { code: "q", label: "Version (or Date of Version)", repeatable: false, mandatory: false, tips: ["Versão da obra ou data da versão."] },
+                { code: "r", label: "Medium of Performance (for Music)", repeatable: true, mandatory: false, tips: ["Instrumentação da obra musical."] },
+                { code: "s", label: "Numeric Designation (for Music)", repeatable: true, mandatory: false, tips: ["Número atribuído à obra musical (opus, série, etc.)."] },
+                { code: "u", label: "Key (for Music)", repeatable: false, mandatory: false, tips: ["Tom musical da obra."] },
+                { code: "w", label: "Arranged Statement (for Music)", repeatable: false, mandatory: false, tips: ["Indicação de que a obra musical é um arranjo."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão de forma para especificar tipo ou género de material."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temática relacionada com o título."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão geográfica aplicável ao título."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão cronológica aplicável ao título."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade do ponto de acesso."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador de autoridade relacionado com o ponto de acesso."] }
+            ]
+        },
+        {
+            tag: "606",
+            name: "TOPICAL NAME USED AS SUBJECT",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém um termo ou conceito usado como assunto do recurso.",
+                "Pode representar temas, tópicos, eventos, objetos, atividades, disciplinas, etc.",
+                "Permite subdivisões por forma, localização e tempo.",
+                "A fonte de autoridade usada deve ser identificada no subcampo $2.",
+                "É recomendável que cada subcampo $x, $y, $z seja usado para uma única subdivisão."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Topical Name as Subject", repeatable: false, mandatory: true, tips: ["Termo temático que representa o assunto principal."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão por forma (ex: dicionários, biografias, estudos de caso)."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão por tema (ex: legislação, ética, história)."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão geográfica (ex: Portugal, Europa, Japão)."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão cronológica (ex: século XXI, 1945-1991)."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte de autoridade (ex: rameau, lcsh, mesh)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador de registo de autoridade correspondente."] }
+            ]
+        },
+        {
+            tag: "607",
+            name: "GEOGRAPHICAL NAME USED AS SUBJECT",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém um nome geográfico usado como ponto de acesso de assunto.",
+                "Abrange locais geográficos como países, cidades, regiões, continentes, etc.",
+                "É possível subdividir o acesso por forma, tema, localização adicional ou tempo.",
+                "A fonte de autoridade deve ser indicada no subcampo $2 sempre que possível.",
+                "Utilizar este campo apenas quando o nome geográfico não estiver subordinado a outra entidade como uma instituição ou corpo governamental (caso em que se usa 601)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome geográfico principal no formato da autoridade usada."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Termos de género ou tipo de material (ex: mapas, estatísticas, etc.)."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Aspetos temáticos relacionados com o local."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Localizações adicionais associadas."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Período temporal associado ao nome geográfico."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte de autoridade utilizada (ex: rameau, lcsh)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador de autoridade associado ao ponto de acesso."] }
+            ]
+        },
+        {
+            tag: "608",
+            name: "FORM, GENRE OR PHYSICAL CHARACTERISTICS ACCESS POINT",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém termos que indicam a forma, género e/ou características físicas do recurso descrito.",
+                "Pode incluir subdivisões adicionais por forma ($j), tema ($x), localização ($y) ou tempo ($z).",
+                "É altamente recomendado o uso do subcampo $2 para indicar a fonte da terminologia utilizada.",
+                "O subcampo $5 permite indicar a instituição à qual o campo se aplica.",
+                "Este campo é usado quando se deseja descrever a natureza do conteúdo ou do suporte do recurso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["O termo conforme estabelecido pela fonte de autoridade utilizada."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Especifica o tipo ou género do material (ex: Biografias, Mapas, Dicionários)."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Aspetos temáticos adicionais ao termo principal."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Especificação geográfica relacionada com a forma ou género."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Período temporal relacionado com o termo."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte ou sistema de autoridade utilizado (ex: gsafd, lcsh, rameau, etc.)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador do registo de autoridade associado ao ponto de acesso."] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Identificador da instituição a que o campo se aplica.", "Código ISIL (ISO 15511) ou nome completo da organização."] }
+            ]
+        },
+        {
+            tag: "610",
+            name: "UNCONTROLLED SUBJECT TERMS",
+            ind1Name: "Level of the Subject Term",
+            ind1Tips: ["0 - No level specified, Primary term, Secondary term"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo é usado para termos de assunto que não provêm de listas de pontos de acesso controlados.",
+                "Pode conter múltiplos termos por campo, cada um em subcampo $a.",
+                "Deve ser utilizado apenas quando os termos não estão disponíveis numa lista de autoridade controlada.",
+                "Para termos controlados, usar campos 600 a 608 com subcampo $2 para indicar a fonte.",
+                "Permite registrar conceitos livres e emergentes em linguagem natural."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Subject Term", repeatable: true, mandatory: true, tips: ["Termo de assunto não controlado atribuído ao recurso.", "Mais de um termo pode ser incluído repetindo o subcampo $a."] }
+            ]
+        },
+        {
+            tag: "615",
+            name: "SUBJECT CATEGORY [PROVISIONAL]",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém uma categoria temática de nível superior em forma codificada e/ou textual.",
+                "Pode conter o código, a descrição textual ou ambos, da categoria e de suas subdivisões.",
+                "O subcampo $2 é recomendado para identificar a fonte do sistema de categorias usado.",
+                "Este campo é útil para sistemas que aplicam categorias hierárquicas a áreas temáticas.",
+                "É permitido usar tanto códigos (subcampos $n, $m) como termos textuais (subcampos $a, $x)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Subject Category Entry Element Text", repeatable: false, mandatory: false, tips: ["Termo textual principal da categoria conforme o sistema de categorias utilizado."] },
+                { code: "x", label: "Subject Category Subdivision Text", repeatable: true, mandatory: false, tips: ["Subdivisão textual que especifica um aspeto particular da categoria principal."] },
+                { code: "n", label: "Subject Category Code", repeatable: true, mandatory: false, tips: ["Código da categoria conforme definido pela fonte de autoridade."] },
+                { code: "m", label: "Subject Category Subdivision Code", repeatable: true, mandatory: false, tips: ["Código de subdivisão associado à categoria."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Identificação codificada da fonte ou sistema de categorias usado."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador de autoridade ou número padrão da categoria registrada."] }
+            ]
+        },
+        {
+            tag: "616",
+            name: "TRADEMARK USED AS SUBJECT [PROVISIONAL]",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém uma marca registada usada como assunto do recurso.",
+                "É um ponto de acesso de assunto estruturado, podendo incluir subdivisões temáticas, geográficas, cronológicas, etc.",
+                "As marcas podem incluir nomes comerciais, logotipos, designações visuais ou verbais, como 'Pentium', 'Levi's', etc.",
+                "Subcampo $2 é recomendado para indicar a fonte de autoridade (ex: rameau, lcsh)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome da marca registada em forma de ponto de acesso."] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas durante as quais a marca foi usada, quando necessário para qualificação."] },
+                { code: "c", label: "Qualification", repeatable: true, mandatory: false, tips: ["Qualificação adicional adicionada à marca, exceto datas."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Tipo ou género do material (usar $x se não se aplicar este)."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Tópico relacionado com a marca."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Localização associada à marca."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Período temporal relacionado à marca."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte de autoridade (ex: rameau, lcsh, etc.)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade associado."] }
+            ]
+        },
+        {
+            tag: "617",
+            name: "HIERARCHICAL GEOGRAPHICAL NAME USED AS SUBJECT",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Contém um ponto de acesso estruturado para lugares que são assuntos do recurso.",
+                "Os subcampos podem ser usados em hierarquia (ex: país, estado, cidade) conforme necessário.",
+                "Subcampos $a, $c, $k, $m, $n e $o são repetíveis quando múltiplos níveis são usados.",
+                "É recomendado o uso do subcampo $2 para indicar a fonte dos termos utilizados.",
+                "Este campo é útil em recursos onde a localização física é um tema central ou relevante."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Country (Nation State)", repeatable: true, mandatory: false, tips: ["País ou Estado-nação."] },
+                { code: "b", label: "State or Province, etc.", repeatable: false, mandatory: false, tips: ["Divisão administrativa de primeira ordem."] },
+                { code: "c", label: "Intermediate Political Jurisdiction", repeatable: true, mandatory: false, tips: ["Divisão política de segunda ordem ou inferior."] },
+                { code: "d", label: "City, etc.", repeatable: false, mandatory: false, tips: ["Nome de uma cidade, vila ou localidade populacional."] },
+                { code: "e", label: "Venue", repeatable: true, mandatory: false, tips: ["Edifícios nomeados, espaços urbanos, veículos, etc."] },
+                { code: "f", label: "Date", repeatable: true, mandatory: false, tips: ["Data(s) associada(s) ao evento ou local. ISO 8601."] },
+                { code: "g", label: "Season", repeatable: false, mandatory: false, tips: ["Estação do ano, ex: Verão."] },
+                { code: "h", label: "Occasion", repeatable: false, mandatory: false, tips: ["Ocasião especial relacionada ao local."] },
+                { code: "i", label: "Final Date", repeatable: false, mandatory: false, tips: ["Data final de um evento."] },
+                { code: "k", label: "Subsection of City, etc.", repeatable: true, mandatory: false, tips: ["Unidade menor dentro de uma cidade, como bairro ou rua."] },
+                { code: "m", label: "Other Geographical Regions or Features", repeatable: true, mandatory: false, tips: ["Entidades geográficas não jurisdicionais, como oceanos ou montanhas."] },
+                { code: "n", label: "Extraterrestrial Areas", repeatable: true, mandatory: false, tips: ["Entidades espaciais como planetas ou luas."] },
+                { code: "o", label: "Geographical Areas Larger Than Country", repeatable: true, mandatory: false, tips: ["Áreas como hemisférios, continentes ou o mundo."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte do termo geográfico, ex: gnis, pemracs."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade."] }
+            ]
+        },
+        {
+            tag: "620",
+            name: "PLACE AND DATE OF PUBLICATION, PERFORMANCE, ETC.",
+            ind1Name: "Type of Data",
+            ind1Tips: ["# - Publication or production, 0 - Not specified, 1 - Performance, 2 - First Performance, 3 - Recording, 4 - Live recording, 5 - Remastering"],
+            ind2Name: "Presence of Data on Source",
+            ind2Tips: ["# - Not applicable, 0 - Data not present on source, 1 - Data present on source, 2 - Data present on source but false or fictitious"],
+            tips: [
+                "Este campo contém pontos de acesso estruturados para o local de publicação, produção, performance ou gravação.",
+                "Pode conter um país, estado, cidade, local do evento, datas, estações ou ocasiões.",
+                "A hierarquia geográfica pode seguir a ordem: $o $a $b $c $d $k.",
+                "Use $2 para identificar a fonte de autoridade geográfica (como TGN, GNIS).",
+                "As datas devem seguir a norma ISO 8601.",
+                "A estrutura pode descrever publicações, atuações ao vivo, remasterizações e mais.",
+                "Este campo **não** é específico de cópia — aplica-se a toda a edição do recurso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Country (Nation State)", repeatable: false, mandatory: false, tips: ["País do local de publicação/performance."] },
+                { code: "b", label: "State or Province", repeatable: false, mandatory: false, tips: ["Estado ou província (1ª divisão administrativa)."] },
+                { code: "c", label: "Intermediate Political Jurisdiction", repeatable: true, mandatory: false, tips: ["Divisão política intermediária (ex: condado)."] },
+                { code: "d", label: "City, etc.", repeatable: false, mandatory: false, tips: ["Cidade, vila ou localidade de publicação/performance."] },
+                { code: "e", label: "Venue", repeatable: true, mandatory: false, tips: ["Edifício, veículo, praça, etc. onde ocorreu a performance."] },
+                { code: "f", label: "Date", repeatable: true, mandatory: false, tips: ["Data normalizada (ISO 8601) da publicação/performance."] },
+                { code: "g", label: "Season", repeatable: false, mandatory: false, tips: ["Estação do ano em que ocorreu o evento (ex: Outono)."] },
+                { code: "h", label: "Occasion", repeatable: false, mandatory: false, tips: ["Ocasião específica (ex: Festa da Assunção)."] },
+                { code: "i", label: "Final Date", repeatable: false, mandatory: false, tips: ["Data final do evento, se for diferente de $f."] },
+                { code: "k", label: "Subsection of City", repeatable: true, mandatory: false, tips: ["Bairro ou subdivisão dentro da cidade."] },
+                { code: "m", label: "Other Geographic Regions or Features", repeatable: true, mandatory: false, tips: ["Montanhas, oceanos, ilhas, etc."] },
+                { code: "n", label: "Extraterrestrial Areas", repeatable: true, mandatory: false, tips: ["Lugares fora da Terra (ex: Lua, Marte)."] },
+                { code: "o", label: "Larger Geographical Area", repeatable: true, mandatory: false, tips: ["Ex: Europa, Mundo, Hemisfério Sul."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade (ex: tgn, pemracs)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade."] }
+            ]
+        },
+        {
+            tag: "621",
+            name: "PLACE AND DATE OF PROVENANCE",
+            ind1Name: "Type of Data",
+            ind1Tips: ["# - Publication or production, 0 - Not specified, 1 - Performance, 2 - First Performance, 3 - Recording, 4 - Live recording, 5 - Remastering, 0 - Not specified"],
+            ind2Name: "Presence of Data on Source",
+            ind2Tips: ["# - Not applicable/ unknown, 0 - Data not present on source, 1 - Data present on source, 2 - Data present on source but false or fictitious"],
+            tips: [
+                "Este campo específico do item contém um ponto de acesso estruturado para locais e datas relacionados com a proveniência do artigo."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Country (Nation State) or Larger Entity Country", repeatable: false, mandatory: false, tips: ["País do local de publicação/performance."] },
+                { code: "b", label: "State or Province, etc", repeatable: false, mandatory: false, tips: ["Estado ou província (1ª divisão administrativa)."] },
+                { code: "c", label: "Intermediate Political Jurisdiction", repeatable: true, mandatory: false, tips: ["Divisão política intermediária (ex: condado)."] },
+                { code: "e", label: "Building, Vehicle, etc", repeatable: true, mandatory: false, tips: ["Divisão política intermediária (ex: condado)."] },
+                { code: "f", label: "Date 1", repeatable: false, mandatory: false, tips: ["Divisão política intermediária (ex: condado)."] },
+
             ]
         },
     ]
