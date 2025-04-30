@@ -4303,10 +4303,10 @@ async function main() {
             ind2Name: "Form of name indicator",
             ind2Tips: ["0 - Name in inverted form, 1 - Name entered under place or jurisdiction, 2 - Name entered under name in direct order"],
             tips: [
-                "Este campo contém o nome de uma entidade jurídica considerada como tendo responsabilidade secundária por uma obra, em formato de ponto de acesso."
+                "Este campo contém o nome de uma entidade corporativa referente a qualquer tipo de proveniência e/ou propriedade (propriedade ou custódia anterior, autor da assinatura, dedicatória informal, notas, etc.), que aplicam exclusivamente ao item, sob a forma de ponto de acesso."
             ],
             subFieldDef: [
-                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome da entidade coletiva com responsabilidade secundária"] },
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome da entidade coletiva associada à proveniência ou posse"] },
                 { code: "b", label: "Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão hierárquica da entidade coletiva"] },
                 { code: "c", label: "Addition to Name or Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores ou adições ao nome da entidade"] },
                 { code: "d", label: "Number of Meeting and/or Number of Part of Meeting", repeatable: false, mandatory: false, tips: ["Número da reunião ou parte da reunião"] },
@@ -4316,12 +4316,233 @@ async function main() {
                 { code: "h", label: "Part of Name Other than Entry Element and Inverted Element", repeatable: false, mandatory: false, tips: ["Parte do nome que não é o elemento de entrada nem o elemento invertido"] },
                 { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome (ex: ISNI)"] },
                 { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação institucional ou endereço associado"] },
-                { code: "r", label: "Part or Role Played", repeatable: true, mandatory: false, tips: ["Parte ou papel desempenhado na obra"] },
                 { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada para o nome"] },
                 { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade correspondente"] },
-                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da responsabilidade secundária"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da relação de proveniência/posse"] },
                 { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Instituição à qual o campo se aplica"] },
                 { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Identificação de materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "714",
+            name: "TRADEMARK",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém o nome de uma entidade corporativa referente a qualquer tipo de proveniência e/ou propriedade (propriedade ou custódia anterior, autor da assinatura, dedicatória informal, notas, etc.), que aplicam exclusivamente ao item, sob a forma de ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Data Element", repeatable: false, mandatory: true, tips: ["Elemento principal da marca registrada"] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas relevantes associadas à marca registrada"] },
+                { code: "c", label: "Qualification", repeatable: true, mandatory: false, tips: ["Qualificadores adicionais para a marca registrada"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade correspondente"] }
+            ]
+        },
+        {
+            tag: "720",
+            name: "FAMILY NAME - PRIMARY RESPONSABILITY",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém o nome de uma família considerada como tendo responsabilidade principal pelo trabalho, no acesso forma de ponto.",
+                "O nome da família neste campo prevê que o registo seja criado de acordo com as regras de catalogação reconhecendo o conceito da entrada principal."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome da família em forma de ponto de acesso"] },
+                { code: "c", label: "Type of Family", repeatable: false, mandatory: true, tips: ["Categoria ou tipo da família (ex: clã, dinastia)"] },
+                { code: "d", label: "Places Associated with the Family", repeatable: true, mandatory: false, tips: ["Locais associados à família"] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas relevantes associadas à família"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código de relator para responsabilidade primária"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "721",
+            name: "FAMILY NAME - ALTERNATIVE RESPONSABILITY",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém o nome de uma família considerada como tendo responsabilidade alternativa pelo trabalho, no acesso forma de ponto."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome da família em forma de ponto de acesso com responsabilidade alternativa"] },
+                { code: "c", label: "Type of Family", repeatable: false, mandatory: true, tips: ["Categoria ou tipo da família (ex: clã, dinastia)"] },
+                { code: "d", label: "Places Associated with the Family", repeatable: true, mandatory: false, tips: ["Locais associados à família"] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas relevantes associadas à família"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código de relator para responsabilidade alternativa"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "722",
+            name: "FAMILY NAME - SECONDARY RESPONSABILITY",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém o nome de uma família considerada como tendo responsabilidade secundária sobre uma obra, no acesso forma de ponto."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome da família em forma de ponto de acesso com responsabilidade secundária"] },
+                { code: "c", label: "Type of Family", repeatable: false, mandatory: true, tips: ["Categoria ou tipo da família (ex: clã, dinastia)"] },
+                { code: "d", label: "Places Associated with the Family", repeatable: true, mandatory: false, tips: ["Locais associados à família"] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas relevantes associadas à família"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome"] },
+                { code: "r", label: "Part or Role Played", repeatable: true, mandatory: false, tips: ["Parte ou papel desempenhado pela família"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código de relator para responsabilidade secundária"] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Instituição à qual o campo se aplica"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "723",
+            name: "FAMILY NAME - PROVENANCE OR OWNERSHIP",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém o nome de uma família referente a qualquer tipo de origem e/ou propriedade (anterior propriedade ou custódia), que se aplicam exclusivamente ao item, sob a forma de ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome da família associada à proveniência ou posse"] },
+                { code: "c", label: "Type of Family", repeatable: false, mandatory: true, tips: ["Tipo de família (ex: dinastia, clã)"] },
+                { code: "d", label: "Places Associated with the Family", repeatable: true, mandatory: false, tips: ["Locais geográficos associados à família"] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Período temporal associado à família"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional (ex: ISNI)"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Número de identificação do registro de autoridade"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica o tipo de relação"] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Instituição detentora dos materiais"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Identificação de materiais específicos"] }
+            ]
+        },
+        {
+            tag: "730",
+            name: "NAME - ENTITY RESPONSIBLE",
+            ind1Name: "Form of Name Indicator",
+            ind1Tips: ["0 - Type of name cannot be determined, 1 - Personal name, 2 - Not a personal name"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém de forma não estruturada o nome de uma entidade considerada responsável por uma trabalhar.",
+                "O nome não segue regras de catalogação. Este campo deve ser utilizado apenas quando outros 7 campos forem inadequado."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome da entidade responsável"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da responsabilidade"] }
+            ]
+        },
+        {
+            tag: "740",
+            name: "UNIFORM CONVENTIONAL HEADING FOR LEGAL AND RELIGIOUS TEXTS - PRIMARY RESPONSIBILITY",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Name: "Form of Name Indicator",
+            ind2Tips: ["1 - Name entered under country or other geographical name, 2 - Name entered under other form, e.g. a church or a simply conventional name"],
+            tips: [
+                "Este campo contém os títulos convencionais uniformes para textos jurídicos e religiosos de natureza prescritiva e para tratados e outros acordos entre duas ou mais partes, emitidos ao abrigo de uma determinada jurisdição, geralmente um país ou uma igreja, sob a forma de ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do cabeçalho uniforme convencional"] },
+                { code: "b", label: "Subdivision", repeatable: true, mandatory: true, tips: ["Subdivisão hierárquica do cabeçalho"] },
+                { code: "c", label: "Addition to Name or Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores ou adições ao nome"] },
+                { code: "e", label: "Name of the Other Party", repeatable: false, mandatory: false, tips: ["Nome da outra parte envolvida"] },
+                { code: "f", label: "Date of Legal Issue or Version, or Date of Signing", repeatable: true, mandatory: false, tips: ["Data de emissão, versão ou assinatura"] },
+                { code: "i", label: "Name of Section or Part", repeatable: true, mandatory: false, tips: ["Nome da seção ou parte"] },
+                { code: "l", label: "Form Subheading", repeatable: true, mandatory: false, tips: ["Subdivisão por forma"] },
+                { code: "n", label: "Miscellaneous Information", repeatable: true, mandatory: false, tips: ["Informações diversas"] },
+                { code: "t", label: "Uniform Title", repeatable: false, mandatory: false, tips: ["Título uniforme associado"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade"] }
+            ]
+        },
+        {
+            tag: "741",
+            name: "UNIFORM CONVENTIONAL HEADING FOR LEGAL AND RELIGIOUS TEXTS - ALTERNATIVE RESPONSIBILITY",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Name: "Form of Name Indicator",
+            ind2Tips: ["1 - Name entered under country or other geographical name, 2 - Name entered under other form, e.g. a church or a simply conventional name"],
+            tips: [
+                "Este campo contém os títulos convencionais uniformes para textos jurídicos e religiosos de natureza prescritiva e para tratados entre duas ou mais partes, considerados como tendo responsabilidade alternativa pelo trabalho, em formulário de ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do cabeçalho uniforme convencional com responsabilidade alternativa"] },
+                { code: "b", label: "Subdivision", repeatable: true, mandatory: true, tips: ["Subdivisão hierárquica do cabeçalho"] },
+                { code: "c", label: "Addition to Name or Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores ou adições ao nome"] },
+                { code: "e", label: "Name of the Other Party", repeatable: false, mandatory: false, tips: ["Nome da outra parte envolvida"] },
+                { code: "f", label: "Date of Legal Issue or Version, or Date of Signing", repeatable: true, mandatory: false, tips: ["Data de emissão, versão ou assinatura"] },
+                { code: "i", label: "Name of Section or Part", repeatable: true, mandatory: false, tips: ["Nome da seção ou parte"] },
+                { code: "l", label: "Form Subheading", repeatable: true, mandatory: false, tips: ["Subdivisão por forma"] },
+                { code: "n", label: "Miscellaneous Information", repeatable: true, mandatory: false, tips: ["Informações diversas"] },
+                { code: "t", label: "Uniform Title", repeatable: false, mandatory: false, tips: ["Título uniforme associado"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade"] }
+            ]
+        },
+        {
+            tag: "742",
+            name: "UNIFORM CONVENTIONAL HEADING FOR LEGAL AND RELIGIOUS TEXTS - SECONDARY RESPONSIBILITY",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Name: "Form of Name Indicator",
+            ind2Tips: ["1 - Name entered under country or other geographical name, 2 - Name entered under other form, e.g. a church or a simply conventional name"],
+            tips: [
+                "Este campo contém os títulos convencionais uniformes para textos jurídicos e religiosos de natureza prescritiva e para tratados entre duas ou mais partes, considerados como tendo responsabilidade secundária por uma obra em formulário de ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do cabeçalho uniforme convencional com responsabilidade secundária"] },
+                { code: "b", label: "Subdivision", repeatable: true, mandatory: true, tips: ["Subdivisão hierárquica do cabeçalho"] },
+                { code: "c", label: "Addition to Name or Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores ou adições ao nome"] },
+                { code: "e", label: "Name of the Other Party", repeatable: false, mandatory: false, tips: ["Nome da outra parte envolvida"] },
+                { code: "f", label: "Date of Legal Issue or Version, or Date of Signing", repeatable: true, mandatory: false, tips: ["Data de emissão, versão ou assinatura"] },
+                { code: "i", label: "Name of Section or Part", repeatable: true, mandatory: false, tips: ["Nome da seção ou parte"] },
+                { code: "l", label: "Form Subheading", repeatable: true, mandatory: false, tips: ["Subdivisão por forma"] },
+                { code: "n", label: "Miscellaneous Information", repeatable: true, mandatory: false, tips: ["Informações diversas"] },
+                { code: "t", label: "Uniform Title", repeatable: false, mandatory: false, tips: ["Título uniforme associado"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade"] }
+            ]
+        },
+        {
+            tag: "801",
+            name: "ORIGINATING SOURCE",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Name: "Function Indicator",
+            ind2Tips: ["0 - Original cataloguing agency, 1 - Transcribing agency, 2 - Modifying agency, 3 - Issuing agency"],
+            tips: [
+                "Este campo contém uma indicação da origem do registo, incluindo um dos seguintes: a agência que criou os dados, a agência que transcreveu os dados para um formato legível por máquina, qualquer agência que tenha modificou o registo/dados originais e a agência que emitiu o registo atual."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Country", repeatable: false, mandatory: true, tips: ["País de origem da catalogação"] },
+                { code: "b", label: "Agency", repeatable: false, mandatory: true, tips: ["Agência responsável pela catalogação"] },
+                { code: "c", label: "Date of Transaction", repeatable: false, mandatory: true, tips: ["Data da transação/catalogção"] },
+                { code: "g", label: "Cataloguing Rules (Descriptive Conventions)", repeatable: true, mandatory: true, tips: ["Normas de catalogação utilizadas"] },
+                { code: "h", label: "Original Record identifier", repeatable: false, mandatory: true, tips: ["Identificador do registro original"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte alternativa de informação"] }
+            ]
+        },
+        {
+            tag: "802",
+            name: "ISSN CENTRE",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém um código para o Centro ISSN responsável pela atribuição do ISSN e do título-chave."
+            ],
+            subFieldDef: [
+                { code: "a", label: "ISSN Centre Code", repeatable: false, mandatory: false, tips: ["Código do centro ISSN responsável"] }
+            ]
+        },
+        {
+            tag: "803",
+            name: "GENERAL CATALOGUER'S NOTE",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo é utilizado para registar informações biográficas, históricas ou outras sobre o registo."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto da nota do catalogador"] }
             ]
         },
     ]
