@@ -84,16 +84,17 @@ model ControlField {
 }
 
 model DataFieldDefinition {
-  id          String               @id @default(cuid())
-  tag         String
-  name        String
-  ind1Name    String
-  ind1Tips    String[]
-  ind2Name    String
-  ind2Tips    String[]
-  tips        String[]
-  subFieldDef SubfieldDefinition[]
-  DataField   DataField[]
+  id                String               @id @default(cuid())
+  tag               String
+  name              String
+  ind1Name          String
+  ind1Tips          String[]
+  ind2Name          String
+  ind2Tips          String[]
+  tips              String[]
+  subFieldDef       SubfieldDefinition[]
+  DataField         DataField[]
+  TemplateDataField TemplateDataField[]
 }
 
 /// Modelo que representa um campo de dados UNIMARC (ex: 100, 245)
@@ -126,6 +127,26 @@ model Subfield {
   value       String /// Valor associado ao campo
   dataField   DataField @relation(fields: [dataFieldId], references: [id])
   dataFieldId String
+}
+
+model Template {
+  id          String              @id @default(cuid())
+  name        String              @unique /// Ex: Livro, CD, DVD, etc.
+  description String?
+  dataFields  TemplateDataField[] /// Campos associados ao template
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
+model TemplateDataField {
+  id           String              @id @default(cuid())
+  template     Template            @relation(fields: [templateId], references: [id])
+  templateId   String
+  definition   DataFieldDefinition @relation(fields: [definitionId], references: [id])
+  definitionId String
+  defaultInd1  String?
+  defaultInd2  String?
+  createdAt    DateTime            @default(now())
 }
 
 /// --- HOLDINGS STRUCTURE ---

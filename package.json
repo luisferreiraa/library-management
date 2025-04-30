@@ -1,6 +1,7 @@
 {
   "name": "my-v0-project",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,6 +9,13 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "ts-node prisma/seed.ts"
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "prisma": {
+    "seed": "node --loader ts-node/esm prisma/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
@@ -68,8 +76,9 @@
     "zod": "latest"
   },
   "devDependencies": {
+    "@swc/core": "^1.11.24",
     "@types/lodash": "^4.17.16",
-    "@types/node": "^22",
+    "@types/node": "^22.15.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8",

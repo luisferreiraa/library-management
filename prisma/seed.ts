@@ -5,39 +5,50 @@ const prisma = new PrismaClient()
 
 async function main() {
 
-    // Criar hash de senha
-    const hashedPassword = await bcrypt.hash("123456789", 10)
+    // Clean up first
+    await prisma.subfieldDefinition.deleteMany();
+    await prisma.dataFieldDefinition.deleteMany();
+    await prisma.controlFieldDefinition.deleteMany();
 
-    // Criar os Roles
-    const adminRole = await prisma.role.create({
-        data: {
-            name: "ADMIN",
-            slug: "admin",
-        },
-    })
+    // Increase timeout and connection limit
+    await prisma.$executeRaw`SET statement_timeout = 60000;`; // 60 seconds
+    await prisma.$executeRaw`SET idle_in_transaction_session_timeout = 30000;`;
 
-    const userRole = await prisma.role.create({
-        data: {
-            name: "USER",
-            slug: "user",
-        },
-    })
 
-    // Criar um utilizador ADMIn
-    const adminUser = await prisma.user.create({
-        data: {
-            username: "luiscarneiroferreira",
-            email: "luiscarneiroferreira@gmail.com",
-            password: hashedPassword,
-            firstName: "Luís",
-            lastName: "Ferreira",
-            address: "Rua Dom Henrique de Cernache, 490",
-            phoneNumber: "911099269",
-            idNumber: "130080640ZY7",
-            nifNumber: 226460207,
-            roleId: adminRole.id,
-        }
-    })
+
+    /*  // Criar hash de senha
+     const hashedPassword = await bcrypt.hash("123456789", 10)
+ 
+     // Criar os Roles
+     const adminRole = await prisma.role.create({
+         data: {
+             name: "ADMIN",
+             slug: "admin",
+         },
+     })
+ 
+     const userRole = await prisma.role.create({
+         data: {
+             name: "USER",
+             slug: "user",
+         },
+     })
+ 
+     // Criar um utilizador ADMIn
+     const adminUser = await prisma.user.create({
+         data: {
+             username: "luiscarneiroferreira",
+             email: "luiscarneiroferreira@gmail.com",
+             password: hashedPassword,
+             firstName: "Luís",
+             lastName: "Ferreira",
+             address: "Rua Dom Henrique de Cernache, 490",
+             phoneNumber: "911099269",
+             idNumber: "130080640ZY7",
+             nifNumber: 226460207,
+             roleId: adminRole.id,
+         }
+     }) */
 
     // Criar ControlFields
     const controlFieldDefinitions = await prisma.controlFieldDefinition.createMany({
@@ -4678,37 +4689,98 @@ async function main() {
         },
     ]
 
-    await Promise.all(
-        dataFieldDefinitionsData.map(def =>
-            prisma.dataFieldDefinition.create({
-                data: {
-                    tag: def.tag ?? "",
-                    name: def.name ?? "",
-                    ind1Name: Array.isArray(def.ind1Name) ? def.ind1Name.join(", ") : def.ind1Name ?? "",
-                    ind2Name: Array.isArray(def.ind2Name) ? def.ind2Name.join(", ") : def.ind2Name ?? "",
-                    ind1Tips: def.ind1Tips,
-                    ind2Tips: def.ind2Tips,
-                    tips: def.tips,
-                    subFieldDef: {
-                        create: (def.subFieldDef ?? []).map(sub => ({
-                            code: sub.code,
-                            label: sub.label,
-                            repeatable: sub.repeatable,
-                            mandatory: sub.mandatory,
-                            tips: sub.tips
-                        }))
-                    }
-                }
-            })
-        )
-    )
+    const batchSize = 100;
 
-    console.log({ adminRole, userRole, adminUser })
+    for (let i = 0; i < dataFieldDefinitionsData.length; i += batchSize) {
+        const batch = dataFieldDefinitionsData.slice(i, i + batchSize);
+
+        await prisma.$transaction(
+            batch.map(def =>
+                prisma.dataFieldDefinition.create({
+                    data: {
+                        tag: def.tag ?? "",
+                        name: def.name ?? "",
+                        ind1Name: Array.isArray(def.ind1Name) ? def.ind1Name.join(", ") : def.ind1Name ?? "",
+                        ind2Name: Array.isArray(def.ind2Name) ? def.ind2Name.join(", ") : def.ind2Name ?? "",
+                        ind1Tips: def.ind1Tips,
+                        ind2Tips: def.ind2Tips,
+                        tips: def.tips,
+                        subFieldDef: {
+                            create: (def.subFieldDef ?? []).map(sub => ({
+                                code: sub.code,
+                                label: sub.label,
+                                repeatable: sub.repeatable,
+                                mandatory: sub.mandatory,
+                                tips: sub.tips
+                            }))
+                        }
+                    }
+                })
+            )
+        )
+    }
+
+    const livroTemplate = await prisma.template.upsert({
+        where: { name: 'Livro' },
+        update: {},
+        create: {
+            name: 'Livro',
+            description: 'Template UNIMARC para livros',
+        },
+    });
+
+    const campos = [
+        { tag: '001', ind1: '#', ind2: '#' }, // Número de registo
+        { tag: '005', ind1: '#', ind2: '#' }, // Data e hora da última modificação
+        { tag: '008', ind1: '#', ind2: '#' }, // Data de publicação e dados bibliográficos
+        { tag: '100', ind1: '#', ind2: '#' }, // Autor principal
+        { tag: '101', ind1: '#', ind2: '#' }, // Tipo de material
+        { tag: '102', ind1: '#', ind2: '#' }, // Código do país de publicação
+        { tag: '110', ind1: '#', ind2: '#' }, // Entidade responsável pelo título
+        { tag: '120', ind1: '#', ind2: '#' }, // Título alternativo
+        { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
+        { tag: '210', ind1: '#', ind2: '#' }, // Editora
+        { tag: '215', ind1: '#', ind2: '#' }, // Descrição física
+        { tag: '225', ind1: '#', ind2: '#' }, // Coleção (se aplicável)
+        { tag: '300', ind1: '#', ind2: '#' }, // Extensão
+        { tag: '700', ind1: '1', ind2: ' ' }, // Autor secundário
+        { tag: '701', ind1: '1', ind2: ' ' }, // Responsável secundário
+        { tag: '801', ind1: '#', ind2: '#' }, // País de publicação
+        { tag: '902', ind1: '#', ind2: '#' }, // ISBN
+        { tag: '410', ind1: '#', ind2: '#' }, // Assunto (se necessário)
+        { tag: '451', ind1: '#', ind2: '#' }, // Classificação (Dewey ou outro)
+        { tag: '999', ind1: '#', ind2: '#' }, // Dados adicionais ou de biblioteca
+    ];
+
+
+    for (const campo of campos) {
+        const definition = await prisma.dataFieldDefinition.findFirst({
+            where: { tag: campo.tag },
+        });
+
+        if (!definition) {
+            console.warn(`Definição para tag ${campo.tag} não encontrada. Pula.`);
+            continue;
+        }
+
+        await prisma.templateDataField.create({
+            data: {
+                templateId: livroTemplate.id,
+                definitionId: definition.id,
+                defaultInd1: campo.ind1,
+                defaultInd2: campo.ind2,
+            },
+        });
+    }
+
+    console.log('Seeder do template "Livro" concluído.');
+
 }
 
 main()
     .catch((e) => {
-        throw e;
+        console.error(e)
+        process.exit(1)
     })
     .finally(async () => {
         await prisma.$disconnect()
