@@ -3887,15 +3887,441 @@ async function main() {
             ind2Name: "Presence of Data on Source",
             ind2Tips: ["# - Not applicable/ unknown, 0 - Data not present on source, 1 - Data present on source, 2 - Data present on source but false or fictitious"],
             tips: [
-                "Este campo específico do item contém um ponto de acesso estruturado para locais e datas relacionados com a proveniência do artigo."
+                "Campo específico de item que contém ponto de acesso estruturado para lugares e datas relacionados com a proveniência.",
+                "Utilizado em conjunto com o campo 317 (nota de proveniência) e campos de nomes (702, 712, 722).",
+                "Subcampo $5 é obrigatório para indicar a instituição a que o campo se aplica.",
+                "Usar $6 para ligação entre os campos associados.",
+                "As datas seguem a norma ISO 8601, com 'u' para posições desconhecidas.",
+                "Hierarquias geográficas podem incluir desde continentes até edifícios específicos."
             ],
             subFieldDef: [
-                { code: "a", label: "Country (Nation State) or Larger Entity Country", repeatable: false, mandatory: false, tips: ["País do local de publicação/performance."] },
-                { code: "b", label: "State or Province, etc", repeatable: false, mandatory: false, tips: ["Estado ou província (1ª divisão administrativa)."] },
-                { code: "c", label: "Intermediate Political Jurisdiction", repeatable: true, mandatory: false, tips: ["Divisão política intermediária (ex: condado)."] },
-                { code: "e", label: "Building, Vehicle, etc", repeatable: true, mandatory: false, tips: ["Divisão política intermediária (ex: condado)."] },
-                { code: "f", label: "Date 1", repeatable: false, mandatory: false, tips: ["Divisão política intermediária (ex: condado)."] },
+                { code: "a", label: "Country (Nation State)", repeatable: false, mandatory: false, tips: ["País ou entidade nacional relacionada com a proveniência."] },
+                { code: "b", label: "State or Province, etc.", repeatable: false, mandatory: false, tips: ["Divisão administrativa de primeira ordem."] },
+                { code: "c", label: "Intermediate Political Jurisdiction", repeatable: true, mandatory: false, tips: ["Divisões administrativas inferiores ao estado."] },
+                { code: "d", label: "City, etc.", repeatable: false, mandatory: false, tips: ["Cidade, vila ou outra área populacional."] },
+                { code: "e", label: "Building, Vehicle, etc.", repeatable: true, mandatory: false, tips: ["Edifício, navio, veículo, ou outro local específico."] },
+                { code: "f", label: "Date 1", repeatable: false, mandatory: false, tips: ["Data de início do período de proveniência."] },
+                { code: "g", label: "Season", repeatable: false, mandatory: false, tips: ["Estação do ano (ex: primavera)."] },
+                { code: "h", label: "Occasion", repeatable: false, mandatory: false, tips: ["Ocasião especial ou evento (ex: Páscoa)."] },
+                { code: "i", label: "Date 2", repeatable: false, mandatory: false, tips: ["Data final do período de proveniência."] },
+                { code: "k", label: "Subsection of City, etc.", repeatable: true, mandatory: false, tips: ["Bairros, ruas, zonas específicas dentro da cidade."] },
+                { code: "m", label: "Other Geographic Regions or Features", repeatable: true, mandatory: false, tips: ["Montanhas, oceanos, ilhas, etc."] },
+                { code: "n", label: "Extraterrestrial Area", repeatable: true, mandatory: false, tips: ["Entidades espaciais como planetas ou luas."] },
+                { code: "o", label: "Larger Geographical Area", repeatable: true, mandatory: false, tips: ["Regiões como continente, hemisfério ou mundo."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade (ex: tgn, pemracs)."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade."] },
+                { code: "5", label: "Institution to Which the Field Applies", repeatable: false, mandatory: true, tips: ["Instituição à qual o campo se refere. Código ISIL ou MARC, ou nome completo."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: true, mandatory: false, tips: ["Código de ligação com campos relacionados (ex: 702, 317)."] }
 
+            ]
+        },
+        {
+            tag: "623",
+            name: "CHARACTER",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém um ponto de acesso estruturado para o nome e outros detalhes relativos a uma personagem fictícia.",
+                "Permite associar a personagem a um ou mais intérpretes indicados em campos 7XX através do subcampo $6.",
+                "Usado principalmente em materiais relacionados com performance (óperas, filmes, peças de teatro, etc.).",
+                "Útil quando a personagem muda de nome ao longo da obra ou é interpretada por várias pessoas.",
+                "O subcampo $3 pode conter um identificador de registo de autoridade UNIMARC.",
+                "Complementa o campo 323 (nota de elenco) e pode estar relacionado com 702, 712, 722."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Nome principal da personagem. Ex: 'Vicomte de Valmont'"] },
+                { code: "b", label: "Part of Name Other than Entry Element", repeatable: false, mandatory: false, tips: ["Parte do nome da personagem que não faz parte do elemento de entrada."] },
+                { code: "c", label: "Additions to Name of the Character", repeatable: true, mandatory: false, tips: ["Títulos, epítetos ou descrições adicionais. Ex: 'Sposo di Lucilla', 'Servo di Uberto'."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador para o registo de autoridade correspondente."] },
+                { code: "6", label: "Interfield Linking Data", repeatable: true, mandatory: false, tips: ["Permite ligar esta personagem a campos 702 (intérpretes), ou a outras ocorrências de 623 (nome alterado, múltiplos intérpretes)."] }
+            ]
+        },
+        {
+            tag: "631",
+            name: "OCCUPATION",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém termos ou expressões que especificam ocupações, profissões, passatempos ou interesses de indivíduos documentados nos materiais descritos.",
+                "Não é usado para listar as ocupações dos criadores dos materiais, exceto quando essas ocupações são significativamente refletidas nos recursos.",
+                "A presença de $2 (fonte) é recomendada.",
+                "Relaciona-se com o campo 606 (Topical Name Used as Subject)."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Occupation", repeatable: false, mandatory: true, tips: ["Profissão, ocupação ou passatempo do indivíduo descrito."] },
+                { code: "b", label: "Form", repeatable: false, mandatory: false, tips: ["Classe ou tipo de material (ex: diário, diretório)."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão para indicar gênero ou tipo de material."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temática para especificar ainda mais a ocupação."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão geográfica relacionada com a ocupação."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão cronológica relacionada com a ocupação."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte controlada de onde o termo de ocupação foi retirado (ex: 'itoamc')."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador de registo de autoridade (se aplicável)."] },
+                { code: "8", label: "Materials Specified", repeatable: false, mandatory: false, tips: ["Parte específica dos materiais descritos a que o campo se aplica."] }
+            ]
+        },
+        {
+            tag: "632",
+            name: "FUNCTION",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém um termo ou expressão usada para especificar a função, atividade ou processo organizacional de pessoas, famílias ou entidades corporativas que geraram os materiais descritos no registo.",
+                "Relaciona-se com o campo 606 (Topical Name Used as Subject).",
+                "A presença de $2 (source) é recomendada.",
+                "Subcampos como $x, $y e $z permitem subdivisões tópicas, geográficas e cronológicas.",
+                "Permite uso em contextos arquivísticos e de história institucional."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Function", repeatable: false, mandatory: true, tips: ["Termo que especifica a função ou atividade relacionada com a criação do recurso."] },
+                { code: "j", label: "Form Subdivision", repeatable: true, mandatory: false, tips: ["Termo adicional que especifica o tipo ou género de material."] },
+                { code: "x", label: "Topical Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão temática que qualifica ainda mais a função."] },
+                { code: "y", label: "Geographical Subdivision", repeatable: true, mandatory: false, tips: ["Lugar associado à função descrita."] },
+                { code: "z", label: "Chronological Subdivision", repeatable: true, mandatory: false, tips: ["Período de tempo em que a função foi exercida."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Código da fonte ou thesaurus de onde foi extraído o termo de função."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: true, mandatory: false, tips: ["Identificador do registo de autoridade associado ao ponto de acesso."] },
+                { code: "8", label: "Materials Specified", repeatable: false, mandatory: false, tips: ["Parte dos materiais descritos a que o campo se aplica."] }
+            ]
+        },
+        {
+            tag: "660",
+            name: "GEOGRAPHIC AREA CODE",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém uma indicação da região geográfica coberta pela obra, em formato codificado.",
+                "Os códigos devem seguir a 'MARC Code List for Geographic Areas' desenvolvida pela Library of Congress.",
+                "Este campo é repetível para cada região geográfica indicada.",
+                "Não substitui o campo 607 (Geographical Name Used as Subject), mas pode ser utilizado em complemento.",
+                "O código contém sete caracteres alfabéticos minúsculos e/ou hífens, representando uma estrutura hierárquica geográfica ou política.",
+                "Quando forem atribuídos múltiplos códigos, deve-se repetir o campo 660 para cada um."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Code", repeatable: false, mandatory: true, tips: ["Código da área geográfica conforme a lista MARC. Exemplo: 'n-us-md' para Maryland (EUA), 'e-fr---' para França."] }
+            ]
+        },
+        {
+            tag: "661",
+            name: "TIME PERIOD CODE",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém uma indicação codificada do(s) período(s) cronológico(s) abordado(s) na obra.",
+                "Pode ser repetido quando a obra trata de múltiplos períodos distintos.",
+                "Usa códigos de quatro caracteres alfanuméricos derivados do MARC 21, campo 045.",
+                "Não deve ser utilizado para datas pré-históricas (ex.: eras geológicas).",
+                "É diferente do campo 122, que pode fornecer maior detalhe sobre o período.",
+                "A tabela de códigos está disponível em: https://www.loc.gov/marc/bibliographic/bd045.html"
+            ],
+            subFieldDef: [
+                { code: "a", label: "Time Period Code", repeatable: false, mandatory: true, tips: ["Código alfanumérico de 4 caracteres que representa o período cronológico. Ex: 'x-x-' para o século XX, 'd6d6' para cerca de 300 A.C."] }
+            ]
+        },
+        {
+            tag: "670",
+            name: "PRECIS",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém dados de indexação de assunto construídos segundo o sistema PRECIS (Preserved Context Index System).",
+                "Utilizado para gerar entradas automáticas em índices impressos e catálogos com base em regras computacionais.",
+                "O conteúdo completo do pacote PRECIS é identificado por um Subject Indicator Number (SIN).",
+                "Os termos devem incluir códigos de manipulação que orientam a geração de entradas.",
+                "Campo especialmente útil em sistemas automatizados e estruturas antigas de catalogação."
+            ],
+            subFieldDef: [
+                { code: "b", label: "Subject Indicator Number", repeatable: false, mandatory: false, tips: ["Número de identificação do pacote de assunto PRECIS. Deve terminar com dígito de controlo módulo 11."] },
+                { code: "c", label: "String", repeatable: false, mandatory: false, tips: ["Sequência de termos de assunto com códigos de manipulação para entradas automáticas."] },
+                { code: "e", label: "Reference Indicator Number", repeatable: true, mandatory: false, tips: ["Número que identifica a posição de um termo no thesaurus de origem. Pode ser usado para referências cruzadas."] },
+                { code: "z", label: "Language of Terms", repeatable: false, mandatory: false, tips: ["Código ISO 639-2 de três caracteres da língua dos termos usados no campo $c."] }
+            ]
+        },
+        {
+            tag: "675",
+            name: "UNIVERSAL DECIMAL CLASSIFICATION UDC",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém um número de classificação atribuído ao recurso, de acordo com o esquema Universal Decimal Classification (UDC).",
+                "Inclui também a indicação da edição e da língua da edição usada.",
+                "Os códigos são derivados do Master Reference File da UDC Consortium.",
+                "O campo é útil para classificação temática normalizada e intercâmbio internacional de registos."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Number", repeatable: false, mandatory: true, tips: ["Número de classificação tal como retirado dos quadros da UDC. Ex: '633.13-155(410)\"18\"'"] },
+                { code: "v", label: "Edition", repeatable: false, mandatory: false, tips: ["Identificação da edição utilizada da UDC (ex: '4' para 4.ª edição)."] },
+                { code: "z", label: "Language of Edition", repeatable: false, mandatory: false, tips: ["Código ISO 639-2 de três letras que indica o idioma da edição da UDC utilizada (ex: 'eng')."] },
+                { code: "3", label: "Classification Record Number", repeatable: false, mandatory: false, tips: ["Identificador de registo de classificação, para uso com o formato UNIMARC/Classification."] }
+            ]
+        },
+        {
+            tag: "676",
+            name: "DEWEY DECIMAL CLASSIFICATION",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém um número de classificação atribuído ao recurso segundo o esquema Dewey Decimal Classification (DDC).",
+                "O número deve ser transcrito tal como aparece nas tabelas da DDC, incluindo barras (/) para marcar pontos de truncamento.",
+                "O subcampo $v especifica a edição da DDC utilizada.",
+                "O subcampo $z é utilizado quando a edição traduzida da DDC difere da versão original.",
+                "O subcampo $3 pode ser usado com um número de registo de classificação, como no UNIMARC/Classification."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Number", repeatable: false, mandatory: true, tips: ["Número conforme atribuído pela Dewey Decimal Classification. Ex.: '823.912' ou '944/.0252'."] },
+                { code: "v", label: "Edition", repeatable: false, mandatory: false, tips: ["Número da edição da DDC usada, como '19' ou '13a' (abridged)."] },
+                { code: "z", label: "Language of Edition", repeatable: false, mandatory: false, tips: ["Código ISO 639-2 da língua da edição da DDC utilizada (ex: 'fre' para francês)."] },
+                { code: "3", label: "Classification Record Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de classificação, usado com o UNIMARC/Classification."] }
+            ]
+        },
+        {
+            tag: "680",
+            name: "LIBRARY OF CONGRESS CLASSIFICATION",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém um número de classificação atribuído ao recurso de acordo com os esquemas da Library of Congress Classification (LCC).",
+                "Inclui, opcionalmente, um número de livro (book number) que identifica de forma única o recurso na coleção da agência catalogadora.",
+                "O número de classe provém dos esquemas da LCC publicados.",
+                "Pode ser utilizado por qualquer agência que possua os esquemas da LCC, mesmo que não pertença à Library of Congress.",
+                "Recomendado para integração com sistemas que utilizam LCC para ordenação física ou semântica de materiais."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Class Number", repeatable: false, mandatory: true, tips: ["Número de classe tal como definido pelos esquemas da Library of Congress Classification. Ex: 'PZ8.3.A6A6'."] },
+                { code: "b", label: "Book Number", repeatable: false, mandatory: false, tips: ["Número de livro atribuído pela agência catalogadora para distinguir exemplares dentro de uma mesma classe."] },
+                { code: "3", label: "Classification Record Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de classificação para o ponto de acesso. Usado com o formato UNIMARC/Classification."] }
+            ]
+        },
+        {
+            tag: "686",
+            name: "OTHER CLASS NUMBERS",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém números de classe de sistemas de classificação que não são utilizados a nível internacional mas que são esquemas publicados amplamente conhecidos."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Class Number", repeatable: false, mandatory: true, tips: ["Número de classe tal como definido pelo esquema."] },
+                { code: "b", label: "Book Number", repeatable: true, mandatory: false, tips: ["Número de livro atribuído pela agência catalogadora."] },
+                { code: "c", label: "Classification Subdivision", repeatable: true, mandatory: false, tips: ["Uma subdivisão do número de classe obtido através do esquema de classificação."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Um código para o esquema de classificação."] },
+                { code: "3", label: "Classification Record Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de classificação para o ponto de acesso."] }
+            ]
+        },
+        {
+            tag: "700",
+            name: "PERSONAL NAME - PRIMARY RESPONSABILITY",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Name: "Form of name indicator",
+            ind2Tips: ["0 - Name entered under forename or direct order, 1 - Name entered under surname (family name, patronymic, etc.)"],
+            tips: [
+                "Este campo contém o nome da pessoa considerada como tendo a responsabilidade principal pelo trabalho, num formulário de ponto de acesso.",
+                "O nome da pessoa neste campo indica que o registo foi criado de acordo com as regras de catalogação reconhecendo o conceito da entrada principal."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome pessoal."] },
+                { code: "b", label: "Part of Name Other than Entry Element", repeatable: false, mandatory: false, tips: ["Parte do nome que não é o elemento de entrada."] },
+                { code: "c", label: "Additions to Names Other than Dates", repeatable: false, mandatory: false, tips: ["Adições ao nome que não sejam datas."] },
+                { code: "d", label: "Roman Numerals", repeatable: false, mandatory: false, tips: ["Numerais romanos associados ao nome."] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas associadas ao nome (nascimento, morte, etc.)."] },
+                { code: "g", label: "Expansion of Initials of Forename", repeatable: false, mandatory: false, tips: ["Expansão de iniciais do prenome."] },
+                { code: "k", label: "Attribution Qualifier", repeatable: true, mandatory: false, tips: ["Qualificador de atribuição."] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome."] },
+                { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação ou endereço associado ao nome."] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte do nome pessoal."] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registo de autoridade ou número padrão."] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código de relator associado ao nome."] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Materiais específicos associados ao nome."] }
+            ]
+        },
+        {
+            tag: "701",
+            name: "PERSONAL NAME - ALTERNATE RESPONSABILITY",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Name: "Form of name indicator",
+            ind2Tips: ["0 - Name entered under forename or direct order, 1 - Name entered under surname (family name, patronymic, etc.)"],
+            tips: [
+                "Este campo contém o nome de uma pessoa considerada como tendo responsabilidade alternativa pelo trabalho, no acesso forma de ponto."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome pessoal com responsabilidade alternativa"] },
+                { code: "b", label: "Part of Name Other than Entry Element", repeatable: false, mandatory: false, tips: ["Parte do nome que não é o elemento de entrada"] },
+                { code: "c", label: "Additions to Names Other than Dates", repeatable: false, mandatory: false, tips: ["Informações adicionais ao nome que não sejam datas"] },
+                { code: "d", label: "Roman Numerals", repeatable: false, mandatory: false, tips: ["Numerais romanos associados ao nome"] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas relevantes associadas ao nome (nascimento, morte, etc.)"] },
+                { code: "g", label: "Expansion of Initials of Forename", repeatable: false, mandatory: false, tips: ["Expansão de iniciais do prenome quando aplicável"] },
+                { code: "k", label: "Attribution Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores de atribuição do nome"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome (ex: ISNI)"] },
+                { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação institucional ou endereço associado"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada para o nome"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade correspondente"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da responsabilidade"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Identificação de materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "702",
+            name: "PERSONAL NAME - SECONDARY RESPONSABILITY",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Name: "Form of name indicator",
+            ind2Tips: ["0 - Name entered under forename or direct order, 1 - Name entered under surname (family name, patronymic, etc.)"],
+            tips: [
+                "Este campo contém o nome de uma pessoa considerada como tendo responsabilidade secundária pelo trabalho, no acesso forma de ponto."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome pessoal com responsabilidade secundária"] },
+                { code: "b", label: "Part of Name Other than Entry Element", repeatable: false, mandatory: false, tips: ["Parte do nome que não é o elemento de entrada"] },
+                { code: "c", label: "Additions to Names Other than Dates", repeatable: false, mandatory: false, tips: ["Informações adicionais ao nome que não sejam datas"] },
+                { code: "d", label: "Roman Numerals", repeatable: false, mandatory: false, tips: ["Numerais romanos associados ao nome"] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas relevantes associadas ao nome (nascimento, morte, etc.)"] },
+                { code: "g", label: "Expansion of Initials of Forename", repeatable: false, mandatory: false, tips: ["Expansão de iniciais do prenome quando aplicável"] },
+                { code: "k", label: "Attribution Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores de atribuição do nome"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome (ex: ISNI)"] },
+                { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação institucional ou endereço associado"] },
+                { code: "r", label: "Part or Role Played", repeatable: true, mandatory: false, tips: ["Parte ou papel desempenhado na obra"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada para o nome"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade correspondente"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da responsabilidade"] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Instituição à qual o campo se aplica"] },
+                { code: "6", label: "Interfield Linking Data", repeatable: true, mandatory: false, tips: ["Dados de ligação entre campos"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Identificação de materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "703",
+            name: "PERSONAL NAME - PROVENANCE OF OWNERSHIP",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Name: "Form of name indicator",
+            ind2Tips: ["0 - Name entered under forename or direct order, 1 - Name entered under surname (family name, patronymic, etc.)"],
+            tips: [
+                "Este campo contém o nome de uma pessoa em relação a qualquer tipo de origem e/ou propriedade (anterior propriedade ou custódia, autor da assinatura, dedicatória informal, notas, etc.), que se aplicam exclusivamente para o item, em formato de ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome pessoal associado à proveniência ou posse"] },
+                { code: "b", label: "Part of Name Other than Entry Element", repeatable: false, mandatory: false, tips: ["Parte do nome que não é o elemento de entrada"] },
+                { code: "c", label: "Additions to Names Other than Dates", repeatable: false, mandatory: false, tips: ["Informações adicionais ao nome que não sejam datas"] },
+                { code: "d", label: "Roman Numerals", repeatable: false, mandatory: false, tips: ["Numerais romanos associados ao nome"] },
+                { code: "f", label: "Dates", repeatable: false, mandatory: false, tips: ["Datas relevantes associadas ao nome (período de posse, etc.)"] },
+                { code: "g", label: "Expansion of Initials of Forename", repeatable: false, mandatory: false, tips: ["Expansão de iniciais do prenome quando aplicável"] },
+                { code: "k", label: "Attribution Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores de atribuição do nome"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome (ex: ISNI)"] },
+                { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação institucional ou endereço associado"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada para o nome"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade correspondente"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da relação de proveniência/posse"] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Instituição à qual o campo se aplica"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Identificação de materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "710",
+            name: "CORPORATE BODY NAME - PRIMARY RESPONSABILITY",
+            ind1Name: "Specifies the Kind of Name of a Body",
+            ind1Tips: ["0 - Corporate name, 1 - Meeting name"],
+            ind2Name: "Form of name indicator",
+            ind2Tips: ["0 - Name in inverted form, 1 - Name entered under place or jurisdiction, 2 - Name entered under name in direct order"],
+            tips: [
+                "Este campo contém o nome da entidade jurídica considerada como tendo a responsabilidade principal pelo trabalho, em um formulário de ponto de acesso.",
+                "O nome da entidade corporativa neste campo prevê que o registo seja criado de acordo com a catalogação regras que reconhecem o conceito de entrada principal."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome da entidade coletiva"] },
+                { code: "b", label: "Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão hierárquica da entidade coletiva"] },
+                { code: "c", label: "Addition to Name or Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores ou adições ao nome da entidade"] },
+                { code: "d", label: "Number of Meeting and/or Number of Part of Meeting", repeatable: false, mandatory: false, tips: ["Número da reunião ou parte da reunião"] },
+                { code: "e", label: "Location of Meeting", repeatable: false, mandatory: false, tips: ["Localização da reunião"] },
+                { code: "f", label: "Date of Meeting", repeatable: false, mandatory: false, tips: ["Data da reunião"] },
+                { code: "g", label: "Inverted Element", repeatable: false, mandatory: false, tips: ["Elemento invertido do nome"] },
+                { code: "h", label: "Part of Name Other than Entry Element and Inverted Element", repeatable: false, mandatory: false, tips: ["Parte do nome que não é o elemento de entrada nem o elemento invertido"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome (ex: ISNI)"] },
+                { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação institucional ou endereço associado"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada para o nome"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade correspondente"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da responsabilidade"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Identificação de materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "711",
+            name: "CORPORATE BODY NAME - ALTERNATIVE RESPONSABILITY",
+            ind1Name: "Specifies the Kind of Name of a Body",
+            ind1Tips: ["0 - Corporate name, 1 - Meeting name"],
+            ind2Name: "Form of name indicator",
+            ind2Tips: ["0 - Name in inverted form, 1 - Name entered under place or jurisdiction, 2 - Name entered under name in direct order"],
+            tips: [
+                "Este campo contém o nome de uma entidade corporativa considerada como tendo responsabilidade alternativa pelo trabalho em formulário de ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome da entidade coletiva com responsabilidade alternativa"] },
+                { code: "b", label: "Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão hierárquica da entidade coletiva"] },
+                { code: "c", label: "Addition to Name or Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores ou adições ao nome da entidade"] },
+                { code: "d", label: "Number of Meeting and/or Number of Part of Meeting", repeatable: false, mandatory: false, tips: ["Número da reunião ou parte da reunião"] },
+                { code: "e", label: "Location of Meeting", repeatable: false, mandatory: false, tips: ["Localização da reunião"] },
+                { code: "f", label: "Date of Meeting", repeatable: false, mandatory: false, tips: ["Data da reunião"] },
+                { code: "g", label: "Inverted Element", repeatable: false, mandatory: false, tips: ["Elemento invertido do nome"] },
+                { code: "h", label: "Part of Name Other than Entry Element and Inverted Element", repeatable: false, mandatory: false, tips: ["Parte do nome que não é o elemento de entrada nem o elemento invertido"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome (ex: ISNI)"] },
+                { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação institucional ou endereço associado"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada para o nome"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade correspondente"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da responsabilidade alternativa"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Identificação de materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "712",
+            name: "CORPORATE BODY NAME - SECONDARY RESPONSABILITY",
+            ind1Name: "Specifies the Kind of Name of a Body",
+            ind1Tips: ["0 - Corporate name, 1 - Meeting name"],
+            ind2Name: "Form of name indicator",
+            ind2Tips: ["0 - Name in inverted form, 1 - Name entered under place or jurisdiction, 2 - Name entered under name in direct order"],
+            tips: [
+                "Este campo contém o nome de uma entidade jurídica considerada como tendo responsabilidade secundária por uma obra, em formato de ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome da entidade coletiva com responsabilidade secundária"] },
+                { code: "b", label: "Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão hierárquica da entidade coletiva"] },
+                { code: "c", label: "Addition to Name or Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores ou adições ao nome da entidade"] },
+                { code: "d", label: "Number of Meeting and/or Number of Part of Meeting", repeatable: false, mandatory: false, tips: ["Número da reunião ou parte da reunião"] },
+                { code: "e", label: "Location of Meeting", repeatable: false, mandatory: false, tips: ["Localização da reunião"] },
+                { code: "f", label: "Date of Meeting", repeatable: false, mandatory: false, tips: ["Data da reunião"] },
+                { code: "g", label: "Inverted Element", repeatable: false, mandatory: false, tips: ["Elemento invertido do nome"] },
+                { code: "h", label: "Part of Name Other than Entry Element and Inverted Element", repeatable: false, mandatory: false, tips: ["Parte do nome que não é o elemento de entrada nem o elemento invertido"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome (ex: ISNI)"] },
+                { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação institucional ou endereço associado"] },
+                { code: "r", label: "Part or Role Played", repeatable: true, mandatory: false, tips: ["Parte ou papel desempenhado na obra"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada para o nome"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade correspondente"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da responsabilidade secundária"] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Instituição à qual o campo se aplica"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Identificação de materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "713",
+            name: "CORPORATE BODY NAME - PROVENANCE OF OWNERSHIP",
+            ind1Name: "Specifies the Kind of Name of a Body",
+            ind1Tips: ["0 - Corporate name, 1 - Meeting name"],
+            ind2Name: "Form of name indicator",
+            ind2Tips: ["0 - Name in inverted form, 1 - Name entered under place or jurisdiction, 2 - Name entered under name in direct order"],
+            tips: [
+                "Este campo contém o nome de uma entidade jurídica considerada como tendo responsabilidade secundária por uma obra, em formato de ponto de acesso."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Entry Element", repeatable: false, mandatory: true, tips: ["Elemento principal do nome da entidade coletiva com responsabilidade secundária"] },
+                { code: "b", label: "Subdivision", repeatable: true, mandatory: false, tips: ["Subdivisão hierárquica da entidade coletiva"] },
+                { code: "c", label: "Addition to Name or Qualifier", repeatable: true, mandatory: false, tips: ["Qualificadores ou adições ao nome da entidade"] },
+                { code: "d", label: "Number of Meeting and/or Number of Part of Meeting", repeatable: false, mandatory: false, tips: ["Número da reunião ou parte da reunião"] },
+                { code: "e", label: "Location of Meeting", repeatable: false, mandatory: false, tips: ["Localização da reunião"] },
+                { code: "f", label: "Date of Meeting", repeatable: false, mandatory: false, tips: ["Data da reunião"] },
+                { code: "g", label: "Inverted Element", repeatable: false, mandatory: false, tips: ["Elemento invertido do nome"] },
+                { code: "h", label: "Part of Name Other than Entry Element and Inverted Element", repeatable: false, mandatory: false, tips: ["Parte do nome que não é o elemento de entrada nem o elemento invertido"] },
+                { code: "o", label: "International Standard Identifier for the Name", repeatable: true, mandatory: false, tips: ["Identificador padrão internacional para o nome (ex: ISNI)"] },
+                { code: "p", label: "Affiliation/Address", repeatable: false, mandatory: false, tips: ["Afiliação institucional ou endereço associado"] },
+                { code: "r", label: "Part or Role Played", repeatable: true, mandatory: false, tips: ["Parte ou papel desempenhado na obra"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte de autoridade utilizada para o nome"] },
+                { code: "3", label: "Authority Record Identifier or Standard Number", repeatable: false, mandatory: false, tips: ["Identificador do registro de autoridade correspondente"] },
+                { code: "4", label: "Relator Code", repeatable: true, mandatory: false, tips: ["Código que especifica a natureza da responsabilidade secundária"] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Instituição à qual o campo se aplica"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Identificação de materiais específicos a que se aplica"] }
             ]
         },
     ]
