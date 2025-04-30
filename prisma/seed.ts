@@ -82,8 +82,8 @@ async function main() {
         {
             tag: "010",
             name: "INTERNATIONAL STANDARD BOOK NUMBER (ISBN)",
-            ind1Tips: ["#: Em branco (não definido)"],
-            ind2Tips: ["#: Em branco (não definido)"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Este campo contém um ISBN e uma qualificação que o distingue quando mais do que um está contido num registo.",
                 "Área de Identificação de Recursos e Termos de Disponibilidade. O campo pode conter os termos de disponibilidade e ou preço, mesmo que não contenha ISBN."
@@ -102,7 +102,7 @@ async function main() {
             ind1Name: "Level of Interest Indicator",
             ind1Tips: ["#: Não especificado/ Não aplicável, 0: Continuing resource of international or national interest, 1: Continuing resource of local interest"],
             ind2Name: "Cluster Identifier Indicator",
-            ind2Tips: ["#: Não especificado/ Não aplicável, 0: ISSN-L, 1: ISSN-H"],
+            ind2Tips: ["# - Não especificado/ Não aplicável, 0 - ISSN-L, 1 - ISSN-H"],
             tips: [
                 "Este campo contém um ISBN e uma qualificação que o distingue quando mais do que um está contido num registo.",
                 "Área de Identificação de Recursos e Termos de Disponibilidade. O campo pode conter os termos de disponibilidade e ou preço, mesmo que não contenha ISBN."
@@ -133,8 +133,8 @@ async function main() {
         {
             tag: "012",
             name: "FINGERPRINT IDENTIFIER",
-            ind1Tips: ["#: Em branco (não definido)"],
-            ind2Tips: ["#: Em branco (não definido)"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Este campo contém o Fingerprint Identifier para publicações monográficas mais antigas (antiquários) e um código para a instituição a que o campo se aplica, que distingue entre Fingerprint Identifiers quando mais do que um está contido num registo.",
                 "O campo corresponde ao identificador de recurso ISBD e aos termos da área de disponibilidade."
@@ -155,8 +155,8 @@ async function main() {
         {
             tag: "013",
             name: "INTERNATIONAL STANDARD MUSIC NUMBER (ISMN)",
-            ind1Tips: ["#: Em branco (não definido)"],
-            ind2Tips: ["#: Em branco (não definido)"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: [
                 "Este campo contém um Número Internacional Normalizado para a Música e uma qualificação que disting entre ISMN quando mais do que um está contido num registo.",
                 "O campo corresponde ao identificador do recurso ISBD e à área das condições de disponibilidade. O campo pode conter as condições de disponibilidade e/ ou preço, mesmo que não contenha um ISMN.",
@@ -173,8 +173,8 @@ async function main() {
         {
             tag: "014",
             name: "ARTICLE IDENTIFIER",
-            ind1Tips: ["#: Em branco (não definido)"],
-            ind2Tips: ["#: Em branco (não definido)"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: ["Este campo contém um código único e não ambíguo atribuído aos artigos de periódicos."],
             subFieldDef: [
                 { code: "a", label: "Article Identifier", repeatable: false, mandatory: true },
@@ -185,8 +185,8 @@ async function main() {
         {
             tag: "015",
             name: "INTERNATIONAL STANDARD TECHNICAL REPORT NUMBER (ISRN)",
-            ind1Tips: ["#: Em branco (não definido)"],
-            ind2Tips: ["#: Em branco (não definido)"],
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
             tips: ["Este campo contém o número internacional normalizado de relatório técnico atribuído por um centro nacional ISRN", "Corresponde ao identificador de recurso ISBD e aos termos da área de disponibilidade"],
             subFieldDef: [
                 { code: "a", label: "Number (ISRN)", repeatable: false, mandatory: true, tips: ["Um ISRN corretamente aplicado, incluindo hífenes.", "Os ISRN são atribuídos pela agência designada de cada país."] },
@@ -4534,7 +4534,7 @@ async function main() {
             ]
         },
         {
-            tag: "803",
+            tag: "830",
             name: "GENERAL CATALOGUER'S NOTE",
             ind1Tips: ["# - Em branco (não definido)"],
             ind2Tips: ["# - Em branco (não definido)"],
@@ -4543,6 +4543,137 @@ async function main() {
             ],
             subFieldDef: [
                 { code: "a", label: "Text of Note", repeatable: false, mandatory: false, tips: ["Texto da nota do catalogador"] }
+            ]
+        },
+        {
+            tag: "850",
+            name: "HOLDING INSTITUTION",
+            ind1Tips: ["# - Em branco (não definido)"],
+            ind2Tips: ["# - Em branco (não definido)"],
+            tips: [
+                "Este campo contém uma lista dos códigos das instituições que detêm os artigos.",
+                "O campo é repetível quando o sistema de catalogação impõe limites ao comprimento de um campo."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Code of Institution", repeatable: true, mandatory: false, tips: ["Código da instituição detentora do exemplar"] }]
+        },
+        {
+            tag: "852",
+            name: "LOCATION AND CALL NUMBER",
+            ind1Name: "Shelving Scheme",
+            ind1Tips: ["# - No information available, 0 - Classification scheme (specified in subfield $2), 1 - Fixed location, 2 - Sequential number, 3 - Author, title or author/ title, 4 - Parts shelved separately, 5 - Other"],
+            ind2Name: "Shelving Order",
+            ind2Tips: ["# - No information available, 0 - No enumeration, 1 - Primary enumeration, 2 - Alternative enumeration"],
+            tips: [
+                "Este campo é utilizado para identificar a organização que detém o artigo ou onde está disponível. Este campo pode também contém informações detalhadas sobre como localizar o item numa coleção."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Institution Identifier", repeatable: false, mandatory: true, tips: ["Identificador da instituição"] },
+                { code: "b", label: "Sub-Location Identifier", repeatable: true, mandatory: false, tips: ["Identificador da sublocalização"] },
+                { code: "c", label: "Address", repeatable: false, mandatory: false, tips: ["Endereço físico"] },
+                { code: "d", label: "Coded Location Qualifier", repeatable: false, mandatory: false, tips: ["Qualificador de localização codificado"] },
+                { code: "g", label: "Call Number Prefix", repeatable: false, mandatory: false, tips: ["Prefixo da cota"] },
+                { code: "j", label: "Call Number", repeatable: false, mandatory: false, tips: ["Número de chamada/cota"] },
+                { code: "k", label: "Shelving Form of Title, Author, Author/Title", repeatable: false, mandatory: false, tips: ["Forma de armazenamento"] },
+                { code: "l", label: "Call Number Suffix", repeatable: false, mandatory: false, tips: ["Sufixo da cota"] },
+                { code: "m", label: "Item Identifier", repeatable: false, mandatory: false, tips: ["Identificador do item"] },
+                { code: "n", label: "Copy Identifier", repeatable: false, mandatory: false, tips: ["Identificador da cópia"] },
+                { code: "p", label: "Country", repeatable: false, mandatory: false, tips: ["País da localização"] },
+                { code: "t", label: "Copy Number", repeatable: false, mandatory: false, tips: ["Número da cópia"] },
+                { code: "x", label: "Non-public Note", repeatable: true, mandatory: false, tips: ["Nota não pública"] },
+                { code: "y", label: "Public Note", repeatable: true, mandatory: false, tips: ["Nota pública"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte da informação"] }
+            ]
+        },
+        {
+            tag: "856",
+            name: "ELECTRONIC LOCATION AND ACCESS",
+            ind1Name: "Access Method",
+            ind1Tips: ["# - No information available, 0 - Email, 1 - FTP, 2 - remote login (Telnet), 3 - Dial-up, 4 - HTTP, 5 - Method specified in subfield $y"],
+            ind2Name: "Completeness of the Accessible Resource",
+            ind2Tips: ["# - No information available, 0 - The field provides details to access the described resource, 1 - The field provides details to access a thumbnail of the described resource , 2 - The field provides details to access the title page, table of contents, and/or other front matter of the described resource"],
+            tips: [
+                "Este campo contém a informação necessária para localizar o recurso eletrónico descrito pelo registo e/ou ficheiros de referência relacionados com o recurso descrito, como miniaturas e páginas de conteúdo."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Host Name", repeatable: true, mandatory: false, tips: ["Nome do servidor ou host"] },
+                { code: "b", label: "Access Number", repeatable: true, mandatory: false, tips: ["Número de acesso"] },
+                { code: "c", label: "Compression Information", repeatable: true, mandatory: false, tips: ["Informações sobre compressão"] },
+                { code: "d", label: "Path", repeatable: true, mandatory: false, tips: ["Caminho no sistema de arquivos"] },
+                { code: "e", label: "Date and Hour of Consultation and Access", repeatable: false, mandatory: false, tips: ["Data e hora de consulta/acesso"] },
+                { code: "f", label: "Electronic Name", repeatable: true, mandatory: false, tips: ["Nome eletrônico do arquivo"] },
+                { code: "h", label: "Processor of Request", repeatable: false, mandatory: false, tips: ["Processador da requisição"] },
+                { code: "i", label: "Instruction", repeatable: true, mandatory: false, tips: ["Instruções para acesso"] },
+                { code: "j", label: "Bits per Second", repeatable: false, mandatory: false, tips: ["Velocidade de transmissão"] },
+                { code: "k", label: "Password", repeatable: false, mandatory: false, tips: ["Senha de acesso"] },
+                { code: "l", label: "Logon/Login", repeatable: false, mandatory: false, tips: ["Informações de login"] },
+                { code: "m", label: "Contact for Access Assistance", repeatable: true, mandatory: false, tips: ["Contato para assistência"] },
+                { code: "n", label: "Name of Location of Host in Subfield $a", repeatable: false, mandatory: false, tips: ["Nome da localização do host"] },
+                { code: "o", label: "Operating System", repeatable: false, mandatory: false, tips: ["Sistema operacional requerido"] },
+                { code: "p", label: "Port", repeatable: false, mandatory: false, tips: ["Porta de comunicação"] },
+                { code: "q", label: "Electronic Format Type", repeatable: true, mandatory: false, tips: ["Tipo de formato eletrônico"] },
+                { code: "r", label: "Settings", repeatable: true, mandatory: false, tips: ["Configurações especiais"] },
+                { code: "s", label: "File Size", repeatable: true, mandatory: false, tips: ["Tamanho do arquivo"] },
+                { code: "t", label: "Terminal Emulation", repeatable: false, mandatory: false, tips: ["Emulação de terminal requerida"] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: false, mandatory: true, tips: ["URI para acesso ao recurso"] },
+                { code: "v", label: "Hours Access Method Available", repeatable: true, mandatory: false, tips: ["Horários disponíveis para acesso"] },
+                { code: "w", label: "Record Identifier", repeatable: true, mandatory: false, tips: ["Identificador do registro"] },
+                { code: "x", label: "Non-Public Note", repeatable: true, mandatory: false, tips: ["Notas internas/não públicas"] },
+                { code: "y", label: "Access Method", repeatable: false, mandatory: false, tips: ["Método de acesso"] },
+                { code: "z", label: "Public Note", repeatable: true, mandatory: false, tips: ["Notas públicas"] },
+                { code: "2", label: "Link Text", repeatable: true, mandatory: false, tips: ["Texto do link/descrição"] }
+            ]
+        },
+        {
+            tag: "857",
+            name: "ELECTRONIC ARCHIVE LOCATION AND ACCESS",
+            ind1Name: "Access Method",
+            ind1Tips: ["# - No information available, 1 - FTP, 4 - HTTP, 7 - Method specified in subfield $p"],
+            ind2Name: "Relationship",
+            ind2Tips: ["# - No information provided, 0 - Resource, 1 - Version of resource , 2 - Related resource, 3 - Component part(s) of resource, 4 - Version of component part(s) of resource"],
+            tips: [
+                "Este campo é utilizado para informações necessárias para localizar e aceder a um recurso eletrónico armazenado num site, ficheiro ou repositório digital.",
+                "Pode ser utilizado em adição ou em substituição do campo 856 se forem necessárias informações adicionais sobre os recursos arquivados."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Name of Archiving Agency", repeatable: false, mandatory: false, tips: ["Nome da agência responsável pelo arquivamento"] },
+                { code: "c", label: "Name of Web Archive or Digital Archive Repository", repeatable: false, mandatory: false, tips: ["Nome do repositório de arquivo web ou digital"] },
+                { code: "d", label: "Date Range of Archived Material", repeatable: false, mandatory: false, tips: ["Intervalo de datas do material arquivado"] },
+                { code: "f", label: "Archive Completeness", repeatable: false, mandatory: false, tips: ["Indicador de completude do arquivo"] },
+                { code: "g", label: "Persistent Identifier", repeatable: true, mandatory: true, tips: ["Identificador persistente do recurso arquivado"] },
+                { code: "h", label: "Non-Functioning Uniform Resource Identifier", repeatable: true, mandatory: true, tips: ["URI que não está mais funcional"] },
+                { code: "l", label: "Standardized Information Governing Access", repeatable: true, mandatory: false, tips: ["Informações padronizadas sobre acesso"] },
+                { code: "m", label: "Contact for Access Assistance", repeatable: true, mandatory: false, tips: ["Contato para assistência de acesso"] },
+                { code: "n", label: "Terms Governing Access", repeatable: true, mandatory: false, tips: ["Termos que regem o acesso"] },
+                { code: "o", label: "Access Status", repeatable: false, mandatory: false, tips: ["Status atual de acesso"] },
+                { code: "p", label: "Access Method", repeatable: false, mandatory: false, tips: ["Método de acesso ao material"] },
+                { code: "q", label: "Electronic Format Type", repeatable: true, mandatory: false, tips: ["Tipo de formato eletrônico"] },
+                { code: "r", label: "Standardized Information Governing Use and Reproduction", repeatable: true, mandatory: false, tips: ["Informações sobre uso e reprodução"] },
+                { code: "s", label: "File Size", repeatable: true, mandatory: false, tips: ["Tamanho do arquivo"] },
+                { code: "t", label: "Terms Governing Use and Reproduction", repeatable: true, mandatory: false, tips: ["Termos de uso e reprodução"] },
+                { code: "u", label: "Uniform Resource Identifier (URI)", repeatable: true, mandatory: true, tips: ["URI para acesso ao recurso arquivado"] },
+                { code: "x", label: "Nonpublic Note", repeatable: true, mandatory: false, tips: ["Notas internas/não públicas"] },
+                { code: "y", label: "Link Text", repeatable: true, mandatory: false, tips: ["Texto descritivo do link"] },
+                { code: "z", label: "Public Note", repeatable: true, mandatory: false, tips: ["Notas públicas"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Fonte da informação"] },
+                { code: "5", label: "Institution to which the Field Applies", repeatable: false, mandatory: false, tips: ["Instituição à qual o campo se aplica"] },
+                { code: "6", label: "Interfield Linking Data", repeatable: true, mandatory: false, tips: ["Dados de ligação entre campos"] },
+                { code: "8", label: "Materials Specified", repeatable: true, mandatory: false, tips: ["Materiais específicos a que se aplica"] }
+            ]
+        },
+        {
+            tag: "886",
+            name: "DATA NOT CONVERTED FROM SOURCE FORMAT",
+            ind1Name: "Type of Field",
+            ind1Tips: ["0 - Record label, 1 - Variable control field (0-- fields without indicators or subfields), 2 - Variable data field (010-999 fields)"],
+            ind2Tips: ["Em branco (não definido)"],
+            tips: [
+                "Este campo contém dados para os quais não existe um campo UNIMARC específico. É utilizado quando uma agência é convertendo registos de outro formato e pretende manter elementos em campos que não têm equivalente."
+            ],
+            subFieldDef: [
+                { code: "a", label: "Tag of the Source Format Field", repeatable: true, mandatory: false, tips: ["Tag do campo no formato de origem"] },
+                { code: "b", label: "Indicators and Subfields of the Source Format Field", repeatable: true, mandatory: false, tips: ["Indicadores e subcampos do formato de origem"] },
+                { code: "2", label: "Source", repeatable: false, mandatory: false, tips: ["Identificação do formato de origem"] }
             ]
         },
     ]
