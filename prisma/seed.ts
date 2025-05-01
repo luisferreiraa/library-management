@@ -4720,6 +4720,7 @@ async function main() {
         )
     }
 
+    // 1. Template Monografia (Livro)
     const livroTemplate = await prisma.template.upsert({
         where: { name: 'Livro' },
         update: {},
@@ -4774,6 +4775,59 @@ async function main() {
     }
 
     console.log('Seeder do template "Livro" concluído.');
+
+    // Template DVD
+    const dvdTemplate = await prisma.template.upsert({
+        where: { name: 'DVD' },
+        update: {},
+        create: {
+            name: 'DVD',
+            description: 'Template UNIMARC para DVDs'
+        }
+    })
+
+    const camposDVD = [
+        { tag: '001', ind1: '#', ind2: '#' },
+        { tag: '005', ind1: '#', ind2: '#' },
+        { tag: '008', ind1: '#', ind2: '#' },
+        { tag: '100', ind1: '#', ind2: '#' },
+        { tag: '101', ind1: '#', ind2: '#' },
+        { tag: '102', ind1: '#', ind2: '#' },
+        { tag: '200', ind1: '1', ind2: '#' },
+        { tag: '210', ind1: '#', ind2: '#' },
+        { tag: '215', ind1: '#', ind2: '#' },
+        { tag: '300', ind1: '#', ind2: '#' },
+        { tag: '307', ind1: '#', ind2: '#' }, // Duração
+        { tag: '330', ind1: '#', ind2: '#' }, // Resumo
+        { tag: '700', ind1: '1', ind2: ' ' },
+        { tag: '701', ind1: '1', ind2: ' ' },
+        { tag: '801', ind1: '#', ind2: '#' },
+        { tag: '902', ind1: '#', ind2: '#' },
+        { tag: '999', ind1: '#', ind2: '#' },
+    ]
+
+    for (const campo of camposDVD) {
+        const definition = await prisma.dataFieldDefinition.findFirst({
+            where: { tag: campo.tag },
+        })
+
+
+        if (!definition) {
+            console.warn(`Definição para tag ${campo.tag} não encontrada. Pula`)
+            continue
+        }
+
+        await prisma.templateDataField.create({
+            data: {
+                templateId: dvdTemplate.id,
+                definitionId: definition.id,
+                defaultInd1: campo.ind1,
+                defaultInd2: campo.ind2,
+            }
+        })
+    }
+
+    console.log('Seeder do template "DVD" concluído.')
 
 }
 
