@@ -4720,115 +4720,217 @@ async function main() {
         )
     }
 
-    // 1. Template Monografia (Livro)
-    const livroTemplate = await prisma.template.upsert({
-        where: { name: 'Livro' },
-        update: {},
-        create: {
-            name: 'Livro',
-            description: 'Template UNIMARC para livros',
+    const templates = [
+        {
+            name: 'Livro (Monografia)',
+            description: 'Obras textuais publicadas individualmente.',
+            fields: [
+                { tag: '001', ind1: '#', ind2: '#' }, // Número de registo
+                { tag: '005', ind1: '#', ind2: '#' }, // Data e hora da transação
+                { tag: '008', ind1: '#', ind2: '#' }, // Dados codificados (data, país, idioma)
+                { tag: '010', ind1: '#', ind2: '#' }, // ISBN
+                { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento (obrigatório)
+                { tag: '101', ind1: '#', ind2: '#' }, // Código do idioma da obra (ex: 0=português)
+                { tag: '102', ind1: '#', ind2: '#' }, // Código do país de publicação
+                { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade (obrigatório)
+                { tag: '205', ind1: '1', ind2: '#' }, // Edição
+                { tag: '210', ind1: '#', ind2: '#' }, // Editora, distribuidor
+                { tag: '215', ind1: '#', ind2: '#' }, // Descrição física (páginas, dimensões)
+                { tag: '225', ind1: '#', ind2: '#' }, // Coleção (se aplicável)
+                { tag: '300', ind1: '#', ind2: '#' }, // Notas gerais
+                { tag: '606', ind1: '#', ind2: '#' }, // Assuntos (nome comum)
+                { tag: '676', ind1: '#', ind2: '#' }, // Classicação Dewey
+                { tag: '700', ind1: '1', ind2: ' ' }, // Autor pessoal (responsabilidade principal)
+                { tag: '701', ind1: '1', ind2: ' ' }, // Coautor/ colaborador (esponsável secundário)
+                { tag: '801', ind1: '#', ind2: '#' } // Fonte do registo (ex: $a PT $b BN $c 20240501)
+            ]
         },
-    });
+        {
+            name: 'Publicação Periódica',
+            description: 'Jornais, revistas e outros periódicos.',
+            fields: [
+                { tag: '001', ind1: '#', ind2: '#' }, // Identificador de registo
+                { tag: '005', ind1: '#', ind2: '#' }, // Data e hora da transação (opcional)
+                { tag: '011', ind1: '#', ind2: '#' }, // ISSN
+                { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento
+                { tag: '101', ind1: '#', ind2: '#' }, // Idioma da obra
+                { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
+                { tag: '207', ind1: '0', ind2: '#' }, // Designação numérica/ cronológica (para periódicos)
+                { tag: '210', ind1: '#', ind2: '#' }, // Publicação, distribuição, etc
+                { tag: '215', ind1: '#', ind2: '#' }, // Descrição física
+                { tag: '225', ind1: '#', ind2: '#' }, // Coleção (opcional)
+                { tag: '300', ind1: '#', ind2: '#' }, // Notas gerais
+                { tag: '326', ind1: '#', ind2: '#' }, // Periodicidade
+                { tag: '430', ind1: '1', ind2: '#' }, // Continuação de (para periódicos que são continuações)
+                { tag: '430', ind1: '1', ind2: '#' }, // Continuação de (obrigatório se aplicável)
+                { tag: '431', ind1: '1', ind2: '#' }, // Continua em parte (opcional)
+                { tag: '434', ind1: '1', ind2: '#' }, // Absorvido por (opcional)
+                { tag: '446', ind1: '1', ind2: '#' }, // Dividido em (opcional)
+                { tag: '447', ind1: '1', ind2: '#' }, // Fundido com para formar (opcional)
+                { tag: '606', ind1: '#', ind2: ' ' }, // Assunto
+                { tag: '676', ind1: '#', ind2: '#' }, // Classificação Dewey
+                { tag: '856', ind1: '4', ind2: '#' }, // Acesso online (se aplicável)
+                { tag: '801', ind1: '#', ind2: '#' } // Origem do registo
+            ]
+        },
+        {
+            name: 'Artigo de Revista',
+            description: 'Parte analítica de uma publicação periódica.',
+            fields: [
+                { tag: '001', ind1: '#', ind2: '#' }, // Identificador de registo
+                { tag: '005', ind1: '#', ind2: '#' }, // Data e hora da transação (opcional)
+                { tag: '011', ind1: '#', ind2: '#' }, // ISSN
+                { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento
+                { tag: '101', ind1: '#', ind2: '#' }, // Idioma da obra
+                { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
+                { tag: '210', ind1: '#', ind2: '#' }, // Publicação, distribuição, etc
+                { tag: '300', ind1: '#', ind2: '#' }, // Notas gerais (resumo, referências, etc)
+                { tag: '330', ind1: '#', ind2: '#' }, // Resumo estruturado
+                { tag: '461', ind1: '1', ind2: '#' }, // Link para a revista-mãe
+                { tag: '463', ind1: '1', ind2: '#' }, // Níveis de unidade (para vincar ao registo da revista)
+                { tag: '517', ind1: '#', ind2: '#' }, // Título alternativo (ex: em inglês)
+                { tag: '606', ind1: '#', ind2: '#' }, // Assunto do artigo
+                { tag: '700', ind1: '1', ind2: '#' }, // Autor do artigo
+                { tag: '701', ind1: '1', ind2: '#' }, // Coautor (se aplicável)
+                { tag: '801', ind1: '#', ind2: '#' } // Origem do registo
+            ]
+        },
+        {
+            name: 'CD (Gravação Sonora)',
+            description: 'Áudio gravado em suporte físico.',
+            fields: [
+                { tag: '001', ind1: '#', ind2: '#' }, // Identificador de registo
+                { tag: '005', ind1: '#', ind2: '#' }, // Data e hora da transação (opcional)
+                { tag: '010', ind1: '#', ind2: '#' }, // ISBN
+                { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento
+                { tag: '101', ind1: '#', ind2: '#' }, // Idioma (se relevante, como audiobooks)
+                { tag: '102', ind1: '#', ind2: '#' }, // País de produção
+                { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
+                { tag: '210', ind1: '#', ind2: '#' }, // Publicação, distribuição, etc
+                { tag: '215', ind1: '#', ind2: '#' }, // Descrição física (número de CDs, duração)
+                { tag: '230', ind1: '#', ind2: '#' }, // Características do recurso (formato digital, ex: "CD áudio")
+                { tag: '327', ind1: '#', ind2: '#' }, // Lista de faixas
+                { tag: '454', ind1: '#', ind2: '#' }, // Título original
+                { tag: '475', ind1: '1', ind2: '#' }, // Intérprete (campo específico para música)
+                { tag: '606', ind1: '#', ind2: '#' }, // Assunto do artigo
+                { tag: '676', ind1: '#', ind2: '#' }, // Classificação (se aplicável)
+                { tag: '686', ind1: '#', ind2: '#' }, // Género musical
+                { tag: '700', ind1: '1', ind2: '#' }, // Compositor
+                { tag: '701', ind1: '1', ind2: '#' }, // Artista secundário
+                { tag: '711', ind1: '1', ind2: '#' }, // Grupo/ Orquestra
+                { tag: '801', ind1: '#', ind2: '#' } // Origem do registo
+            ]
+        },
+        {
+            name: 'DVD (Vídeo)',
+            description: 'Filmes, documentários, gravações visuais.',
+            fields: [
+                { tag: '001', ind1: '#', ind2: '#' },
+                { tag: '005', ind1: '#', ind2: '#' },
+                { tag: '010', ind1: '#', ind2: '#' }, // ISBN
+                { tag: '100', ind1: '#', ind2: '#' },
+                { tag: '101', ind1: '#', ind2: '#' }, // Idioma (áudio/legendas)
+                { tag: '102', ind1: '#', ind2: '#' }, // País
+                { tag: '200', ind1: '1', ind2: '#' }, // Título principal
+                { tag: '205', ind1: '#', ind2: '#' }, // Edição
+                { tag: '210', ind1: '#', ind2: '#' }, // Publicação
+                { tag: '215', ind1: '#', ind2: '#' }, // Descrição física
+                { tag: '230', ind1: '#', ind2: '#' }, // Formato (ex: "DVD-9")
+                { tag: '300', ind1: '#', ind2: '#' }, // Notas técnicas
+                { tag: '330', ind1: '#', ind2: '#' }, // Sinopse
+                { tag: '517', ind1: '1', ind2: '#' }, // Título original
+                { tag: '606', ind1: '#', ind2: '#' }, // Gênero
+                { tag: '700', ind1: '1', ind2: '#' }, // Diretor (com $4=drt)
+                { tag: '701', ind1: '1', ind2: '#' }, // Atores (com $4=act)
+                { tag: '702', ind1: '1', ind2: '#' }, // Outros colaboradores (ex: roteirista)
+                { tag: '856', ind1: '4', ind2: '#' }, // Link 
+                { tag: '801', ind1: '#', ind2: '#' }  // Origem
+            ]
+        },
+        {
+            name: 'Mapa (Material Cartográfico)',
+            description: 'Representações geográficas.',
+            fields: [
+                { tag: '001', ind1: '#', ind2: '#' }, // Identificador de registo
+                { tag: '005', ind1: '#', ind2: '#' }, // Data e hora da transação (opcional)
+                { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento
+                { tag: '101', ind1: '#', ind2: '#' }, // Idioma
+                { tag: '102', ind1: '#', ind2: '#' }, // País de produção
+                { tag: '120', ind1: '#', ind2: '#' }, // Tipo de mapa
+                { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
+                { tag: '206', ind1: '#', ind2: '#' }, // Dados matemáticos (escala, projeção)
+                { tag: '210', ind1: '#', ind2: '#' }, // Publicação
+                { tag: '215', ind1: '#', ind2: '#' }, // Descrição física (tamanho, cor, suporte)
+                { tag: '300', ind1: '#', ind2: '#' }, // Notas (abrangência geográfica)
+                { tag: '454', ind1: '1', ind2: '#' }, // Título paralelo
+                { tag: '607', ind1: '#', ind2: '#' }, // Assunto geográfico
+                { tag: '686', ind1: '#', ind2: '#' }, // Classificação
+                { tag: '701', ind1: '1', ind2: '#' }, // Cartógrafo
+                { tag: '702', ind1: '1', ind2: '#' }, // Outros colaboradores (ex: editor)
+                { tag: '801', ind1: '#', ind2: '#' }  // Origem
+            ]
+        },
+        {
+            name: 'Material Eletrónico',
+            description: 'REcursos digitais, websites, ficheiros multimédia.',
+            fields: [
+                { tag: '001', ind1: '#', ind2: '#' }, // Identificador de registo
+                { tag: '005', ind1: '#', ind2: '#' }, // Data e hora da transação (opcional)
+                { tag: '010', ind1: '#', ind2: '#' }, // ISBN (se aplicável)
+                { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento
+                { tag: '101', ind1: '#', ind2: '#' }, // Idioma
+                { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
+                { tag: '206', ind1: '#', ind2: '#' }, // Dados matemáticos (escala, projeção)
+                { tag: '210', ind1: '#', ind2: '#' }, // Publicação
+                { tag: '215', ind1: '#', ind2: '#' }, // Descrição física (tamanho, cor, suporte)
+                { tag: '300', ind1: '#', ind2: '#' }, // Notas (abrangência geográfica)
+                { tag: '454', ind1: '1', ind2: '#' }, // Título paralelo
+                { tag: '607', ind1: '#', ind2: '#' }, // Assunto geográfico
+                { tag: '686', ind1: '#', ind2: '#' }, // Classificação
+                { tag: '701', ind1: '1', ind2: '#' }, // Cartógrafo
+                { tag: '702', ind1: '1', ind2: '#' }, // Outros colaboradores (ex: editor)
+                { tag: '801', ind1: '#', ind2: '#' }  // Origem
+            ]
+        },
 
-    const campos = [
-        { tag: '001', ind1: '#', ind2: '#' }, // Número de registo
-        { tag: '005', ind1: '#', ind2: '#' }, // Data e hora da última modificação
-        { tag: '008', ind1: '#', ind2: '#' }, // Data de publicação e dados bibliográficos
-        { tag: '100', ind1: '#', ind2: '#' }, // Autor principal
-        { tag: '101', ind1: '#', ind2: '#' }, // Tipo de material
-        { tag: '102', ind1: '#', ind2: '#' }, // Código do país de publicação
-        { tag: '110', ind1: '#', ind2: '#' }, // Entidade responsável pelo título
-        { tag: '120', ind1: '#', ind2: '#' }, // Título alternativo
-        { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
-        { tag: '210', ind1: '#', ind2: '#' }, // Editora
-        { tag: '215', ind1: '#', ind2: '#' }, // Descrição física
-        { tag: '225', ind1: '#', ind2: '#' }, // Coleção (se aplicável)
-        { tag: '300', ind1: '#', ind2: '#' }, // Extensão
-        { tag: '700', ind1: '1', ind2: ' ' }, // Autor secundário
-        { tag: '701', ind1: '1', ind2: ' ' }, // Responsável secundário
-        { tag: '801', ind1: '#', ind2: '#' }, // País de publicação
-        { tag: '902', ind1: '#', ind2: '#' }, // ISBN
-        { tag: '410', ind1: '#', ind2: '#' }, // Assunto (se necessário)
-        { tag: '451', ind1: '#', ind2: '#' }, // Classificação (Dewey ou outro)
-        { tag: '999', ind1: '#', ind2: '#' }, // Dados adicionais ou de biblioteca
-    ];
-
-
-    for (const campo of campos) {
-        const definition = await prisma.dataFieldDefinition.findFirst({
-            where: { tag: campo.tag },
-        });
-
-        if (!definition) {
-            console.warn(`Definição para tag ${campo.tag} não encontrada. Pula.`);
-            continue;
-        }
-
-        await prisma.templateDataField.create({
-            data: {
-                templateId: livroTemplate.id,
-                definitionId: definition.id,
-                defaultInd1: campo.ind1,
-                defaultInd2: campo.ind2,
-            },
-        });
-    }
-
-    console.log('Seeder do template "Livro" concluído.');
-
-    // Template DVD
-    const dvdTemplate = await prisma.template.upsert({
-        where: { name: 'DVD' },
-        update: {},
-        create: {
-            name: 'DVD',
-            description: 'Template UNIMARC para DVDs'
-        }
-    })
-
-    const camposDVD = [
-        { tag: '001', ind1: '#', ind2: '#' },
-        { tag: '005', ind1: '#', ind2: '#' },
-        { tag: '008', ind1: '#', ind2: '#' },
-        { tag: '100', ind1: '#', ind2: '#' },
-        { tag: '101', ind1: '#', ind2: '#' },
-        { tag: '102', ind1: '#', ind2: '#' },
-        { tag: '200', ind1: '1', ind2: '#' },
-        { tag: '210', ind1: '#', ind2: '#' },
-        { tag: '215', ind1: '#', ind2: '#' },
-        { tag: '300', ind1: '#', ind2: '#' },
-        { tag: '307', ind1: '#', ind2: '#' }, // Duração
-        { tag: '330', ind1: '#', ind2: '#' }, // Resumo
-        { tag: '700', ind1: '1', ind2: ' ' },
-        { tag: '701', ind1: '1', ind2: ' ' },
-        { tag: '801', ind1: '#', ind2: '#' },
-        { tag: '902', ind1: '#', ind2: '#' },
-        { tag: '999', ind1: '#', ind2: '#' },
     ]
 
-    for (const campo of camposDVD) {
-        const definition = await prisma.dataFieldDefinition.findFirst({
-            where: { tag: campo.tag },
-        })
-
-
-        if (!definition) {
-            console.warn(`Definição para tag ${campo.tag} não encontrada. Pula`)
-            continue
-        }
-
-        await prisma.templateDataField.create({
-            data: {
-                templateId: dvdTemplate.id,
-                definitionId: definition.id,
-                defaultInd1: campo.ind1,
-                defaultInd2: campo.ind2,
+    async function createTemplateWithFields(templateData: { name: any; description: any; fields: any; }) {
+        const template = await prisma.template.upsert({
+            where: { name: templateData.name },
+            update: {},
+            create: {
+                name: templateData.name,
+                description: templateData.description,
             }
         })
+
+        for (const field of templateData.fields) {
+            const definition = await prisma.dataFieldDefinition.findFirst({
+                where: { tag: field.tag },
+            })
+
+            if (!definition) {
+                console.warn(`Definição para tag ${field.tag} não encontrada. Pula.`)
+                continue
+            }
+
+            await prisma.templateDataField.create({
+                data: {
+                    templateId: template.id,
+                    definitionId: definition.id,
+                    defaultInd1: field.ind1,
+                    defaultInd2: field.ind2,
+                }
+            })
+        }
+
+        console.log(`Seeder do template "${templateData.name}" concluído.`)
     }
 
-    console.log('Seeder do template "DVD" concluído.')
-
+    for (const template of templates) {
+        await createTemplateWithFields(template)
+    }
 }
 
 main()
