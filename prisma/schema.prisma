@@ -66,11 +66,12 @@ model Record {
 }
 
 model ControlFieldDefinition {
-  id           String         @id @default(cuid())
-  tag          String
-  name         String
-  tips         String[]
-  ControlField ControlField[]
+  id                   String                 @id @default(cuid())
+  tag                  String                 @unique
+  name                 String
+  tips                 String[]
+  ControlField         ControlField[]
+  TemplateControlField TemplateControlField[]
 }
 
 /// Modelo que representa um campo de controlo UNIMARC
@@ -85,7 +86,7 @@ model ControlField {
 
 model DataFieldDefinition {
   id                String               @id @default(cuid())
-  tag               String
+  tag               String               @unique
   name              String
   ind1Name          String
   ind1Tips          String[]
@@ -130,12 +131,13 @@ model Subfield {
 }
 
 model Template {
-  id          String              @id @default(cuid())
-  name        String              @unique /// Ex: Livro, CD, DVD, etc.
-  description String?
-  dataFields  TemplateDataField[] /// Campos associados ao template
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
+  id            String                 @id @default(cuid())
+  name          String                 @unique /// Ex: Livro, CD, DVD, etc.
+  description   String?
+  controlFields TemplateControlField[]
+  dataFields    TemplateDataField[] /// Campos associados ao template
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
 }
 
 model TemplateDataField {
@@ -147,6 +149,15 @@ model TemplateDataField {
   defaultInd1  String?
   defaultInd2  String?
   createdAt    DateTime            @default(now())
+}
+
+model TemplateControlField {
+  id           String                 @id @default(cuid())
+  template     Template               @relation(fields: [templateId], references: [id])
+  templateId   String
+  definition   ControlFieldDefinition @relation(fields: [definitionId], references: [id])
+  definitionId String
+  createdAt    DateTime               @default(now())
 }
 
 /// --- HOLDINGS STRUCTURE ---

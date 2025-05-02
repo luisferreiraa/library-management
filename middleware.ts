@@ -41,6 +41,7 @@ export async function middleware(request: NextRequest) {
         "/library-networks",
         "/libraries",
         "/catalogs",
+        "record-templates",
     ]
     const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route))
 
