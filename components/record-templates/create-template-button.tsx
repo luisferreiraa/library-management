@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CreateTemplateModal } from "./create-template-modal"
+import CreateTemplateModal from "@/components/record-templates/create-template-modal"
+
 
 export function CreateTemplateButton() {
     const [open, setOpen] = useState(false)
