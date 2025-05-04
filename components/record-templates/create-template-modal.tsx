@@ -1,30 +1,20 @@
 "use client"
 
-import { getControlFieldDefinitions, getDataFieldDefinitions } from "@/lib/field-definitions"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Template } from "@/lib/templates"
+import type { Template } from "@/lib/templates"
 import { useRouter } from "next/navigation"
 import { useEffect, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 import { z } from "zod"
-import { createTemplateAction, getControlFieldDefinitionsAction, getDataFieldDefinitionsAction, updateTemplateAction } from "@/app/record-templates/actions"
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "../ui/dialog"
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
-} from "@/components/ui/form"
+    createTemplateAction,
+    getControlFieldDefinitionsAction,
+    getDataFieldDefinitionsAction,
+    updateTemplateAction,
+} from "@/app/record-templates/actions"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -38,7 +28,7 @@ const formSchema = z.object({
     name: z.string().min(1, { message: "Nome do template é obrigatório" }),
     description: z.string().optional(),
     controlFieldDefinitionIds: z.array(z.string()).min(1, { message: "Selecione pelo menos um campo de controlo" }),
-    dataFieldDefinitionIds: z.array(z.string()).min(1, { message: "Selecione pelo menos um campo de dados" })
+    dataFieldDefinitionIds: z.array(z.string()).min(1, { message: "Selecione pelo menos um campo de dados" }),
 })
 
 type TemplateFormValues = z.infer<typeof formSchema>
@@ -56,7 +46,7 @@ export default function CreateTemplateModal({
     onOpenChange,
     template = null,
     mode = "create",
-    onSuccess
+    onSuccess,
 }: CreateTemplateModalProps) {
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -65,8 +55,10 @@ export default function CreateTemplateModal({
     const isEditMode = mode === "edit"
 
     // Estado para dados relacionados
-    const [controlFieldDefinitions, setControlFieldDefinitions] = useState<{ id: string; name: string }[]>([])
-    const [dataFieldDefinitions, setDataFieldDefinitions] = useState<{ id: string; name: string }[]>([])
+    const [controlFieldDefinitions, setControlFieldDefinitions] = useState<{ id: string; tag: string; name: string }[]>(
+        [],
+    )
+    const [dataFieldDefinitions, setDataFieldDefinitions] = useState<{ id: string; tag: string; name: string }[]>([])
 
     // Estado para o comando de control e data field definitions
     const [commandOpen, setCommandOpen] = useState(false)
@@ -80,7 +72,7 @@ export default function CreateTemplateModal({
             description: "",
             controlFieldDefinitionIds: [],
             dataFieldDefinitionIds: [],
-        }
+        },
     })
 
     // Carregar dados relacionados quando o modal abrir
@@ -114,15 +106,17 @@ export default function CreateTemplateModal({
     // Preencher o formulário quando estiver no modo de edição e o template for fornecido
     useEffect(() => {
         if (isEditMode && template && open) {
-            const templateControlFields = template.controlFields?.map((cf) => ({
-                id: cf.id,
-                name: cf.definition.name
-            })) || []
+            const templateControlFields =
+                template.controlFields?.map((cf) => ({
+                    id: cf.definition.id,
+                    name: cf.definition.name,
+                })) || []
 
-            const templateDataFields = template.dataFields?.map((df) => ({
-                id: df.id,
-                name: df.definition.name
-            })) || []
+            const templateDataFields =
+                template.dataFields?.map((df) => ({
+                    id: df.definition.id,
+                    name: df.definition.name,
+                })) || []
 
             setSelectedControlFields(templateControlFields)
             setSelectedDataFields(templateDataFields)
@@ -132,7 +126,7 @@ export default function CreateTemplateModal({
                 name: template.name,
                 description: template.description || "",
                 controlFieldDefinitionIds: templateControlFields.map((cf) => cf.id),
-                dataFieldDefinitionIds: templateDataFields.map((df) => df.id)
+                dataFieldDefinitionIds: templateDataFields.map((df) => df.id),
             })
         } else if (!isEditMode && open) {
             form.reset({
@@ -147,14 +141,14 @@ export default function CreateTemplateModal({
     }, [form, template, isEditMode, open])
 
     // Função para adicionar um Control Field
-    const addControlField = (controlField: { id: string, name: string }) => {
+    const addControlField = (controlField: { id: string; name: string }) => {
         if (!selectedControlFields.some((cf) => cf.id === controlField.id)) {
             const newSelectedControlFields = [...selectedControlFields, controlField]
             setSelectedControlFields(newSelectedControlFields)
             form.setValue(
                 "controlFieldDefinitionIds",
                 newSelectedControlFields.map((cf) => cf.id),
-                { shouldValidate: true }
+                { shouldValidate: true },
             )
         }
     }
@@ -166,19 +160,19 @@ export default function CreateTemplateModal({
         form.setValue(
             "controlFieldDefinitionIds",
             newSelectedControlFields.map((cf) => cf.id),
-            { shouldValidate: true }
+            { shouldValidate: true },
         )
     }
 
     // Função para adicionar um Data Field
-    const addDataField = (dataField: { id: string, name: string }) => {
+    const addDataField = (dataField: { id: string; name: string }) => {
         if (!selectedDataFields.some((df) => df.id === dataField.id)) {
             const newSelectedDataFields = [...selectedDataFields, dataField]
             setSelectedDataFields(newSelectedDataFields)
             form.setValue(
                 "dataFieldDefinitionIds",
                 newSelectedDataFields.map((df) => df.id),
-                { shouldValidate: true }
+                { shouldValidate: true },
             )
         }
     }
@@ -190,7 +184,7 @@ export default function CreateTemplateModal({
         form.setValue(
             "dataFieldDefinitionIds",
             newSelectedDataFields.map((df) => df.id),
-            { shouldValidate: true }
+            { shouldValidate: true },
         )
     }
 
@@ -203,7 +197,7 @@ export default function CreateTemplateModal({
                 if (isEditMode && template) {
                     const updateData = {
                         id: template.id,
-                        ...values
+                        ...values,
                     }
 
                     await updateTemplateAction(updateData)
@@ -253,9 +247,7 @@ export default function CreateTemplateModal({
                 <DialogHeader>
                     <DialogTitle>{isEditMode ? "Editar Template" : "Criar Novo Template"}</DialogTitle>
                     <DialogDescription>
-                        {isEditMode
-                            ? "Atualize os dados do template"
-                            : "Preencha os dados do novo template"}
+                        {isEditMode ? "Atualize os dados do template" : "Preencha os dados do novo template"}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -309,10 +301,7 @@ export default function CreateTemplateModal({
                                                 <div className="space-y-2">
                                                     <Popover>
                                                         <PopoverTrigger asChild>
-                                                            <Button
-                                                                variant="outline"
-                                                                className="w-full justify-between"
-                                                            >
+                                                            <Button variant="outline" className="w-full justify-between">
                                                                 Selecionar Campos de Controlo
                                                             </Button>
                                                         </PopoverTrigger>
@@ -323,11 +312,8 @@ export default function CreateTemplateModal({
                                                                 <CommandGroup>
                                                                     <CommandList>
                                                                         {controlFieldDefinitions.map((field) => (
-                                                                            <CommandItem
-                                                                                key={field.id}
-                                                                                onSelect={() => addControlField(field)}
-                                                                            >
-                                                                                {field.name}
+                                                                            <CommandItem key={field.id} onSelect={() => addControlField(field)}>
+                                                                                {field.tag} - {field.name}
                                                                             </CommandItem>
                                                                         ))}
                                                                     </CommandList>
@@ -338,9 +324,7 @@ export default function CreateTemplateModal({
 
                                                     <div className="flex flex-wrap gap-2">
                                                         {selectedControlFields.length === 0 ? (
-                                                            <span className="text-sm text-muted-foreground">
-                                                                Nenhum campo selecionado
-                                                            </span>
+                                                            <span className="text-sm text-muted-foreground">Nenhum campo selecionado</span>
                                                         ) : (
                                                             selectedControlFields.map((field) => (
                                                                 <Badge key={field.id} variant="secondary" className="flex items-center gap-1">
@@ -375,10 +359,7 @@ export default function CreateTemplateModal({
                                                 <div className="space-y-2">
                                                     <Popover>
                                                         <PopoverTrigger asChild>
-                                                            <Button
-                                                                variant="outline"
-                                                                className="w-full justify-between"
-                                                            >
+                                                            <Button variant="outline" className="w-full justify-between">
                                                                 Selecionar Campos de Dados
                                                             </Button>
                                                         </PopoverTrigger>
@@ -389,11 +370,8 @@ export default function CreateTemplateModal({
                                                                 <CommandGroup>
                                                                     <CommandList>
                                                                         {dataFieldDefinitions.map((field) => (
-                                                                            <CommandItem
-                                                                                key={field.id}
-                                                                                onSelect={() => addDataField(field)}
-                                                                            >
-                                                                                {field.name}
+                                                                            <CommandItem key={field.id} onSelect={() => addDataField(field)}>
+                                                                                {field.tag} - {field.name}
                                                                             </CommandItem>
                                                                         ))}
                                                                     </CommandList>
@@ -404,9 +382,7 @@ export default function CreateTemplateModal({
 
                                                     <div className="flex flex-wrap gap-2">
                                                         {selectedDataFields.length === 0 ? (
-                                                            <span className="text-sm text-muted-foreground">
-                                                                Nenhum campo selecionado
-                                                            </span>
+                                                            <span className="text-sm text-muted-foreground">Nenhum campo selecionado</span>
                                                         ) : (
                                                             selectedDataFields.map((field) => (
                                                                 <Badge key={field.id} variant="secondary" className="flex items-center gap-1">
