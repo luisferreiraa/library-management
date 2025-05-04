@@ -28,6 +28,7 @@ export type Record = {
             tips: string[]
         }
         subFields: {
+            [x: string]: any;
             id: string
             value: string
         }[]

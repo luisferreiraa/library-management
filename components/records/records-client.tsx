@@ -38,9 +38,9 @@ export default function RecordsClient({ initialRecords }: RecordsClientProps) {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Lista de Registros</h2>
+                <h2 className="text-xl font-semibold">Lista de Registos</h2>
                 <Button onClick={handleCreateRecord}>
-                    <Plus className="mr-2 h-4 w-4" /> Novo Registro
+                    <Plus className="mr-2 h-4 w-4" /> Novo Registo
                 </Button>
             </div>
 

@@ -13,6 +13,7 @@ import {
 } from "@/lib/records"
 import { getTemplates } from "@/lib/templates"
 import { getControlFieldDefinitions, getDataFieldDefinitions } from "@/lib/field-definitions"
+import prisma from "@/lib/prisma"
 
 export async function getRecordsAction(): Promise<Record[]> {
     try {
@@ -84,18 +85,16 @@ export async function getTemplatesAction() {
 }
 
 export async function getFieldDefinitionsAction() {
-    try {
-        const [controlFieldDefinitions, dataFieldDefinitions] = await Promise.all([
-            getControlFieldDefinitions(),
-            getDataFieldDefinitions(),
-        ])
+    const controlFieldDefinitions = await prisma.controlFieldDefinition.findMany({
+        orderBy: { tag: 'asc' }
+    })
 
-        return {
-            controlFieldDefinitions,
-            dataFieldDefinitions,
-        }
-    } catch (error) {
-        console.error("Erro ao buscar definições de campos:", error)
-        throw new Error("Não foi possível buscar as definições de campos")
-    }
+    const dataFieldDefinitions = await prisma.dataFieldDefinition.findMany({
+        include: {
+            subFieldDef: true // Esta linha é crucial! Inclui os subcampos na consulta
+        },
+        orderBy: { tag: 'asc' }
+    })
+
+    return { controlFieldDefinitions, dataFieldDefinitions }
 }

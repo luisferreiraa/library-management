@@ -12,9 +12,9 @@ export default async function RecordsPage() {
 
     return (
         <div className="container mx-auto py-8">
-            <h1 className="text-3xl font-bold mb-8">Registros Bibliográficos</h1>
+            <h1 className="text-3xl font-bold mb-8">Registos Bibliográficos</h1>
 
-            <Suspense fallback={<div>Carregando registros...</div>}>
+            <Suspense fallback={<div>A carregar registos...</div>}>
                 <RecordsClient initialRecords={records} />
             </Suspense>
         </div>
