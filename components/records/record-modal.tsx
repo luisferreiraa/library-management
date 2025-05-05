@@ -511,7 +511,7 @@ export default function RecordModal({
                 {isLoading ? (
                     <div className="flex justify-center items-center py-8">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                        <span className="ml-2">Carregando definições de campos...</span>
+                        <span className="ml-2">A carregar as definições de campos...</span>
                     </div>
                 ) : (
                     <Form {...form}>
@@ -519,7 +519,7 @@ export default function RecordModal({
                             <Tabs value={activeTab} onValueChange={setActiveTab}>
                                 <TabsList className="grid grid-cols-4 mb-4">
                                     <TabsTrigger value="general">Geral</TabsTrigger>
-                                    <TabsTrigger value="control">Campos de Controle</TabsTrigger>
+                                    <TabsTrigger value="control">Campos de Controlo</TabsTrigger>
                                     <TabsTrigger value="data">Campos de Dados</TabsTrigger>
                                     <TabsTrigger value="unimarc">UNIMARC</TabsTrigger>
                                 </TabsList>
@@ -529,7 +529,7 @@ export default function RecordModal({
                                         <Card>
                                             <CardHeader>
                                                 <CardTitle>Template</CardTitle>
-                                                <CardDescription>Selecione um template para pré-preencher os campos</CardDescription>
+                                                <CardDescription className="mt-3">Selecione um template para pré-preencher os campos</CardDescription>
                                             </CardHeader>
                                             <CardContent>
                                                 <FormField
@@ -571,8 +571,8 @@ export default function RecordModal({
                                     <Card>
                                         <CardHeader className="flex flex-row items-center justify-between">
                                             <div>
-                                                <CardTitle>Campos de Controle</CardTitle>
-                                                <CardDescription>Campos de controle do registro bibliográfico</CardDescription>
+                                                <CardTitle>Campos de Controlo</CardTitle>
+                                                <CardDescription className="mt-3">Campos de controlo do registo bibliográfico</CardDescription>
                                             </div>
                                             <Button type="button" variant="outline" size="sm" onClick={addControlField}>
                                                 <Plus className="h-4 w-4 mr-1" /> Adicionar Campo
@@ -581,7 +581,7 @@ export default function RecordModal({
                                         <CardContent>
                                             {form.watch("controlFields").length === 0 ? (
                                                 <div className="text-center py-4 text-muted-foreground">
-                                                    Nenhum campo de controle adicionado
+                                                    Nenhum campo de controlo adicionado
                                                 </div>
                                             ) : (
                                                 form.watch("controlFields").map((_, index) => (
@@ -642,7 +642,7 @@ export default function RecordModal({
                                         <CardHeader className="flex flex-row items-center justify-between">
                                             <div>
                                                 <CardTitle>Campos de Dados</CardTitle>
-                                                <CardDescription>Campos de dados do registro bibliográfico</CardDescription>
+                                                <CardDescription className="mt-3">Campos de dados do registo bibliográfico</CardDescription>
                                             </div>
                                             <Button type="button" variant="outline" size="sm" onClick={addDataField}>
                                                 <Plus className="h-4 w-4 mr-1" /> Adicionar Campo
@@ -668,7 +668,7 @@ export default function RecordModal({
                                                                     <div className="flex items-center flex-1">
                                                                         <AccordionTrigger className="flex-1">
                                                                             <span>
-                                                                                Campo {dataFieldIndex + 1}:&nbsp;
+                                                                                {/* Campo {dataFieldIndex + 1}:&nbsp; */}
                                                                                 {fieldDef?.name || "Campo não selecionado"}
                                                                             </span>
                                                                         </AccordionTrigger>
@@ -855,7 +855,7 @@ export default function RecordModal({
                                     <Card>
                                         <CardHeader>
                                             <CardTitle>Visualização UNIMARC</CardTitle>
-                                            <CardDescription>Representação do registro no formato UNIMARC (somente leitura)</CardDescription>
+                                            <CardDescription className="mt-3">Representação do registo no formato UNIMARC (somente leitura)</CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             {isEditMode && record?.metadata ? (
@@ -877,7 +877,7 @@ export default function RecordModal({
                                     Cancelar
                                 </Button>
                                 <Button type="submit" disabled={isSubmitting}>
-                                    {isSubmitting ? "Salvando..." : "Salvar"}
+                                    {isSubmitting ? "A guardar..." : "Guardar"}
                                 </Button>
                             </DialogFooter>
                         </form>

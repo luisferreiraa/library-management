@@ -8,25 +8,27 @@ const templates = [
         description: 'Obras textuais publicadas individualmente.',
         controlFields: [
             { tag: '001' },
-            { tag: '005' }
+            { tag: '003' }
         ],
         dataFields: [
-            { tag: '008', ind1: '#', ind2: '#' }, // Dados codificados (data, país, idioma)
             { tag: '010', ind1: '#', ind2: '#' }, // ISBN
+            { tag: '021', ind1: '#', ind2: '#' }, // Número de depósito legal
+            { tag: '035', ind1: '#', ind2: '#' }, // Identificadores de outros sistemas
             { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento (obrigatório)
             { tag: '101', ind1: '#', ind2: '#' }, // Código do idioma da obra (ex: 0=português)
             { tag: '102', ind1: '#', ind2: '#' }, // Código do país de publicação
+            { tag: '105', ind1: '#', ind2: '#' }, // Textual language material
+            { tag: '106', ind1: '#', ind2: '#' }, // Coded textual language material
             { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade (obrigatório)
             { tag: '205', ind1: '1', ind2: '#' }, // Edição
             { tag: '210', ind1: '#', ind2: '#' }, // Editora, distribuidor
             { tag: '215', ind1: '#', ind2: '#' }, // Descrição física (páginas, dimensões)
-            { tag: '225', ind1: '#', ind2: '#' }, // Coleção (se aplicável)
-            { tag: '300', ind1: '#', ind2: '#' }, // Notas gerais
-            { tag: '606', ind1: '#', ind2: '#' }, // Assuntos (nome comum)
-            { tag: '676', ind1: '#', ind2: '#' }, // Classicação Dewey
+            { tag: '304', ind1: '#', ind2: '#' }, // Notas sobre o título e statement de responsabilidade
+            { tag: '675', ind1: '#', ind2: '#' }, // Classicação UDC
             { tag: '700', ind1: '1', ind2: ' ' }, // Autor pessoal (responsabilidade principal)
-            { tag: '701', ind1: '1', ind2: ' ' }, // Coautor/ colaborador (esponsável secundário)
-            { tag: '801', ind1: '#', ind2: '#' } // Fonte do registo (ex: $a PT $b BN $c 20240501)
+            { tag: '702', ind1: '1', ind2: ' ' }, // Coautor/ colaborador (esponsável secundário)
+            { tag: '801', ind1: '#', ind2: '#' }, // Fonte do registo (ex: $a PT $b BN $c 20240501)
+            { tag: '856', ind1: '#', ind2: '#' }, // Localização e acesso eletrónico
         ]
     },
     {
@@ -44,19 +46,15 @@ const templates = [
             { tag: '207', ind1: '0', ind2: '#' }, // Designação numérica/ cronológica (para periódicos)
             { tag: '210', ind1: '#', ind2: '#' }, // Publicação, distribuição, etc
             { tag: '215', ind1: '#', ind2: '#' }, // Descrição física
-            { tag: '225', ind1: '#', ind2: '#' }, // Coleção (opcional)
-            { tag: '300', ind1: '#', ind2: '#' }, // Notas gerais
+            { tag: '305', ind1: '#', ind2: '#' }, // Notas da edição e histórico bibliográfico
             { tag: '326', ind1: '#', ind2: '#' }, // Periodicidade
-            { tag: '430', ind1: '1', ind2: '#' }, // Continuação de (para periódicos que são continuações)
-            { tag: '430', ind1: '1', ind2: '#' }, // Continuação de (obrigatório se aplicável)
-            { tag: '431', ind1: '1', ind2: '#' }, // Continua em parte (opcional)
-            { tag: '434', ind1: '1', ind2: '#' }, // Absorvido por (opcional)
-            { tag: '446', ind1: '1', ind2: '#' }, // Dividido em (opcional)
-            { tag: '447', ind1: '1', ind2: '#' }, // Fundido com para formar (opcional)
+            { tag: '530', ind1: '#', ind2: '#' }, // Key title
             { tag: '606', ind1: '#', ind2: ' ' }, // Assunto
-            { tag: '676', ind1: '#', ind2: '#' }, // Classificação Dewey
+            { tag: '675', ind1: '#', ind2: '#' }, // Classificação UDC
+            { tag: '702', ind1: '#', ind2: '#' }, // Responsabilidade secundária
+            { tag: '801', ind1: '#', ind2: '#' }, // Origem do registo
+            { tag: '802', ind1: '#', ind2: '#' }, // Centro ISSN
             { tag: '856', ind1: '4', ind2: '#' }, // Acesso online (se aplicável)
-            { tag: '801', ind1: '#', ind2: '#' } // Origem do registo
         ]
     },
     {
@@ -84,30 +82,28 @@ const templates = [
         ]
     },
     {
-        name: 'CD (Gravação Sonora)',
+        name: 'CD-Áudio',
         description: 'Áudio gravado em suporte físico.',
         controlFields: [
             { tag: '001' },
-            { tag: '005' }
+            { tag: '003' }
         ],
         dataFields: [
-            { tag: '010', ind1: '#', ind2: '#' }, // ISBN
+            { tag: '035', ind1: '#', ind2: '#' }, // identificadores de outros sistemas
+            { tag: '071', ind1: '#', ind2: '#' }, // Número de editor
             { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento
             { tag: '101', ind1: '#', ind2: '#' }, // Idioma (se relevante, como audiobooks)
             { tag: '102', ind1: '#', ind2: '#' }, // País de produção
             { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
             { tag: '210', ind1: '#', ind2: '#' }, // Publicação, distribuição, etc
             { tag: '215', ind1: '#', ind2: '#' }, // Descrição física (número de CDs, duração)
-            { tag: '230', ind1: '#', ind2: '#' }, // Características do recurso (formato digital, ex: "CD áudio")
+            { tag: '300', ind1: '#', ind2: '#' }, // Notas
+            { tag: '301', ind1: '#', ind2: '#' }, // Notas relativas a números de identificação
+            { tag: '323', ind1: '#', ind2: '#' }, // Cast notes
             { tag: '327', ind1: '#', ind2: '#' }, // Lista de faixas
-            { tag: '454', ind1: '#', ind2: '#' }, // Título original
-            { tag: '475', ind1: '1', ind2: '#' }, // Intérprete (campo específico para música)
-            { tag: '606', ind1: '#', ind2: '#' }, // Assunto do artigo
-            { tag: '676', ind1: '#', ind2: '#' }, // Classificação (se aplicável)
-            { tag: '686', ind1: '#', ind2: '#' }, // Género musical
-            { tag: '700', ind1: '1', ind2: '#' }, // Compositor
-            { tag: '701', ind1: '1', ind2: '#' }, // Artista secundário
-            { tag: '711', ind1: '1', ind2: '#' }, // Grupo/ Orquestra
+            { tag: '675', ind1: '#', ind2: '#' }, // Classificação UDC
+            { tag: '702', ind1: '1', ind2: '#' }, // Responsabilidade secundária
+            { tag: '710', ind1: '1', ind2: '#' }, // Corporate bpdy name
             { tag: '801', ind1: '#', ind2: '#' } // Origem do registo
         ]
     },
@@ -144,24 +140,29 @@ const templates = [
         description: 'Representações geográficas.',
         controlFields: [
             { tag: '001' },
-            { tag: '005' }
+            { tag: '003' }
         ],
         dataFields: [
             { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento
             { tag: '101', ind1: '#', ind2: '#' }, // Idioma
             { tag: '102', ind1: '#', ind2: '#' }, // País de produção
             { tag: '120', ind1: '#', ind2: '#' }, // Tipo de mapa
+            { tag: '121', ind1: '#', ind2: '#' }, // Recursos cartográficos - Atríbutos físicos
+            { tag: '123', ind1: '#', ind2: '#' }, // Escala e coordenadas
             { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
             { tag: '206', ind1: '#', ind2: '#' }, // Dados matemáticos (escala, projeção)
             { tag: '210', ind1: '#', ind2: '#' }, // Publicação
             { tag: '215', ind1: '#', ind2: '#' }, // Descrição física (tamanho, cor, suporte)
-            { tag: '300', ind1: '#', ind2: '#' }, // Notas (abrangência geográfica)
-            { tag: '454', ind1: '1', ind2: '#' }, // Título paralelo
-            { tag: '607', ind1: '#', ind2: '#' }, // Assunto geográfico
+            { tag: '315', ind1: '#', ind2: '#' }, // Notas (abrangência geográfica)
+            { tag: '316', ind1: '#', ind2: '#' }, // Notas relativas ao item
+            { tag: '327', ind1: '#', ind2: '#' }, // Notas relativas ao conteúdo
+            { tag: '518', ind1: '#', ind2: '#' }, // Título moderno
+            { tag: '675', ind1: '#', ind2: '#' }, // Classificação UDC
             { tag: '686', ind1: '#', ind2: '#' }, // Classificação
-            { tag: '701', ind1: '1', ind2: '#' }, // Cartógrafo
+            { tag: '700', ind1: '1', ind2: '#' }, // Cartógrafo
             { tag: '702', ind1: '1', ind2: '#' }, // Outros colaboradores (ex: editor)
-            { tag: '801', ind1: '#', ind2: '#' }  // Origem
+            { tag: '801', ind1: '#', ind2: '#' },  // Origem
+            { tag: '856', ind1: '4', ind2: '#' }, // Link 
         ]
     },
     {
@@ -189,27 +190,28 @@ const templates = [
         ]
     },
     {
-        name: 'Imagem Estática',
+        name: 'Iconografia',
         description: 'Fotografias, gravuras, pinturas.',
         controlFields: [
             { tag: '001' },
+            { tag: '003' },
             { tag: '005' }
         ],
         dataFields: [
             { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento
+            { tag: '101', ind1: '#', ind2: '#' }, // Idioma do recurso
             { tag: '102', ind1: '#', ind2: '#' }, // País de origem
-            { tag: '120', ind1: '#', ind2: '#' }, // Tipo codificado
             { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
+            { tag: '210', ind1: '1', ind2: '#' }, // Publicação, destribuição, etc
             { tag: '215', ind1: '#', ind2: '#' }, // Descrição física (técnica: "1 fotigrafia: p&b")
-            { tag: '300', ind1: '#', ind2: '#' }, // Notas
-            { tag: '330', ind1: '#', ind2: '#' }, // Descrição do conteúdo
-            { tag: '454', ind1: '1', ind2: '#' }, // Título paralelo
-            { tag: '606', ind1: '#', ind2: '#' }, // Assunto (ex: "Retratos")
-            { tag: '607', ind1: '#', ind2: '#' }, // Localização geográfica
-            { tag: '686', ind1: '#', ind2: '#' }, // Classificação
+            { tag: '305', ind1: '#', ind2: '#' }, // Notas da edição ou histórico bibliográfico
+            { tag: '321', ind1: '#', ind2: '#' }, // Indexes externos
+            { tag: '540', ind1: '#', ind2: '#' }, // Título adicional fornecido pelo catálogo
+            { tag: '675', ind1: '#', ind2: '#' }, // Código UDC
             { tag: '700', ind1: '1', ind2: '#' }, // Fotógrafo/ artista
             { tag: '702', ind1: '1', ind2: '#' }, // Outros (ex: proprietário)
-            { tag: '801', ind1: '#', ind2: '#' }  // Origem
+            { tag: '801', ind1: '#', ind2: '#' }, // Origem
+            { tag: '856', ind1: '#', ind2: '#' } // Link
         ]
     },
     {
