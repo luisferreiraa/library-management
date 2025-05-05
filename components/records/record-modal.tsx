@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -27,7 +29,8 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Plus, Minus, X } from "lucide-react"
+import { Plus, Minus, X, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // Interfaces que correspondem exatamente ao modelo Prisma
 interface SubfieldDefinition {
@@ -43,6 +46,7 @@ interface DataFieldDefinition {
     id: string
     tag: string
     name: string
+    tips: string[]
     subFieldDef?: SubfieldDefinition[]
     [key: string]: any // Para outras propriedades
 }
@@ -81,6 +85,56 @@ interface RecordModalProps {
     record?: Record | null
     mode: "create" | "edit"
     onSuccess?: () => void
+}
+
+// Componente para o tooltip paginado
+interface PaginatedTooltipProps {
+    tips: string[]
+    children: React.ReactNode
+}
+
+function PaginatedTooltip({ tips, children }: PaginatedTooltipProps) {
+    const [currentTipIndex, setCurrentTipIndex] = useState(0)
+
+    const nextTip = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setCurrentTipIndex((prev) => (prev + 1) % tips.length)
+    }
+
+    const prevTip = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setCurrentTipIndex((prev) => (prev - 1 + tips.length) % tips.length)
+    }
+
+    return (
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>{children}</TooltipTrigger>
+                <TooltipContent className="w-80 p-0">
+                    <div className="p-4">
+                        <p className="text-sm">{tips[currentTipIndex]}</p>
+                    </div>
+                    {tips.length > 1 && (
+                        <div className="flex items-center justify-between border-t p-2 bg-muted/50">
+                            <div className="text-xs text-muted-foreground">
+                                {currentTipIndex + 1} de {tips.length}
+                            </div>
+                            <div className="flex gap-1">
+                                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={prevTip} disabled={tips.length <= 1}>
+                                    <ChevronLeft className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={nextTip} disabled={tips.length <= 1}>
+                                    <ChevronRight className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
+    )
 }
 
 export default function RecordModal({
@@ -370,9 +424,11 @@ export default function RecordModal({
         return () => subscription.unsubscribe()
     }, [form])
 
+    // Modifique também a função onSubmit para evitar submissões automáticas
     const onSubmit = async (values: FormValues) => {
         try {
             setIsSubmitting(true)
+            console.log("Formulário submetido manualmente", values)
 
             if (isEditMode && record) {
                 const updateData: UpdateRecordInput = {
@@ -405,6 +461,39 @@ export default function RecordModal({
         } finally {
             setIsSubmitting(false)
         }
+    }
+
+    // Substitua a função renderTips para usar o componente PaginatedTooltip
+    const renderTips = (tips: string[] | undefined) => {
+        if (!tips || tips.length === 0) return null
+
+        return (
+            <PaginatedTooltip tips={tips}>
+                <span className="inline-flex h-5 w-5 ml-1 items-center justify-center cursor-help">
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                </span>
+            </PaginatedTooltip>
+        )
+    }
+
+    // Substitua a função renderSubfieldTips para usar o componente PaginatedTooltip
+    const renderSubfieldTips = (dataFieldIndex: number, code: string) => {
+        const definitionId = form.getValues(`dataFields.${dataFieldIndex}.definitionId`)
+        const fieldDef = dataFieldDefinitions.find((def) => def.id === definitionId)
+
+        if (!fieldDef || !fieldDef.subFieldDef) return null
+
+        const subFieldDef = fieldDef.subFieldDef.find((sf) => sf.code === code)
+
+        if (!subFieldDef || !subFieldDef.tips || subFieldDef.tips.length === 0) return null
+
+        return (
+            <PaginatedTooltip tips={subFieldDef.tips}>
+                <span className="inline-flex h-5 w-5 ml-1 items-center justify-center cursor-help">
+                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                </span>
+            </PaginatedTooltip>
+        )
     }
 
     return (
@@ -576,17 +665,23 @@ export default function RecordModal({
                                                                 className="border rounded-md"
                                                             >
                                                                 <div className="flex items-center justify-between px-4">
-                                                                    <AccordionTrigger className="flex-1">
-                                                                        <span>
-                                                                            Campo {dataFieldIndex + 1}:&nbsp;
-                                                                            {fieldDef?.name || "Campo não selecionado"}
-                                                                        </span>
-                                                                    </AccordionTrigger>
+                                                                    <div className="flex items-center flex-1">
+                                                                        <AccordionTrigger className="flex-1">
+                                                                            <span>
+                                                                                Campo {dataFieldIndex + 1}:&nbsp;
+                                                                                {fieldDef?.name || "Campo não selecionado"}
+                                                                            </span>
+                                                                        </AccordionTrigger>
+                                                                        {fieldDef && fieldDef.tips && fieldDef.tips.length > 0 && renderTips(fieldDef.tips)}
+                                                                    </div>
                                                                     <Button
                                                                         type="button"
                                                                         variant="ghost"
                                                                         size="icon"
-                                                                        onClick={() => removeDataField(dataFieldIndex)}
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation() // Impedir propagação para evitar que o acordeão abra/feche
+                                                                            removeDataField(dataFieldIndex)
+                                                                        }}
                                                                         className="h-8 w-8"
                                                                     >
                                                                         <X className="h-4 w-4" />
@@ -709,13 +804,14 @@ export default function RecordModal({
 
                                                                                 return (
                                                                                     <div key={subFieldIndex} className="flex items-center space-x-2">
-                                                                                        <div className="w-48">
+                                                                                        <div className="w-48 flex items-center">
                                                                                             <span className="text-sm font-medium">
                                                                                                 {subFieldDef?.label || `Subcampo ${subField.code}`}
                                                                                             </span>
                                                                                             <span className="text-xs text-muted-foreground ml-1">
                                                                                                 (${subField.code})
                                                                                             </span>
+                                                                                            {renderSubfieldTips(dataFieldIndex, subField.code)}
                                                                                         </div>
 
                                                                                         <FormField
