@@ -162,24 +162,88 @@ model TemplateControlField {
 
 /// --- HOLDINGS STRUCTURE ---
 model Holding {
-  id         String  @id @default(cuid())
-  record     Record  @relation(fields: [recordId], references: [id])
-  recordId   String
-  callNumber String?
-  location   String?
-  shelf      String?
-  items      Item[]
+  id            String                @id @default(cuid())
+  record        Record                @relation(fields: [recordId], references: [id])
+  recordId      String
+  controlFields HoldingControlField[]
+  dataFields    HoldingDataField[]
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  Item          Item[]
+}
+
+model HoldingControlField {
+  id           String                   @id @default(cuid())
+  value        String
+  holding      Holding                  @relation(fields: [holdingId], references: [id])
+  holdingId    String
+  definition   HoldingControlDefinition @relation(fields: [definitionId], references: [id])
+  definitionId String
+}
+
+model HoldingControlDefinition {
+  id                  String                @id @default(cuid())
+  tag                 String                @unique
+  name                String
+  tips                String[]
+  holdingControlField HoldingControlField[]
+}
+
+model HoldingDataField {
+  id           String                @id @default(cuid())
+  ind1         String
+  ind2         String
+  holding      Holding               @relation(fields: [holdingId], references: [id])
+  holdingId    String
+  definition   HoldingDataDefinition @relation(fields: [definitionId], references: [id])
+  definitionId String
+  subFields    HoldingSubfield[]
+}
+
+model HoldingDataDefinition {
+  id               String                      @id @default(cuid())
+  tag              String                      @unique
+  name             String
+  ind1Name         String
+  ind1Tips         String[]
+  ind2Name         String
+  ind2Tips         String[]
+  tips             String[]
+  subFieldDef      HoldingSubfieldDefinition[]
+  holdingDataField HoldingDataField[]
+}
+
+model HoldingSubfieldDefinition {
+  id                      String                @id @default(cuid())
+  code                    String
+  label                   String
+  repeatable              Boolean               @default(false)
+  mandatory               Boolean               @default(false)
+  tips                    String[]
+  holdingDefinition       HoldingDataDefinition @relation(fields: [holdingDataDefinitionId], references: [id])
+  holdingDataDefinitionId String
+}
+
+model HoldingSubfield {
+  id          String           @id @default(cuid())
+  value       String
+  dataField   HoldingDataField @relation(fields: [dataFieldId], references: [id])
+  dataFieldId String
 }
 
 model Item {
   id              String    @id @default(cuid())
   holding         Holding   @relation(fields: [holdingId], references: [id])
   holdingId       String
-  barcode         String    @unique
+  barcode         String    @unique /// Código de barras do exemplar
   status          String /// Ex: "Available", "Loaned", "Reserved"
-  condition       String?
+  condition       String? /// Ex: "New", "Used", "Damaged"
   acquisitionDate DateTime?
   loanType        String? /// Ex: "Standard", "Short loan"
+  // Podes ainda adicionar:
+  // locationCode    String?   // Ex: "Sala A", "Depósito"
+  // price           Float?
+  // lastSeen        DateTime?
 }
 
 /// --- AUTHORITY STRUCTURE ---

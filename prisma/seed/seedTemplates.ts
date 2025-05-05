@@ -58,30 +58,6 @@ const templates = [
         ]
     },
     {
-        name: 'Artigo de Revista',
-        description: 'Parte analítica de uma publicação periódica.',
-        controlFields: [
-            { tag: '001' },
-            { tag: '005' }
-        ],
-        dataFields: [
-            { tag: '011', ind1: '#', ind2: '#' }, // ISSN
-            { tag: '100', ind1: '#', ind2: '#' }, // Dados gerais de processamento
-            { tag: '101', ind1: '#', ind2: '#' }, // Idioma da obra
-            { tag: '200', ind1: '1', ind2: '#' }, // Título e menção de responsabilidade
-            { tag: '210', ind1: '#', ind2: '#' }, // Publicação, distribuição, etc
-            { tag: '300', ind1: '#', ind2: '#' }, // Notas gerais (resumo, referências, etc)
-            { tag: '330', ind1: '#', ind2: '#' }, // Resumo estruturado
-            { tag: '461', ind1: '1', ind2: '#' }, // Link para a revista-mãe
-            { tag: '463', ind1: '1', ind2: '#' }, // Níveis de unidade (para vincar ao registo da revista)
-            { tag: '517', ind1: '#', ind2: '#' }, // Título alternativo (ex: em inglês)
-            { tag: '606', ind1: '#', ind2: '#' }, // Assunto do artigo
-            { tag: '700', ind1: '1', ind2: '#' }, // Autor do artigo
-            { tag: '701', ind1: '1', ind2: '#' }, // Coautor (se aplicável)
-            { tag: '801', ind1: '#', ind2: '#' } // Origem do registo
-        ]
-    },
-    {
         name: 'CD-Áudio',
         description: 'Áudio gravado em suporte físico.',
         controlFields: [
@@ -112,26 +88,27 @@ const templates = [
         description: 'Filmes, documentários, gravações visuais.',
         controlFields: [
             { tag: '001' },
-            { tag: '005' }
+            { tag: '003' }
         ],
         dataFields: [
-            { tag: '010', ind1: '#', ind2: '#' }, // ISBN
+            { tag: '071', ind1: '#', ind2: '#' }, // Número de editor
             { tag: '100', ind1: '#', ind2: '#' },
             { tag: '101', ind1: '#', ind2: '#' }, // Idioma (áudio/legendas)
             { tag: '102', ind1: '#', ind2: '#' }, // País
+            { tag: '115', ind1: '#', ind2: '#' }, // País
             { tag: '200', ind1: '1', ind2: '#' }, // Título principal
-            { tag: '205', ind1: '#', ind2: '#' }, // Edição
             { tag: '210', ind1: '#', ind2: '#' }, // Publicação
             { tag: '215', ind1: '#', ind2: '#' }, // Descrição física
-            { tag: '230', ind1: '#', ind2: '#' }, // Formato (ex: "DVD-9")
             { tag: '300', ind1: '#', ind2: '#' }, // Notas técnicas
-            { tag: '330', ind1: '#', ind2: '#' }, // Sinopse
-            { tag: '517', ind1: '1', ind2: '#' }, // Título original
+            { tag: '303', ind1: '#', ind2: '#' },
+            { tag: '323', ind1: '#', ind2: '#' },
+            { tag: '327', ind1: '#', ind2: '#' },
+            { tag: '333', ind1: '#', ind2: '#' },
+            { tag: '337', ind1: '#', ind2: '#' },
             { tag: '606', ind1: '#', ind2: '#' }, // Gênero
+            { tag: '675', ind1: '#', ind2: '#' },
             { tag: '700', ind1: '1', ind2: '#' }, // Diretor (com $4=drt)
-            { tag: '701', ind1: '1', ind2: '#' }, // Atores (com $4=act)
             { tag: '702', ind1: '1', ind2: '#' }, // Outros colaboradores (ex: roteirista)
-            { tag: '856', ind1: '4', ind2: '#' }, // Link 
             { tag: '801', ind1: '#', ind2: '#' }  // Origem
         ]
     },

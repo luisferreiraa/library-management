@@ -93,6 +93,8 @@ interface PaginatedTooltipProps {
     children: React.ReactNode
 }
 
+// Modifique o componente PaginatedTooltip para garantir que o tooltip seja renderizado fora dos limites do modal
+
 function PaginatedTooltip({ tips, children }: PaginatedTooltipProps) {
     const [currentTipIndex, setCurrentTipIndex] = useState(0)
 
@@ -109,10 +111,10 @@ function PaginatedTooltip({ tips, children }: PaginatedTooltipProps) {
     }
 
     return (
-        <TooltipProvider>
+        <TooltipProvider delayDuration={300}>
             <Tooltip>
                 <TooltipTrigger asChild>{children}</TooltipTrigger>
-                <TooltipContent className="w-80 p-0">
+                <TooltipContent side="right" align="start" className="w-80 p-0" sideOffset={5}>
                     <div className="p-4">
                         <p className="text-sm">{tips[currentTipIndex]}</p>
                     </div>
@@ -499,6 +501,11 @@ export default function RecordModal({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                <style jsx global>{`
+          .radix-tooltip-content {
+            z-index: 1000;
+          }
+        `}</style>
                 <DialogHeader>
                     <DialogTitle>{isEditMode ? "Editar Registro" : "Criar Novo Registro"}</DialogTitle>
                     <DialogDescription>
@@ -511,7 +518,7 @@ export default function RecordModal({
                 {isLoading ? (
                     <div className="flex justify-center items-center py-8">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                        <span className="ml-2">A carregar as definições de campos...</span>
+                        <span className="ml-2">Carregando definições de campos...</span>
                     </div>
                 ) : (
                     <Form {...form}>
@@ -519,7 +526,7 @@ export default function RecordModal({
                             <Tabs value={activeTab} onValueChange={setActiveTab}>
                                 <TabsList className="grid grid-cols-4 mb-4">
                                     <TabsTrigger value="general">Geral</TabsTrigger>
-                                    <TabsTrigger value="control">Campos de Controlo</TabsTrigger>
+                                    <TabsTrigger value="control">Campos de Controle</TabsTrigger>
                                     <TabsTrigger value="data">Campos de Dados</TabsTrigger>
                                     <TabsTrigger value="unimarc">UNIMARC</TabsTrigger>
                                 </TabsList>
@@ -529,7 +536,7 @@ export default function RecordModal({
                                         <Card>
                                             <CardHeader>
                                                 <CardTitle>Template</CardTitle>
-                                                <CardDescription className="mt-3">Selecione um template para pré-preencher os campos</CardDescription>
+                                                <CardDescription>Selecione um template para pré-preencher os campos</CardDescription>
                                             </CardHeader>
                                             <CardContent>
                                                 <FormField
@@ -571,8 +578,8 @@ export default function RecordModal({
                                     <Card>
                                         <CardHeader className="flex flex-row items-center justify-between">
                                             <div>
-                                                <CardTitle>Campos de Controlo</CardTitle>
-                                                <CardDescription className="mt-3">Campos de controlo do registo bibliográfico</CardDescription>
+                                                <CardTitle>Campos de Controle</CardTitle>
+                                                <CardDescription>Campos de controle do registro bibliográfico</CardDescription>
                                             </div>
                                             <Button type="button" variant="outline" size="sm" onClick={addControlField}>
                                                 <Plus className="h-4 w-4 mr-1" /> Adicionar Campo
@@ -581,57 +588,75 @@ export default function RecordModal({
                                         <CardContent>
                                             {form.watch("controlFields").length === 0 ? (
                                                 <div className="text-center py-4 text-muted-foreground">
-                                                    Nenhum campo de controlo adicionado
+                                                    Nenhum campo de controle adicionado
                                                 </div>
                                             ) : (
-                                                form.watch("controlFields").map((_, index) => (
-                                                    <div key={index} className="flex items-start space-x-2 mb-4 p-3 border rounded-md">
-                                                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                            <FormField
-                                                                control={form.control}
-                                                                name={`controlFields.${index}.definitionId`}
-                                                                render={({ field }) => (
-                                                                    <FormItem>
-                                                                        <FormLabel>Campo</FormLabel>
-                                                                        <Select onValueChange={field.onChange} value={field.value} disabled={isEditMode}>
+                                                form.watch("controlFields").map((_, index) => {
+                                                    // Obter a definição do campo de controle para acessar as dicas
+                                                    const controlFieldDef = controlFieldDefinitions.find(
+                                                        (def) => def.id === form.getValues(`controlFields.${index}.definitionId`),
+                                                    )
+
+                                                    return (
+                                                        <div key={index} className="flex items-start space-x-2 mb-4 p-3 border rounded-md">
+                                                            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                <FormField
+                                                                    control={form.control}
+                                                                    name={`controlFields.${index}.definitionId`}
+                                                                    render={({ field }) => (
+                                                                        <FormItem>
+                                                                            <div className="flex items-center">
+                                                                                <FormLabel>Campo</FormLabel>
+                                                                                {controlFieldDef &&
+                                                                                    controlFieldDef.tips &&
+                                                                                    controlFieldDef.tips.length > 0 &&
+                                                                                    renderTips(controlFieldDef.tips)}
+                                                                            </div>
+                                                                            <Select onValueChange={field.onChange} value={field.value} disabled={isEditMode}>
+                                                                                <FormControl>
+                                                                                    <SelectTrigger>
+                                                                                        <SelectValue placeholder="Selecione um campo" />
+                                                                                    </SelectTrigger>
+                                                                                </FormControl>
+                                                                                <SelectContent>
+                                                                                    {controlFieldDefinitions.map((def) => (
+                                                                                        <SelectItem key={def.id} value={def.id}>
+                                                                                            {def.tag} - {def.name}
+                                                                                        </SelectItem>
+                                                                                    ))}
+                                                                                </SelectContent>
+                                                                            </Select>
+                                                                            <FormMessage />
+                                                                        </FormItem>
+                                                                    )}
+                                                                />
+
+                                                                <FormField
+                                                                    control={form.control}
+                                                                    name={`controlFields.${index}.value`}
+                                                                    render={({ field }) => (
+                                                                        <FormItem>
+                                                                            <FormLabel>Valor</FormLabel>
                                                                             <FormControl>
-                                                                                <SelectTrigger>
-                                                                                    <SelectValue placeholder="Selecione um campo" />
-                                                                                </SelectTrigger>
+                                                                                <Input {...field} />
                                                                             </FormControl>
-                                                                            <SelectContent>
-                                                                                {controlFieldDefinitions.map((def) => (
-                                                                                    <SelectItem key={def.id} value={def.id}>
-                                                                                        {def.tag} - {def.name}
-                                                                                    </SelectItem>
-                                                                                ))}
-                                                                            </SelectContent>
-                                                                        </Select>
-                                                                        <FormMessage />
-                                                                    </FormItem>
-                                                                )}
-                                                            />
+                                                                            <FormMessage />
+                                                                        </FormItem>
+                                                                    )}
+                                                                />
+                                                            </div>
 
-                                                            <FormField
-                                                                control={form.control}
-                                                                name={`controlFields.${index}.value`}
-                                                                render={({ field }) => (
-                                                                    <FormItem>
-                                                                        <FormLabel>Valor</FormLabel>
-                                                                        <FormControl>
-                                                                            <Input {...field} />
-                                                                        </FormControl>
-                                                                        <FormMessage />
-                                                                    </FormItem>
-                                                                )}
-                                                            />
+                                                            <Button
+                                                                type="button"
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                onClick={() => removeControlField(index)}
+                                                            >
+                                                                <X className="h-4 w-4" />
+                                                            </Button>
                                                         </div>
-
-                                                        <Button type="button" variant="ghost" size="icon" onClick={() => removeControlField(index)}>
-                                                            <X className="h-4 w-4" />
-                                                        </Button>
-                                                    </div>
-                                                ))
+                                                    )
+                                                })
                                             )}
                                         </CardContent>
                                     </Card>
@@ -642,7 +667,7 @@ export default function RecordModal({
                                         <CardHeader className="flex flex-row items-center justify-between">
                                             <div>
                                                 <CardTitle>Campos de Dados</CardTitle>
-                                                <CardDescription className="mt-3">Campos de dados do registo bibliográfico</CardDescription>
+                                                <CardDescription>Campos de dados do registro bibliográfico</CardDescription>
                                             </div>
                                             <Button type="button" variant="outline" size="sm" onClick={addDataField}>
                                                 <Plus className="h-4 w-4 mr-1" /> Adicionar Campo
@@ -668,7 +693,7 @@ export default function RecordModal({
                                                                     <div className="flex items-center flex-1">
                                                                         <AccordionTrigger className="flex-1">
                                                                             <span>
-                                                                                {/* Campo {dataFieldIndex + 1}:&nbsp; */}
+                                                                                Campo {dataFieldIndex + 1}:&nbsp;
                                                                                 {fieldDef?.name || "Campo não selecionado"}
                                                                             </span>
                                                                         </AccordionTrigger>
@@ -855,7 +880,7 @@ export default function RecordModal({
                                     <Card>
                                         <CardHeader>
                                             <CardTitle>Visualização UNIMARC</CardTitle>
-                                            <CardDescription className="mt-3">Representação do registo no formato UNIMARC (somente leitura)</CardDescription>
+                                            <CardDescription>Representação do registro no formato UNIMARC (somente leitura)</CardDescription>
                                         </CardHeader>
                                         <CardContent>
                                             {isEditMode && record?.metadata ? (
@@ -877,7 +902,7 @@ export default function RecordModal({
                                     Cancelar
                                 </Button>
                                 <Button type="submit" disabled={isSubmitting}>
-                                    {isSubmitting ? "A guardar..." : "Guardar"}
+                                    {isSubmitting ? "Salvando..." : "Salvar"}
                                 </Button>
                             </DialogFooter>
                         </form>
