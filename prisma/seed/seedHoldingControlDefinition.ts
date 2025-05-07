@@ -18,3 +18,18 @@ const holdingControlDefinitionsData = [
         tips: ["Este campo é constituído por 16 caracteres que indicam a data e hora da última transação/atualização do registo."],
     },
 ]
+
+export async function seedHoldingControlDefinitionsData() {
+    for (const holdingControlDefintionData of holdingControlDefinitionsData) {
+        await prisma.holdingControlDefinition.upsert({
+            where: { tag: holdingControlDefintionData.tag },
+            update: {},
+            create: {
+                tag: holdingControlDefintionData.tag,
+                name: holdingControlDefintionData.name,
+                tips: holdingControlDefintionData.tips,
+            }
+        })
+        console.log(`✅ Holding Control Field Definition "${holdingControlDefintionData.tag}" criado com sucesso.`)
+    }
+}

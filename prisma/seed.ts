@@ -4,6 +4,7 @@ import { seedUsers } from "./seed/seedUsers";
 import { seedControlFieldDefinitions } from "./seed/seedControlFieldDefinitions";
 import { seedDataFieldDefinitions } from "./seed/seedDataFieldDefinitions";
 import { seedTemplates } from "./seed/seedTemplates.ts";
+import { seedHoldingControlDefinitionsData } from "./seed/seedHoldingControlDefinition.ts";
 
 const prisma = new PrismaClient()
 
@@ -23,6 +24,7 @@ async function main() {
     await seedTemplates()
     /*     await seedControlFieldDefinitions()
         await seedDataFieldDefinitions() */
+    /* await seedHoldingControlDefinitionsData() */
 }
 
 main()
